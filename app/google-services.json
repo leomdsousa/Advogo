@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "401885998927",
+    "project_id": "advogo-app",
+    "storage_bucket": "advogo-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:401885998927:android:35ed3876fb1bc64dbd5f3a",
+        "android_client_info": {
+          "package_name": "com.example.advogo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "401885998927-d8b5qvo2hu3kd9vk1onpeo9uanhkitbs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.advogo",
+            "certificate_hash": "4c17782f4fef1b471e65e8678626d52301716a5b"
+          }
+        },
+        {
+          "client_id": "401885998927-gskvkb06se76c0hik78hlcihg04kro6o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClSagttHxMtRJQ9XPUyiKyq0r3SKuBxdk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "401885998927-gskvkb06se76c0hik78hlcihg04kro6o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
