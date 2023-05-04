@@ -4,15 +4,16 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/drawable-xxhdpi/shape_button_rounded.xml" value="0.1" />
+        <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/drawable-xxhdpi/white_border_shape_button_rounded.xml" value="0.1" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout-w1240dp/activity_login.xml" value="0.25" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout-w1240dp/dialog_progress.xml" value="0.1" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout-w936dp/activity_login.xml" value="0.25" />
-        <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/activity_cadastro.xml" value="0.15" />
+        <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/activity_cadastro.xml" value="0.25" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/activity_cadastro_processo.xml" value="0.33" />
-        <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/activity_intro.xml" value="0.18" />
+        <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/activity_intro.xml" value="0.196513470681458" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/activity_main.xml" value="0.1" />
-        <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/activity_perfil.xml" value="0.1" />
+        <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/activity_perfil.xml" value="0.22" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/activity_splash_screen.xml" value="0.25" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/dialog_progress.xml" value="0.1" />
       </map>

@@ -9,25 +9,27 @@
     <string name="cliqueNovamente">Clique novamente.</string>
 
     <!--INTRO-->
-    <string name="imageContentDescription">image</string>
-    <string name="letsGetStartedText">Let\'s Get started</string>
-    <string name="introTextDescription">Collaborate and Plan Together Across Multiple Devices on Projemanag’s Minimalist Interface.</string>
-    <string name="signIn">SIGN IN</string>
-    <string name="signUp">SIGN UP</string>
+    <string name="imageContentDescription">Imagem</string>
+    <string name="letsGetStartedText">Vamos começar!</string>
+    <string name="introTextDescription">Gerencie e planeje seu processos em múltiplos aparelhos com o AdvoGo!.</string>
+    <string name="signIn">Log-in</string>
+    <string name="signUp">Registrar-se</string>
 
     <!--CADASTRO-->
-    <string name="signUpDescriptionText">Preencha o formul.</string>
-    <string name="name">Name</string>
-    <string name="password">Password</string>
-    <string name="email">Email</string>
+    <string name="signUpDescriptionText">Preencha o formulário para se cadastrar.</string>
+    <string name="name">Nome</string>
+    <string name="password">Senha</string>
+    <string name="email">E-mail</string>
 
     <!--LOGIN-->
-    <string name="signInDescriptionText">Enter your name, email id and password, to register with us.</string>
+    <string name="signInDescriptionText">Entre com seu e-mail e senha.</string>
 
     <!--PERFIL-->
-    <string name="mobile">Mobile</string>
-    <string name="update">UPDATE</string>
-    <string name="profile">My Profile</string>
+    <string name="mobile">Telefone</string>
+    <string name="update">Atualizar</string>
+    <string name="profile">Perfil</string>
+    <string name="oab">Nº OAB</string>
+    <string name="endereco">Endereço</string>
 
     <!--CADASTRO PROCESSO-->
     <string name="criar_processo">Criar Processo</string>
