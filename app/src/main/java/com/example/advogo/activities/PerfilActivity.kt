@@ -1,10 +1,9 @@
 package com.example.advogo.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.advogo.R
 
-class PerfilActivity : AppCompatActivity() {
+class PerfilActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_perfil)

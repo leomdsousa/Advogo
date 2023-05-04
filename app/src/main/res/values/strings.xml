@@ -1,12 +1,44 @@
 <resources>
     <string name="app_name">Advogo</string>
-    <string name="title_activity_login">LoginActivity</string>
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="welcome">"Welcome !"</string>
-    <string name="invalid_username">Not a valid username</string>
-    <string name="invalid_password">Password must be >5 characters</string>
-    <string name="login_failed">"Login failed"</string>
+
+    <!--SPLASH SCREEN-->
+    <string name="splashScreenTexto">Advogo</string>
+
+    <!--GERAL-->
+    <string name="aguardePorfavor">Aguarde por favor...</string>
+    <string name="cliqueNovamente">Clique novamente.</string>
+
+    <!--INTRO-->
+    <string name="imageContentDescription">image</string>
+    <string name="letsGetStartedText">Let\'s Get started</string>
+    <string name="introTextDescription">Collaborate and Plan Together Across Multiple Devices on Projemanag’s Minimalist Interface.</string>
+    <string name="signIn">SIGN IN</string>
+    <string name="signUp">SIGN UP</string>
+
+    <!--CADASTRO-->
+    <string name="signUpDescriptionText">Preencha o formul.</string>
+    <string name="name">Name</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+
+    <!--LOGIN-->
+    <string name="signInDescriptionText">Enter your name, email id and password, to register with us.</string>
+
+    <!--PERFIL-->
+    <string name="mobile">Mobile</string>
+    <string name="update">UPDATE</string>
+    <string name="profile">My Profile</string>
+
+    <!--CADASTRO PROCESSO-->
+    <string name="criar_processo">Criar Processo</string>
+    <string name="numero_processo">Nº Processo: </string>
+    <string name="nome_processo">Nome do Processo: </string>
+    <string name="status_processo">Status: </string>
+    <string name="descricao_processo">Descrição: </string>
+
+    <string name="tarefa_pendente">Tarefas: </string>
+    <string name="arquivo_processo">Arquivos: </string>
+    <string name="selecionar_arquivo">Anexar</string>
+    <string name="salvar">Cadastrar</string>
+
 </resources>
