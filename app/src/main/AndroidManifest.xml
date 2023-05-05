@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
+        android:name=".dagger.MyApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -18,16 +19,16 @@
         android:theme="@style/Theme.Advogo"
         tools:targetApi="31">
         <activity
-            android:name=".DiligenciaDetalheActivity"
+            android:name=".activities.DiligenciaDetalheActivity"
             android:exported="false" />
         <activity
-            android:name=".DiligenciaCadastroActivity"
+            android:name=".activities.DiligenciaCadastroActivity"
             android:exported="false" />
         <activity
-            android:name=".ProcessoDetalheActivity"
+            android:name=".activities.ProcessoDetalheActivity"
             android:exported="false" />
         <activity
-            android:name=".CadastroProcessoActivity"
+            android:name=".activities.ProcessoCadastroActivity"
             android:exported="false" />
         <activity
             android:name=".activities.PerfilActivity"

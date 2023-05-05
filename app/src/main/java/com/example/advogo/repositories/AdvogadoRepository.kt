@@ -2,40 +2,41 @@ package com.example.advogo.repositories
 
 import com.example.advogo.models.Advogado
 import com.google.firebase.firestore.FirebaseFirestore
+import javax.inject.Inject
 
-class AdvogadoRepository: IAdvogadoRepository {
+class AdvogadoRepository @Inject constructor(): IAdvogadoRepository {
     private val firebaseStore = FirebaseFirestore.getInstance()
 
-    override fun ObterAdvogados(): ArrayList<Advogado> {
+    override suspend fun ObterAdvogados(): ArrayList<Advogado> {
         TODO("Not yet implemented")
     }
 
-    override fun ObterAdvogado(id: String): Advogado {
+    override suspend fun ObterAdvogado(id: String): Advogado {
         TODO("Not yet implemented")
     }
 
-    override fun ObterAdvogadoPorEmail(email: String): Advogado {
+    override suspend fun ObterAdvogadoPorEmail(email: String): Advogado {
         TODO("Not yet implemented")
     }
 
-    override fun AdicionarAdvogado(model: Advogado): Advogado {
+    override suspend fun AdicionarAdvogado(model: Advogado): Advogado {
         TODO("Not yet implemented")
     }
 
-    override fun AtualizarAdvogado(model: Advogado): Advogado {
+    override suspend fun AtualizarAdvogado(model: Advogado): Advogado {
         TODO("Not yet implemented")
     }
 
-    override fun DeletarAdvogado(id: String): Boolean {
+    override suspend fun DeletarAdvogado(id: String): Boolean {
         TODO("Not yet implemented")
     }
 }
 
 interface IAdvogadoRepository {
-    fun ObterAdvogados(): ArrayList<Advogado>
-    fun ObterAdvogado(id: String): Advogado
-    fun ObterAdvogadoPorEmail(email: String): Advogado
-    fun AdicionarAdvogado(model: Advogado): Advogado
-    fun AtualizarAdvogado(model: Advogado): Advogado
-    fun DeletarAdvogado(id: String): Boolean
+    suspend fun ObterAdvogados(): ArrayList<Advogado>
+    suspend fun ObterAdvogado(id: String): Advogado
+    suspend fun ObterAdvogadoPorEmail(email: String): Advogado
+    suspend fun AdicionarAdvogado(model: Advogado): Advogado
+    suspend fun AtualizarAdvogado(model: Advogado): Advogado
+    suspend fun DeletarAdvogado(id: String): Boolean
 }

@@ -2,8 +2,9 @@ package com.example.advogo.repositories
 
 import com.example.advogo.models.Processo
 import com.google.firebase.firestore.FirebaseFirestore
+import javax.inject.Inject
 
-class ProcessoRepository: IProcessoRepository {
+class ProcessoRepository @Inject constructor(): IProcessoRepository {
     private val firebaseStore = FirebaseFirestore.getInstance()
 
     override fun ObterProcessos(): ArrayList<Processo> {
