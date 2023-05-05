@@ -1,42 +1,65 @@
 package com.example.advogo.repositories
 
 import com.example.advogo.models.Advogado
+import com.example.advogo.utils.Constants
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.OnSuccessListener
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import javax.inject.Inject
 
 class AdvogadoRepository @Inject constructor(): IAdvogadoRepository {
     private val firebaseStore = FirebaseFirestore.getInstance()
 
-    override suspend fun ObterAdvogados(): ArrayList<Advogado> {
+    override fun ObterAdvogados(onSuccessListener: OnSuccessListener<List<Advogado>>, onFailureListener: OnFailureListener) {
+        firebaseStore
+            .collection(Constants.ADVOGADOS_TABLE)
+            .get()
+    }
+
+    override fun ObterAdvogado(id: String, onSuccessListener: OnSuccessListener<Advogado>, onFailureListener: OnFailureListener) {
+        firebaseStore
+            .collection(Constants.ADVOGADOS_TABLE)
+            .document(getCurrentUserId())
+            .get()
+    }
+
+    override fun ObterAdvogadoPorEmail(email: String, onSuccessListener: OnSuccessListener<Advogado>, onFailureListener: OnFailureListener) {
+        firebaseStore
+            .collection(Constants.ADVOGADOS_TABLE)
+            .whereEqualTo(Constants.ADVOGADOS_EMAIL, email)
+            .get()
+    }
+
+    override fun AdicionarAdvogado(model: Advogado, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: OnFailureListener) {
         TODO("Not yet implemented")
     }
 
-    override suspend fun ObterAdvogado(id: String): Advogado {
+    override fun AtualizarAdvogado(model: Advogado, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: OnFailureListener) {
         TODO("Not yet implemented")
     }
 
-    override suspend fun ObterAdvogadoPorEmail(email: String): Advogado {
+    override fun DeletarAdvogado(id: String, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: OnFailureListener) {
         TODO("Not yet implemented")
     }
 
-    override suspend fun AdicionarAdvogado(model: Advogado): Advogado {
-        TODO("Not yet implemented")
-    }
+    private fun getCurrentUserId(): String {
+        val user = FirebaseAuth.getInstance().currentUser
 
-    override suspend fun AtualizarAdvogado(model: Advogado): Advogado {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun DeletarAdvogado(id: String): Boolean {
-        TODO("Not yet implemented")
+        return if(user != null) {
+            FirebaseAuth.getInstance().currentUser!!.uid
+        } else {
+            ""
+        }
     }
 }
 
 interface IAdvogadoRepository {
-    suspend fun ObterAdvogados(): ArrayList<Advogado>
-    suspend fun ObterAdvogado(id: String): Advogado
-    suspend fun ObterAdvogadoPorEmail(email: String): Advogado
-    suspend fun AdicionarAdvogado(model: Advogado): Advogado
-    suspend fun AtualizarAdvogado(model: Advogado): Advogado
-    suspend fun DeletarAdvogado(id: String): Boolean
+    fun ObterAdvogados(onSuccessListener: OnSuccessListener<List<Advogado>>, onFailureListener: OnFailureListener)
+    fun ObterAdvogado(id: String, onSuccessListener: OnSuccessListener<Advogado>, onFailureListener: OnFailureListener)
+    fun ObterAdvogadoPorEmail(email: String, onSuccessListener: OnSuccessListener<Advogado>, onFailureListener: OnFailureListener)
+    fun AdicionarAdvogado(model: Advogado, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: OnFailureListener)
+    fun AtualizarAdvogado(model: Advogado, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: OnFailureListener)
+    fun DeletarAdvogado(id: String, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: OnFailureListener)
 }
