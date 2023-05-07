@@ -13,4 +13,12 @@ object Constants {
     const val DILIGENCIAS_ID = "_id"
     const val DILIGENCIAS_PROCESSO = "processo"
     const val DILIGENCIAS_ADVOGADO = "advogado"
+
+    //Informa que a Activity origem está passando um dado
+    const val ADV_NOME_PARAM = "advNomeParam"
+
+    //Indica a Activity origem da Intent
+    const val FROM_LOGIN = "FROM_LOGIN"
+
+    const val ADVOGO_PREFERENCES: String = "AdvogoPrefs"
 }

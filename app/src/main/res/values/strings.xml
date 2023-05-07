@@ -4,15 +4,20 @@
     <!--SPLASH SCREEN-->
     <string name="splashScreenTexto">Advogo</string>
 
+    <!--NAV-->
+    <string name="navPerfil">Perfil</string>
+    <string name="navDeslogar">Sair</string>
+
     <!--GERAL-->
     <string name="aguardePorfavor">Aguarde por favor...</string>
     <string name="cliqueNovamente">Clique novamente.</string>
+    <string name="nenhumProcessoEncontrado">Nenhum processo encontrado!</string>
 
     <!--INTRO-->
     <string name="imageContentDescription">Imagem</string>
     <string name="letsGetStartedText">Vamos começar!</string>
     <string name="introTextDescription">Gerencie e planeje seu processos em múltiplos aparelhos com o AdvoGo!.</string>
-    <string name="signIn">Log-in</string>
+    <string name="signIn">Entrar</string>
     <string name="signUp">Registrar-se</string>
 
     <!--CADASTRO-->
@@ -20,6 +25,7 @@
     <string name="name">Nome</string>
     <string name="password">Senha</string>
     <string name="email">E-mail</string>
+    <string name="telefone">Telefone</string>
 
     <!--LOGIN-->
     <string name="signInDescriptionText">Entre com seu e-mail e senha.</string>

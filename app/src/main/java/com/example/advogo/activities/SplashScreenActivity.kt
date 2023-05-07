@@ -24,7 +24,7 @@ class SplashScreenActivity : BaseActivity() {
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
             } else {
-                startActivity(Intent(this, LoginActivity::class.java))
+                startActivity(Intent(this, IntroActivity::class.java))
                 finish()
             }
         }, _splashTimeOut)

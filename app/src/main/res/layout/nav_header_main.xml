@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/heightOfNavMain"
+    android:background="@drawable/nav_header_main_background"
+    android:gravity="bottom"
+    android:orientation="vertical"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/ivUserImageNav"
+        android:layout_width="@dimen/navImageSize"
+        android:layout_height="@dimen/navImageSize"
+        android:contentDescription="User profile image"
+        android:layout_marginStart="@dimen/navContentMarginStartEnd"
+        android:layout_marginEnd="@dimen/navContentMarginStartEnd"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_baseline_person_24"
+        app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
+        app:strokeColor="@color/white"
+        app:strokeWidth="1dp"  />
+
+    <TextView
+        android:id="@+id/tvUsernameNav"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/navContentMarginStartEnd"
+        android:layout_marginTop="@dimen/navContentMarginTop"
+        android:layout_marginEnd="@dimen/navContentMarginStartEnd"
+        android:layout_marginBottom="@dimen/navContentMarginBottom"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/navUserNameTextSize"
+        tools:text="Username" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/navDividerHeight"
+        android:background="@android:color/white" />
+</LinearLayout>

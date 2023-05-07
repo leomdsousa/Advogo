@@ -6,6 +6,21 @@
     <dimen name="splashScreenTextSize">50sp</dimen>
     <dimen name="splashScreenPadding">15dp</dimen>
 
+    <dimen name="mainScreenContentPadding">16dp</dimen>
+    <dimen name="noProcessAvailableTextSize">16sp</dimen>
+
+    <dimen name="fabMargin">16dp</dimen>
+
+    <!--NAV-->
+    <dimen name="heightOfNavMain">200dp</dimen>
+    <dimen name="navImageSize">80dp</dimen>
+    <dimen name="navContentMarginStartEnd">16dp</dimen>
+    <dimen name="navContentMarginTop">5dp</dimen>
+    <dimen name="navContentMarginBottom">10dp</dimen>
+    <dimen name="navUserNameTextSize">18sp</dimen>
+    <dimen name="navImageCircularBorderWidth">1dp</dimen>
+    <dimen name="navDividerHeight">0.5dp</dimen>
+
     <!--PROGRESS DIALOG -->
     <dimen name="progressDialogContentPadding">10dp</dimen>
     <dimen name="progressBarSize">50dp</dimen>

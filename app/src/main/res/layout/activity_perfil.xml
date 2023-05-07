@@ -90,7 +90,7 @@
                     android:layout_marginTop="@dimen/profileEtMobileMarginTop">
 
                     <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/etMobile"
+                        android:id="@+id/etTelefone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/mobile"

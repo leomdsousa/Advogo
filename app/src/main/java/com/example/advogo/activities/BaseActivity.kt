@@ -5,19 +5,24 @@ import android.app.DatePickerDialog
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
+import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.advogo.R
+import com.example.advogo.repositories.IAdvogadoRepository
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
+import javax.inject.Inject
 
 open class BaseActivity : AppCompatActivity() {
     private lateinit var _sharedPreferences: SharedPreferences
@@ -25,7 +30,7 @@ open class BaseActivity : AppCompatActivity() {
     private var _doubleBackToExitPressureOnce = false
 
     fun isUserLoggedIn(): Boolean {
-        TODO("Implementar")
+        return getCurrentUserID().isNotEmpty()
     }
 
     fun getCurrentUser(): FirebaseUser {
@@ -54,7 +59,7 @@ open class BaseActivity : AppCompatActivity() {
     }
 
     fun showErrorSnackBar(msg: String) {
-        TODO("Para para um singleton")
+        TODO("Mudar para um singleton")
         val snackBar = Snackbar.make(findViewById(android.R.id.content), msg, Snackbar.LENGTH_LONG)
         val snackBarView = snackBar.view
         snackBarView.setBackgroundColor(ContextCompat.getColor(this, R.color.red))
@@ -124,6 +129,10 @@ open class BaseActivity : AppCompatActivity() {
                 ).show()
             }
         }
+    }
+
+    fun getFileExtension(uri: Uri): String? {
+        return MimeTypeMap.getSingleton().getExtensionFromMimeType(contentResolver.getType(uri!!))
     }
 
     companion object {

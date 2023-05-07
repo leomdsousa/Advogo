@@ -64,11 +64,11 @@
                     android:layout_marginEnd="@dimen/authenticationScreenTilMarginStartEnd">
 
                     <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/etName"
+                        android:id="@+id/etNome"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/name"
-                        android:inputType="textEmailAddress"
+                        android:inputType="text"
                         android:textSize="@dimen/etTextSize" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -85,6 +85,54 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/email"
                         android:inputType="textEmailAddress"
+                        android:textSize="@dimen/etTextSize" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/authenticationScreenTilMarginStartEnd"
+                    android:layout_marginTop="@dimen/authenticationScreenTilMarginTop"
+                    android:layout_marginEnd="@dimen/authenticationScreenTilMarginStartEnd">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/etOab"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/oab"
+                        android:inputType="phone"
+                        android:textSize="@dimen/etTextSize" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/authenticationScreenTilMarginStartEnd"
+                    android:layout_marginTop="@dimen/authenticationScreenTilMarginTop"
+                    android:layout_marginEnd="@dimen/authenticationScreenTilMarginStartEnd">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/etEndereco"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/endereco"
+                        android:inputType="text"
+                        android:textSize="@dimen/etTextSize" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/authenticationScreenTilMarginStartEnd"
+                    android:layout_marginTop="@dimen/authenticationScreenTilMarginTop"
+                    android:layout_marginEnd="@dimen/authenticationScreenTilMarginStartEnd">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/etTelefone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/telefone"
+                        android:inputType="phone"
                         android:textSize="@dimen/etTextSize" />
                 </com.google.android.material.textfield.TextInputLayout>
 
