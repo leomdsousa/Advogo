@@ -1,8 +1,7 @@
 package com.example.advogo.repositories
 
 import com.example.advogo.models.Advogado
-import com.example.advogo.models.Telefone
-import com.example.advogo.models.TelefoneTipo
+import com.example.advogo.models.Endereco
 import com.example.advogo.utils.Constants
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
@@ -10,19 +9,19 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import javax.inject.Inject
 
-class TelefoneRepository @Inject constructor(
+class EnderecoRepository @Inject constructor(
     //private val firebaseStore: FirebaseFirestore
-): ITelefoneRepository {
+): IEnderecoRepository {
     private val firebaseStore = FirebaseFirestore.getInstance()
 
-    override fun ObterTelefones(onSuccessListener: (List<Telefone>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun ObterEnderecos(onSuccessListener: (lista: List<Endereco>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
-            .collection(Constants.TELEFONES_TABLE)
+            .collection(Constants.PROCESSOS_TABLE)
             .get()
             .addOnSuccessListener { document ->
                 if (!document.isEmpty) {
-                    val lista = document.toObjects(Telefone::class.java)
-                    onSuccessListener(lista)
+                    val enderecos = document.toObjects(Endereco::class.java)
+                    onSuccessListener(enderecos)
                 } else {
                     onFailureListener(null)
                 }
@@ -32,15 +31,15 @@ class TelefoneRepository @Inject constructor(
             }
     }
 
-    override fun ObterTelefone(id: String, onSuccessListener: (telefone: Telefone) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun ObterEndereco(id: String, onSuccessListener: (process: Endereco) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
-            .collection(Constants.TELEFONES_TABLE)
-            .whereEqualTo(Constants.TELEFONES_ID, id)
+            .collection(Constants.PROCESSOS_TABLE)
+            .document(id)
             .get()
             .addOnSuccessListener { document ->
-                if (!document.isEmpty) {
-                    val telefone = document.first().toObject(Telefone::class.java)
-                    onSuccessListener(telefone)
+                if (document.exists()) {
+                    val endereco = document.toObject(Endereco::class.java)!!
+                    onSuccessListener(endereco)
                 } else {
                     onFailureListener(null)
                 }
@@ -50,7 +49,7 @@ class TelefoneRepository @Inject constructor(
             }
     }
 
-    override fun AdicionarTelefone(model: Telefone, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun AdicionarEndereco(model: Endereco, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.ADVOGADOS_TABLE)
             .document(model.id!!)
@@ -63,7 +62,7 @@ class TelefoneRepository @Inject constructor(
             }
     }
 
-    override fun AtualizarTelefone(model: Telefone, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun AtualizarEndereco(model: Endereco, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.ADVOGADOS_TABLE)
             .document(model.id!!)
@@ -76,7 +75,7 @@ class TelefoneRepository @Inject constructor(
             }
     }
 
-    override fun DeletarTelefone(id: String, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun DeletarEndereco(id: String, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.ADVOGADOS_TABLE)
             .document(id)
@@ -90,10 +89,10 @@ class TelefoneRepository @Inject constructor(
     }
 }
 
-interface ITelefoneRepository {
-    fun ObterTelefones(onSuccessListener: (List<Telefone>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
-    fun ObterTelefone(id: String, onSuccessListener: (telefone: Telefone) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
-    fun AdicionarTelefone(model: Telefone, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (ex: Exception?) -> Unit)
-    fun AtualizarTelefone(model: Telefone, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (ex: Exception?) -> Unit)
-    fun DeletarTelefone(id: String, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (ex: Exception?) -> Unit)
+interface IEnderecoRepository {
+    fun ObterEnderecos(onSuccessListener: (lista: List<Endereco>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun ObterEndereco(id: String, onSuccessListener: (endereco: Endereco) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun AdicionarEndereco(model: Endereco, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (ex: Exception?) -> Unit)
+    fun AtualizarEndereco(model: Endereco, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (ex: Exception?) -> Unit)
+    fun DeletarEndereco(id: String, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (ex: Exception?) -> Unit)
 }

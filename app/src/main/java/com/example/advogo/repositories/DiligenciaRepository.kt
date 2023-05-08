@@ -1,15 +1,16 @@
 package com.example.advogo.repositories
 
 import com.example.advogo.models.Diligencia
-import com.example.advogo.models.Processo
 import com.example.advogo.utils.Constants
-import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import javax.inject.Inject
 
 
-class DiligenciaRepository @Inject constructor(): IDiligenciaRepository {
+class DiligenciaRepository @Inject constructor(
+    //private val firebaseStore: FirebaseFirestore
+) : IDiligenciaRepository {
     private val firebaseStore = FirebaseFirestore.getInstance()
 
     override fun ObterDiligencias(onSuccessListener: (lista: List<Diligencia>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
@@ -84,15 +85,42 @@ class DiligenciaRepository @Inject constructor(): IDiligenciaRepository {
     }
 
     override fun AdicionarDiligencia(model: Diligencia, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (ex: Exception?) -> Unit) {
-        TODO("Not yet implemented")
+        firebaseStore
+            .collection(Constants.ADVOGADOS_TABLE)
+            .document(model.id!!)
+            .set(model, SetOptions.merge())
+            .addOnSuccessListener {
+                onSuccessListener
+            }
+            .addOnFailureListener {
+                onFailureListener
+            }
     }
 
     override fun AtualizarDiligencia(model: Diligencia, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (ex: Exception?) -> Unit) {
-        TODO("Not yet implemented")
+        firebaseStore
+            .collection(Constants.ADVOGADOS_TABLE)
+            .document(model.id!!)
+            .set(model, SetOptions.merge())
+            .addOnSuccessListener {
+                onSuccessListener
+            }
+            .addOnFailureListener {
+                onFailureListener
+            }
     }
 
     override fun DeletarDiligencia(id: String, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (ex: Exception?) -> Unit) {
-        TODO("Not yet implemented")
+        firebaseStore
+            .collection(Constants.ADVOGADOS_TABLE)
+            .document(id)
+            .delete()
+            .addOnSuccessListener {
+                onSuccessListener
+            }
+            .addOnFailureListener {
+                onFailureListener
+            }
     }
 }
 

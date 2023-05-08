@@ -11,9 +11,10 @@ import com.google.firebase.firestore.SetOptions
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
-class AdvogadoRepository @Inject constructor(): IAdvogadoRepository {
-    @Inject lateinit var _telefoneRepository: ITelefoneRepository
-
+class AdvogadoRepository @Inject constructor(
+    //private val firebaseStore: FirebaseFirestore
+    //private val telefoneRepository: TelefoneRepository
+): IAdvogadoRepository {
     private val firebaseStore = FirebaseFirestore.getInstance()
 
     override fun ObterAdvogados(onSuccessListener: OnSuccessListener<List<Advogado>>, onFailureListener: (exception: Exception?) -> Unit) {
@@ -31,8 +32,12 @@ class AdvogadoRepository @Inject constructor(): IAdvogadoRepository {
                 if (document.exists()) {
                     val advogado = document.toObject(Advogado::class.java)!!
 
-                    //val telefoneId = document[Constants.ADVOGADOS_TELEFONE].toString()
-                    //advogado.telefone = _telefoneRepository.ObterTelefone(telefoneId, { null }, { null })!!
+                    val telefoneId = document[Constants.ADVOGADOS_TELEFONE].toString()
+//                    telefoneRepository.ObterTelefone(
+//                        telefoneId,
+//                        { tel -> advogado.telefone = tel.numero },
+//                        { null } //TODO("Implementar")
+//                    )
 
                     onSuccessListener(advogado)
                 } else {

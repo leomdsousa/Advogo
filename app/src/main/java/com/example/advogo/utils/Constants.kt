@@ -13,10 +13,17 @@ object Constants {
     const val ADVOGADOS_ENDEREDO_LONG = "enderecoLong"
     const val ADVOGADOS_TELEFONE = "telefone"
 
-
     const val PROCESSOS_TABLE = "processos"
     const val PROCESSOS_ID = "_id"
     const val PROCESSOS_NUMERO = "numero"
+
+    const val PROCESSOS_TIPOS_TABLE = "processosTipos"
+    const val PROCESSOS_TIPOS_ID = "_id"
+    const val PROCESSOS_TIPOS_TIPO = "tipo"
+
+    const val PROCESSOS_STATUS_TABLE = "processosStatus"
+    const val PROCESSOS_STATUS_ID = "_id"
+    const val PROCESSOS_STATUS_STATUS = "status"
 
     const val DILIGENCIAS_TABLE = "diligencias"
     const val DILIGENCIAS_ID = "_id"
@@ -44,6 +51,11 @@ object Constants {
     const val FROM_LOGIN_ACTIVITY = "FROM_LOGIN_ACTIVITY"
     const val FROM_PERFIL_ACTIVITY = "FROM_PERFIL_ACTIVITY"
     const val FROM_PROCESSO_CADASTRO_ACTIVITY = "FROM_PROCESSO_CADASTRO_ACTIVITY"
+
+    //Indica para Map Acitivy qual objeto obter
+    const val PROCESSO_MAP = "PROCESSO_MAP"
+    const val DILIGENCIA_MAP = "DILIGENCIA_MAP"
+    const val ADVOGADO_MAP = "ADVOGADO_MAP"
 
     const val ADVOGO_PREFERENCES: String = "AdvogoPrefs"
 }

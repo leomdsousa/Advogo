@@ -12,9 +12,10 @@ data class Processo(
     var tipo: Long? = null,
     var status: Long? = null,
     var imagem: String? = null,
-    var data: Date? = null,
-    var cliente: Cliente? = null,
-    var advogado: Advogado? = null,
-    var diligencias: List<Diligencia>? = null
+    var data: String? = null,
+    var clienteId: String? = null,
+    var advogadoId: String? = null,
+    var diligencias: List<Int>? = null,
+    var arquivos: List<String>? = null
 ): Parcelable {
 }

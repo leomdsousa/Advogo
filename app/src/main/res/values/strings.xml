@@ -1,5 +1,12 @@
 <resources>
     <string name="app_name">Advogo</string>
+    <string name="title_activity_map">Google Maps</string>
+    <string name="google_maps_api_key">AIzaSyAhI74ij4CwgG9w_mlPR1Bdg7vc96dZcpM</string>
+
+    <!--SHARED-->
+    <string name="sim">Sim</string>
+    <string name="nao">Não</string>
+    <string name="atencao">Atenção</string>
     <string name="create">Salvar</string>
     <string name="update">Atualizar</string>
     <string name="adv">Advogado</string>
@@ -8,6 +15,9 @@
     <string name="selectData">Selecionar data</string>
     <string name="labelColor">Cor</string>
 
+    <string name="confirmacaoDeletarProcesso">Deseja deletar o processo \'%1$s\'?</string>
+
+    <!--HINT-->
     <string name="hintProcessoName">Nome</string>
     <string name="hintProcessoDescription">Descrição</string>
     <string name="hintNumeroProcessoDescription">Nº do processo</string>
@@ -62,6 +72,8 @@
     <string name="deletarProcesso">Deletar Processo</string>
     <string name="selecionarAdvogado">Selecionar Advogado</string>
     <string name="addAdvogado">Add Advogado</string>
+
+
 
 
 </resources>

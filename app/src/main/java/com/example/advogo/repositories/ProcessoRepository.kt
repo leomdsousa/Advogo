@@ -6,9 +6,12 @@ import com.example.advogo.utils.Constants
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import javax.inject.Inject
 
-class ProcessoRepository @Inject constructor(): IProcessoRepository {
+class ProcessoRepository @Inject constructor(
+    //private val firebaseStore: FirebaseFirestore
+): IProcessoRepository {
     private val firebaseStore = FirebaseFirestore.getInstance()
 
     override fun ObterProcessos(onSuccessListener: (lista: List<Processo>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
@@ -65,15 +68,42 @@ class ProcessoRepository @Inject constructor(): IProcessoRepository {
     }
 
     override fun AdicionarProcesso(model: Processo, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (ex: Exception?) -> Unit) {
-        TODO("Not yet implemented")
+        firebaseStore
+            .collection(Constants.ADVOGADOS_TABLE)
+            .document(model.id!!)
+            .set(model, SetOptions.merge())
+            .addOnSuccessListener {
+                onSuccessListener
+            }
+            .addOnFailureListener {
+                onFailureListener
+            }
     }
 
     override fun AtualizarProcesso(model: Processo, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (ex: Exception?) -> Unit) {
-        TODO("Not yet implemented")
+        firebaseStore
+            .collection(Constants.ADVOGADOS_TABLE)
+            .document(model.id!!)
+            .set(model, SetOptions.merge())
+            .addOnSuccessListener {
+                onSuccessListener
+            }
+            .addOnFailureListener {
+                onFailureListener
+            }
     }
 
     override fun DeletarProcesso(id: String, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (ex: Exception?) -> Unit) {
-        TODO("Not yet implemented")
+        firebaseStore
+            .collection(Constants.ADVOGADOS_TABLE)
+            .document(id)
+            .delete()
+            .addOnSuccessListener {
+                onSuccessListener
+            }
+            .addOnFailureListener {
+                onFailureListener
+            }
     }
 }
 
