@@ -1,15 +1,16 @@
 <resources>
     <!--SHARED-->
     <dimen name="toolbarTitleTextSize">25sp</dimen>
+    <dimen name="screenContentMarginTop">40dp</dimen>
+    <dimen name="cardViewCornerRadius">10dp</dimen>
+    <dimen name="mainScreenContentPadding">16dp</dimen>
+    <dimen name="noProcessAvailableTextSize">16sp</dimen>
+    <dimen name="fabMargin">16dp</dimen>
+    <dimen name="itemSelectedMarginEnd">10dp</dimen>
 
     <!--SPLASH SCREEN-->
     <dimen name="splashScreenTextSize">50sp</dimen>
     <dimen name="splashScreenPadding">15dp</dimen>
-
-    <dimen name="mainScreenContentPadding">16dp</dimen>
-    <dimen name="noProcessAvailableTextSize">16sp</dimen>
-
-    <dimen name="fabMargin">16dp</dimen>
 
     <!--NAV-->
     <dimen name="heightOfNavMain">200dp</dimen>
@@ -27,7 +28,7 @@
     <dimen name="progressTextMarginStart">16dp</dimen>
     <dimen name="progressTextSize">16sp</dimen>
 
-    <!--INTRO SCREEN-->
+    <!--INTRO-->
     <dimen name="introScreenTitleTextSize">40sp</dimen>
     <dimen name="introScreenTitleTextMarginTop">40dp</dimen>
     <dimen name="introScreenImageMarginTop">30dp</dimen>
@@ -43,7 +44,7 @@
     <dimen name="introScreenSignUpBtnMarginTop">15dp</dimen>
     <dimen name="btnTextSize">18sp</dimen>
 
-    <!--SIGN UP SCREEN-->
+    <!--CADASTRO-->
     <dimen name="signUpScreenBtnMarginTop">30dp</dimen>
     <dimen name="authenticationScreenContentMarginTop">40dp</dimen>
     <dimen name="authenticationDescriptionTextSize">16sp</dimen>
@@ -55,13 +56,10 @@
     <dimen name="etTextSize">16sp</dimen>
     <dimen name="authenticationScreenTilMarginTop">20dp</dimen>
 
-    <!--SIGN IN-->
+    <!--LOGIN-->
     <dimen name="authenticationScreenMarginTop">60dp</dimen>
 
-    <dimen name="screenContentMarginTop">40dp</dimen>
-    <dimen name="cardViewCornerRadius">10dp</dimen>
-
-    <!--PROFILE SCREEN-->
+    <!--PERFIL-->
     <dimen name="profileScreenContentMarginStartEnd">16dp</dimen>
     <dimen name="profileScreenContentMarginTopBottom">10dp</dimen>
     <dimen name="profileScreenContentPadding">16dp</dimen>
@@ -70,4 +68,84 @@
     <dimen name="profileEtEmailMarginTop">20dp</dimen>
     <dimen name="profileEtMobileMarginTop">20dp</dimen>
     <dimen name="profileBtnUpdateMarginTop">30dp</dimen>
+
+    <!--PROCESSO CADASTRO-->
+    <dimen name="processoCadastroContentPadding">16dp</dimen>
+    <dimen name="processoImageSize">100dp</dimen>
+    <dimen name="processoCadastroTilMarginTop">25dp</dimen>
+    <dimen name="processoCadastroBtnMarginTop">30dp</dimen>
+
+    <!--PROCESSO DETALHES-->
+    <dimen name="processoDetalheContentPadding">16dp</dimen>
+    <dimen name="processoDetalheCvContentPadding">16dp</dimen>
+    <dimen name="processoDetalheLabelTextSize">14sp</dimen>
+    <dimen name="processoDetalheLabelMarginTop">15dp</dimen>
+    <dimen name="processoDetalheValueMarginTop">5dp</dimen>
+    <dimen name="processoDetalheValuePadding">10dp</dimen>
+    <dimen name="processoDetalheMembersLabelMarginTop">15dp</dimen>
+    <dimen name="processoDetalheUpdateBtnMarginTop">30dp</dimen>
+    <dimen name="processoDetalheCvCardNameMarginBottom">10dp</dimen>
+
+    <!--ITEM PROCESSO-->
+    <dimen name="itemProcessoContentMarginBottom">10dp</dimen>
+    <dimen name="itemProcessoContentPadding">10dp</dimen>
+    <dimen name="itemProcessoImageSize">60dp</dimen>
+    <dimen name="itemProcessoImageCircularBorderWidth">0.5dp</dimen>
+    <dimen name="itemProcessoDescricaoLayoutMarginStart">10dp</dimen>
+    <dimen name="itemProcessoDescricaoTextSize">18sp</dimen>
+    <dimen name="itemProcessoNumeroTextSize">14sp</dimen>
+    <dimen name="itemProcessoTipoTextSize">14sp</dimen>
+    <dimen name="itemProcessoStatusTextSize">14sp</dimen>
+    <dimen name="itemProcessoDividerMarginTop">5dp</dimen>
+    <dimen name="itemProcessoDividerHeight">0.3dp</dimen>
+
+    <!--ITEM DILIGENCIA-->
+    <dimen name="itemDiligenciaContentMarginBottom">10dp</dimen>
+    <dimen name="itemDiligenciaContentPadding">10dp</dimen>
+    <dimen name="itemDiligenciaImageSize">60dp</dimen>
+    <dimen name="itemDiligenciaImageCircularBorderWidth">0.5dp</dimen>
+    <dimen name="itemDiligenciaDescricaoLayoutMarginStart">10dp</dimen>
+    <dimen name="itemDiligenciaDescricaoTextSize">16sp</dimen>
+    <dimen name="itemDiligenciaProcessoTextSize">12sp</dimen>
+    <dimen name="itemDiligenciaTipoTextSize">12sp</dimen>
+    <dimen name="itemDiligenciaAdvTextSize">12sp</dimen>
+    <dimen name="itemDiligenciaDataTextSize">12sp</dimen>
+    <dimen name="itemDiligenciaStatusTextSize">12sp</dimen>
+    <dimen name="itemDiligenciaDividerMarginTop">5dp</dimen>
+    <dimen name="itemDiligenciaDividerHeight">0.3dp</dimen>
+
+    <!--ITEM ADVOGADO-->
+    <dimen name="itemAdvMarginBottom">10dp</dimen>
+    <dimen name="itemAdvContentPadding">10dp</dimen>
+    <dimen name="itemAdvAdvImageSize">60dp</dimen>
+    <dimen name="itemAdvImageCircularWidthSize">0.5dp</dimen>
+    <dimen name="itemAdvDetailLayoutMarginStart">10dp</dimen>
+    <dimen name="itemAdvNameTextSize">18sp</dimen>
+    <dimen name="itemAdvEmailTextSize">14sp</dimen>
+    <dimen name="itemAdvDividerHeight">0.3dp</dimen>
+    <dimen name="itemAdvDividerMarginTop">5dp</dimen>
+
+    <!--DIALOG ADVOGADO-->
+    <dimen name="dialogAdvCvElevation">3dp</dimen>
+    <dimen name="dialogAdvCvCornerRadius">3dp</dimen>
+    <dimen name="dialogAdvContentPadding">10dp</dimen>
+    <dimen name="dialogAdvTitlePadding">5dp</dimen>
+    <dimen name="dialogAdvTitleTextSize">18sp</dimen>
+    <dimen name="advDialogDividerHeight">1dp</dimen>
+    <dimen name="advDialogDividerMarginTopBottom">3dp</dimen>
+    <dimen name="advDialogTilEmailMarginTop">10dp</dimen>
+    <dimen name="advDialogActionLayoutHeight">40dp</dimen>
+    <dimen name="advDialogActionLayoutMarginTop">10dp</dimen>
+    <dimen name="advDialogActionButtonPadding">10dp</dimen>
+    <dimen name="advDialogActionButtonTextSize">16sp</dimen>
+
+    <dimen name="itemSelectedAdvImageSize">45dp</dimen>
+
+    <!--DIALOG LIST-->
+    <dimen name="dialogListCvElevationAndCornerRadius">3dp</dimen>
+    <dimen name="dialogListContentPadding">10dp</dimen>
+    <dimen name="dialogListTitlePadding">5dp</dimen>
+    <dimen name="dialogListTitleTextSize">18sp</dimen>
+    <dimen name="dialogListDividerHeight">1dp</dimen>
+    <dimen name="dialogListMarginTopBottom">3dp</dimen>
 </resources>

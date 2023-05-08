@@ -5,11 +5,13 @@ import kotlinx.parcelize.Parcelize
 import java.util.*
 
 @Parcelize
-class Processo(
+data class Processo(
     var id: String? = null,
     var numero: String? = null,
     var descricao: String? = null,
-    var tipo: String? = null,
+    var tipo: Long? = null,
+    var status: Long? = null,
+    var imagem: String? = null,
     var data: Date? = null,
     var cliente: Cliente? = null,
     var advogado: Advogado? = null,

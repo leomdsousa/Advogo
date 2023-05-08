@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/shape_dialog_rounded"
+        app:cardCornerRadius="@dimen/dialogListCvElevationAndCornerRadius"
+        app:cardElevation="@dimen/dialogListCvElevationAndCornerRadius"
+        app:cardUseCompatPadding="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/dialogListContentPadding">
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dialogListTitlePadding"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="@dimen/dialogListTitleTextSize"
+                android:textStyle="bold"
+                android:visibility="visible"
+                tools:text="Select" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dialogListDividerHeight"
+                android:layout_marginTop="@dimen/dialogListMarginTopBottom"
+                android:layout_marginBottom="@dimen/dialogListMarginTopBottom"
+                android:background="@color/dividerColor" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible"
+                tools:visibility="gone" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</FrameLayout>

@@ -1,9 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".activities.ProcessoDetalheActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_processo_detalhe_activity"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/processoDetalheContentPadding">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/processoDetalheCvCardNameMarginBottom"
+            android:elevation="@dimen/cardViewElevation"
+            app:cardCornerRadius="@dimen/cardViewCornerRadius">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:padding="@dimen/processoDetalheCvContentPadding">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/et_name_processo_detalhe"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hintProcessoNome"
+                        android:inputType="text"
+                        android:textSize="@dimen/etTextSize"
+                        tools:text="Test" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="@dimen/cardViewElevation"
+            app:cardCornerRadius="@dimen/cardViewCornerRadius">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:padding="@dimen/processoDetalheCvContentPadding">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/labelColor"
+                    android:textColor="@color/secondaryTextColor"
+                    android:textSize="@dimen/processoDetalheLabelTextSize" />
+
+                <TextView
+                    android:id="@+id/tv_select_adv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/processoDetalheValueMarginTop"
+                    android:padding="@dimen/processoDetalheValuePadding"
+                    android:text="@string/selectAdv"
+                    android:textColor="@color/primaryTextColor"
+                    android:visibility="visible"
+                    tools:visibility="visible" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_selected_adv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/processoDetalheValueMarginTop"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/processoDetalheLabelMarginTop"
+                    android:text="@string/data"
+                    android:textColor="@color/secondaryTextColor"
+                    android:textSize="@dimen/processoDetalheLabelTextSize" />
+
+                <TextView
+                    android:id="@+id/tv_select_data"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/processoDetalheValueMarginTop"
+                    android:padding="@dimen/processoDetalheValuePadding"
+                    android:text="@string/selectData"
+                    android:textColor="@color/primaryTextColor" />
+
+                <Button
+                    android:id="@+id/btn_update_processo_detalhe"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/processoDetalheUpdateBtnMarginTop"
+                    android:background="@drawable/shape_button_rounded"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:paddingTop="@dimen/btnPaddingTopBottom"
+                    android:paddingBottom="@dimen/btnPaddingTopBottom"
+                    android:text="@string/update"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/btnTextSize" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+</LinearLayout>

@@ -85,7 +85,7 @@ class LoginActivity : BaseActivity() {
     fun loginSuccess(advogado: Advogado) {
         //TODO("Fechar progress bar")
         val intent = Intent(this@LoginActivity, MainActivity::class.java)
-        intent.putExtra(Constants.FROM_LOGIN, Constants.FROM_LOGIN)
+        intent.putExtra(Constants.FROM_LOGIN_ACTIVITY, Constants.FROM_LOGIN_ACTIVITY)
         startActivity(intent)
         finish()
     }

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/itemAdvMarginBottom"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/itemAdvContentPadding">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/iv_adv_image"
+            android:layout_width="@dimen/itemAdvAdvImageSize"
+            android:layout_height="@dimen/itemAdvAdvImageSize"
+            android:contentDescription="@string/imageContentDescription"
+            android:padding="1dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_user_place_holder"
+            app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
+            app:strokeColor="@color/primaryTextColor"
+            app:strokeWidth="1dp"  />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/itemAdvDetailLayoutMarginStart"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_adv_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="@dimen/itemAdvNameTextSize"
+                tools:text="Adv Name" />
+
+            <TextView
+                android:id="@+id/tv_adv_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/secondaryTextColor"
+                android:textSize="@dimen/itemAdvEmailTextSize"
+                tools:text="Email" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/iv_selected_adv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|end"
+            android:layout_marginEnd="@dimen/itemSelectedMarginEnd"
+            android:contentDescription="@string/imageContentDescription"
+            android:src="@drawable/ic_vector_color_accent_done_24dp"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/itemAdvDividerHeight"
+        android:layout_marginTop="@dimen/itemAdvDividerMarginTop"
+        android:background="@color/dividerColor" />
+</LinearLayout>

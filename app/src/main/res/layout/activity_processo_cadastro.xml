@@ -1,82 +1,211 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activities.ProcessoCadastroActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbarProcessoCadastroActivity"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+    </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="@dimen/processoCadastroContentPadding">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/criar_processo"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:elevation="@dimen/cardViewElevation"
+                app:cardCornerRadius="@dimen/cardViewCornerRadius">
 
-        <EditText
-            android:id="@+id/numero_processo_edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/numero_processo" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:padding="@dimen/cardViewLayoutContentPadding">
 
-        <EditText
-            android:id="@+id/nome_processo_edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/nome_processo" />
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/ivProcessoImage"
+                        android:layout_width="@dimen/processoImageSize"
+                        android:layout_height="@dimen/processoImageSize"
+                        android:contentDescription="Processo imagem"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_processo_place_holder"
+                        app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
+                        app:strokeColor="@color/white"
+                        app:strokeWidth="1dp"  />
 
-        <EditText
-            android:id="@+id/descricao_processo_edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/descricao_processo" />
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/processoCadastroTilMarginTop">
 
-        <DatePicker
-            android:id="@+id/data_abertura_picker"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:calendarViewShown="false" />
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/etProcessoName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/hintProcessoName"
+                            android:inputType="text"
+                            android:textSize="@dimen/etTextSize" />
 
-        <EditText
-            android:id="@+id/status_processo_edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/status_processo" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
-        <DatePicker
-            android:id="@+id/data_movimentacao_picker"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:calendarViewShown="false" />
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/processoCadastroTilMarginTop">
 
-        <EditText
-            android:id="@+id/tarefa_pendente_edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/tarefa_pendente" />
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/etNumeroProcesso"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/hintNumeroProcessoDescription"
+                            android:inputType="text"
+                            android:textSize="@dimen/etTextSize" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/arquivo_processo"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
-        <Button
-            android:id="@+id/selecionar_arquivo_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/selecionar_arquivo" />
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/processoCadastroTilMarginTop">
 
-        <Button
-            android:id="@+id/salvar_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/salvar" />
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/etDescricao"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/hintProcessoDescription"
+                            android:inputType="text"
+                            android:textSize="@dimen/etTextSize" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/processoCadastroTilMarginTop">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/etTipo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/hintTipoDescription"
+                            android:inputType="text"
+                            android:textSize="@dimen/etTextSize" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/processoCadastroTilMarginTop">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/etStatus"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/hintStatusDescription"
+                            android:inputType="text"
+                            android:textSize="@dimen/etTextSize" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/processoCadastroTilMarginTop">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/etData"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/hintDataDescription"
+                            android:inputType="text"
+                            android:textSize="@dimen/etTextSize" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/processoCadastroTilMarginTop">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/etCliente"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/hintClienteDescription"
+                            android:inputType="text"
+                            android:textSize="@dimen/etTextSize" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/processoCadastroTilMarginTop">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/etAdv"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/hintAdvDescription"
+                            android:inputType="text"
+                            android:textSize="@dimen/etTextSize" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/processoCadastroTilMarginTop">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/etDiligencias"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/hintDiligenciasDescription"
+                            android:inputType="text"
+                            android:textSize="@dimen/etTextSize" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <Button
+                        android:id="@+id/btnProcessoCadastro"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/processoCadastroBtnMarginTop"
+                        android:background="@drawable/shape_button_rounded"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:gravity="center"
+                        android:paddingTop="@dimen/btnPaddingTopBottom"
+                        android:paddingBottom="@dimen/btnPaddingTopBottom"
+                        android:text="@string/create"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/btnTextSize" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </ScrollView>
 
     </LinearLayout>
-</ScrollView>
+</LinearLayout>

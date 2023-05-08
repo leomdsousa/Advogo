@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/itemProcessoContentMarginBottom"
+    android:background="?attr/selectableItemBackground"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/itemProcessoContentPadding">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/iv_processo_image"
+            android:layout_width="@dimen/itemProcessoImageSize"
+            android:layout_height="@dimen/itemProcessoImageSize"
+            android:contentDescription="@string/imageContentDescription"
+            android:padding="1dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_processo_place_holder"
+            app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
+            app:strokeColor="@color/primaryTextColor"
+            app:strokeWidth="1dp"  />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/itemProcessoDescricaoLayoutMarginStart"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_descricao_processo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="@dimen/itemProcessoDescricaoTextSize"
+                tools:text="Processo Descrição" />
+
+            <TextView
+                android:id="@+id/tv_numero_processo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/secondaryTextColor"
+                android:textSize="@dimen/itemProcessoNumeroTextSize"
+                tools:text="Nº: 123456456789" />
+
+            <TextView
+                android:id="@+id/tv_tipo_processo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/secondaryTextColor"
+                android:textSize="@dimen/itemProcessoTipoTextSize"
+                tools:text="Tipo: Penal" />
+
+            <TextView
+                android:id="@+id/tv_status_processo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/secondaryTextColor"
+                android:textSize="@dimen/itemProcessoStatusTextSize"
+                tools:text="Status: Em Andamento" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/itemProcessoDividerHeight"
+        android:layout_marginTop="@dimen/itemProcessoDividerMarginTop"
+        android:background="@color/dividerColor" />
+</LinearLayout>

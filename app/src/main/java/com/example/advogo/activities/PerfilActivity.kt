@@ -12,6 +12,7 @@ import com.example.advogo.R
 import com.example.advogo.databinding.ActivityPerfilBinding
 import com.example.advogo.models.Advogado
 import com.example.advogo.repositories.IAdvogadoRepository
+import com.google.common.base.Converter
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import dagger.hilt.android.AndroidEntryPoint
@@ -87,28 +88,17 @@ class PerfilActivity : BaseActivity() {
     }
 
     private fun atualizarAdvogado() {
-//        val userHashMap = HashMap<String, Any>()
-//
-//        if (profileImagemURL.isNotEmpty() && profileImagemURL != userDetails.image) {
-//            userHashMap[Constants.USER_IMAGE] = profileImagemURL
-//        }
-//
-//        if (binding.etName.text.toString() != userDetails.name) {
-//            userHashMap[Constants.USER_NAME] = binding.etName.text.toString()
-//        }
-//
-//        if (binding.etMobile.text.toString() != userDetails.mobile.toString()) {
-//            userHashMap[Constants.USER_MOBILE] = binding.etMobile.text.toString().toLong()
-//        }
-
         val advogado = Advogado(
-            getCurrentUserID(),
-            (if (binding.etName.text.toString() != advogadoDetalhes.nome) binding.etName.text.toString() else advogadoDetalhes.nome),
-            (if (binding.etEmail.text.toString() != advogadoDetalhes.email) binding.etEmail.text.toString() else advogadoDetalhes.email),
-            (if (binding.etEndereco.text.toString() != advogadoDetalhes.endereco) binding.etEndereco.text.toString() else advogadoDetalhes.endereco),
-            (if (imagemPerfilURL.isNotEmpty() && imagemPerfilURL != advogadoDetalhes.image) imagemPerfilURL else advogadoDetalhes.image),
-            (if (binding.etOab.text.toString() != advogadoDetalhes.oab) binding.etOab.text.toString() else advogadoDetalhes.oab),
-            (if (binding.etTelefone.text.toString() != advogadoDetalhes.telefone) binding.etTelefone.text.toString() else advogadoDetalhes.telefone),
+            id = getCurrentUserID(),
+            nome = (if (binding.etName.text.toString() != advogadoDetalhes.nome) binding.etName.text.toString() else advogadoDetalhes.nome),
+            sobrenome = (if (binding.etSobrenome.text.toString() != advogadoDetalhes.sobrenome) binding.etSobrenome.text.toString() else advogadoDetalhes.sobrenome),
+            email = (if (binding.etEmail.text.toString() != advogadoDetalhes.email) binding.etEmail.text.toString() else advogadoDetalhes.email),
+            endereco = (if (binding.etEndereco.text.toString() != advogadoDetalhes.endereco) binding.etEndereco.text.toString() else advogadoDetalhes.endereco),
+            enderecoLat = 0,
+            enderecoLong = 0,
+            imagem = (if (imagemPerfilURL.isNotEmpty() && imagemPerfilURL != advogadoDetalhes.imagem) imagemPerfilURL else advogadoDetalhes.imagem),
+            oab = (if (binding.etOab.text.toString() != advogadoDetalhes.oab!!.toString()) binding.etOab.text.toString().toLong() else advogadoDetalhes.oab!!.toLong()),
+            telefone = (if (binding.etTelefone.text.toString() != advogadoDetalhes.telefone) binding.etTelefone.text.toString() else advogadoDetalhes.telefone),
         )
 
         _advRepository.AtualizarAdvogado(
@@ -154,14 +144,15 @@ class PerfilActivity : BaseActivity() {
 
         Glide
             .with(this@PerfilActivity)
-            .load(advogadoDetalhes.image)
+            .load(advogadoDetalhes.imagem)
             .centerCrop()
             .placeholder(R.drawable.ic_user_place_holder)
             .into(binding.ivUserImage)
 
         binding.etName.setText(advogadoDetalhes.nome)
+        binding.etSobrenome.setText(advogadoDetalhes.sobrenome)
         binding.etEmail.setText(advogadoDetalhes.email)
-        binding.etOab.setText(advogadoDetalhes.oab)
+        binding.etOab.setText(advogadoDetalhes.oab.toString())
         binding.etEndereco.setText(advogadoDetalhes.endereco)
         binding.etTelefone.setText(advogadoDetalhes.telefone)
     }

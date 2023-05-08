@@ -5,7 +5,7 @@ import kotlinx.parcelize.Parcelize
 import java.util.*
 
 @Parcelize
-class Diligencia(
+data class Diligencia(
     var id: String? = null,
     var descricao: String? = null,
     var data: Date? = null,

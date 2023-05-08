@@ -3,6 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/drawable-hdpi/ic_vector_color_accent_done_24dp.xml" value="0.1" />
+        <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/drawable-hdpi/ic_vector_delete_24dp.xml" value="0.1" />
+        <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/drawable-hdpi/shape_dialog_rounded.xml" value="0.1" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/drawable-xxhdpi/shape_button_rounded.xml" value="0.1" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/drawable-xxhdpi/white_border_shape_button_rounded.xml" value="0.1" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/drawable/ic_action_navigation_menu.xml" value="0.141" />
@@ -13,6 +16,7 @@
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/drawable/nav_header_main_background.xml" value="0.1" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout-w1240dp/activity_login.xml" value="0.25" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout-w1240dp/dialog_progress.xml" value="0.1" />
+        <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout-w1240dp/item_processo.xml" value="0.1" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout-w936dp/activity_login.xml" value="0.25" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/activity_cadastro.xml" value="0.25" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/activity_cadastro_processo.xml" value="0.33" />
@@ -20,12 +24,21 @@
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/activity_perfil.xml" value="0.22" />
+        <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/activity_processo_cadastro.xml" value="0.25" />
+        <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/activity_processo_detalhe.xml" value="0.33" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/activity_splash_screen.xml" value="0.25" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/app_bar_main.xml" value="0.13385416666666666" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/content_main.xml" value="0.13385416666666666" />
+        <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/dialog_list.xml" value="0.1" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/dialog_progress.xml" value="0.1" />
+        <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/item_advogado.xml" value="0.2786259541984733" />
+        <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/item_diligencia.xml" value="0.25" />
+        <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/item_processo.xml" value="0.33" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/nav_header_main.xml" value="0.1" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/menu/activity_main_drawer.xml" value="0.13489583333333333" />
+        <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/menu/menu_advogados.xml" value="0.13854166666666667" />
+        <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/menu/menu_advogados_add.xml" value="0.13854166666666667" />
+        <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/menu/menu_processo_delete.xml" value="0.13854166666666667" />
       </map>
     </option>
   </component>

@@ -42,134 +42,157 @@
             android:textColor="@color/secondaryTextColor"
             android:textSize="@dimen/authenticationDescriptionTextSize" />
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/authenticationScreenTilMarginStartEnd"
-            android:layout_marginTop="@dimen/authenticationScreenCardViewMarginTop"
-            android:layout_marginEnd="@dimen/authenticationScreenTilMarginStartEnd"
-            android:elevation="@dimen/cardViewElevation"
-            app:cardCornerRadius="@dimen/cardViewCornerRadius">
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
 
-            <LinearLayout
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="@dimen/cardViewLayoutContentPadding">
+                android:layout_marginStart="@dimen/authenticationScreenTilMarginStartEnd"
+                android:layout_marginTop="@dimen/authenticationScreenCardViewMarginTop"
+                android:layout_marginEnd="@dimen/authenticationScreenTilMarginStartEnd"
+                android:elevation="@dimen/cardViewElevation"
+                app:cardCornerRadius="@dimen/cardViewCornerRadius">
 
-                <com.google.android.material.textfield.TextInputLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/authenticationScreenTilMarginStartEnd"
-                    android:layout_marginEnd="@dimen/authenticationScreenTilMarginStartEnd">
+                    android:orientation="vertical"
+                    android:padding="@dimen/cardViewLayoutContentPadding">
 
-                    <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/etNome"
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/name"
-                        android:inputType="text"
-                        android:textSize="@dimen/etTextSize" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_marginStart="@dimen/authenticationScreenTilMarginStartEnd"
+                        android:layout_marginEnd="@dimen/authenticationScreenTilMarginStartEnd">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/authenticationScreenTilMarginStartEnd"
-                    android:layout_marginTop="@dimen/authenticationScreenTilMarginTop"
-                    android:layout_marginEnd="@dimen/authenticationScreenTilMarginStartEnd">
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/etNome"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/name"
+                            android:inputType="text"
+                            android:textSize="@dimen/etTextSize" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/etEmail"
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/email"
-                        android:inputType="textEmailAddress"
-                        android:textSize="@dimen/etTextSize" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_marginStart="@dimen/authenticationScreenTilMarginStartEnd"
+                        android:layout_marginTop="@dimen/authenticationScreenTilMarginTop"
+                        android:layout_marginEnd="@dimen/authenticationScreenTilMarginStartEnd">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/authenticationScreenTilMarginStartEnd"
-                    android:layout_marginTop="@dimen/authenticationScreenTilMarginTop"
-                    android:layout_marginEnd="@dimen/authenticationScreenTilMarginStartEnd">
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/etSobrenome"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/sobrenome"
+                            android:inputType="text"
+                            android:textSize="@dimen/etTextSize" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/etOab"
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/oab"
-                        android:inputType="phone"
-                        android:textSize="@dimen/etTextSize" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_marginStart="@dimen/authenticationScreenTilMarginStartEnd"
+                        android:layout_marginTop="@dimen/authenticationScreenTilMarginTop"
+                        android:layout_marginEnd="@dimen/authenticationScreenTilMarginStartEnd">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/authenticationScreenTilMarginStartEnd"
-                    android:layout_marginTop="@dimen/authenticationScreenTilMarginTop"
-                    android:layout_marginEnd="@dimen/authenticationScreenTilMarginStartEnd">
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/etEmail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/email"
+                            android:inputType="textEmailAddress"
+                            android:textSize="@dimen/etTextSize" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/etEndereco"
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/endereco"
-                        android:inputType="text"
-                        android:textSize="@dimen/etTextSize" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_marginStart="@dimen/authenticationScreenTilMarginStartEnd"
+                        android:layout_marginTop="@dimen/authenticationScreenTilMarginTop"
+                        android:layout_marginEnd="@dimen/authenticationScreenTilMarginStartEnd">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/authenticationScreenTilMarginStartEnd"
-                    android:layout_marginTop="@dimen/authenticationScreenTilMarginTop"
-                    android:layout_marginEnd="@dimen/authenticationScreenTilMarginStartEnd">
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/etOab"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/oab"
+                            android:inputType="phone"
+                            android:textSize="@dimen/etTextSize" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/etTelefone"
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/telefone"
-                        android:inputType="phone"
-                        android:textSize="@dimen/etTextSize" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_marginStart="@dimen/authenticationScreenTilMarginStartEnd"
+                        android:layout_marginTop="@dimen/authenticationScreenTilMarginTop"
+                        android:layout_marginEnd="@dimen/authenticationScreenTilMarginStartEnd">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/authenticationScreenTilMarginStartEnd"
-                    android:layout_marginTop="@dimen/authenticationScreenTilMarginTop"
-                    android:layout_marginEnd="@dimen/authenticationScreenTilMarginStartEnd">
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/etEndereco"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/endereco"
+                            android:inputType="text"
+                            android:textSize="@dimen/etTextSize" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/et_password"
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/password"
-                        android:inputType="textPassword"
-                        android:textSize="16sp" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_marginStart="@dimen/authenticationScreenTilMarginStartEnd"
+                        android:layout_marginTop="@dimen/authenticationScreenTilMarginTop"
+                        android:layout_marginEnd="@dimen/authenticationScreenTilMarginStartEnd">
 
-                <Button
-                    android:id="@+id/btnSignUp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/btnMarginStartEnd"
-                    android:layout_marginTop="@dimen/signUpScreenBtnMarginTop"
-                    android:layout_marginEnd="@dimen/btnMarginStartEnd"
-                    android:background="@drawable/shape_button_rounded"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:gravity="center"
-                    android:paddingTop="@dimen/btnPaddingTopBottom"
-                    android:paddingBottom="@dimen/btnPaddingTopBottom"
-                    android:text="@string/signUp"
-                    android:textColor="@android:color/white"
-                    android:textSize="@dimen/btnTextSize" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/etTelefone"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/telefone"
+                            android:inputType="phone"
+                            android:textSize="@dimen/etTextSize" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/authenticationScreenTilMarginStartEnd"
+                        android:layout_marginTop="@dimen/authenticationScreenTilMarginTop"
+                        android:layout_marginEnd="@dimen/authenticationScreenTilMarginStartEnd">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/et_password"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/password"
+                            android:inputType="textPassword"
+                            android:textSize="16sp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <Button
+                        android:id="@+id/btnSignUp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/btnMarginStartEnd"
+                        android:layout_marginTop="@dimen/signUpScreenBtnMarginTop"
+                        android:layout_marginEnd="@dimen/btnMarginStartEnd"
+                        android:background="@drawable/shape_button_rounded"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:gravity="center"
+                        android:paddingTop="@dimen/btnPaddingTopBottom"
+                        android:paddingBottom="@dimen/btnPaddingTopBottom"
+                        android:text="@string/signUp"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/btnTextSize" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+        </ScrollView>
+
     </LinearLayout>
 </LinearLayout>
     <!--END-->

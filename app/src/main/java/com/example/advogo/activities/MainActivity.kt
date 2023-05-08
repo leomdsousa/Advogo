@@ -7,11 +7,19 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.GravityCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.example.advogo.R
+import com.example.advogo.adapters.ProcessosAdapter
 import com.example.advogo.databinding.ActivityMainBinding
+import com.example.advogo.models.Advogado
+import com.example.advogo.models.Processo
 import com.example.advogo.repositories.IAdvogadoRepository
 import com.example.advogo.repositories.IDiligenciaRepository
 import com.example.advogo.repositories.IProcessoRepository
@@ -46,6 +54,11 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         sharedPreferences =
             this.getSharedPreferences(Constants.ADVOGO_PREFERENCES, Context.MODE_PRIVATE)
 
+        _processoRepository.ObterProcessos(
+            { processos -> setProcessosToUI(processos as ArrayList<Processo>) },
+            { null } //TODO("Implementar")
+        )
+
 //        val tokenUpdated = sharedPreferences.getBoolean(Constants.FCM_TOKEN_UPDATED, false)
 //
 //        if (tokenUpdated) {
@@ -61,19 +74,27 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                //if (result.data!!.hasExtra(PROFILE_REQUEST_CODE)) {
-                    //FirestoreService().loadUserData(this@MainActivity)
-                //} else if (result.data!!.hasExtra(CREATE_BOARD_REQUEST_CODE)) {
-                    //FirestoreService().getBoardsList(this@MainActivity)
-                //}
+                if (result.data!!.hasExtra(Constants.FROM_PERFIL_ACTIVITY)) {
+                    _advRepository.ObterAdvogado(
+                        getCurrentUserID(),
+                        { adv -> setNavigationAdvDetalhes(adv) },
+                        { ex -> null } //TODO("Imlementar OnFailure")
+                    )
+                } else if (result.data!!.hasExtra(Constants.FROM_PROCESSO_CADASTRO_ACTIVITY)) {
+                    _processoRepository.ObterProcessos(
+                        { lista -> setProcessosToUI(lista!! as ArrayList<Processo>) },
+                        { ex -> null } //TODO("Imlementar OnFailure")
+                    )
+                }
             } else {
                 Log.e("Cancelado", "Cancelado")
             }
         }
 
-        binding.appBarMain.fabCreateBoard.setOnClickListener {
+        binding.appBarMain.fabProcessoCadastro.setOnClickListener {
             val intent = Intent(this@MainActivity, ProcessoCadastroActivity::class.java)
             intent.putExtra(Constants.ADV_NOME_PARAM, advNome)
+            intent.putExtra(Constants.FROM_PROCESSO_CADASTRO_ACTIVITY, Constants.FROM_PROCESSO_CADASTRO_ACTIVITY)
             resultLauncher.launch(intent)
         }
     }
@@ -82,7 +103,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         when(menuItem.itemId) {
             R.id.navPerfil -> {
                 val intent = Intent(this@MainActivity, PerfilActivity::class.java)
-                //intent.putExtra(PROFILE_REQUEST_CODE, PROFILE_REQUEST_CODE)
+                intent.putExtra(Constants.FROM_PERFIL_ACTIVITY, Constants.FROM_PERFIL_ACTIVITY)
                 resultLauncher.launch(intent)
             }
             R.id.navDeslogar -> {
@@ -98,6 +119,58 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         binding.drawerLayout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    fun setProcessosToUI(lista: ArrayList<Processo>) {
+        //TODO("hideProgressDialog()")
+
+        if(lista.size > 0) {
+            binding.appBarMain.contentMain
+
+            binding.appBarMain.contentMain.rvBoardsList.visibility = View.VISIBLE
+            binding.appBarMain.contentMain.tvNoBoardsAvailable.visibility = View.GONE
+
+            binding.appBarMain.contentMain.rvBoardsList.layoutManager = LinearLayoutManager(this@MainActivity)
+            binding.appBarMain.contentMain.rvBoardsList.setHasFixedSize(true)
+
+            val adapter = ProcessosAdapter(this@MainActivity, lista)
+            binding.appBarMain.contentMain.rvBoardsList.adapter = adapter
+
+            adapter.setOnItemClickListener(object :
+                ProcessosAdapter.OnItemClickListener {
+                override fun onClick(model: Processo, position: Int) {
+                    val intent = Intent(this@MainActivity, ProcessoDetalheActivity::class.java)
+                    intent.putExtra(Constants.PROCESSO_ID_PARAM, model.id)
+                    startActivity(intent)
+                }
+            })
+
+        } else {
+            binding.appBarMain.contentMain.rvBoardsList.visibility = View.GONE
+            binding.appBarMain.contentMain.tvNoBoardsAvailable.visibility = View.VISIBLE
+        }
+    }
+
+    fun setNavigationAdvDetalhes(adv: Advogado) {
+        val headerView = binding.navView.getHeaderView(0)
+        val navUserImage = headerView.findViewById<ImageView>(R.id.ivUserImageNav)
+
+        advNome = adv.nome!!
+
+        Glide
+            .with(this@MainActivity)
+            .load(adv.imagem)
+            .centerCrop()
+            .placeholder(R.drawable.ic_user_place_holder)
+            .into(navUserImage)
+
+        val navUserName = headerView.findViewById<TextView>(R.id.tvUsernameNav)
+        navUserName.text = adv.nome
+
+//        if (readBoardsList) {
+//            showProgressDialog(resources.getString(R.string.please_wait))
+//            FirestoreService().getBoardsList(this@MainActivity)
+//        }
     }
 
     private fun setupActionBar() {

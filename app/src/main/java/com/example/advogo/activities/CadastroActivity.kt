@@ -57,13 +57,15 @@ class CadastroActivity : BaseActivity() {
                     if(task.isSuccessful) {
                         val firebaseUser = task.result!!.user
                         val advogado = Advogado(
-                            firebaseUser!!.uid,
-                            nome,
-                            firebaseUser.email!!,
-                            endereco,
-                            null,
-                            oab,
-                            telefone
+                            id = firebaseUser!!.uid,
+                            nome = nome,
+                            email = firebaseUser.email!!,
+                            endereco = endereco,
+                            enderecoLat = 0,
+                            enderecoLong = 0,
+                            imagem = null,
+                            oab = oab.toLong(),
+                            telefone = telefone
                         )
 
                         _advRepository.AdicionarAdvogado(

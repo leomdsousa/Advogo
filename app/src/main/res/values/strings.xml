@@ -1,5 +1,23 @@
 <resources>
     <string name="app_name">Advogo</string>
+    <string name="create">Salvar</string>
+    <string name="update">Atualizar</string>
+    <string name="adv">Advogado</string>
+    <string name="data">Data</string>
+    <string name="selectAdv">Selecionar advogado</string>
+    <string name="selectData">Selecionar data</string>
+    <string name="labelColor">Cor</string>
+
+    <string name="hintProcessoName">Nome</string>
+    <string name="hintProcessoDescription">Descrição</string>
+    <string name="hintNumeroProcessoDescription">Nº do processo</string>
+    <string name="hintTipoDescription">Tipo do processo</string>
+    <string name="hintStatusDescription">Status do processo</string>
+    <string name="hintDataDescription">Data do processo</string>
+    <string name="hintClienteDescription">Selecione o cliente</string>
+    <string name="hintAdvDescription">Selecione o advogado</string>
+    <string name="hintDiligenciasDescription">Diligências</string>
+
 
     <!--SPLASH SCREEN-->
     <string name="splashScreenTexto">Advogo</string>
@@ -23,6 +41,7 @@
     <!--CADASTRO-->
     <string name="signUpDescriptionText">Preencha o formulário para se cadastrar.</string>
     <string name="name">Nome</string>
+    <string name="sobrenome">Sobrenome</string>
     <string name="password">Senha</string>
     <string name="email">E-mail</string>
     <string name="telefone">Telefone</string>
@@ -32,21 +51,17 @@
 
     <!--PERFIL-->
     <string name="mobile">Telefone</string>
-    <string name="update">Atualizar</string>
     <string name="profile">Perfil</string>
     <string name="oab">Nº OAB</string>
     <string name="endereco">Endereço</string>
 
     <!--CADASTRO PROCESSO-->
-    <string name="criar_processo">Criar Processo</string>
-    <string name="numero_processo">Nº Processo: </string>
-    <string name="nome_processo">Nome do Processo: </string>
-    <string name="status_processo">Status: </string>
-    <string name="descricao_processo">Descrição: </string>
+    <string name="hintProcessoNome">Enter the board name</string>
+    <string name="hintProcessoDescricao">Enter the board description</string>
 
-    <string name="tarefa_pendente">Tarefas: </string>
-    <string name="arquivo_processo">Arquivos: </string>
-    <string name="selecionar_arquivo">Anexar</string>
-    <string name="salvar">Cadastrar</string>
+    <string name="deletarProcesso">Deletar Processo</string>
+    <string name="selecionarAdvogado">Selecionar Advogado</string>
+    <string name="addAdvogado">Add Advogado</string>
+
 
 </resources>
