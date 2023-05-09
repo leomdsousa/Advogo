@@ -34,5 +34,13 @@
             android:textColor="@color/secondaryTextColor"
             android:textSize="@dimen/noProcessAvailableTextSize" />
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_processo_cadastro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fabMargin"
+            app:srcCompat="@drawable/ic_vector_add_24dp" />
+
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

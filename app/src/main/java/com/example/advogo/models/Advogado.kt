@@ -16,10 +16,7 @@ data class Advogado(
     var imagem: String? = null,
     var oab: Long? = null,
     var telefone: String? = null,
-    //TODO("Validar")
-    var selecionado: Boolean = false
-): Parcelable {
-    @IgnoredOnParcel
-    val selecionado_2: Boolean = selecionado
-}
+    @Transient var telefoneObj: Telefone? = null,
+    @Transient var selecionado: Boolean = false
+): Parcelable { }
 

@@ -34,7 +34,7 @@ import javax.inject.Inject
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
     @Inject lateinit var _processoRepository: IProcessoRepository
     @Inject lateinit var _advRepository: IAdvogadoRepository
-    @Inject lateinit var _diligenciaRepository: IDiligenciaRepository
+//    @Inject lateinit var _diligenciaRepository: IDiligenciaRepository
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var sharedPreferences: SharedPreferences
@@ -91,7 +91,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             }
         }
 
-        binding.appBarMain.fabProcessoCadastro.setOnClickListener {
+        binding.appBarMain.contentMain.fabProcessoCadastro.setOnClickListener {
             val intent = Intent(this@MainActivity, ProcessoCadastroActivity::class.java)
             intent.putExtra(Constants.ADV_NOME_PARAM, advNome)
             intent.putExtra(Constants.FROM_PROCESSO_CADASTRO_ACTIVITY, Constants.FROM_PROCESSO_CADASTRO_ACTIVITY)

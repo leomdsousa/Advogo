@@ -72,8 +72,8 @@
     <string name="deletarProcesso">Deletar Processo</string>
     <string name="selecionarAdvogado">Selecionar Advogado</string>
     <string name="addAdvogado">Add Advogado</string>
-
-
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

@@ -22,8 +22,21 @@
         android:theme="@style/Theme.Advogo"
         tools:targetApi="31">
 
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="YOUR_API_KEY" />
+
         <activity
-            android:name=".activities.MapActivity"
+            android:name=".activities.ClienteCadastroActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.ClienteDetalheActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.ClienteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.MapAtivity"
             android:exported="false"
             android:label="@string/title_activity_map"
             android:screenOrientation="portrait"
@@ -75,10 +88,6 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Advogo.NoActionBar" />
-
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_api_key" />
     </application>
 
 </manifest>

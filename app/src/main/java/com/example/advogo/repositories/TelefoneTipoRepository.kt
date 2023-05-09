@@ -11,10 +11,8 @@ import com.google.firebase.firestore.SetOptions
 import javax.inject.Inject
 
 class TelefoneTipoRepository @Inject constructor(
-    //private val firebaseStore: FirebaseFirestore
+    private val firebaseStore: FirebaseFirestore
 ): ITelefoneTipoRepository {
-    private val firebaseStore = FirebaseFirestore.getInstance()
-
     override fun ObterTelefonesTipos(onSuccessListener: (List<TelefoneTipo>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.TELEFONES_TABLE)

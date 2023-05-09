@@ -10,9 +10,8 @@ import com.google.firebase.firestore.SetOptions
 import javax.inject.Inject
 
 class EnderecoRepository @Inject constructor(
-    //private val firebaseStore: FirebaseFirestore
+    private val firebaseStore: FirebaseFirestore
 ): IEnderecoRepository {
-    private val firebaseStore = FirebaseFirestore.getInstance()
 
     override fun ObterEnderecos(onSuccessListener: (lista: List<Endereco>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore

@@ -6,10 +6,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import javax.inject.Inject
 
 class ProcessoTipoRepository @Inject constructor(
-    //private val firebaseStore: FirebaseFirestore
+    private val firebaseStore: FirebaseFirestore
 ): IProcessoTipoRepository {
-    private val firebaseStore = FirebaseFirestore.getInstance()
-
     override fun ObterProcessosTipos(onSuccessListener: (List<ProcessoTipo>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.PROCESSOS_TIPOS_TABLE)

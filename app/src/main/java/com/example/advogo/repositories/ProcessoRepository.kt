@@ -8,11 +8,17 @@ import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import javax.inject.Inject
+import javax.inject.Provider
 
 class ProcessoRepository @Inject constructor(
-    //private val firebaseStore: FirebaseFirestore
+    private val firebaseStore: FirebaseFirestore,
+    private val advogadoRepository: AdvogadoRepository,
+    private val clienteRepository: ClienteRepository,
+    private val diligenciaRepository: Provider<DiligenciaRepository>,
+    private val tipoProcessoRepository: ProcessoTipoRepository,
+    private val statusProcessoRepository: ProcessoStatusRepository
 ): IProcessoRepository {
-    private val firebaseStore = FirebaseFirestore.getInstance()
+    private val _diligenciaRepository = diligenciaRepository.get()
 
     override fun ObterProcessos(onSuccessListener: (lista: List<Processo>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
@@ -21,6 +27,33 @@ class ProcessoRepository @Inject constructor(
             .addOnSuccessListener { document ->
                 if (!document.isEmpty) {
                     val processos = document.toObjects(Processo::class.java)
+
+                    for (item in processos) {
+                        clienteRepository.ObterCliente(
+                            item.cliente!!,
+                            { ret -> item.clienteObj = ret },
+                            { null } //TODO("Implementar")
+                        )
+
+                        advogadoRepository.ObterAdvogado(
+                            item.advogado!!,
+                            { ret -> item.advogadoObj = ret },
+                            { null } //TODO("Implementar")
+                        )
+
+                        statusProcessoRepository.ObterProcessoStatus(
+                            item.status!!,
+                            { ret -> item.statusObj = ret },
+                            { null } //TODO("Implementar")
+                        )
+
+                        tipoProcessoRepository.ObterProcessoTipo(
+                            item.tipo!!,
+                            { ret -> item.tipoObj = ret },
+                            { null } //TODO("Implementar")
+                        )
+                    }
+
                     onSuccessListener(processos)
                 } else {
                     onFailureListener(null)
@@ -39,6 +72,31 @@ class ProcessoRepository @Inject constructor(
             .addOnSuccessListener { document ->
                 if (document.exists()) {
                     val processo = document.toObject(Processo::class.java)!!
+
+                    clienteRepository.ObterCliente(
+                        processo.cliente!!,
+                        { ret -> processo.clienteObj = ret },
+                        { null } //TODO("Implementar")
+                    )
+
+                    advogadoRepository.ObterAdvogado(
+                        processo.advogado!!,
+                        { ret -> processo.advogadoObj = ret },
+                        { null } //TODO("Implementar")
+                    )
+
+                    statusProcessoRepository.ObterProcessoStatus(
+                        processo.status!!,
+                        { ret -> processo.statusObj = ret },
+                        { null } //TODO("Implementar")
+                    )
+
+                    tipoProcessoRepository.ObterProcessoTipo(
+                        processo.tipo!!,
+                        { ret -> processo.tipoObj = ret },
+                        { null } //TODO("Implementar")
+                    )
+
                     onSuccessListener(processo)
                 } else {
                     onFailureListener(null)

@@ -7,6 +7,7 @@ import kotlinx.parcelize.Parcelize
 data class Telefone(
     var id: String? = null,
     var numero: String? = null,
-    var tipo: Long? = null
+    var tipo: String? = null,
+    @Transient var tipoObj: TelefoneTipo? = null
 ): Parcelable {
 }

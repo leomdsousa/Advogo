@@ -6,10 +6,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import javax.inject.Inject
 
 class ProcessoStatusRepository @Inject constructor(
-    //private val firebaseStore: FirebaseFirestore
+    private val firebaseStore: FirebaseFirestore
 ): IProcessoStatusRepository {
-    private val firebaseStore = FirebaseFirestore.getInstance()
-
     override fun ObterProcessosStatuss(onSuccessListener: (List<ProcessoStatus>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.PROCESSOS_STATUS_TABLE)

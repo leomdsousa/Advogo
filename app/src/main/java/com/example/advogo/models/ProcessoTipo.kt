@@ -5,7 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class ProcessoTipo(
-    var id: Long? = null,
+    var id: String? = null,
     var tipo: String? = null
 ): Parcelable {
 }

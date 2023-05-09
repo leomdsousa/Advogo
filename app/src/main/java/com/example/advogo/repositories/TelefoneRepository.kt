@@ -9,12 +9,12 @@ import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import javax.inject.Inject
+import javax.inject.Provider
 
 class TelefoneRepository @Inject constructor(
-    //private val firebaseStore: FirebaseFirestore
+    private val firebaseStore: FirebaseFirestore,
+    private val telefoneTipoRepository: TelefoneTipoRepository
 ): ITelefoneRepository {
-    private val firebaseStore = FirebaseFirestore.getInstance()
-
     override fun ObterTelefones(onSuccessListener: (List<Telefone>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.TELEFONES_TABLE)

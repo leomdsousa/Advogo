@@ -9,6 +9,9 @@ data class Cliente(
     var nome: String? = null,
     var cpf: String,
     var endereco: String,
-    var telefones: List<Telefone>
+    var enderecoLat: Long,
+    var enderecoLong: Long,
+    var telefone: String? = null,
+    @Transient var telefoneObj: Telefone? = null
 ): Parcelable {
 }
