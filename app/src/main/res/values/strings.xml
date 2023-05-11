@@ -9,6 +9,7 @@
     <string name="atencao">Atenção</string>
     <string name="create">Salvar</string>
     <string name="update">Atualizar</string>
+    <string name="cadastrar">Cadastrar</string>
     <string name="adv">Advogado</string>
     <string name="data">Data</string>
     <string name="selectAdv">Selecionar advogado</string>
@@ -27,7 +28,22 @@
     <string name="hintClienteDescription">Selecione o cliente</string>
     <string name="hintAdvDescription">Selecione o advogado</string>
     <string name="hintDiligenciasDescription">Diligências</string>
+    <string name="hintCpf">CPF</string>
 
+    <string name="hintEndereco">Endereço</string>
+    <string name="hintEnderecoOuCep">Rua ou CEP</string>
+    <string name="hintEnderecoNumero">Nº da Rua</string>
+    <string name="hintEnderecoBairro">Bairro</string>
+    <string name="hintEnderecoCidade">Cidade</string>
+
+    <!--DILIGENCIA CADASTRO-->
+    <string name="diligenciaDescricao">Descrição</string>
+    <string name="diligenciaTipo">Tipo da Diligência</string>
+    <string name="hintDiligenciaEndereco">Endereço da Diligência</string>
+    <string name="diligenciaStatus">Status da Diligência</string>
+    <string name="hintDiligenciaData">Data da Diligência</string>
+    <string name="hintDiligenciaProcesso">Nº do Processo</string>
+    <string name="hintDiligenciaAdvogado">Advogado designado</string>
 
     <!--SPLASH SCREEN-->
     <string name="splashScreenTexto">Advogo</string>
@@ -40,6 +56,7 @@
     <string name="aguardePorfavor">Aguarde por favor...</string>
     <string name="cliqueNovamente">Clique novamente.</string>
     <string name="nenhumProcessoEncontrado">Nenhum processo encontrado!</string>
+    <string name="nenhumClienteEncontrado">Nenhum cliente encontrado!</string>
 
     <!--INTRO-->
     <string name="imageContentDescription">Imagem</string>
@@ -69,9 +86,18 @@
     <string name="hintProcessoNome">Enter the board name</string>
     <string name="hintProcessoDescricao">Enter the board description</string>
 
+    <!--CADASTRO CLIENTE-->
+    <string name="cadastroClienteTitle">Cadastro Cliente</string>
+    <string name="cadastroClienteDescriptionText">Preencha o formulário abaixo para o cadastro.</string>
+
+    <!--CADASTRO CLIENTE-->
+    <string name="diligenciaCadastroTitle">Cadastro Diligência</string>
+    <string name="diligenciaCadastroDescriptionText">Preencha o formulário abaixo para a diligência.</string>
+
     <string name="deletarProcesso">Deletar Processo</string>
     <string name="selecionarAdvogado">Selecionar Advogado</string>
     <string name="addAdvogado">Add Advogado</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

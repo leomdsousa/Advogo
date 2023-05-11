@@ -1,9 +1,178 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".activities.DiligenciaDetalheActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarDiligenciaDetalhe"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/screenContentMarginTop"
+        android:orientation="vertical">
+
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/diligenciaDetalheScreenTilMarginStartEnd"
+                android:layout_marginTop="@dimen/diligenciaDetalheScreenCardViewMarginTop"
+                android:layout_marginEnd="@dimen/diligenciaDetalheScreenTilMarginStartEnd"
+                android:elevation="@dimen/cardViewElevation"
+                app:cardCornerRadius="@dimen/cardViewCornerRadius">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/cardViewLayoutContentPadding">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/diligenciaDetalheScreenTilMarginStartEnd"
+                        android:layout_marginEnd="@dimen/diligenciaDetalheScreenTilMarginStartEnd">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/etDiligenciaDescricao"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/diligenciaDescricao"
+                            android:inputType="text"
+                            android:textSize="@dimen/etTextSize" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/diligenciaDetalheScreenTilMarginStartEnd"
+                        android:layout_marginTop="@dimen/diligenciaDetalheScreenTilMarginTop"
+                        android:layout_marginEnd="@dimen/diligenciaDetalheScreenTilMarginStartEnd">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/etDiligenciaTipo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/diligenciaTipo"
+                            android:inputType="text"
+                            android:textSize="@dimen/etTextSize" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/diligenciaDetalheScreenTilMarginStartEnd"
+                        android:layout_marginTop="@dimen/diligenciaDetalheScreenTilMarginTop"
+                        android:layout_marginEnd="@dimen/diligenciaDetalheScreenTilMarginStartEnd">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/etDiligenciaStatus"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/diligenciaStatus"
+                            android:inputType="text"
+                            android:textSize="@dimen/etTextSize" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/diligenciaDetalheScreenTilMarginStartEnd"
+                        android:layout_marginTop="@dimen/diligenciaDetalheScreenTilMarginTop"
+                        android:layout_marginEnd="@dimen/diligenciaDetalheScreenTilMarginStartEnd">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/etDiligenciaData"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/hintDiligenciaData"
+                            android:inputType="text"
+                            android:textSize="@dimen/etTextSize" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/diligenciaDetalheScreenTilMarginStartEnd"
+                        android:layout_marginTop="@dimen/diligenciaDetalheScreenTilMarginTop"
+                        android:layout_marginEnd="@dimen/diligenciaDetalheScreenTilMarginStartEnd">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/etDiligenciaProcesso"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/hintDiligenciaProcesso"
+                            android:inputType="text"
+                            android:textSize="@dimen/etTextSize" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/diligenciaDetalheScreenTilMarginStartEnd"
+                        android:layout_marginTop="@dimen/diligenciaDetalheScreenTilMarginTop"
+                        android:layout_marginEnd="@dimen/diligenciaDetalheScreenTilMarginStartEnd">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/etDiligenciaAdvogado"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/hintDiligenciaAdvogado"
+                            android:inputType="text"
+                            android:textSize="@dimen/etTextSize" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/diligenciaDetalheScreenTilMarginStartEnd"
+                        android:layout_marginTop="@dimen/diligenciaDetalheScreenTilMarginTop"
+                        android:layout_marginEnd="@dimen/diligenciaDetalheScreenTilMarginStartEnd">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/etDiligenciaEndereco"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/hintDiligenciaEndereco"
+                            android:inputType="text"
+                            android:textSize="@dimen/etTextSize" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <Button
+                        android:id="@+id/btnAtualizarDiligencia"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/btnMarginStartEnd"
+                        android:layout_marginTop="@dimen/btnBtnMarginTop"
+                        android:layout_marginEnd="@dimen/btnMarginStartEnd"
+                        android:background="@drawable/shape_button_rounded"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:gravity="center"
+                        android:paddingTop="@dimen/btnPaddingTopBottom"
+                        android:paddingBottom="@dimen/btnPaddingTopBottom"
+                        android:text="@string/cadastrar"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/btnTextSize" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+        </ScrollView>
+
+    </LinearLayout>
+</LinearLayout>
+    <!--END-->

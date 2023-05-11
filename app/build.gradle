@@ -76,6 +76,13 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
     //VIEWPAGER2
     implementation 'androidx.viewpager2:viewpager2:1.0.0'
+    //RETROFIT
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    //OK HTTP
+    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+    //LOGGING INTERCEPTOR
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
 
     implementation 'com.google.dagger:hilt-android:2.44'
     kapt 'com.google.dagger:hilt-android-compiler:2.44'

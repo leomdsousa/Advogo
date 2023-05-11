@@ -8,7 +8,9 @@ import java.util.*
 data class Diligencia(
     var id: String? = null,
     var descricao: String? = null,
-    var data: Date? = null,
+    var data: String? = null,
+    var status: String? = null,
+    var tipo: String? = null,
     var endereco: String? = null,
     var enderecoLat: Long? = null,
     var enderecoLong: Long? = null,

@@ -1,5 +1,6 @@
 package com.example.advogo.activities
 
+import TabsAdapter
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -14,10 +15,14 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.example.advogo.R
 import com.example.advogo.adapters.ProcessosAdapter
 import com.example.advogo.databinding.ActivityMainBinding
+import com.example.advogo.fragments.ClienteFragment
+import com.example.advogo.fragments.EventosFragment
+import com.example.advogo.fragments.ProcessosFragment
 import com.example.advogo.models.Advogado
 import com.example.advogo.models.Processo
 import com.example.advogo.repositories.IAdvogadoRepository
@@ -25,6 +30,8 @@ import com.example.advogo.repositories.IDiligenciaRepository
 import com.example.advogo.repositories.IProcessoRepository
 import com.example.advogo.utils.Constants
 import com.google.android.material.navigation.NavigationView
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,13 +41,16 @@ import javax.inject.Inject
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
     @Inject lateinit var _processoRepository: IProcessoRepository
     @Inject lateinit var _advRepository: IAdvogadoRepository
-//    @Inject lateinit var _diligenciaRepository: IDiligenciaRepository
+    @Inject lateinit var _diligenciaRepository: IDiligenciaRepository
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var sharedPreferences: SharedPreferences
 
     private lateinit var advNome: String
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
+
+    private lateinit var viewPager: ViewPager2
+    private lateinit var tabLayout: TabLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,28 +59,17 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         setupActionBar()
 
+        setupTabsLayout()
+
         binding.navView.setNavigationItemSelectedListener(this)
 
         sharedPreferences =
             this.getSharedPreferences(Constants.ADVOGO_PREFERENCES, Context.MODE_PRIVATE)
 
-        _processoRepository.ObterProcessos(
-            { processos -> setProcessosToUI(processos as ArrayList<Processo>) },
-            { null } //TODO("Implementar")
-        )
-
-//        val tokenUpdated = sharedPreferences.getBoolean(Constants.FCM_TOKEN_UPDATED, false)
-//
-//        if (tokenUpdated) {
-//            showProgressDialog(resources.getString(R.string.please_wait))
-//            FirestoreService().loadUserData(this@MainActivity, true)
-//        } else {
-//            FirebaseMessaging.getInstance()
-//                .token
-//                .addOnSuccessListener(this@MainActivity) { instanceIdResult ->
-//                    updateFCMToken(instanceIdResult, this@MainActivity)
-//                }
-//        }
+//        _processoRepository.ObterProcessos(
+//            { processos -> setProcessosToUI(processos as ArrayList<Processo>) },
+//            { null } //TODO("Implementar")
+//        )
 
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -80,23 +79,39 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                         { adv -> setNavigationAdvDetalhes(adv) },
                         { ex -> null } //TODO("Imlementar OnFailure")
                     )
-                } else if (result.data!!.hasExtra(Constants.FROM_PROCESSO_CADASTRO_ACTIVITY)) {
-                    _processoRepository.ObterProcessos(
-                        { lista -> setProcessosToUI(lista!! as ArrayList<Processo>) },
-                        { ex -> null } //TODO("Imlementar OnFailure")
-                    )
                 }
+//                else if (result.data!!.hasExtra(Constants.FROM_PROCESSO_CADASTRO_ACTIVITY)) {
+//                    _processoRepository.ObterProcessos(
+//                        { lista -> setProcessosToUI(lista!! as ArrayList<Processo>) },
+//                        { ex -> null } //TODO("Imlementar OnFailure")
+//                    )
+//                }
             } else {
                 Log.e("Cancelado", "Cancelado")
             }
         }
 
-        binding.appBarMain.contentMain.fabProcessoCadastro.setOnClickListener {
-            val intent = Intent(this@MainActivity, ProcessoCadastroActivity::class.java)
-            intent.putExtra(Constants.ADV_NOME_PARAM, advNome)
-            intent.putExtra(Constants.FROM_PROCESSO_CADASTRO_ACTIVITY, Constants.FROM_PROCESSO_CADASTRO_ACTIVITY)
-            resultLauncher.launch(intent)
-        }
+//        binding.appBarMain.contentMain.fabProcessoCadastro.setOnClickListener {
+//            val intent = Intent(this@MainActivity, ProcessoCadastroActivity::class.java)
+//            intent.putExtra(Constants.ADV_NOME_PARAM, advNome)
+//            intent.putExtra(Constants.FROM_PROCESSO_CADASTRO_ACTIVITY, Constants.FROM_PROCESSO_CADASTRO_ACTIVITY)
+//            resultLauncher.launch(intent)
+//        }
+    }
+
+    private fun setupTabsLayout() {
+        viewPager = findViewById(R.id.viewPager)
+        tabLayout = findViewById(R.id.tabLayout)
+
+        val adapter = TabsAdapter(this)
+        adapter.addFragment(ClienteFragment(), "Clientes")
+        adapter.addFragment(ProcessosFragment(), "Processos")
+        adapter.addFragment(EventosFragment(), "Eventos")
+        viewPager.adapter = adapter
+
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            tab.text = adapter.getTabTitle(position)
+        }.attach()
     }
 
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
@@ -121,35 +136,35 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         return true
     }
 
-    fun setProcessosToUI(lista: ArrayList<Processo>) {
-        //TODO("hideProgressDialog()")
-
-        if(lista.size > 0) {
-            binding.appBarMain.contentMain
-
-            binding.appBarMain.contentMain.rvBoardsList.visibility = View.VISIBLE
-            binding.appBarMain.contentMain.tvNoBoardsAvailable.visibility = View.GONE
-
-            binding.appBarMain.contentMain.rvBoardsList.layoutManager = LinearLayoutManager(this@MainActivity)
-            binding.appBarMain.contentMain.rvBoardsList.setHasFixedSize(true)
-
-            val adapter = ProcessosAdapter(this@MainActivity, lista)
-            binding.appBarMain.contentMain.rvBoardsList.adapter = adapter
-
-            adapter.setOnItemClickListener(object :
-                ProcessosAdapter.OnItemClickListener {
-                override fun onClick(model: Processo, position: Int) {
-                    val intent = Intent(this@MainActivity, ProcessoDetalheActivity::class.java)
-                    intent.putExtra(Constants.PROCESSO_ID_PARAM, model.id)
-                    startActivity(intent)
-                }
-            })
-
-        } else {
-            binding.appBarMain.contentMain.rvBoardsList.visibility = View.GONE
-            binding.appBarMain.contentMain.tvNoBoardsAvailable.visibility = View.VISIBLE
-        }
-    }
+//    fun setProcessosToUI(lista: ArrayList<Processo>) {
+//        //TODO("hideProgressDialog()")
+//
+//        if(lista.size > 0) {
+//            binding.appBarMain.contentMain
+//
+//            binding.appBarMain.contentMain.rvBoardsList.visibility = View.VISIBLE
+//            binding.appBarMain.contentMain.tvNoBoardsAvailable.visibility = View.GONE
+//
+//            binding.appBarMain.contentMain.rvBoardsList.layoutManager = LinearLayoutManager(this@MainActivity)
+//            binding.appBarMain.contentMain.rvBoardsList.setHasFixedSize(true)
+//
+//            val adapter = ProcessosAdapter(this@MainActivity, lista)
+//            binding.appBarMain.contentMain.rvBoardsList.adapter = adapter
+//
+//            adapter.setOnItemClickListener(object :
+//                ProcessosAdapter.OnItemClickListener {
+//                override fun onClick(model: Processo, position: Int) {
+//                    val intent = Intent(this@MainActivity, ProcessoDetalheActivity::class.java)
+//                    intent.putExtra(Constants.PROCESSO_ID_PARAM, model.id)
+//                    startActivity(intent)
+//                }
+//            })
+//
+//        } else {
+//            binding.appBarMain.contentMain.rvBoardsList.visibility = View.GONE
+//            binding.appBarMain.contentMain.tvNoBoardsAvailable.visibility = View.VISIBLE
+//        }
+//    }
 
     fun setNavigationAdvDetalhes(adv: Advogado) {
         val headerView = binding.navView.getHeaderView(0)

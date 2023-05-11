@@ -6,18 +6,22 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
+import dagger.hilt.android.components.FragmentComponent
+import dagger.hilt.components.SingletonComponent
 import javax.inject.Provider
 import javax.inject.Singleton
 
 @Module
-@InstallIn(ActivityComponent::class)
+@InstallIn(SingletonComponent::class)
 object MyApplicationModule {
     @Provides
+    @Singleton
     fun provideFirestore(): FirebaseFirestore {
         return FirebaseFirestore.getInstance()
     }
 
     @Provides
+    @Singleton
     fun provideAdvogadoRepository(
         firestore: FirebaseFirestore
     ): IAdvogadoRepository {
@@ -25,6 +29,7 @@ object MyApplicationModule {
     }
 
     @Provides
+    @Singleton
     fun provideClienteRepository(
         firestore: FirebaseFirestore
     ): IClienteRepository {
@@ -32,6 +37,7 @@ object MyApplicationModule {
     }
 
     @Provides
+    @Singleton
     fun provideDiligenciaRepository(
         firestore: FirebaseFirestore,
         processoRepository: Provider<ProcessoRepository>,
@@ -41,11 +47,13 @@ object MyApplicationModule {
     }
 
     @Provides
+    @Singleton
     fun provideEnderecoRepository(firestore: FirebaseFirestore): IEnderecoRepository {
         return EnderecoRepository(firestore)
     }
 
     @Provides
+    @Singleton
     fun provideProcessoRepository(
         firestore: FirebaseFirestore,
         advogadoRepository: AdvogadoRepository,
@@ -65,16 +73,19 @@ object MyApplicationModule {
     }
 
     @Provides
+    @Singleton
     fun provideProcessoStatusRepository(firestore: FirebaseFirestore): IProcessoStatusRepository {
         return ProcessoStatusRepository(firestore)
     }
 
     @Provides
+    @Singleton
     fun provideProcessoTipoRepository(firestore: FirebaseFirestore): IProcessoTipoRepository {
         return ProcessoTipoRepository(firestore)
     }
 
     @Provides
+    @Singleton
     fun provideTelefoneRepository(
         firestore: FirebaseFirestore,
         telefoneTipoRepository: TelefoneTipoRepository
@@ -83,6 +94,7 @@ object MyApplicationModule {
     }
 
     @Provides
+    @Singleton
     fun provideTelefoneTipoRepository(firestore: FirebaseFirestore): ITelefoneTipoRepository {
         return TelefoneTipoRepository(firestore)
     }

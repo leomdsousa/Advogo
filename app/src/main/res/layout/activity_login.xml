@@ -93,7 +93,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginStart="@dimen/btnMarginStartEnd"
-                    android:layout_marginTop="@dimen/signUpScreenBtnMarginTop"
+                    android:layout_marginTop="@dimen/btnBtnMarginTop"
                     android:layout_marginEnd="@dimen/btnMarginStartEnd"
                     android:background="@drawable/shape_button_rounded"
                     android:foreground="?attr/selectableItemBackground"

@@ -1,6 +1,7 @@
 package com.example.advogo.repositories
 
 import com.example.advogo.models.Advogado
+import com.example.advogo.models.Cliente
 import com.example.advogo.utils.Constants
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
@@ -15,10 +16,21 @@ import javax.inject.Provider
 class AdvogadoRepository @Inject constructor(
     private val firebaseStore: FirebaseFirestore
 ): IAdvogadoRepository {
-    override fun ObterAdvogados(onSuccessListener: OnSuccessListener<List<Advogado>>, onFailureListener: (exception: Exception?) -> Unit) {
+    override fun ObterAdvogados(onSuccessListener: (lista: List<Advogado>) -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.ADVOGADOS_TABLE)
             .get()
+            .addOnSuccessListener { document ->
+                if (!document.isEmpty) {
+                    val advogados = document.toObjects(Advogado::class.java)
+                    onSuccessListener(advogados)
+                } else {
+                    onFailureListener(null)
+                }
+            }
+            .addOnFailureListener { exception ->
+                onFailureListener(exception)
+            }
     }
 
     override fun ObterAdvogado(id: String, onSuccessListener: (advogado: Advogado) -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
@@ -108,7 +120,7 @@ class AdvogadoRepository @Inject constructor(
 }
 
 interface IAdvogadoRepository {
-    fun ObterAdvogados(onSuccessListener: OnSuccessListener<List<Advogado>>, onFailureListener: (exception: Exception?) -> Unit)
+    fun ObterAdvogados(onSuccessListener: (lista: List<Advogado>) -> Unit, onFailureListener: (exception: Exception?) -> Unit)
     fun ObterAdvogado(id: String, onSuccessListener: (advogado: Advogado) -> Unit, onFailureListener: (exception: Exception?) -> Unit)
     fun ObterAdvogadoPorEmail(email: String, onSuccessListener: (advogado: Advogado) -> Unit, onFailureListener: (exception: Exception?) -> Unit)
     fun AdicionarAdvogado(model: Advogado, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (exception: Exception?) -> Unit)

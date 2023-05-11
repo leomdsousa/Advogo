@@ -6,19 +6,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activities.CadastroActivity">
+    tools:context=".activities.ClienteCadastroActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbarSignUp"
+        android:id="@+id/toolbarClienteCadastro"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize">
 
         <TextView
-            android:id="@+id/tvTitle"
+            android:id="@+id/tvCadastroClienteTitle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="@string/signUp"
+            android:text="@string/cadastroClienteTitle"
             android:textColor="@color/primaryTextColor"
             android:textSize="@dimen/toolbarTitleTextSize"
             android:textStyle="bold" />
@@ -35,12 +35,12 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/authenticationScreenMarginStartEnd"
-            android:layout_marginEnd="@dimen/authenticationScreenMarginStartEnd"
+            android:layout_marginStart="@dimen/cadastroClienteScreenMarginStartEnd"
+            android:layout_marginEnd="@dimen/cadastroClienteScreenMarginStartEnd"
             android:gravity="center"
-            android:text="@string/signUpDescriptionText"
+            android:text="@string/cadastroClienteDescriptionText"
             android:textColor="@color/secondaryTextColor"
-            android:textSize="@dimen/authenticationDescriptionTextSize" />
+            android:textSize="@dimen/cadastroClienteDescriptionTextSize" />
 
         <ScrollView
             android:layout_width="fill_parent"
@@ -49,9 +49,9 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/authenticationScreenTilMarginStartEnd"
-                android:layout_marginTop="@dimen/authenticationScreenCardViewMarginTop"
-                android:layout_marginEnd="@dimen/authenticationScreenTilMarginStartEnd"
+                android:layout_marginStart="@dimen/cadastroClienteScreenTilMarginStartEnd"
+                android:layout_marginTop="@dimen/cadastroClienteScreenCardViewMarginTop"
+                android:layout_marginEnd="@dimen/cadastroClienteScreenTilMarginStartEnd"
                 android:elevation="@dimen/cardViewElevation"
                 app:cardCornerRadius="@dimen/cardViewCornerRadius">
 
@@ -64,8 +64,8 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/authenticationScreenTilMarginStartEnd"
-                        android:layout_marginEnd="@dimen/authenticationScreenTilMarginStartEnd">
+                        android:layout_marginStart="@dimen/cadastroClienteScreenTilMarginStartEnd"
+                        android:layout_marginEnd="@dimen/cadastroClienteScreenTilMarginStartEnd">
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etNome"
@@ -79,15 +79,15 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/authenticationScreenTilMarginStartEnd"
-                        android:layout_marginTop="@dimen/authenticationScreenTilMarginTop"
-                        android:layout_marginEnd="@dimen/authenticationScreenTilMarginStartEnd">
+                        android:layout_marginStart="@dimen/cadastroClienteScreenTilMarginStartEnd"
+                        android:layout_marginTop="@dimen/cadastroClienteScreenTilMarginTop"
+                        android:layout_marginEnd="@dimen/cadastroClienteScreenTilMarginStartEnd">
 
                         <androidx.appcompat.widget.AppCompatEditText
-                            android:id="@+id/etSobrenome"
+                            android:id="@+id/etCpf"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/sobrenome"
+                            android:hint="@string/hintCpf"
                             android:inputType="text"
                             android:textSize="@dimen/etTextSize" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -95,9 +95,9 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/authenticationScreenTilMarginStartEnd"
-                        android:layout_marginTop="@dimen/authenticationScreenTilMarginTop"
-                        android:layout_marginEnd="@dimen/authenticationScreenTilMarginStartEnd">
+                        android:layout_marginStart="@dimen/cadastroClienteScreenTilMarginStartEnd"
+                        android:layout_marginTop="@dimen/cadastroClienteScreenTilMarginTop"
+                        android:layout_marginEnd="@dimen/cadastroClienteScreenTilMarginStartEnd">
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etEmail"
@@ -111,41 +111,9 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/authenticationScreenTilMarginStartEnd"
-                        android:layout_marginTop="@dimen/authenticationScreenTilMarginTop"
-                        android:layout_marginEnd="@dimen/authenticationScreenTilMarginStartEnd">
-
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:id="@+id/etOab"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/oab"
-                            android:inputType="phone"
-                            android:textSize="@dimen/etTextSize" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/authenticationScreenTilMarginStartEnd"
-                        android:layout_marginTop="@dimen/authenticationScreenTilMarginTop"
-                        android:layout_marginEnd="@dimen/authenticationScreenTilMarginStartEnd">
-
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:id="@+id/etEndereco"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/endereco"
-                            android:inputType="text"
-                            android:textSize="@dimen/etTextSize" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/authenticationScreenTilMarginStartEnd"
-                        android:layout_marginTop="@dimen/authenticationScreenTilMarginTop"
-                        android:layout_marginEnd="@dimen/authenticationScreenTilMarginStartEnd">
+                        android:layout_marginStart="@dimen/cadastroClienteScreenTilMarginStartEnd"
+                        android:layout_marginTop="@dimen/cadastroClienteScreenTilMarginTop"
+                        android:layout_marginEnd="@dimen/cadastroClienteScreenTilMarginStartEnd">
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etTelefone"
@@ -159,33 +127,81 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/authenticationScreenTilMarginStartEnd"
-                        android:layout_marginTop="@dimen/authenticationScreenTilMarginTop"
-                        android:layout_marginEnd="@dimen/authenticationScreenTilMarginStartEnd">
+                        android:layout_marginStart="@dimen/cadastroClienteScreenTilMarginStartEnd"
+                        android:layout_marginTop="@dimen/cadastroClienteScreenTilMarginTop"
+                        android:layout_marginEnd="@dimen/cadastroClienteScreenTilMarginStartEnd">
 
                         <androidx.appcompat.widget.AppCompatEditText
-                            android:id="@+id/et_password"
+                            android:id="@+id/etEndereco"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/password"
-                            android:inputType="textPassword"
-                            android:textSize="16sp" />
+                            android:hint="@string/hintEnderecoOuCep"
+                            android:inputType="text"
+                            android:textSize="@dimen/etTextSize" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/cadastroClienteScreenTilMarginStartEnd"
+                        android:layout_marginTop="@dimen/cadastroClienteScreenTilMarginTop"
+                        android:layout_marginEnd="@dimen/cadastroClienteScreenTilMarginStartEnd">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/etEnderecoNumero"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/hintEnderecoNumero"
+                            android:inputType="text"
+                            android:textSize="@dimen/etTextSize" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/cadastroClienteScreenTilMarginStartEnd"
+                        android:layout_marginTop="@dimen/cadastroClienteScreenTilMarginTop"
+                        android:layout_marginEnd="@dimen/cadastroClienteScreenTilMarginStartEnd">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/etBairro"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/hintEnderecoBairro"
+                            android:inputType="text"
+                            android:textSize="@dimen/etTextSize" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/cadastroClienteScreenTilMarginStartEnd"
+                        android:layout_marginTop="@dimen/cadastroClienteScreenTilMarginTop"
+                        android:layout_marginEnd="@dimen/cadastroClienteScreenTilMarginStartEnd">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/etEnderecoCidade"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/hintEnderecoCidade"
+                            android:inputType="text"
+                            android:textSize="@dimen/etTextSize" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <Button
-                        android:id="@+id/btnSignUp"
+                        android:id="@+id/btnCadastroCliente"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginStart="@dimen/btnMarginStartEnd"
-                        android:layout_marginTop="@dimen/signUpScreenBtnMarginTop"
+                        android:layout_marginTop="@dimen/btnBtnMarginTop"
                         android:layout_marginEnd="@dimen/btnMarginStartEnd"
                         android:background="@drawable/shape_button_rounded"
                         android:foreground="?attr/selectableItemBackground"
                         android:gravity="center"
                         android:paddingTop="@dimen/btnPaddingTopBottom"
                         android:paddingBottom="@dimen/btnPaddingTopBottom"
-                        android:text="@string/signUp"
+                        android:text="@string/cadastrar"
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/btnTextSize" />
                 </LinearLayout>

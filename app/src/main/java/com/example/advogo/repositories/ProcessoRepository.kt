@@ -18,7 +18,7 @@ class ProcessoRepository @Inject constructor(
     private val tipoProcessoRepository: ProcessoTipoRepository,
     private val statusProcessoRepository: ProcessoStatusRepository
 ): IProcessoRepository {
-    private val _diligenciaRepository = diligenciaRepository.get()
+    //private val _diligenciaRepository = diligenciaRepository.get()
 
     override fun ObterProcessos(onSuccessListener: (lista: List<Processo>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore

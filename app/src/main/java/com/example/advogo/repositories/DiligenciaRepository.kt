@@ -14,8 +14,8 @@ class DiligenciaRepository @Inject constructor(
     private val processoRepository: Provider<ProcessoRepository>,
     private val advogadoRepository: Provider<AdvogadoRepository>
 ) : IDiligenciaRepository {
-    private val _processoRepository = processoRepository.get()
-    private val _advogadoRepository = advogadoRepository.get()
+//    private val _processoRepository = processoRepository.get()
+//    private val _advogadoRepository = advogadoRepository.get()
 
     override fun ObterDiligencias(onSuccessListener: (lista: List<Diligencia>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore

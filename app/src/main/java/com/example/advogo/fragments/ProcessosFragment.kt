@@ -12,15 +12,12 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.advogo.R
-import com.example.advogo.activities.ClienteCadastroActivity
-import com.example.advogo.activities.ClienteDetalheActivity
+import com.example.advogo.activities.ProcessoCadastroActivity
 import com.example.advogo.activities.ProcessoDetalheActivity
-import com.example.advogo.adapters.ClientesAdapter
 import com.example.advogo.adapters.ProcessosAdapter
-import com.example.advogo.databinding.FragmentClienteBinding
-import com.example.advogo.models.Cliente
+import com.example.advogo.databinding.FragmentProcessosBinding
 import com.example.advogo.models.Processo
-import com.example.advogo.repositories.IClienteRepository
+import com.example.advogo.repositories.IProcessoRepository
 import com.example.advogo.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -32,44 +29,46 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [ClienteFragment.newInstance] factory method to
+ * Use the [ProcessosFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
 @AndroidEntryPoint
-class ClienteFragment : Fragment() {
-    private lateinit var binding: FragmentClienteBinding
-    @Inject lateinit var _clienteRepository: IClienteRepository
+class ProcessosFragment : Fragment() {
+    private lateinit var binding: FragmentProcessosBinding
+    @Inject lateinit var _processoRepository: IProcessoRepository
 
+    private lateinit var advNome: String
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
-    
+
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        binding = FragmentClienteBinding.inflate(layoutInflater)
+        binding = FragmentProcessosBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
 
-        binding.fabClienteCadastro.setOnClickListener {
-            val intent = Intent(binding.root.context, ClienteCadastroActivity::class.java)
-            intent.putExtra(Constants.FROM_CLIENTE_ACTIVITY, Constants.FROM_CLIENTE_ACTIVITY)
+        binding.fabProcessoCadastro.setOnClickListener {
+            val intent = Intent(binding.root.context, ProcessoCadastroActivity::class.java)
+            intent.putExtra(Constants.ADV_NOME_PARAM, advNome)
+            intent.putExtra(Constants.FROM_PROCESSO_ACTIVITY, Constants.FROM_PROCESSO_ACTIVITY)
             resultLauncher.launch(intent)
         }
 
-        _clienteRepository.ObterClientes(
-            { Clientes -> setClientesToUI(Clientes as ArrayList<Cliente>) },
+        _processoRepository.ObterProcessos(
+            { processos -> setProcessosToUI(processos as ArrayList<Processo>) },
             { null } //TODO("Implementar")
         )
 
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                if (result.data!!.hasExtra(Constants.FROM_CLIENTE_ACTIVITY)) {
-                    _clienteRepository.ObterClientes(
-                        { lista -> setClientesToUI(lista!! as ArrayList<Cliente>) },
+                if (result.data!!.hasExtra(Constants.FROM_PROCESSO_ACTIVITY)) {
+                    _processoRepository.ObterProcessos(
+                        { lista -> setProcessosToUI(lista!! as ArrayList<Processo>) },
                         { ex -> null } //TODO("Imlementar OnFailure")
                     )
                 }
@@ -83,35 +82,34 @@ class ClienteFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_cliente, container, false)
+        return inflater.inflate(R.layout.fragment_processos, container, false)
     }
 
-    fun setClientesToUI(lista: ArrayList<Cliente>) {
+    fun setProcessosToUI(lista: ArrayList<Processo>) {
         //TODO("hideProgressDialog()")
 
         if(lista.size > 0) {
-            binding.rvClientsList.visibility = View.VISIBLE
-            binding.tvNoClientsAvailable.visibility = View.GONE
+            binding.rvBoardsList.visibility = View.VISIBLE
+            binding.tvNoBoardsAvailable.visibility = View.GONE
 
-            binding.rvClientsList.layoutManager = LinearLayoutManager(binding.root.context)
-            binding.rvClientsList.setHasFixedSize(true)
+            binding.rvBoardsList.layoutManager = LinearLayoutManager(binding.root.context)
+            binding.rvBoardsList.setHasFixedSize(true)
 
-            val adapter = ClientesAdapter(binding.root.context, lista)
-            binding.rvClientsList.adapter = adapter
+            val adapter = ProcessosAdapter(binding.root.context, lista)
+            binding.rvBoardsList.adapter = adapter
 
             adapter.setOnItemClickListener(object :
-                ClientesAdapter.OnItemClickListener {
-                override fun onClick(model: Cliente, position: Int) {
-                    val intent = Intent(binding.root.context, ClienteDetalheActivity::class.java)
-                    intent.putExtra(Constants.CLIENTE_ID_PARAM, model.id)
+                ProcessosAdapter.OnItemClickListener {
+                override fun onClick(model: Processo, position: Int) {
+                    val intent = Intent(binding.root.context, ProcessoDetalheActivity::class.java)
+                    intent.putExtra(Constants.PROCESSO_ID_PARAM, model.id)
                     startActivity(intent)
                 }
             })
 
         } else {
-            binding.rvClientsList.visibility = View.GONE
-            binding.tvNoClientsAvailable.visibility = View.VISIBLE
+            binding.rvBoardsList.visibility = View.GONE
+            binding.tvNoBoardsAvailable.visibility = View.VISIBLE
         }
     }
 
@@ -122,12 +120,12 @@ class ClienteFragment : Fragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment ClienteFragment.
+         * @return A new instance of fragment ProcessosFragment.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            ClienteFragment().apply {
+            ProcessosFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

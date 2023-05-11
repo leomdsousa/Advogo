@@ -1,6 +1,7 @@
 package com.example.advogo.repositories
 
 import com.example.advogo.models.Cliente
+import com.example.advogo.models.Processo
 import com.example.advogo.utils.Constants
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
@@ -14,10 +15,21 @@ import javax.inject.Inject
 class ClienteRepository @Inject constructor(
     private val firebaseStore: FirebaseFirestore
 ): IClienteRepository {
-    override fun ObterClientes(onSuccessListener: OnSuccessListener<List<Cliente>>, onFailureListener: (exception: Exception?) -> Unit) {
+    override fun ObterClientes(onSuccessListener: (lista: List<Cliente>) -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.CLIENTES_TABLE)
             .get()
+            .addOnSuccessListener { document ->
+                if (!document.isEmpty) {
+                    val clientes = document.toObjects(Cliente::class.java)
+                    onSuccessListener(clientes)
+                } else {
+                    onFailureListener(null)
+                }
+            }
+            .addOnFailureListener { exception ->
+                onFailureListener(exception)
+            }
     }
 
     override fun ObterCliente(id: String, onSuccessListener: (cliente: Cliente) -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
@@ -107,7 +119,7 @@ class ClienteRepository @Inject constructor(
 }
 
 interface IClienteRepository {
-    fun ObterClientes(onSuccessListener: OnSuccessListener<List<Cliente>>, onFailureListener: (exception: Exception?) -> Unit)
+    fun ObterClientes(onSuccessListener: (lista: List<Cliente>) -> Unit, onFailureListener: (exception: Exception?) -> Unit)
     fun ObterCliente(id: String, onSuccessListener: (cliente: Cliente) -> Unit, onFailureListener: (exception: Exception?) -> Unit)
     fun ObterClientePorEmail(email: String, onSuccessListener: (cliente: Cliente) -> Unit, onFailureListener: (exception: Exception?) -> Unit)
     fun AdicionarCliente(model: Cliente, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (exception: Exception?) -> Unit)

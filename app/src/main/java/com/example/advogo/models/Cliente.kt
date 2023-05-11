@@ -8,6 +8,7 @@ data class Cliente(
     var id: String? = null,
     var nome: String? = null,
     var cpf: String,
+    var email: String,
     var endereco: String,
     var enderecoLat: Long,
     var enderecoLong: Long,

@@ -7,6 +7,10 @@
     <dimen name="noProcessAvailableTextSize">16sp</dimen>
     <dimen name="fabMargin">16dp</dimen>
     <dimen name="itemSelectedMarginEnd">10dp</dimen>
+    <dimen name="btnMarginStartEnd">20dp</dimen>
+    <dimen name="btnPaddingTopBottom">8dp</dimen>
+    <dimen name="btnTextSize">18sp</dimen>
+    <dimen name="btnBtnMarginTop">30dp</dimen>
 
     <!--SPLASH SCREEN-->
     <dimen name="splashScreenTextSize">50sp</dimen>
@@ -38,26 +42,65 @@
     <dimen name="introTextLineSpacingExtra">5dp</dimen>
     <dimen name="introTextMarginTop">10dp</dimen>
     <dimen name="introTextSize">16sp</dimen>
-    <dimen name="btnMarginStartEnd">20dp</dimen>
     <dimen name="introScreenSignInBtnMarginTop">50dp</dimen>
-    <dimen name="btnPaddingTopBottom">8dp</dimen>
+
     <dimen name="introScreenSignUpBtnMarginTop">15dp</dimen>
-    <dimen name="btnTextSize">18sp</dimen>
+
+    <dimen name="cardViewElevation">10dp</dimen>
+    <dimen name="cardViewLayoutContentPadding">16dp</dimen>
+    <dimen name="etTextSize">16sp</dimen>
 
     <!--CADASTRO-->
-    <dimen name="signUpScreenBtnMarginTop">30dp</dimen>
+    <dimen name="authenticationScreenBtnMarginTop">30dp</dimen>
     <dimen name="authenticationScreenContentMarginTop">40dp</dimen>
     <dimen name="authenticationDescriptionTextSize">16sp</dimen>
     <dimen name="authenticationScreenMarginStartEnd">25dp</dimen>
     <dimen name="authenticationScreenCardViewMarginTop">60dp</dimen>
-    <dimen name="cardViewElevation">10dp</dimen>
-    <dimen name="cardViewLayoutContentPadding">16dp</dimen>
     <dimen name="authenticationScreenTilMarginStartEnd">16dp</dimen>
-    <dimen name="etTextSize">16sp</dimen>
     <dimen name="authenticationScreenTilMarginTop">20dp</dimen>
 
     <!--LOGIN-->
     <dimen name="authenticationScreenMarginTop">60dp</dimen>
+
+    <!--CADASTRO CLIENTE-->
+    <dimen name="cadastroClienteScreenBtnMarginTop">30dp</dimen>
+    <dimen name="cadastroClienteScreenContentMarginTop">40dp</dimen>
+    <dimen name="cadastroClienteDescriptionTextSize">16sp</dimen>
+    <dimen name="cadastroClienteScreenMarginStartEnd">25dp</dimen>
+    <dimen name="cadastroClienteScreenCardViewMarginTop">60dp</dimen>
+    <dimen name="cadastroClienteScreenTilMarginStartEnd">16dp</dimen>
+    <dimen name="cadastroClienteScreenTilMarginTop">20dp</dimen>
+    <dimen name="cadastroClienteScreenMarginTop">60dp</dimen>
+
+    <!--DETALHE CLIENTE-->
+    <dimen name="detalheClienteScreenBtnMarginTop">30dp</dimen>
+    <dimen name="detalheClienteScreenContentMarginTop">40dp</dimen>
+    <dimen name="detalheClienteDescriptionTextSize">16sp</dimen>
+    <dimen name="detalheClienteScreenMarginStartEnd">25dp</dimen>
+    <dimen name="detalheClienteScreenCardViewMarginTop">60dp</dimen>
+    <dimen name="detalheClienteScreenTilMarginStartEnd">16dp</dimen>
+    <dimen name="detalheClienteScreenTilMarginTop">20dp</dimen>
+    <dimen name="detalheClienteScreenMarginTop">60dp</dimen>
+
+    <!--CADASTRO DILIGENCIA-->
+    <dimen name="diligenciaCadastroScreenBtnMarginTop">30dp</dimen>
+    <dimen name="diligenciaCadastroScreenContentMarginTop">40dp</dimen>
+    <dimen name="diligenciaCadastroDescriptionTextSize">16sp</dimen>
+    <dimen name="diligenciaCadastroScreenMarginStartEnd">25dp</dimen>
+    <dimen name="diligenciaCadastroScreenCardViewMarginTop">60dp</dimen>
+    <dimen name="diligenciaCadastroScreenTilMarginStartEnd">16dp</dimen>
+    <dimen name="diligenciaCadastroScreenTilMarginTop">20dp</dimen>
+    <dimen name="diligenciaCadastroScreenMarginTop">60dp</dimen>
+
+    <!--DETALHE DILIGENCIA-->
+    <dimen name="diligenciaDetalheScreenBtnMarginTop">30dp</dimen>
+    <dimen name="diligenciaDetalheScreenContentMarginTop">40dp</dimen>
+    <dimen name="diligenciaDetalheDescriptionTextSize">16sp</dimen>
+    <dimen name="diligenciaDetalheScreenMarginStartEnd">25dp</dimen>
+    <dimen name="diligenciaDetalheScreenCardViewMarginTop">60dp</dimen>
+    <dimen name="diligenciaDetalheScreenTilMarginStartEnd">16dp</dimen>
+    <dimen name="diligenciaDetalheScreenTilMarginTop">20dp</dimen>
+    <dimen name="diligenciaDetalheScreenMarginTop">60dp</dimen>
 
     <!--PERFIL-->
     <dimen name="profileScreenContentMarginStartEnd">16dp</dimen>
@@ -113,6 +156,13 @@
     <dimen name="itemDiligenciaStatusTextSize">12sp</dimen>
     <dimen name="itemDiligenciaDividerMarginTop">5dp</dimen>
     <dimen name="itemDiligenciaDividerHeight">0.3dp</dimen>
+
+    <!--ITEM CLIENTE-->
+    <dimen name="itemClienteTextSize">12sp</dimen>
+    <dimen name="itemClienteContentMarginBottom">10dp</dimen>
+    <dimen name="itemClienteContentPadding">10dp</dimen>
+    <dimen name="itemClienteDividerMarginTop">5dp</dimen>
+    <dimen name="itemClienteDividerHeight">0.3dp</dimen>
 
     <!--ITEM ADVOGADO-->
     <dimen name="itemAdvMarginBottom">10dp</dimen>
