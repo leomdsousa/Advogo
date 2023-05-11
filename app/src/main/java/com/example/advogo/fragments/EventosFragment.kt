@@ -40,6 +40,39 @@ class EventosFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_eventos, container, false)
     }
 
+
+
+//    calendarView.setOnDateChangedListener { widget, date, selected ->
+//        // Obter eventos para a data selecionada
+//        val events = getEventsForDate(date)
+//
+//        // Exibir eventos no ListView
+//        eventsListView.adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, events)
+//    }
+
+//    fun getEventsForDate(date: Date): List<String> {
+//        // Conectar-se à base de dados MongoDB
+//        val mongoClient = MongoClient("localhost", 27017)
+//        val database = mongoClient.getDatabase("myDatabase")
+//        val collection = database.getCollection("events")
+//
+//        // Executar consulta para obter eventos para o mês selecionado
+//        val calendar = Calendar.getInstance()
+//        calendar.time = date
+//        val firstDayOfMonth = calendar.getActualMinimum(Calendar.DAY_OF_MONTH)
+//        val lastDayOfMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
+//        val query = and(
+//            gte("dueDate", firstDayOfMonth),
+//            lte("dueDate", lastDayOfMonth)
+//        )
+//        val events = mutableListOf<String>()
+//        collection.find(query).forEach {
+//            events.add(it["description"].toString())
+//        }
+//
+//        return events
+//    }
+
     companion object {
         /**
          * Use this factory method to create a new instance of

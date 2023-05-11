@@ -1,9 +1,6 @@
 package com.example.advogo.utils
 
 object Constants {
-
-
-
     const val ADVOGADOS_TABLE = "advogados"
     const val ADVOGADOS_ID = "_id"
     const val ADVOGADOS_NOME = "nome"
@@ -54,14 +51,21 @@ object Constants {
     const val ADV_NOME_PARAM = "advNomeParam"
     const val PROCESSO_ID_PARAM = "processoIdParam"
     const val CLIENTE_ID_PARAM = "clienteIdParam"
+    const val DILIGENCIA_ID_PARAM = "diligenciaIdParam"
+
+    const val ADV_PARAM = "advParam"
+    const val PROCESSO_PARAM = "processoParam"
+    const val CLIENTE_PARAM = "clienteParam"
+    const val DILIGENCIA_PARAM = "diligenciaParam"
 
     //Indica a Activity origem da Intent
     const val FROM_LOGIN_ACTIVITY = "FROM_LOGIN_ACTIVITY"
     const val FROM_PERFIL_ACTIVITY = "FROM_PERFIL_ACTIVITY"
     const val FROM_PROCESSO_ACTIVITY = "FROM_PROCESSO_ACTIVITY"
     const val FROM_CLIENTE_ACTIVITY = "FROM_CLIENTE_ACTIVITY"
+    const val FROM_DILIGENCIA_ACTIVITY = "FROM_DILIGENCIA_ACTIVITY"
 
-    //Indica para Map Acitivy qual objeto obter
+    //Indica para Map Activity qual objeto obter
     const val PROCESSO_MAP = "PROCESSO_MAP"
     const val DILIGENCIA_MAP = "DILIGENCIA_MAP"
     const val ADVOGADO_MAP = "ADVOGADO_MAP"

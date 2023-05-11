@@ -9,7 +9,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.advogo.R
 import com.example.advogo.databinding.ActivityProcessoDetalheBinding
+import com.example.advogo.models.Cliente
 import com.example.advogo.models.Processo
+import com.example.advogo.utils.Constants
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -166,9 +168,9 @@ class ProcessoDetalheActivity : BaseActivity() {
     }
 
     private fun obterIntentDados() {
-//        if (intent.hasExtra(Constants.SET_BOARD_DETAIL)) {
-//            boardDetails = intent.getParcelableExtra<Board>(Constants.SET_BOARD_DETAIL)!!
-//        }
+        if (intent.hasExtra(Constants.PROCESSO_PARAM)) {
+            processoDetalhes = intent.getParcelableExtra<Processo>(Constants.PROCESSO_PARAM)!!
+        }
 //
 //        if (intent.hasExtra(Constants.SET_BOARD_MEMBERS_LIST)) {
 //            membersDetailList = intent.getParcelableArrayListExtra(Constants.SET_BOARD_MEMBERS_LIST)!!

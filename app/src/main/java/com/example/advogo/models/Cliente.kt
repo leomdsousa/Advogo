@@ -7,11 +7,11 @@ import kotlinx.parcelize.Parcelize
 data class Cliente(
     var id: String? = null,
     var nome: String? = null,
-    var cpf: String,
-    var email: String,
-    var endereco: String,
-    var enderecoLat: Long,
-    var enderecoLong: Long,
+    var cpf: String? = null,
+    var email: String? = null,
+    var endereco: String? = null,
+    var enderecoLat: Long? = null,
+    var enderecoLong: Long? = null,
     var telefone: String? = null,
     @Transient var telefoneObj: Telefone? = null
 ): Parcelable {

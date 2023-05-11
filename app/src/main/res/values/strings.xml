@@ -95,6 +95,8 @@
     <string name="diligenciaCadastroDescriptionText">Preencha o formulário abaixo para a diligência.</string>
 
     <string name="deletarProcesso">Deletar Processo</string>
+    <string name="deletarCliente">Deletar Cliente</string>
+    <string name="deletarDiligencia">Deletar Diligência</string>
     <string name="selecionarAdvogado">Selecionar Advogado</string>
     <string name="addAdvogado">Add Advogado</string>
 
