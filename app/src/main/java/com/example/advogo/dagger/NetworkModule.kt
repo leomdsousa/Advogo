@@ -37,12 +37,12 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideCorreioApiService(): CorreioApiService {
+    fun provideCorreioApiService(): ICorreioApiService {
         val retrofit = Retrofit.Builder()
             .baseUrl("https://viacep.com.br/ws/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-        return retrofit.create(CorreioApiService::class.java)
+        return retrofit.create(ICorreioApiService::class.java)
     }
 }

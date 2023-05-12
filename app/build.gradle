@@ -45,7 +45,6 @@ android {
 }
 
 dependencies {
-
     implementation 'androidx.core:core-ktx:1.10.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.8.0'
@@ -83,9 +82,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:4.9.0'
     //LOGGING INTERCEPTOR
     implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
-    //CALENDAR VIEW
-    //implementation 'com.github.prolificinteractive:material-calendarview:2.0.1'
-
+    //DAGGER HILT
     implementation 'com.google.dagger:hilt-android:2.44'
     kapt 'com.google.dagger:hilt-android-compiler:2.44'
 
