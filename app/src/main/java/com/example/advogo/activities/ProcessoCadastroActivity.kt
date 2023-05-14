@@ -5,29 +5,45 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.bumptech.glide.Glide
 import com.example.advogo.R
+import com.example.advogo.adapters.ProcessosTiposAdapter
 import com.example.advogo.databinding.ActivityProcessoCadastroBinding
+import com.example.advogo.models.Advogado
 import com.example.advogo.models.Processo
-import com.example.advogo.repositories.IAdvogadoRepository
-import com.example.advogo.repositories.IDiligenciaRepository
-import com.example.advogo.repositories.IProcessoRepository
+import com.example.advogo.models.ProcessoStatus
+import com.example.advogo.models.ProcessoTipo
+import com.example.advogo.repositories.*
 import com.example.advogo.utils.Constants
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 class ProcessoCadastroActivity : BaseActivity() {
-    @Inject lateinit var _processoRepository: IProcessoRepository
+    @Inject lateinit var processoRepository: IProcessoRepository
+    @Inject lateinit var processoTipoRepository: IProcessoTipoRepository
+    @Inject lateinit var processoStatusRepository: IProcessoStatusRepository
 
     private lateinit var binding: ActivityProcessoCadastroBinding
     private lateinit var userName: String
+
+    private var advogados: List<Advogado> = ArrayList()
+    private var processosTipos: List<ProcessoTipo> = ArrayList()
+    private var processosStatus: List<ProcessoStatus> = ArrayList()
+    private var dataSelecionada: String? = null
 
     private var imagemSelecionadaURI: Uri? = null
     private var imagemSelecionadaURL: String? = null
@@ -40,6 +56,7 @@ class ProcessoCadastroActivity : BaseActivity() {
         setContentView(binding.root)
 
         setupActionBar()
+        setupSpinners()
 
         if (intent.hasExtra(Constants.ADV_NOME_PARAM)) {
             userName = intent.getStringExtra(Constants.ADV_NOME_PARAM)!!
@@ -47,6 +64,12 @@ class ProcessoCadastroActivity : BaseActivity() {
 
         binding.ivProcessoImage.setOnClickListener {
             chooseImage(this@ProcessoCadastroActivity, resultLauncher)
+        }
+
+        binding.etData.setOnClickListener {
+            showDataPicker() { ano, mes, dia ->
+                onDatePickerResult(ano, mes, dia)
+            }
         }
 
         binding.btnProcessoCadastro.setOnClickListener {
@@ -71,6 +94,32 @@ class ProcessoCadastroActivity : BaseActivity() {
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
+            }
+        }
+    }
+
+    private fun setupSpinners() {
+        val spinnerTipos = findViewById<Spinner>(R.id.spinnerTipo)
+
+        processoTipoRepository.ObterProcessosTipos(
+            { lista -> processosTipos = lista },
+            {  } //TODO("Implementat")
+        )
+
+        val adapter = ProcessosTiposAdapter(this, processosTipos)
+        spinnerTipos.adapter = adapter
+
+        spinnerTipos.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val selectedItem = parent?.getItemAtPosition(position) as? String
+                selectedItem?.let {
+                    binding.etTipo.setText(it)
+                    Log.i("Console", it)
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                // Nada selecionado
             }
         }
     }
@@ -118,16 +167,35 @@ class ProcessoCadastroActivity : BaseActivity() {
     private fun saveProcesso() {
         //TODO("showProgressDialog("Please wait...")")
 
-        //TODO("preencher obj para add ou alterar")
         val processo = Processo(
-
+            id = null,
+            descricao = binding.etDescricao.text.toString(),
+            numero = binding.etNumeroProcesso.text.toString(),
+            tipo = binding.etTipo.text.toString(),
+            status = binding.etStatus.text.toString(),
+            data = dataSelecionada,
+            imagem = imagemSelecionadaURL,
+            cliente = binding.etCliente.text.toString(),
+            advogado = binding.etAdv.text.toString(),
         )
 
-        _processoRepository.AdicionarProcesso(
+        processoRepository.AdicionarProcesso(
             processo,
             { processoCadastroSuccess() },
             { processoCadastroFailure() }
         )
+    }
+
+    private fun onDatePickerResult(year: Int, month: Int, day: Int) {
+        val sDayOfMonth = if (day < 10) "0$day" else "$day"
+        val sMonthOfYear = if ((month + 1) < 10) "0${month + 1}" else "${month + 1}"
+
+        val selectedDate = "$sDayOfMonth/$sMonthOfYear/$year"
+        binding.etData.setText(dataSelecionada)
+
+        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
+        val theDate = sdf.parse(selectedDate)
+        dataSelecionada = theDate!!.toLocaleString()
     }
 
     private fun processoCadastroSuccess() {

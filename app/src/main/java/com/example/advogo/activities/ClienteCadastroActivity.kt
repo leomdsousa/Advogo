@@ -1,23 +1,24 @@
 package com.example.advogo.activities
 
 import android.app.Activity
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.advogo.R
 import com.example.advogo.databinding.ActivityClienteCadastroBinding
 import com.example.advogo.models.Cliente
-import com.example.advogo.models.Processo
 import com.example.advogo.models.externals.CorreioResponse
 import com.example.advogo.repositories.ClienteRepository
 import com.example.advogo.services.CorreioApiService
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ClienteCadastroActivity : AppCompatActivity() {
+class ClienteCadastroActivity : BaseActivity() {
     private lateinit var binding: ActivityClienteCadastroBinding
-    @Inject lateinit var _clienteRepository: ClienteRepository
+    @Inject lateinit var clienteRepository: ClienteRepository
     @Inject lateinit var correioService: CorreioApiService
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,17 +31,53 @@ class ClienteCadastroActivity : AppCompatActivity() {
         binding.btnCadastroCliente.setOnClickListener {
             saveCliente()
         }
+
+        binding.etEndereco.setOnClickListener {
+            val valor: String = binding.etEndereco.text.toString()
+
+            if (valor.isNullOrEmpty()) {
+                binding.etEndereco.error = "O campo não pode estar vazio"
+                binding.etEndereco.requestFocus()
+                return@setOnClickListener
+            }
+
+            val rgxCep: Pattern = Pattern.compile("(^\\d{5}-\\d{3}|^\\d{2}.\\d{3}-\\d{3}|\\d{8})")
+            val matcher: Matcher = rgxCep.matcher(valor)
+
+            if (!matcher.matches()) {
+                binding.etEndereco.error = "Informe um CEP válido"
+                binding.etEndereco.requestFocus()
+            } else {
+                val endereco = buscarEnderecoCorreio(valor)
+
+                if(endereco != null) {
+                    binding.etEndereco.setText(endereco.logradouro)
+                    binding.etEnderecoCidade.setText(endereco.localidade)
+                    binding.etBairro.setText(endereco.bairro)
+                } else {
+                    binding.etEndereco.error = "CEP não encontrado"
+                    binding.etEndereco.requestFocus()
+                }
+            }
+        }
     }
 
     private fun saveCliente() {
         //TODO("showProgressDialog("Please wait...")")
 
-        //TODO("preencher obj para add ou alterar")
         val cliente = Cliente(
-
+            id = null,
+            nome = binding.etNome.text.toString(),
+            cpf = binding.etCpf.text.toString(),
+            email = binding.etEmail.text.toString(),
+            endereco = binding.etEndereco.text.toString(),
+            enderecoNumero = binding.etEnderecoNumero.text.toString(),
+            enderecoCidade = binding.etEnderecoCidade.text.toString(),
+            enderecoBairro = binding.etBairro.text.toString(),
+            telefone = binding.etTelefone.text.toString(),
         )
 
-        _clienteRepository.AdicionarCliente(
+        clienteRepository.AdicionarCliente(
             cliente,
             { clienteCadastroSuccess() },
             { clienteCadastroFailure() }
@@ -63,7 +100,7 @@ class ClienteCadastroActivity : AppCompatActivity() {
         ).show()
     }
 
-    private fun BuscarEnderecoCorreio(cep: String): CorreioResponse? {
+    private fun buscarEnderecoCorreio(cep: String): CorreioResponse? {
         return correioService.obterEndereco(cep)
     }
 

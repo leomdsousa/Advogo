@@ -6,22 +6,23 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.example.advogo.R
-import com.example.advogo.databinding.ActivityClienteCadastroBinding
 import com.example.advogo.databinding.ActivityClienteDetalheBinding
 import com.example.advogo.models.Cliente
-import com.example.advogo.models.Processo
 import com.example.advogo.models.externals.CorreioResponse
 import com.example.advogo.repositories.ClienteRepository
 import com.example.advogo.services.CorreioApiService
 import com.example.advogo.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ClienteDetalheActivity : AppCompatActivity() {
+class ClienteDetalheActivity : BaseActivity() {
     private lateinit var binding: ActivityClienteDetalheBinding
-    @Inject lateinit var _clienteRepository: ClienteRepository
+    @Inject lateinit var clienteRepository: ClienteRepository
     @Inject lateinit var correioService: CorreioApiService
 
     private lateinit var clienteDetalhes: Cliente
@@ -34,8 +35,41 @@ class ClienteDetalheActivity : AppCompatActivity() {
         obterIntentDados()
         setupActionBar()
 
+        setClienteToUI(clienteDetalhes)
+
         binding.btnAtualizarCliente.setOnClickListener {
             saveCliente()
+        }
+
+        binding.etEndereco.setOnClickListener {
+            val valor: String = binding.etEndereco.text.toString()
+
+            if (valor.isEmpty()) {
+                binding.etEndereco.error = "O campo não pode estar vazio"
+                binding.etEndereco.requestFocus()
+                return@setOnClickListener
+            }
+
+            val rgxCep: Pattern = Pattern.compile("(^\\d{5}-\\d{3}|^\\d{2}.\\d{3}-\\d{3}|\\d{8})")
+            val matcher: Matcher = rgxCep.matcher(valor)
+
+            if (!matcher.matches()) {
+                binding.etEndereco.error = "Informe um CEP válido"
+                binding.etEndereco.requestFocus()
+                return@setOnClickListener
+            } else {
+                val endereco = buscarEnderecoCorreio(valor)
+
+                if(endereco != null) {
+                    binding.etEndereco.setText(endereco.logradouro)
+                    binding.etEnderecoCidade.setText(endereco.localidade)
+                    binding.etBairro.setText(endereco.bairro)
+                } else {
+                    binding.etEndereco.error = "CEP não encontrado"
+                    binding.etEndereco.requestFocus()
+                    return@setOnClickListener
+                }
+            }
         }
     }
 
@@ -47,7 +81,7 @@ class ClienteDetalheActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_deletar_cliente -> {
-                //alertDialogDeletarCliente(boardDetails.taskList!![taskListPosition].cards!![cardPosition].name)
+                alertDialogDeletarCliente(clienteDetalhes.nome!!)
                 return true
             }
         }
@@ -61,19 +95,70 @@ class ClienteDetalheActivity : AppCompatActivity() {
         }
     }
 
+    private fun setClienteToUI(cliente: Cliente) {
+        binding.etNome.setText(cliente.nome)
+        binding.etCpf.setText(cliente.cpf)
+        binding.etEmail.setText(cliente.email)
+        binding.etEndereco.setText(cliente.endereco)
+        cliente.enderecoNumero?.let { binding.etEnderecoNumero.setText(it) }
+        binding.etEnderecoCidade.setText(cliente.enderecoCidade)
+        binding.etBairro.setText(cliente.enderecoBairro)
+        binding.etTelefone.setText(cliente.telefone)
+    }
+
     private fun saveCliente() {
         //TODO("showProgressDialog("Please wait...")")
 
-        //TODO("preencher obj para add ou alterar")
         val cliente = Cliente(
-
+            id = clienteDetalhes.id,
+            nome = (if (binding.etNome.text.toString() != clienteDetalhes.nome) binding.etNome.text.toString() else clienteDetalhes.nome),
+            cpf = (if (binding.etCpf.text.toString() != clienteDetalhes.cpf) binding.etEmail.text.toString() else clienteDetalhes.nome),
+            email = (if (binding.etEmail.text.toString() != clienteDetalhes.email) binding.etCpf.text.toString() else clienteDetalhes.cpf),
+            endereco = (if (binding.etEndereco.text.toString() != clienteDetalhes.endereco) binding.etEmail.text.toString() else clienteDetalhes.email),
+            enderecoNumero = (if (binding.etEnderecoNumero.text.toString() != clienteDetalhes.enderecoNumero.toString()) binding.etEnderecoNumero.text.toString() else clienteDetalhes.enderecoNumero.toString()),
+            enderecoBairro = (if (binding.etBairro.text.toString() != clienteDetalhes.enderecoBairro.toString()) binding.etBairro.text.toString() else clienteDetalhes.enderecoBairro.toString()),
+            enderecoCidade = (if (binding.etEnderecoCidade.text.toString() != clienteDetalhes.enderecoCidade.toString()) binding.etEnderecoCidade.text.toString() else clienteDetalhes.enderecoCidade.toString()),
+            telefone = (if (binding.etTelefone.text.toString() != clienteDetalhes.telefone) binding.etTelefone.text.toString() else clienteDetalhes.telefone),
         )
 
-        _clienteRepository.AtualizarCliente(
+        clienteRepository.AtualizarCliente(
             cliente,
             { clienteCadastroSuccess() },
             { clienteCadastroFailure() }
         )
+    }
+
+    private fun deletarCliente() {
+        clienteRepository.DeletarCliente(
+            clienteDetalhes.id!!,
+            { deletarClienteSuccess() },
+            { deletarClienteFailure() }
+        )
+    }
+
+    private fun alertDialogDeletarCliente(nome: String) {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(resources.getString(R.string.atencao))
+        builder.setMessage(
+            resources.getString(
+                R.string.confirmacaoDeletarCliente,
+                clienteDetalhes.nome
+            )
+        )
+        builder.setIcon(android.R.drawable.ic_dialog_alert)
+
+        builder.setPositiveButton(resources.getString(R.string.sim)) { dialogInterface, which ->
+            dialogInterface.dismiss()
+            deletarCliente()
+        }
+
+        builder.setNegativeButton(resources.getString(R.string.nao)) { dialogInterface, which ->
+            dialogInterface.dismiss()
+        }
+
+        val alertDialog: AlertDialog = builder.create()
+        alertDialog.setCancelable(false)
+        alertDialog.show()
     }
 
     private fun clienteCadastroSuccess() {
@@ -92,7 +177,7 @@ class ClienteDetalheActivity : AppCompatActivity() {
         ).show()
     }
 
-    private fun BuscarEnderecoCorreio(cep: String): CorreioResponse? {
+    private fun buscarEnderecoCorreio(cep: String): CorreioResponse? {
         return correioService.obterEndereco(cep)
     }
 
@@ -107,5 +192,14 @@ class ClienteDetalheActivity : AppCompatActivity() {
         }
 
         binding.toolbarClienteDetalhe.setNavigationOnClickListener { onBackPressed() }
+    }
+
+    private fun deletarClienteSuccess() {
+        //TODO("hideProgressDialog()")
+        finish()
+    }
+
+    private fun deletarClienteFailure() {
+        //TODO("hideProgressDialog()")
     }
 }

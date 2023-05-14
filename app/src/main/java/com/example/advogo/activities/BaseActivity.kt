@@ -92,7 +92,7 @@ open class BaseActivity : AppCompatActivity() {
         result.launch(galleryIntent)
     }
 
-    fun showDataPicker(activity: Activity) {
+    fun showDataPicker(onSuccess: (year: Int, monthOfYear: Int, dayOfMonth: Int) -> Unit) {
         val c = Calendar.getInstance()
         val year = c.get(Calendar.YEAR)
         val month = c.get(Calendar.MONTH)
@@ -101,9 +101,7 @@ open class BaseActivity : AppCompatActivity() {
         val dpd = DatePickerDialog(
             this,
             DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
-                when (activity) {
-
-                }
+                onSuccess(year, monthOfYear, dayOfMonth)
             },
             year,
             month,

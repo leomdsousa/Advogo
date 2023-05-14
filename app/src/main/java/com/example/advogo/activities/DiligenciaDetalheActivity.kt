@@ -28,9 +28,21 @@ class DiligenciaDetalheActivity : BaseActivity() {
         obterIntentDados()
         setupActionBar()
 
+        setDiligenciaToUI(diligenciaDetalhes)
+
         binding.btnAtualizarDiligencia.setOnClickListener {
             saveDiligencia()
         }
+    }
+
+    private fun setDiligenciaToUI(diligencia: Diligencia) {
+        binding.etDiligenciaDescricao.setText(diligencia.descricao)
+        binding.etDiligenciaTipo.setText(diligencia.tipoObj?.tipo)
+        binding.etDiligenciaStatus.setText(diligencia.statusObj?.status)
+        binding.etDiligenciaData.setText(diligencia.data)
+        binding.etDiligenciaProcesso.setText(diligencia.processoObj?.numero)
+        binding.btnAtualizarDiligencia.text = diligencia.advogadoObj?.nome
+        binding.etDiligenciaEndereco.setText(diligencia.endereco)
     }
 
     private fun saveDiligencia() {

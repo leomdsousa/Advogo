@@ -17,6 +17,8 @@ data class Diligencia(
     var processo: String? = null,
     var advogado: String? = null,
     @Transient var processoObj: Processo? = null,
-    @Transient var advogadoObj: Advogado? = null
+    @Transient var advogadoObj: Advogado? = null,
+    @Transient var tipoObj: DiligenciaTipo? = null,
+    @Transient var statusObj: DiligenciaStatus? = null
 ): Parcelable {
 }

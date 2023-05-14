@@ -10,8 +10,9 @@ data class Cliente(
     var cpf: String? = null,
     var email: String? = null,
     var endereco: String? = null,
-    var enderecoLat: Long? = null,
-    var enderecoLong: Long? = null,
+    var enderecoNumero: String? = null,
+    var enderecoCidade: String? = null,
+    var enderecoBairro: String? = null,
     var telefone: String? = null,
     @Transient var telefoneObj: Telefone? = null
 ): Parcelable {

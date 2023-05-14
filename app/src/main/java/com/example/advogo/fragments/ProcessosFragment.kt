@@ -23,16 +23,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ProcessosFragment : Fragment() {
+class ProcessosFragment : BaseFragment() {
     private lateinit var binding: FragmentProcessosBinding
-    @Inject lateinit var _processoRepository: IProcessoRepository
+    @Inject lateinit var processoRepository: IProcessoRepository
 
-    private lateinit var advNome: String
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
-
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,12 +42,11 @@ class ProcessosFragment : Fragment() {
 
         binding.fabProcessoCadastro.setOnClickListener {
             val intent = Intent(binding.root.context, ProcessoCadastroActivity::class.java)
-            intent.putExtra(Constants.ADV_NOME_PARAM, advNome)
             intent.putExtra(Constants.FROM_PROCESSO_ACTIVITY, Constants.FROM_PROCESSO_ACTIVITY)
             resultLauncher.launch(intent)
         }
 
-        _processoRepository.ObterProcessos(
+        processoRepository.ObterProcessos(
             { processos -> setProcessosToUI(processos as ArrayList<Processo>) },
             { null } //TODO("Implementar")
         )
@@ -60,7 +54,7 @@ class ProcessosFragment : Fragment() {
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 if (result.data!!.hasExtra(Constants.FROM_PROCESSO_ACTIVITY)) {
-                    _processoRepository.ObterProcessos(
+                    processoRepository.ObterProcessos(
                         { lista -> setProcessosToUI(lista!! as ArrayList<Processo>) },
                         { ex -> null } //TODO("Imlementar OnFailure")
                     )
@@ -88,7 +82,7 @@ class ProcessosFragment : Fragment() {
                 ProcessosAdapter.OnItemClickListener {
                 override fun onClick(model: Processo, position: Int) {
                     val intent = Intent(binding.root.context, ProcessoDetalheActivity::class.java)
-                    intent.putExtra(Constants.PROCESSO_ID_PARAM, model.id)
+                    intent.putExtra(Constants.PROCESSO_PARAM, model)
                     startActivity(intent)
                 }
             })

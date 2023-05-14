@@ -1,5 +1,6 @@
 package com.example.advogo.adapters
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -17,6 +18,7 @@ open class ProcessosAdapter(
 
     inner class MyViewHolder(private val binding: ItemProcessoBinding)
         : RecyclerView.ViewHolder(binding.root) {
+        @SuppressLint("SetTextI18n")
         fun bind(item: Processo, position: Int) {
             binding.apply {
                 Glide
@@ -27,9 +29,9 @@ open class ProcessosAdapter(
                     .into(binding.ivProcessoImage)
 
                 binding.tvDescricaoProcesso.text = item.descricao
-                binding.tvNumeroProcesso.text = "Nº : ${item.numero}"
-                binding.tvTipoProcesso.text = "Tipo: ${item.tipo}"
-                binding.tvStatusProcesso.text = "Status: ${item.status}"
+                binding.tvNumeroProcesso.text = "Nº Processo: ${item.numero}"
+                binding.tvTipoProcesso.text = "Tipo: ${item.tipoObj?.tipo}"
+                binding.tvStatusProcesso.text = "Status: ${item.statusObj?.status}"
 
                 binding.root.setOnClickListener {
                     if (onItemClickListener != null) {

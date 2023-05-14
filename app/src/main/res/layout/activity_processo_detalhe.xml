@@ -45,7 +45,7 @@
                     android:src="@drawable/ic_processo_place_holder"
                     app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
                     app:strokeColor="@color/white"
-                    app:strokeWidth="1dp"  />
+                    app:strokeWidth="1dp" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"

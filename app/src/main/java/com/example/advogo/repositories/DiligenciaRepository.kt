@@ -14,9 +14,6 @@ class DiligenciaRepository @Inject constructor(
     private val processoRepository: Provider<ProcessoRepository>,
     private val advogadoRepository: Provider<AdvogadoRepository>
 ) : IDiligenciaRepository {
-//    private val _processoRepository = processoRepository.get()
-//    private val _advogadoRepository = advogadoRepository.get()
-
     override fun ObterDiligencias(onSuccessListener: (lista: List<Diligencia>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.DILIGENCIAS_TABLE)
@@ -26,17 +23,17 @@ class DiligenciaRepository @Inject constructor(
                     val diligencias = document.toObjects(Diligencia::class.java)
 
                     for (item in diligencias) {
-//                        processoRepository.ObterProcesso(
-//                            item.processo!!,
-//                            { ret -> item.processoObj = ret },
-//                            { null } //TODO("Implementar")
-//                        )
-//
-//                        advogadoRepository.ObterAdvogado(
-//                            item.advogado!!,
-//                            { ret -> item.advogadoObj = ret },
-//                            { null } //TODO("Implementar")
-//                        )
+                        processoRepository.get().ObterProcesso(
+                            item.processo!!,
+                            { ret -> item.processoObj = ret },
+                            { null } //TODO("Implementar")
+                        )
+
+                        advogadoRepository.get().ObterAdvogado(
+                            item.advogado!!,
+                            { ret -> item.advogadoObj = ret },
+                            { null } //TODO("Implementar")
+                        )
                     }
 
                     onSuccessListener(diligencias)
@@ -58,17 +55,17 @@ class DiligenciaRepository @Inject constructor(
                 if (document.exists()) {
                     val diligencia = document.toObject(Diligencia::class.java)!!
 
-//                    processoRepository.ObterProcesso(
-//                        diligencia.processo!!,
-//                        { ret -> diligencia.processoObj = ret },
-//                        { null } //TODO("Implementar")
-//                    )
-//
-//                    advogadoRepository.ObterAdvogado(
-//                        diligencia.advogado!!,
-//                        { ret -> diligencia.advogadoObj = ret },
-//                        { null } //TODO("Implementar")
-//                    )
+                    processoRepository.get().ObterProcesso(
+                        diligencia.processo!!,
+                        { ret -> diligencia.processoObj = ret },
+                        { null } //TODO("Implementar")
+                    )
+
+                    advogadoRepository.get().ObterAdvogado(
+                        diligencia.advogado!!,
+                        { ret -> diligencia.advogadoObj = ret },
+                        { null } //TODO("Implementar")
+                    )
 
                     onSuccessListener(diligencia)
                 } else {
@@ -89,17 +86,19 @@ class DiligenciaRepository @Inject constructor(
                 if (!document.isEmpty) {
                     val diligencias = document.toObjects(Diligencia::class.java)!!
 
-//                    processoRepository.ObterProcesso(
-//                        diligencia.processo!!,
-//                        { ret -> diligencia.processoObj = ret },
-//                        { null } //TODO("Implementar")
-//                    )
-//
-//                    advogadoRepository.ObterAdvogado(
-//                        diligencia.advogado!!,
-//                        { ret -> diligencia.advogadoObj = ret },
-//                        { null } //TODO("Implementar")
-//                    )
+                    for (item in diligencias) {
+                        processoRepository.get().ObterProcesso(
+                            item.processo!!,
+                            { ret -> item.processoObj = ret },
+                            { null } //TODO("Implementar")
+                        )
+
+                        advogadoRepository.get().ObterAdvogado(
+                            item.advogado!!,
+                            { ret -> item.advogadoObj = ret },
+                            { null } //TODO("Implementar")
+                        )
+                    }
 
                     onSuccessListener(diligencias)
                 } else {
@@ -120,17 +119,19 @@ class DiligenciaRepository @Inject constructor(
                 if (!document.isEmpty) {
                     val diligencias = document.toObjects(Diligencia::class.java)!!
 
-//                    processoRepository.ObterProcesso(
-//                        diligencia.processo!!,
-//                        { ret -> diligencia.processoObj = ret },
-//                        { null } //TODO("Implementar")
-//                    )
-//
-//                    advogadoRepository.ObterAdvogado(
-//                        diligencia.advogado!!,
-//                        { ret -> diligencia.advogadoObj = ret },
-//                        { null } //TODO("Implementar")
-//                    )
+                    for (item in diligencias) {
+                        processoRepository.get().ObterProcesso(
+                            item.processo!!,
+                            { ret -> item.processoObj = ret },
+                            { null } //TODO("Implementar")
+                        )
+
+                        advogadoRepository.get().ObterAdvogado(
+                            item.advogado!!,
+                            { ret -> item.advogadoObj = ret },
+                            { null } //TODO("Implementar")
+                        )
+                    }
 
                     onSuccessListener(diligencias)
                 } else {

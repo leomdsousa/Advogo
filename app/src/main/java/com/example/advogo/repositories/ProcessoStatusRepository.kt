@@ -28,12 +28,14 @@ class ProcessoStatusRepository @Inject constructor(
     override fun ObterProcessoStatus(id: String, onSuccessListener: (processoStatus: ProcessoStatus) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.PROCESSOS_STATUS_TABLE)
-            .whereEqualTo(Constants.PROCESSOS_STATUS_ID, id)
+            .document(id)
             .get()
             .addOnSuccessListener { document ->
-                if (!document.isEmpty) {
-                    val processoStatus = document.first().toObject(ProcessoStatus::class.java)
-                    onSuccessListener(processoStatus)
+                if (document != null) {
+                    val processoStatus = document.toObject(ProcessoStatus::class.java)
+                    if (processoStatus != null) {
+                        onSuccessListener(processoStatus)
+                    }
                 } else {
                     onFailureListener(null)
                 }

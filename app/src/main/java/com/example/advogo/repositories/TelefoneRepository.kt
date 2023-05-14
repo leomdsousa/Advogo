@@ -35,12 +35,14 @@ class TelefoneRepository @Inject constructor(
     override fun ObterTelefone(id: String, onSuccessListener: (telefone: Telefone) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.TELEFONES_TABLE)
-            .whereEqualTo(Constants.TELEFONES_ID, id)
+            .document(id)
             .get()
             .addOnSuccessListener { document ->
-                if (!document.isEmpty) {
-                    val telefone = document.first().toObject(Telefone::class.java)
-                    onSuccessListener(telefone)
+                if (document != null) {
+                    val telefone = document.toObject(Telefone::class.java)
+                    if (telefone != null) {
+                        onSuccessListener(telefone)
+                    }
                 } else {
                     onFailureListener(null)
                 }

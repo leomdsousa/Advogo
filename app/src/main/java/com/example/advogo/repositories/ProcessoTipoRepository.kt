@@ -28,12 +28,14 @@ class ProcessoTipoRepository @Inject constructor(
     override fun ObterProcessoTipo(id: String, onSuccessListener: (processoTipo: ProcessoTipo) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.PROCESSOS_TIPOS_TABLE)
-            .whereEqualTo(Constants.PROCESSOS_TIPOS_ID, id)
+            .document(id)
             .get()
             .addOnSuccessListener { document ->
-                if (!document.isEmpty) {
-                    val processoTipo = document.first().toObject(ProcessoTipo::class.java)
-                    onSuccessListener(processoTipo)
+                if (document != null) {
+                    val processoTipo = document.toObject(ProcessoTipo::class.java)
+                    if (processoTipo != null) {
+                        onSuccessListener(processoTipo)
+                    }
                 } else {
                     onFailureListener(null)
                 }

@@ -10,7 +10,7 @@ import com.example.advogo.databinding.FragmentEventosBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class EventosFragment : Fragment() {
+class EventosFragment : BaseFragment() {
     private lateinit var binding: FragmentEventosBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {

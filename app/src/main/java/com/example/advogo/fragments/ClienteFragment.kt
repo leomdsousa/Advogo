@@ -26,9 +26,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ClienteFragment : Fragment() {
+class ClienteFragment : BaseFragment() {
     private lateinit var binding: FragmentClienteBinding
-    @Inject lateinit var _clienteRepository: IClienteRepository
+    @Inject lateinit var clienteRepository: IClienteRepository
 
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
     
@@ -55,7 +55,7 @@ class ClienteFragment : Fragment() {
             resultLauncher.launch(intent)
         }
 
-        _clienteRepository.ObterClientes(
+        clienteRepository.ObterClientes(
             { Clientes -> setClientesToUI(Clientes as ArrayList<Cliente>) },
             { null } //TODO("Implementar")
         )
@@ -63,7 +63,7 @@ class ClienteFragment : Fragment() {
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 if (result.data!!.hasExtra(Constants.FROM_CLIENTE_ACTIVITY)) {
-                    _clienteRepository.ObterClientes(
+                    clienteRepository.ObterClientes(
                         { lista -> setClientesToUI(lista!! as ArrayList<Cliente>) },
                         { ex -> null } //TODO("Imlementar OnFailure")
                     )
@@ -91,7 +91,7 @@ class ClienteFragment : Fragment() {
                 ClientesAdapter.OnItemClickListener {
                 override fun onClick(model: Cliente, position: Int) {
                     val intent = Intent(binding.root.context, ClienteDetalheActivity::class.java)
-                    intent.putExtra(Constants.CLIENTE_ID_PARAM, model.id)
+                    intent.putExtra(Constants.CLIENTE_PARAM, model)
                     startActivity(intent)
                 }
             })

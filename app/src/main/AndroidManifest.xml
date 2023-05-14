@@ -28,31 +28,45 @@
 
         <activity
             android:name=".activities.ClienteCadastroActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Advogo.NoActionBar"/>
         <activity
             android:name=".activities.ClienteDetalheActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Advogo.NoActionBar"/>
         <activity
             android:name=".activities.ClienteActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Advogo.NoActionBar"/>
         <activity
-            android:name=".activities.MapAtivity"
+            android:name=".activities.MapActivity"
             android:exported="false"
             android:label="@string/title_activity_map"
             android:screenOrientation="portrait"
             android:theme="@style/CustomNoActionBarTheme" />
         <activity
             android:name=".activities.DiligenciaDetalheActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Advogo.NoActionBar"/>
         <activity
             android:name=".activities.DiligenciaCadastroActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Advogo.NoActionBar"/>
         <activity
             android:name=".activities.ProcessoDetalheActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Advogo.NoActionBar"/>
         <activity
             android:name=".activities.ProcessoCadastroActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Advogo.NoActionBar"/>
         <activity
             android:name=".activities.PerfilActivity"
             android:exported="false"
@@ -79,7 +93,6 @@
             android:theme="@style/Theme.Advogo.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

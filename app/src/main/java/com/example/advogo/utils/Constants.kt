@@ -49,6 +49,7 @@ object Constants {
 
     //Informa que a Activity origem está passando um dado
     const val ADV_NOME_PARAM = "advNomeParam"
+    const val ADV_ID_PARAM = "advIdParam"
     const val PROCESSO_ID_PARAM = "processoIdParam"
     const val CLIENTE_ID_PARAM = "clienteIdParam"
     const val DILIGENCIA_ID_PARAM = "diligenciaIdParam"

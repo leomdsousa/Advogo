@@ -1,5 +1,6 @@
 package com.example.advogo.adapters
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -19,6 +20,7 @@ open class ClientesAdapter(
 
     inner class MyViewHolder(private val binding: ItemClienteBinding)
         : RecyclerView.ViewHolder(binding.root) {
+        @SuppressLint("SetTextI18n")
         fun bind(item: Cliente, position: Int) {
             binding.apply {
                 binding.tvNomeCliente.text = item.nome

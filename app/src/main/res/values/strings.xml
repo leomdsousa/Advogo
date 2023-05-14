@@ -17,6 +17,8 @@
     <string name="labelColor">Cor</string>
 
     <string name="confirmacaoDeletarProcesso">Deseja deletar o processo \'%1$s\'?</string>
+    <string name="confirmacaoDeletarCliente">Deseja deletar o cliente \'%1$s\'?</string>
+    <string name="confirmacaoDeletarDiligencia">Deseja deletar a diligência \'%1$s\'?</string>
 
     <!--HINT-->
     <string name="hintProcessoName">Nome</string>

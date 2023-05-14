@@ -35,7 +35,7 @@ class ClienteRepository @Inject constructor(
     override fun ObterCliente(id: String, onSuccessListener: (cliente: Cliente) -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.CLIENTES_TABLE)
-            .document(getCurrentUserId())
+            .document(id)
             .get()
             .addOnSuccessListener { document ->
                 if (document.exists()) {
