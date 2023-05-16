@@ -10,7 +10,11 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 class ClienteRepository @Inject constructor(
     private val firebaseStore: FirebaseFirestore
@@ -47,6 +51,24 @@ class ClienteRepository @Inject constructor(
             }
             .addOnFailureListener { exception ->
                 onFailureListener(exception)
+            }
+    }
+
+    override suspend fun ObterCliente(id: String): Cliente? = suspendCoroutine { continuation ->
+        firebaseStore
+            .collection(Constants.CLIENTES_TABLE)
+            .document(id)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    val cliente = document.toObject(Cliente::class.java)!!
+                    continuation.resume(cliente)
+                } else {
+                    continuation.resume(null)
+                }
+            }
+            .addOnFailureListener { exception ->
+                continuation.resumeWithException(exception)
             }
     }
 
@@ -125,4 +147,6 @@ interface IClienteRepository {
     fun AdicionarCliente(model: Cliente, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (exception: Exception?) -> Unit)
     fun AtualizarCliente(model: Cliente, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (exception: Exception?) -> Unit)
     fun DeletarCliente(id: String, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (exception: Exception?) -> Unit)
+
+    suspend fun ObterCliente(id: String): Cliente?
 }

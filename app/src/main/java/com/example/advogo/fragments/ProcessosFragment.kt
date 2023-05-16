@@ -20,6 +20,9 @@ import com.example.advogo.models.Processo
 import com.example.advogo.repositories.IProcessoRepository
 import com.example.advogo.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -68,28 +71,30 @@ class ProcessosFragment : BaseFragment() {
     fun setProcessosToUI(lista: ArrayList<Processo>) {
         //TODO("hideProgressDialog()")
 
-        if(lista.size > 0) {
-            binding.rvBoardsList.visibility = View.VISIBLE
-            binding.tvNoBoardsAvailable.visibility = View.GONE
+        CoroutineScope(Dispatchers.Main).launch {
+            if(lista.size > 0) {
+                binding.rvBoardsList.visibility = View.VISIBLE
+                binding.tvNoBoardsAvailable.visibility = View.GONE
 
-            binding.rvBoardsList.layoutManager = LinearLayoutManager(binding.root.context)
-            binding.rvBoardsList.setHasFixedSize(true)
+                binding.rvBoardsList.layoutManager = LinearLayoutManager(binding.root.context)
+                binding.rvBoardsList.setHasFixedSize(true)
 
-            val adapter = ProcessosAdapter(binding.root.context, lista)
-            binding.rvBoardsList.adapter = adapter
+                val adapter = ProcessosAdapter(binding.root.context, lista)
+                binding.rvBoardsList.adapter = adapter
 
-            adapter.setOnItemClickListener(object :
-                ProcessosAdapter.OnItemClickListener {
-                override fun onClick(model: Processo, position: Int) {
-                    val intent = Intent(binding.root.context, ProcessoDetalheActivity::class.java)
-                    intent.putExtra(Constants.PROCESSO_PARAM, model)
-                    startActivity(intent)
-                }
-            })
+                adapter.setOnItemClickListener(object :
+                    ProcessosAdapter.OnItemClickListener {
+                    override fun onClick(model: Processo, position: Int) {
+                        val intent = Intent(binding.root.context, ProcessoDetalheActivity::class.java)
+                        intent.putExtra(Constants.PROCESSO_PARAM, model)
+                        startActivity(intent)
+                    }
+                })
 
-        } else {
-            binding.rvBoardsList.visibility = View.GONE
-            binding.tvNoBoardsAvailable.visibility = View.VISIBLE
+            } else {
+                binding.rvBoardsList.visibility = View.GONE
+                binding.tvNoBoardsAvailable.visibility = View.VISIBLE
+            }
         }
     }
 }

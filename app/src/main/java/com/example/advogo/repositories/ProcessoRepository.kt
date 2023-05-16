@@ -7,6 +7,12 @@ import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import okhttp3.internal.wait
+import java.util.concurrent.CountDownLatch
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -18,6 +24,7 @@ class ProcessoRepository @Inject constructor(
     private val tipoProcessoRepository: ProcessoTipoRepository,
     private val statusProcessoRepository: ProcessoStatusRepository
 ): IProcessoRepository {
+    @OptIn(DelicateCoroutinesApi::class)
     override fun ObterProcessos(onSuccessListener: (lista: List<Processo>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.PROCESSOS_TABLE)
@@ -26,33 +33,73 @@ class ProcessoRepository @Inject constructor(
                 if (!document.isEmpty) {
                     val processos = document.toObjects(Processo::class.java)
 
-                    for (item in processos) {
-                        clienteRepository.ObterCliente(
-                            item.cliente!!,
-                            { ret -> item.clienteObj = ret },
-                            { null } //TODO("Implementar")
-                        )
+                    val job = GlobalScope.launch {
+                        if (processos.isNotEmpty()) {
+                            for (item in processos) {
+                                val clienteDeferred = async { clienteRepository.ObterCliente(item.cliente!!) }
+                                val advogadoDeferred = async { advogadoRepository.ObterAdvogado(item.advogado!!) }
+                                val statusDeferred = async { statusProcessoRepository.ObterProcessoStatus(item.status!!) }
+                                val tipoDeferred = async { tipoProcessoRepository.ObterProcessoTipo(item.tipo!!) }
 
-                        advogadoRepository.ObterAdvogado(
-                            item.advogado!!,
-                            { ret -> item.advogadoObj = ret },
-                            { null } //TODO("Implementar")
-                        )
-
-                        statusProcessoRepository.ObterProcessoStatus(
-                            item.status!!,
-                            { ret -> item.statusObj = ret },
-                            { null } //TODO("Implementar")
-                        )
-
-                        tipoProcessoRepository.ObterProcessoTipo(
-                            item.tipo!!,
-                            { ret -> item.tipoObj = ret },
-                            { null } //TODO("Implementar")
-                        )
+                                item.clienteObj = clienteDeferred.await()
+                                item.advogadoObj = advogadoDeferred.await()
+                                item.statusObj = statusDeferred.await()
+                                item.tipoObj = tipoDeferred.await()
+                            }
+                        }
                     }
 
-                    onSuccessListener(processos)
+                    job.invokeOnCompletion { cause ->
+                        if (cause != null) {
+                            onFailureListener(null)
+                        } else {
+                            onSuccessListener(processos)
+                        }
+                    }
+
+//                    for (item in processos) {
+//                        GlobalScope.launch {
+//                            clienteRepository.ObterCliente(
+//                                item.cliente!!,
+//                                { ret ->
+//                                    item.clienteObj = ret
+//                                },
+//                                { null } //TODO("Implementar")
+//                            )
+//                        }
+//
+//                        GlobalScope.launch {
+//                            advogadoRepository.ObterAdvogado(
+//                                item.advogado!!,
+//                                { ret ->
+//                                    item.advogadoObj = ret
+//                                },
+//                                { null } //TODO("Implementar")
+//                            )
+//                        }
+//
+//                        GlobalScope.launch {
+//                            statusProcessoRepository.ObterProcessoStatus(
+//                                item.status!!,
+//                                { ret ->
+//                                    item.statusObj = ret
+//                                },
+//                                { null } //TODO("Implementar")
+//                            )
+//                        }
+//
+//                        GlobalScope.launch {
+//                            tipoProcessoRepository.ObterProcessoTipo(
+//                                item.tipo!!,
+//                                { ret ->
+//                                    item.tipoObj = ret
+//                                },
+//                                { null } //TODO("Implementar")
+//                            )
+//                        }
+//                    }
+//
+//                    onSuccessListener(processos)
                 } else {
                     onFailureListener(null)
                 }
@@ -71,31 +118,51 @@ class ProcessoRepository @Inject constructor(
                 if (document.exists()) {
                     val processo = document.toObject(Processo::class.java)!!
 
-                    clienteRepository.ObterCliente(
-                        processo.cliente!!,
-                        { ret -> processo.clienteObj = ret },
-                        { null } //TODO("Implementar")
-                    )
+                    val countDownLatch = CountDownLatch(4)
+
+                    GlobalScope.launch {
+                        clienteRepository.ObterCliente(
+                            processo.cliente!!,
+                            { ret ->
+                                processo.clienteObj = ret
+                            },
+                            { null } //TODO("Implementar")
+                        )
+                    }
 
                     advogadoRepository.ObterAdvogado(
                         processo.advogado!!,
-                        { ret -> processo.advogadoObj = ret },
+                        { ret ->
+                            processo.advogadoObj = ret
+                            countDownLatch.countDown()
+                        },
                         { null } //TODO("Implementar")
                     )
 
                     statusProcessoRepository.ObterProcessoStatus(
                         processo.status!!,
-                        { ret -> processo.statusObj = ret },
+                        { ret ->
+                            processo.statusObj = ret
+                            countDownLatch.countDown()
+                        },
                         { null } //TODO("Implementar")
                     )
 
                     tipoProcessoRepository.ObterProcessoTipo(
                         processo.tipo!!,
-                        { ret -> processo.tipoObj = ret },
+                        { ret ->
+                            processo.tipoObj = ret
+                            countDownLatch.countDown()
+                        },
                         { null } //TODO("Implementar")
                     )
 
-                    onSuccessListener(processo)
+                    try {
+                        countDownLatch.await()
+                        onSuccessListener(processo)
+                    } catch (ex: InterruptedException) {
+                        onFailureListener(ex)
+                    }
                 } else {
                     onFailureListener(null)
                 }

@@ -25,6 +25,10 @@ import com.example.advogo.utils.Constants
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -101,20 +105,20 @@ class ProcessoCadastroActivity : BaseActivity() {
     private fun setupSpinners() {
         val spinnerTipos = findViewById<Spinner>(R.id.spinnerTipo)
 
-        processoTipoRepository.ObterProcessosTipos(
-            { lista -> processosTipos = lista },
-            {  } //TODO("Implementat")
-        )
+        CoroutineScope(Dispatchers.Main).launch {
+            val processosTiposDeferred = async { processoTipoRepository.ObterProcessosTipos() }
+            processosTipos = processosTiposDeferred.await()!!
 
-        val adapter = ProcessosTiposAdapter(this, processosTipos)
-        spinnerTipos.adapter = adapter
+            val adapter = ProcessosTiposAdapter(this@ProcessoCadastroActivity, processosTipos)
+            spinnerTipos.adapter = adapter
+        }
 
         spinnerTipos.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val selectedItem = parent?.getItemAtPosition(position) as? String
                 selectedItem?.let {
                     binding.etTipo.setText(it)
-                    Log.i("Console", it)
+                    spinnerTipos.setSelection(id.toInt())
                 }
             }
 
@@ -190,12 +194,12 @@ class ProcessoCadastroActivity : BaseActivity() {
         val sDayOfMonth = if (day < 10) "0$day" else "$day"
         val sMonthOfYear = if ((month + 1) < 10) "0${month + 1}" else "${month + 1}"
 
-        val selectedDate = "$sDayOfMonth/$sMonthOfYear/$year"
+        dataSelecionada = "$sDayOfMonth/$sMonthOfYear/$year"
         binding.etData.setText(dataSelecionada)
 
-        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
-        val theDate = sdf.parse(selectedDate)
-        dataSelecionada = theDate!!.toLocaleString()
+//        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
+//        val theDate = sdf.parse(selectedDate)
+//        dataSelecionada = theDate!!.toLocaleString()
     }
 
     private fun processoCadastroSuccess() {

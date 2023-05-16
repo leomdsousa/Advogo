@@ -12,6 +12,9 @@ import com.google.firebase.firestore.SetOptions
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import javax.inject.Provider
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 class AdvogadoRepository @Inject constructor(
     private val firebaseStore: FirebaseFirestore
@@ -48,6 +51,24 @@ class AdvogadoRepository @Inject constructor(
             }
             .addOnFailureListener { exception ->
                 onFailureListener(exception)
+            }
+    }
+
+    override suspend fun ObterAdvogado(id: String): Advogado? = suspendCoroutine { continuation ->
+        firebaseStore
+            .collection(Constants.ADVOGADOS_TABLE)
+            .document(id)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    val cliente = document.toObject(Advogado::class.java)!!
+                    continuation.resume(cliente)
+                } else {
+                    continuation.resume(null)
+                }
+            }
+            .addOnFailureListener { exception ->
+                continuation.resumeWithException(exception)
             }
     }
 
@@ -126,4 +147,6 @@ interface IAdvogadoRepository {
     fun AdicionarAdvogado(model: Advogado, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (exception: Exception?) -> Unit)
     fun AtualizarAdvogado(model: Advogado, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (exception: Exception?) -> Unit)
     fun DeletarAdvogado(id: String, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (exception: Exception?) -> Unit)
+
+    suspend fun ObterAdvogado(id: String): Advogado?
 }
