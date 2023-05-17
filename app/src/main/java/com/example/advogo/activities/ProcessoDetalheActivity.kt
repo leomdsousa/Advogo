@@ -244,6 +244,7 @@ class ProcessoDetalheActivity : BaseActivity() {
     }
 
     private fun setProcessoToUI(processo: Processo) {
+        binding.etProcessoName.setText(processo.titulo)
         binding.etDescricao.setText(processo.descricao)
         binding.etTipo.setText(processo.tipoObj?.tipo)
         binding.etStatus.setText(processo.statusObj?.status)

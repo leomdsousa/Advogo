@@ -22,6 +22,9 @@ import com.example.advogo.models.ProcessoStatus
 import com.example.advogo.models.ProcessoTipo
 import com.example.advogo.repositories.*
 import com.example.advogo.utils.Constants
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.google.android.libraries.places.api.Places
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import dagger.hilt.android.AndroidEntryPoint

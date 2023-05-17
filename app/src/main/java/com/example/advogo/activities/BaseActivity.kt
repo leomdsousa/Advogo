@@ -1,33 +1,66 @@
 package com.example.advogo.activities
+import android.Manifest
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
+import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlertDialog
 import android.app.DatePickerDialog
+import android.app.ProgressDialog
+import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
+import android.provider.Settings
+import android.util.Log
 import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.example.advogo.R
 import com.example.advogo.repositories.IAdvogadoRepository
+import com.example.advogo.utils.Constants
+import com.example.advogo.utils.ObterEnderecoFromLatLng
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.widget.Autocomplete
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.MultiplePermissionsReport
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionRequest
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
 open class BaseActivity : AppCompatActivity() {
+    class BaseActivity @Inject constructor(
+        private val progressDialog: ProgressDialog
+    ) { }
+
     private lateinit var _sharedPreferences: SharedPreferences
     private lateinit var _result: ActivityResultLauncher<Intent>
     private var _doubleBackToExitPressureOnce = false
+
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     fun isUserLoggedIn(): Boolean {
         return getCurrentUserID().isNotEmpty()
@@ -131,6 +164,175 @@ open class BaseActivity : AppCompatActivity() {
 
     fun getFileExtension(uri: Uri): String? {
         return MimeTypeMap.getSingleton().getExtensionFromMimeType(contentResolver.getType(uri!!))
+    }
+
+    fun abrirArquivo(url: String) {
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.setDataAndType(Uri.parse(url), "application/pdf")
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+
+        if(consegueAbrirArquivo(intent)) {
+            startActivity(intent)
+        } else {
+            Toast.makeText(this, "Nenhum aplicativo encontrado para visualizar o PDF.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun consegueAbrirArquivo(intent: Intent): Boolean {
+        val packageManager = packageManager
+        return intent.resolveActivity(packageManager) != null
+    }
+
+    fun showGoogleMapPlaces(context: Context, result: ActivityResultLauncher<Intent>) {
+        _result = result
+
+        try {
+            val fields = listOf(
+                Place.Field.ID,
+                Place.Field.NAME,
+                Place.Field.LAT_LNG,
+                Place.Field.ADDRESS
+            )
+
+            val intent = Autocomplete.IntentBuilder(
+                AutocompleteActivityMode.FULLSCREEN,
+                fields
+            ).build(context)
+            intent.putExtra(Constants.FROM_GOOGLE_PLACES, Constants.FROM_GOOGLE_PLACES)
+
+            _result.launch(intent)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    fun obterLocalizacaoAtual(
+        context: Context,
+        onSuccess: (lat: Double, long: Double) -> Unit,
+        onFailure: () -> Unit
+    ) {
+        if(!isLocationEnabled()) {
+            Toast.makeText(this, "Localização não habilitada, favor habilite-a e tente novamente.", Toast.LENGTH_SHORT).show()
+
+            val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+            startActivity(intent)
+        } else {
+            Dexter.withActivity(this)
+                .withPermissions(
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                    , Manifest.permission.ACCESS_COARSE_LOCATION
+                )
+                .withListener(object: MultiplePermissionsListener {
+                    @SuppressLint("MissingPermission")
+                    override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
+                        if(report!!.areAllPermissionsGranted()) {
+                            fusedLocationProviderClient.lastLocation
+                                .addOnSuccessListener { location : Location? ->
+                                    if(location != null) {
+                                        onSuccess(location.latitude, location.longitude)
+                                    } else {
+                                        onFailure()
+                                    }
+                                }
+                        }
+                    }
+                    override fun onPermissionRationaleShouldBeShown(
+                        permissions: MutableList<PermissionRequest>?,
+                        token: PermissionToken?
+                    ) {
+                        showRationalDialogForPermissions(context)
+                    }
+                })
+                .onSameThread()
+                .check()
+        }
+    }
+
+    private fun obterLocalizacaoComLatLong(
+        context: Context,
+        lat: Double,
+        lng: Double,
+        onSuccess: (endereco: String) -> Unit,
+        onFailure: () -> Unit
+    ) {
+        val addressTask = ObterEnderecoFromLatLng(context, lat, lng)
+        addressTask.setCustomAddressListener(object: ObterEnderecoFromLatLng.AddressListener {
+            override fun onAddressFound(address: String) {
+                onSuccess(address)
+            }
+            override fun onError() {
+                onFailure()
+            }
+        })
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            addressTask.launchBackgroundProcessForRequest()
+        }
+    }
+
+//    private val locationCallback = object: LocationCallback() {
+//        override fun onLocationResult(locationResult: LocationResult) {
+//            val lastLocation: Location? = locationResult!!.lastLocation
+//            savedLatitude = lastLocation!!.latitude
+//            savedLongitude = lastLocation!!.longitude
+//
+//            val addressTask = ObterEnderecoFromLatLng(this@AddLugarFavoritoActivity, savedLatitude, savedLongitude)
+//            addressTask.setCustomAddressListener(object: ObterEnderecoFromLatLng.AddressListener {
+//                override fun onAddressFound(address: String) {
+//                    binding.etLocation.setText(address)
+//                }
+//
+//                override fun onError() {
+//                    Log.e("Address:: ", "onError: Um erro ocorreu ao traduzir as coordenadas para o endereço")
+//                }
+//            })
+//
+//            lifecycleScope.launch(Dispatchers.IO) {
+//                addressTask.launchBackgroundProcessForRequest()
+//            }
+//        }
+//    }
+
+    private fun showRationalDialogForPermissions(context: Context) {
+        AlertDialog
+            .Builder(context)
+            .setMessage("Permissões negadas! Você ainda pode permiti-las em Configurações do Sistema.")
+            .setPositiveButton("Ir para Configurações")
+            { _, _ ->
+                try {
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    val uri = Uri.fromParts("package", packageName, null)
+                    intent.data = uri
+                    startActivity(intent)
+                } catch (e: ActivityNotFoundException) {
+                    e.printStackTrace()
+                }
+            }
+            .setNegativeButton("Cancelar") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
+    }
+
+//    @SuppressLint("MissingPermission")
+//    private fun requestNewLocationData(){
+//        var mLocationRequest = LocationRequest.create().apply {
+//            interval = 5000
+//            fastestInterval = 1000
+//            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+//        }
+//
+//        fusedLocationProviderClient.requestLocationUpdates(mLocationRequest, locationCallback,
+//            Looper.myLooper()!!
+//        )
+//    }
+
+    private fun isLocationEnabled(): Boolean {
+        val locationManager: LocationManager =
+            getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+                || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
     }
 
     companion object {

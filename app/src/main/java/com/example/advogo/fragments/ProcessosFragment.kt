@@ -42,6 +42,7 @@ class ProcessosFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        //showProgressDialog()
 
         binding.fabProcessoCadastro.setOnClickListener {
             val intent = Intent(binding.root.context, ProcessoCadastroActivity::class.java)
@@ -50,7 +51,10 @@ class ProcessosFragment : BaseFragment() {
         }
 
         processoRepository.ObterProcessos(
-            { processos -> setProcessosToUI(processos as ArrayList<Processo>) },
+            { processos ->
+                setProcessosToUI(processos as ArrayList<Processo>)
+                //hideProgressDialog()
+            },
             { null } //TODO("Implementar")
         )
 
@@ -68,7 +72,7 @@ class ProcessosFragment : BaseFragment() {
         }
     }
 
-    fun setProcessosToUI(lista: ArrayList<Processo>) {
+    private fun setProcessosToUI(lista: ArrayList<Processo>) {
         //TODO("hideProgressDialog()")
 
         CoroutineScope(Dispatchers.Main).launch {

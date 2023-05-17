@@ -7,6 +7,7 @@ import java.util.*
 @Parcelize
 data class Processo(
     var id: String? = null,
+    var titulo: String? = null,
     var numero: String? = null,
     var descricao: String? = null,
     var tipo: String? = null,

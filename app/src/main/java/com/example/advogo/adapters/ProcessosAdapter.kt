@@ -28,7 +28,7 @@ open class ProcessosAdapter(
                     .placeholder(R.drawable.ic_processo_place_holder)
                     .into(binding.ivProcessoImage)
 
-                binding.tvDescricaoProcesso.text = item.descricao
+                binding.tvDescricaoProcesso.text = item.titulo
                 binding.tvNumeroProcesso.text = "Nº Processo: ${item.numero}"
                 binding.tvTipoProcesso.text = "Tipo: ${item.tipoObj?.tipo}"
                 binding.tvStatusProcesso.text = "Status: ${item.statusObj?.status}"

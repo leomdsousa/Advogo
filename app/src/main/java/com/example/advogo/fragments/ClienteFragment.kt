@@ -74,7 +74,7 @@ class ClienteFragment : BaseFragment() {
         }
     }
 
-    fun setClientesToUI(lista: ArrayList<Cliente>) {
+    private fun setClientesToUI(lista: ArrayList<Cliente>) {
         //TODO("hideProgressDialog()")
 
         if(lista.size > 0) {

@@ -58,18 +58,12 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         setContentView(binding.root)
 
         setupActionBar()
-
         setupTabsLayout()
 
         binding.navView.setNavigationItemSelectedListener(this)
 
         sharedPreferences =
             this.getSharedPreferences(Constants.ADVOGO_PREFERENCES, Context.MODE_PRIVATE)
-
-//        _processoRepository.ObterProcessos(
-//            { processos -> setProcessosToUI(processos as ArrayList<Processo>) },
-//            { null } //TODO("Implementar")
-//        )
 
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -90,13 +84,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 Log.e("Cancelado", "Cancelado")
             }
         }
-
-//        binding.appBarMain.contentMain.fabProcessoCadastro.setOnClickListener {
-//            val intent = Intent(this@MainActivity, ProcessoCadastroActivity::class.java)
-//            intent.putExtra(Constants.ADV_NOME_PARAM, advNome)
-//            intent.putExtra(Constants.FROM_PROCESSO_CADASTRO_ACTIVITY, Constants.FROM_PROCESSO_CADASTRO_ACTIVITY)
-//            resultLauncher.launch(intent)
-//        }
     }
 
     private fun setupTabsLayout() {
