@@ -18,8 +18,8 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class CadastroActivity : BaseActivity() {
-    @Inject lateinit var _advRepository: IAdvogadoRepository
     private lateinit var binding: ActivityCadastroBinding
+    @Inject lateinit var advRepository: IAdvogadoRepository
     @Inject lateinit var correioService: CorreioApiService
 
     private var endereco = ""
@@ -109,7 +109,7 @@ class CadastroActivity : BaseActivity() {
                             telefone = telefone
                         )
 
-                        _advRepository.AdicionarAdvogado(
+                        advRepository.AdicionarAdvogado(
                             advogado,
                             { registrarSuccess() },
                             { registrarFailure() }

@@ -21,9 +21,11 @@ import com.example.advogo.models.Cliente
 import com.example.advogo.models.Diligencia
 import com.example.advogo.models.Processo
 import com.example.advogo.repositories.AdvogadoRepository
+import com.example.advogo.repositories.ClienteRepository
 import com.example.advogo.repositories.ProcessoRepository
 import com.example.advogo.utils.Constants
 import com.example.projmgr.dialogs.AdvogadosDialog
+import com.example.projmgr.dialogs.ClientesDialog
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,11 +40,14 @@ import kotlin.collections.ArrayList
 class ProcessoDetalheActivity : BaseActivity() {
     @Inject lateinit var processoRepository: ProcessoRepository
     @Inject lateinit var advogadoRepository: AdvogadoRepository
+    @Inject lateinit var clienteRepository: ClienteRepository
 
     private lateinit var binding: ActivityProcessoDetalheBinding
     private lateinit var processoDetalhes: Processo
 
     private var advogados: List<Advogado> = ArrayList()
+    private var clientes: List<Cliente> = ArrayList()
+
     private var dataSelecionada: String? = null
 
     private var imagemSelecionadaURI: Uri? = null
@@ -60,6 +65,7 @@ class ProcessoDetalheActivity : BaseActivity() {
 
         setProcessoToUI(processoDetalhes)
         advogados = carregarAdvogados()
+        clientes = carregarClientes()
 
         binding.tvSelectData.setOnClickListener {
             showDataPicker() { ano, mes, dia ->
@@ -77,6 +83,14 @@ class ProcessoDetalheActivity : BaseActivity() {
 
         binding.ivProcessoImage.setOnClickListener {
             chooseImage(this@ProcessoDetalheActivity, resultLauncher)
+        }
+
+        binding.etAdv.setOnClickListener {
+            advogadosDialog()
+        }
+
+        binding.etCliente.setOnClickListener {
+            clientesDialog()
         }
 
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -186,61 +200,63 @@ class ProcessoDetalheActivity : BaseActivity() {
                         processoDetalhes.advogado = adv.id                        
                         advogados[advogados.indexOf(adv)].selecionado = true
                     } else {
-                        //TODO("ADVOGADO JÁ SELECIONADO")
+                        Toast.makeText(
+                            this@ProcessoDetalheActivity,
+                            "Advogado já selecionado! Favor escolher outro.",
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
                 } else {
                     processoDetalhes.advogado = null
                     advogados[advogados.indexOf(adv)].selecionado = false
                 }
-
-                setAdvogadosToUI()
             }
         }
         
         listDialog.show()
     }
 
+    private fun clientesDialog() {
+        if(clientes.isEmpty()) {
+            clientes = carregarClientes()
+        }
 
+        val listDialog = object : ClientesDialog(
+            this@ProcessoDetalheActivity,
+            advogados as ArrayList<Cliente>,
+            resources.getString(R.string.selecionarCliente)
+        ) {
+            override fun onItemSelected(adv: Cliente, action: String) {
+                if (action == Constants.SELECIONAR) {
+                    if (processoDetalhes.cliente != adv.id) {
+                        processoDetalhes.cliente = adv.id
+                        advogados[clientes.indexOf(adv)].selecionado = true
+                    } else {
+                        Toast.makeText(
+                            this@ProcessoDetalheActivity,
+                            "Cliente já selecionado! Favor escolher outro.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                } else {
+                    processoDetalhes.cliente = null
+                    clientes[clientes.indexOf(adv)].selecionado = false
+                }
+            }
+        }
 
-    private fun setAdvogadosToUI() {
-//        val cardAssignedMembersList =
-//            boardDetails.taskList!![taskListPosition].cards!![cardPosition].assignedTo
-//
-//        val selectedMembersList: ArrayList<SelectedMembers> = ArrayList()
-//
-//        for (i in membersDetailList.indices) {
-//            for (j in cardAssignedMembersList) {
-//                if (membersDetailList[i].id == j) {
-//                    val selectedMember = SelectedMembers(
-//                        membersDetailList[i].id,
-//                        membersDetailList[i].image!!
-//                    )
-//
-//                    selectedMembersList.add(selectedMember)
-//                }
-//            }
-//        }
-//
-//        if (selectedMembersList.size > 0) {
-//            selectedMembersList.add(SelectedMembers("", ""))
-//
-//            binding.tvSelectMembers.visibility = View.GONE
-//            binding.tvSelectMembers.visibility = View.VISIBLE
-//
-//            binding.rvSelectedMembersList.layoutManager = GridLayoutManager(this@CardDetailsActivity, 6)
-//
-//            val adapter = CardMembersListItemsAdapter(this@CardDetailsActivity, selectedMembersList, true)
-//            binding.rvSelectedMembersList.adapter = adapter
-//            adapter.setOnItemClickListener(object :
-//                CardMembersListItemsAdapter.OnItemClickListener {
-//                override fun onClick() {
-//                    membersListDialog()
-//                }
-//            })
-//        } else {
-//            binding.tvSelectMembers.visibility = View.VISIBLE
-//            binding.rvSelectedMembersList.visibility = View.GONE
-//        }
+        listDialog.show()
+    }
+
+    private fun carregarClientes(): List<Cliente> {
+        var retorno: List<Cliente> = ArrayList()
+
+        clienteRepository.ObterClientes(
+            { lista -> retorno = lista },
+            { null } //TODO("Implementar")
+        )
+
+        return retorno
     }
 
     private fun setProcessoToUI(processo: Processo) {

@@ -13,13 +13,16 @@ import com.example.advogo.R
 import com.example.advogo.adapters.DiligenciasStatusAdapter
 import com.example.advogo.adapters.DiligenciasTiposAdapter
 import com.example.advogo.databinding.ActivityDiligenciaCadastroBinding
+import com.example.advogo.models.Advogado
 import com.example.advogo.models.Diligencia
 import com.example.advogo.models.DiligenciaStatus
 import com.example.advogo.models.DiligenciaTipo
+import com.example.advogo.repositories.AdvogadoRepository
 import com.example.advogo.repositories.DiligenciaRepository
 import com.example.advogo.repositories.DiligenciaStatusRepository
 import com.example.advogo.repositories.DiligenciaTipoRepository
 import com.example.advogo.utils.Constants
+import com.example.projmgr.dialogs.AdvogadosDialog
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.libraries.places.api.Places
@@ -37,7 +40,9 @@ class DiligenciaCadastroActivity : BaseActivity() {
     @Inject lateinit var diligenciaRepository: DiligenciaRepository
     @Inject lateinit var diligenciaTipoRepository: DiligenciaTipoRepository
     @Inject lateinit var diligenciaStatusRepository: DiligenciaStatusRepository
+    @Inject lateinit var advogadoRepository: AdvogadoRepository
 
+    private var advogados: List<Advogado> = ArrayList()
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 //    private var savedUriImage: Uri? = null
     private var savedLatitude: Double = 0.0
@@ -74,6 +79,10 @@ class DiligenciaCadastroActivity : BaseActivity() {
             }
         }
 
+        binding.etDiligenciaAdvogado.setOnClickListener {
+            advogadosDialog()
+        }
+
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 try {
@@ -100,6 +109,49 @@ class DiligenciaCadastroActivity : BaseActivity() {
                 }
             }
         }
+    }
+
+    private fun advogadosDialog() {
+        if(advogados.isEmpty()) {
+            advogados = carregarAdvogados()
+        }
+
+        val listDialog = object : AdvogadosDialog(
+            this@DiligenciaCadastroActivity,
+            advogados as ArrayList<Advogado>,
+            resources.getString(R.string.selecionarAdvogado)
+        ) {
+            override fun onItemSelected(adv: Advogado, action: String) {
+                if (action == Constants.SELECIONAR) {
+//                    if (processoDetalhes.advogado != adv.id) {
+//                        processoDetalhes.advogado = adv.id
+//                        advogados[advogados.indexOf(adv)].selecionado = true
+//                    } else {
+//                        Toast.makeText(
+//                            this@DiligenciaCadastroActivity,
+//                            "Advogado já selecionado! Favor escolher outro.",
+//                            Toast.LENGTH_LONG
+//                        ).show()
+//                    }
+                } else {
+//                    processoDetalhes.advogado = null
+//                    advogados[advogados.indexOf(adv)].selecionado = false
+                }
+            }
+        }
+
+        listDialog.show()
+    }
+
+    private fun carregarAdvogados(): List<Advogado> {
+        var retorno: List<Advogado> = ArrayList()
+
+        advogadoRepository.ObterAdvogados(
+            { lista -> retorno = lista },
+            { null } //TODO("Implementar")
+        )
+
+        return retorno
     }
 
     private fun setupSpinners() {

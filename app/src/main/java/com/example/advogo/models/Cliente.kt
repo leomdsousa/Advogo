@@ -14,6 +14,7 @@ data class Cliente(
     var enderecoCidade: String? = null,
     var enderecoBairro: String? = null,
     var telefone: String? = null,
-    @Transient var telefoneObj: Telefone? = null
+    @Transient var telefoneObj: Telefone? = null,
+    @Transient var selecionado: Boolean = false
 ): Parcelable {
 }

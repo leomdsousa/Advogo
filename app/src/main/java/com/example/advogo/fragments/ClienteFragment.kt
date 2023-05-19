@@ -89,7 +89,7 @@ class ClienteFragment : BaseFragment() {
 
             adapter.setOnItemClickListener(object :
                 ClientesAdapter.OnItemClickListener {
-                override fun onClick(model: Cliente, position: Int) {
+                override fun onClick(model: Cliente, position: Int, acao: String?) {
                     val intent = Intent(binding.root.context, ClienteDetalheActivity::class.java)
                     intent.putExtra(Constants.CLIENTE_PARAM, model)
                     startActivity(intent)

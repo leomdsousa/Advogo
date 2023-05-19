@@ -30,7 +30,7 @@ open class ClientesAdapter(
 
                 binding.root.setOnClickListener {
                     if (onItemClickListener != null) {
-                        onItemClickListener!!.onClick(item, position)
+                        onItemClickListener!!.onClick(item, position, null)
                     }
                 }
             }
@@ -56,7 +56,7 @@ open class ClientesAdapter(
     override fun getItemCount(): Int = list.size
 
     interface OnItemClickListener {
-        fun onClick(cliente: Cliente, position: Int)
+        fun onClick(cliente: Cliente, position: Int, acao: String? = null)
     }
 
     fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
