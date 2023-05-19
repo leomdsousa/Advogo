@@ -2,37 +2,50 @@ package com.example.advogo.activities
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
-import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.MediaStore
-import android.util.Log
+import android.view.View
+import android.widget.AdapterView
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import com.bumptech.glide.Glide
 import com.example.advogo.R
+import com.example.advogo.adapters.DiligenciasStatusAdapter
+import com.example.advogo.adapters.DiligenciasTiposAdapter
 import com.example.advogo.databinding.ActivityDiligenciaCadastroBinding
 import com.example.advogo.models.Diligencia
+import com.example.advogo.models.DiligenciaStatus
+import com.example.advogo.models.DiligenciaTipo
 import com.example.advogo.repositories.DiligenciaRepository
+import com.example.advogo.repositories.DiligenciaStatusRepository
+import com.example.advogo.repositories.DiligenciaTipoRepository
 import com.example.advogo.utils.Constants
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import java.io.IOException
 import javax.inject.Inject
 
 class DiligenciaCadastroActivity : BaseActivity() {
     private lateinit var binding: ActivityDiligenciaCadastroBinding
     @Inject lateinit var diligenciaRepository: DiligenciaRepository
+    @Inject lateinit var diligenciaTipoRepository: DiligenciaTipoRepository
+    @Inject lateinit var diligenciaStatusRepository: DiligenciaStatusRepository
 
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 //    private var savedUriImage: Uri? = null
     private var savedLatitude: Double = 0.0
     private var savedLongitude: Double = 0.0
+    private var dataSelecionada: String? = null
+
+    private var diligenciaStatus: List<DiligenciaStatus>? = ArrayList()
+    private var diligenciaTipos: List<DiligenciaTipo>? = ArrayList()
 
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
@@ -45,6 +58,7 @@ class DiligenciaCadastroActivity : BaseActivity() {
 
         setupActionBar()
         configurarGoogleMapPlaces()
+        setupSpinners()
 
         binding.btnCadastrarDiligencia.setOnClickListener {
             saveDiligencia()
@@ -52,6 +66,12 @@ class DiligenciaCadastroActivity : BaseActivity() {
 
         binding.etDiligenciaEndereco.setOnClickListener {
             showGoogleMapPlaces(this, resultLauncher)
+        }
+
+        binding.etDiligenciaData.setOnClickListener {
+            showDataPicker() { ano, mes, dia ->
+                onDatePickerResult(ano, mes, dia)
+            }
         }
 
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -78,6 +98,63 @@ class DiligenciaCadastroActivity : BaseActivity() {
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
+            }
+        }
+    }
+
+    private fun setupSpinners() {
+        setupSpinnerTipoDiligencia()
+        setupSpinnerStatusDiligencia()
+    }
+
+    private fun setupSpinnerStatusDiligencia() {
+        val spinnerStatus = findViewById<Spinner>(R.id.spinnerStatusProcesso)
+
+        CoroutineScope(Dispatchers.Main).launch {
+            val diligenciaStatusDeferred = async { diligenciaStatusRepository.ObterDiligenciasStatus() }
+            diligenciaStatus = diligenciaStatusDeferred.await()!!
+
+            val adapter = DiligenciasStatusAdapter(this@DiligenciaCadastroActivity, diligenciaStatus!!)
+            spinnerStatus.adapter = adapter
+        }
+
+        spinnerStatus.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val selectedItem = parent?.getItemAtPosition(position) as? String
+                selectedItem?.let {
+                    binding.autoTvStatusDiligencia.setText(it)
+                    spinnerStatus.setSelection(id.toInt())
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                // Nada selecionado
+            }
+        }
+    }
+
+    private fun setupSpinnerTipoDiligencia() {
+        val spinnerTipos = findViewById<Spinner>(R.id.spinnerTipoProcesso)
+
+        CoroutineScope(Dispatchers.Main).launch {
+            val diligenciaTiposDeferred = async { diligenciaTipoRepository.ObterDiligenciasTipos() }
+            diligenciaTipos = diligenciaTiposDeferred.await()!!
+
+            val adapter = DiligenciasTiposAdapter(this@DiligenciaCadastroActivity, diligenciaTipos!!)
+            spinnerTipos.adapter = adapter
+        }
+
+        spinnerTipos.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val selectedItem = parent?.getItemAtPosition(position) as? String
+                selectedItem?.let {
+                    binding.autoTvTipoDiligencia.setText(it)
+                    spinnerTipos.setSelection(id.toInt())
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                // Nada selecionado
             }
         }
     }
@@ -131,5 +208,13 @@ class DiligenciaCadastroActivity : BaseActivity() {
             Places.initialize(this@DiligenciaCadastroActivity,
                 resources.getString(R.string.google_maps_api_key))
         }
+    }
+
+    private fun onDatePickerResult(ano: Int, mes: Int, dia: Int) {
+        val sDayOfMonth = if (dia < 10) "0$dia" else "$dia"
+        val sMonthOfYear = if ((mes + 1) < 10) "0${mes + 1}" else "${mes + 1}"
+
+        dataSelecionada = "$sDayOfMonth/$sMonthOfYear/$ano"
+        binding.etDiligenciaData.setText(dataSelecionada)
     }
 }

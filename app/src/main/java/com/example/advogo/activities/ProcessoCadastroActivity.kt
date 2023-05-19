@@ -14,6 +14,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.bumptech.glide.Glide
 import com.example.advogo.R
+import com.example.advogo.adapters.ProcessosStatusAdapter
 import com.example.advogo.adapters.ProcessosTiposAdapter
 import com.example.advogo.databinding.ActivityProcessoCadastroBinding
 import com.example.advogo.models.Advogado
@@ -106,7 +107,39 @@ class ProcessoCadastroActivity : BaseActivity() {
     }
 
     private fun setupSpinners() {
-        val spinnerTipos = findViewById<Spinner>(R.id.spinnerTipo)
+        setupSpinnerTiposProcesso()
+        setupSpinnerStatusProcesso()
+
+    }
+
+    private fun setupSpinnerStatusProcesso() {
+        val spinnerStatus = findViewById<Spinner>(R.id.spinnerStatusProcesso)
+
+        CoroutineScope(Dispatchers.Main).launch {
+            val processosStatusDeferred = async { processoStatusRepository.ObterProcessoStatus() }
+            processosStatus = processosStatusDeferred.await()!!
+
+            val adapter = ProcessosStatusAdapter(this@ProcessoCadastroActivity, processosStatus)
+            spinnerStatus.adapter = adapter
+        }
+
+        spinnerStatus.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val selectedItem = parent?.getItemAtPosition(position) as? String
+                selectedItem?.let {
+                    binding.autoTvTipoProcesso.setText(it)
+                    spinnerStatus.setSelection(id.toInt())
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                // Nada selecionado
+            }
+        }
+    }
+
+    private fun setupSpinnerTiposProcesso() {
+        val spinnerTipos = findViewById<Spinner>(R.id.spinnerTipoProcesso)
 
         CoroutineScope(Dispatchers.Main).launch {
             val processosTiposDeferred = async { processoTipoRepository.ObterProcessosTipos() }
@@ -120,7 +153,7 @@ class ProcessoCadastroActivity : BaseActivity() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val selectedItem = parent?.getItemAtPosition(position) as? String
                 selectedItem?.let {
-                    binding.etTipo.setText(it)
+                    binding.autoTvTipoProcesso.setText(it)
                     spinnerTipos.setSelection(id.toInt())
                 }
             }
@@ -178,8 +211,8 @@ class ProcessoCadastroActivity : BaseActivity() {
             id = null,
             descricao = binding.etDescricao.text.toString(),
             numero = binding.etNumeroProcesso.text.toString(),
-            tipo = binding.etTipo.text.toString(),
-            status = binding.etStatus.text.toString(),
+            tipo = binding.autoTvTipoProcesso.text.toString(),
+            status = binding.autoTvStatusProcesso.text.toString(),
             data = dataSelecionada,
             imagem = imagemSelecionadaURL,
             cliente = binding.etCliente.text.toString(),
@@ -199,10 +232,6 @@ class ProcessoCadastroActivity : BaseActivity() {
 
         dataSelecionada = "$sDayOfMonth/$sMonthOfYear/$year"
         binding.etData.setText(dataSelecionada)
-
-//        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
-//        val theDate = sdf.parse(selectedDate)
-//        dataSelecionada = theDate!!.toLocaleString()
     }
 
     private fun processoCadastroSuccess() {

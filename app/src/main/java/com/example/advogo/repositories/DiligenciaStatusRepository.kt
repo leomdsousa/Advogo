@@ -1,6 +1,7 @@
 package com.example.advogo.repositories
 
-import com.example.advogo.models.ProcessoStatus
+import com.example.advogo.models.DiligenciaStatus
+import com.example.advogo.models.DiligenciaTipo
 import com.example.advogo.utils.Constants
 import com.google.firebase.firestore.FirebaseFirestore
 import javax.inject.Inject
@@ -8,16 +9,16 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-class ProcessoStatusRepository @Inject constructor(
+class DiligenciaStatusRepository @Inject constructor(
     private val firebaseStore: FirebaseFirestore
-): IProcessoStatusRepository {
-    override fun ObterProcessosStatuss(onSuccessListener: (List<ProcessoStatus>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+): IDiligenciaStatusRepository {
+    override fun ObterDiligenciasStatus(onSuccessListener: (List<DiligenciaStatus>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
-            .collection(Constants.PROCESSOS_STATUS_TABLE)
+            .collection(Constants.DILIGENCIAS_STATUS_TABLE)
             .get()
             .addOnSuccessListener { document ->
                 if (!document.isEmpty) {
-                    val lista = document.toObjects(ProcessoStatus::class.java)
+                    val lista = document.toObjects(DiligenciaStatus::class.java)
                     onSuccessListener(lista)
                 } else {
                     onFailureListener(null)
@@ -28,14 +29,14 @@ class ProcessoStatusRepository @Inject constructor(
             }
     }
 
-    override fun ObterProcessoStatus(id: String, onSuccessListener: (processoStatus: ProcessoStatus) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun ObterDiligenciaStatus(id: String, onSuccessListener: (processoStatus: DiligenciaStatus) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
-            .collection(Constants.PROCESSOS_STATUS_TABLE)
+            .collection(Constants.DILIGENCIAS_STATUS_TABLE)
             .document(id)
             .get()
             .addOnSuccessListener { document ->
                 if (document != null) {
-                    val processoStatus = document.toObject(ProcessoStatus::class.java)
+                    val processoStatus = document.toObject(DiligenciaStatus::class.java)
                     if (processoStatus != null) {
                         onSuccessListener(processoStatus)
                     }
@@ -48,14 +49,14 @@ class ProcessoStatusRepository @Inject constructor(
             }
     }
 
-    override suspend fun ObterProcessoStatus(): List<ProcessoStatus>? = suspendCoroutine { continuation ->
+    override suspend fun ObterDiligenciasStatus(): List<DiligenciaStatus>? = suspendCoroutine { continuation ->
         firebaseStore
-            .collection(Constants.PROCESSOS_STATUS_TABLE)
+            .collection(Constants.DILIGENCIAS_STATUS_TABLE)
             .get()
             .addOnSuccessListener { document ->
                 if (!document.isEmpty) {
-                    val lista = document.toObjects(ProcessoStatus::class.java)!!
-                    continuation.resume(lista)
+                    val resultado = document.toObjects(DiligenciaStatus::class.java)!!
+                    continuation.resume(resultado)
                 } else {
                     continuation.resume(null)
                 }
@@ -64,15 +65,14 @@ class ProcessoStatusRepository @Inject constructor(
                 continuation.resumeWithException(exception)
             }
     }
-
-    override suspend fun ObterProcessoStatus(id: String): ProcessoStatus? = suspendCoroutine { continuation ->
+    override suspend fun ObterDiligenciaStatus(id: String): DiligenciaStatus? = suspendCoroutine { continuation ->
         firebaseStore
-            .collection(Constants.PROCESSOS_STATUS_TABLE)
+            .collection(Constants.DILIGENCIAS_STATUS_TABLE)
             .document(id)
             .get()
             .addOnSuccessListener { document ->
                 if (document.exists()) {
-                    val status = document.toObject(ProcessoStatus::class.java)!!
+                    val status = document.toObject(DiligenciaStatus::class.java)!!
                     continuation.resume(status)
                 } else {
                     continuation.resume(null)
@@ -84,10 +84,10 @@ class ProcessoStatusRepository @Inject constructor(
     }
 }
 
-interface IProcessoStatusRepository {
-    fun ObterProcessosStatuss(onSuccessListener: (lista: List<ProcessoStatus>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
-    fun ObterProcessoStatus(id: String, onSuccessListener: (processoStatus: ProcessoStatus) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+interface IDiligenciaStatusRepository {
+    fun ObterDiligenciasStatus(onSuccessListener: (lista: List<DiligenciaStatus>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun ObterDiligenciaStatus(id: String, onSuccessListener: (processoStatus: DiligenciaStatus) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
 
-    suspend fun ObterProcessoStatus(): List<ProcessoStatus>?
-    suspend fun ObterProcessoStatus(id: String): ProcessoStatus?
+    suspend fun ObterDiligenciasStatus(): List<DiligenciaStatus>?
+    suspend fun ObterDiligenciaStatus(id: String): DiligenciaStatus?
 }

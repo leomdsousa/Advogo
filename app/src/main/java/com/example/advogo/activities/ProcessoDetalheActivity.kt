@@ -275,10 +275,10 @@ class ProcessoDetalheActivity : BaseActivity() {
 
         val selectedDate = "$sDayOfMonth/$sMonthOfYear/$year"
         binding.tvSelectData.text = selectedDate
-
-        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
-        val theDate = sdf.parse(selectedDate)
-        dataSelecionada = theDate!!.toLocaleString()
+//
+//        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
+//        val theDate = sdf.parse(selectedDate)
+//        dataSelecionada = theDate!!.toLocaleString()
     }
 
     private fun alertDialogDeletarProcesso(numeroProcesso: String) {

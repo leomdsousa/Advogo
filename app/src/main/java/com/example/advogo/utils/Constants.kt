@@ -2,6 +2,7 @@ package com.example.advogo.utils
 
 object Constants {
 
+
     const val ADVOGADOS_TABLE = "advogados"
     const val ADVOGADOS_ID = "_id"
     const val ADVOGADOS_NOME = "nome"
@@ -34,6 +35,14 @@ object Constants {
     const val DILIGENCIAS_ID = "_id"
     const val DILIGENCIAS_PROCESSO = "processo"
     const val DILIGENCIAS_ADVOGADO = "advogado"
+
+    const val DILIGENCIAS_STATUS_TABLE = "diligenciasStatus"
+    const val DILIGENCIAS_STATUS_ID = "_id"
+    const val DILIGENCIAS_STATUS_STATUS = "status"
+
+    const val DILIGENCIAS_TIPOS_TABLE = "diligenciasTipos"
+    const val DILIGENCIAS_TIPOS_ID = "_id"
+    const val DILIGENCIAS_TIPOS_TIPO = "tipo"
 
     const val TELEFONES_TABLE = "telefones"
     const val TELEFONES_ID = "_id"

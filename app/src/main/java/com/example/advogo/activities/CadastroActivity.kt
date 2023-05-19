@@ -7,15 +7,22 @@ import android.widget.Toast
 import com.example.advogo.R
 import com.example.advogo.databinding.ActivityCadastroBinding
 import com.example.advogo.models.Advogado
+import com.example.advogo.models.externals.CorreioResponse
 import com.example.advogo.repositories.IAdvogadoRepository
+import com.example.advogo.services.CorreioApiService
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class CadastroActivity : BaseActivity() {
     @Inject lateinit var _advRepository: IAdvogadoRepository
     private lateinit var binding: ActivityCadastroBinding
+    @Inject lateinit var correioService: CorreioApiService
+
+    private var endereco = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +32,39 @@ class CadastroActivity : BaseActivity() {
         setupActionBar()
 
         binding.btnSignUp.setOnClickListener { registrar() }
+
+        binding.etCep.setOnClickListener {
+            val valor: String = binding.etCep.text.toString()
+
+            if (valor.isNullOrEmpty()) {
+                binding.etCep.error = "O campo não pode estar vazio"
+                binding.etCep.requestFocus()
+                return@setOnClickListener
+            }
+
+            val rgxCep: Pattern = Pattern.compile("(^\\d{5}-\\d{3}|^\\d{2}.\\d{3}-\\d{3}|\\d{8})")
+            val matcher: Matcher = rgxCep.matcher(valor)
+
+            if (!matcher.matches()) {
+                binding.etCep.error = "Informe um CEP válido"
+                binding.etCep.requestFocus()
+            } else {
+                val endereco = buscarEnderecoCorreio(valor)
+
+                if(endereco != null) {
+                    binding.etCep.setText(endereco.logradouro)
+                    binding.etEnderecoCidade.setText(endereco.localidade)
+                    binding.etBairro.setText(endereco.bairro)
+                } else {
+                    binding.etCep.error = "CEP não encontrado"
+                    binding.etCep.requestFocus()
+                }
+            }
+        }
+    }
+
+    private fun buscarEnderecoCorreio(cep: String): CorreioResponse? {
+        return correioService.obterEndereco(cep)
     }
 
     private fun setupActionBar() {
@@ -43,7 +83,8 @@ class CadastroActivity : BaseActivity() {
         val nome = binding.etNome.text.toString().trim()
         val email = binding.etEmail.text.toString().trim()
         val password = binding.etPassword.text.toString().trim()
-        val endereco = binding.etEndereco.text.toString().trim()
+        //val endereco = binding.etEndereco.text.toString().trim()
+        val endereco = endereco
         val oab = binding.etOab.text.toString().trim()
         val telefone = binding.etTelefone.text.toString().trim()
 

@@ -14,12 +14,13 @@
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/drawable/ic_vector_add_24dp.xml" value="0.145" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/drawable/ic_white_color_back_24dp.xml" value="0.1035" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/drawable/nav_header_main_background.xml" value="0.1" />
+        <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/drawable/spinner_background.xml" value="0.1" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout-w1240dp/activity_login.xml" value="0.25" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout-w1240dp/activity_map.xml" value="0.1" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout-w1240dp/dialog_progress.xml" value="0.1" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout-w1240dp/item_processo.xml" value="0.1" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout-w936dp/activity_login.xml" value="0.25" />
-        <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/activity_cadastro.xml" value="0.25" />
+        <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/activity_cadastro.xml" value="0.23991507430997877" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/activity_cadastro_processo.xml" value="0.33" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/activity_cliente.xml" value="0.11302083333333333" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/activity_cliente_cadastro.xml" value="0.18" />
@@ -31,7 +32,7 @@
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/activity_map.xml" value="0.1" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/activity_perfil.xml" value="0.22" />
-        <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/activity_processo_cadastro.xml" value="0.1" />
+        <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/activity_processo_cadastro.xml" value="0.22" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/activity_processo_detalhe.xml" value="0.1" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/activity_splash_screen.xml" value="0.25" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/app_bar_main.xml" value="0.13385416666666666" />

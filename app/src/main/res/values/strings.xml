@@ -12,6 +12,7 @@
     <string name="cadastrar">Cadastrar</string>
     <string name="adv">Advogado</string>
     <string name="data">Data</string>
+    <string name="selecionar">Selecionar</string>
     <string name="selectAdv">Selecionar advogado</string>
     <string name="selectData">Selecionar data</string>
     <string name="labelColor">Cor</string>
@@ -31,6 +32,7 @@
     <string name="hintAdvDescription">Selecione o advogado</string>
     <string name="hintDiligenciasDescription">Diligências</string>
     <string name="hintCpf">CPF</string>
+    <string name="hintCep">Digite o CEP: </string>
 
     <string name="hintEndereco">Endereço</string>
     <string name="hintEnderecoOuCep">Rua ou CEP</string>

@@ -42,7 +42,7 @@
                     android:layout_height="@dimen/processoImageSize"
                     android:contentDescription="Processo imagem"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/ic_processo_place_holder"
+                    android:src="@drawable/ic_baseline_anchor_24"
                     app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
                     app:strokeColor="@color/white"
                     app:strokeWidth="1dp" />

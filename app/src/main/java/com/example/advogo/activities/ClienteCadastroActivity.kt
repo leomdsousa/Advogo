@@ -32,34 +32,34 @@ class ClienteCadastroActivity : BaseActivity() {
             saveCliente()
         }
 
-        binding.etEndereco.setOnClickListener {
-            val valor: String = binding.etEndereco.text.toString()
-
-            if (valor.isNullOrEmpty()) {
-                binding.etEndereco.error = "O campo não pode estar vazio"
-                binding.etEndereco.requestFocus()
-                return@setOnClickListener
-            }
-
-            val rgxCep: Pattern = Pattern.compile("(^\\d{5}-\\d{3}|^\\d{2}.\\d{3}-\\d{3}|\\d{8})")
-            val matcher: Matcher = rgxCep.matcher(valor)
-
-            if (!matcher.matches()) {
-                binding.etEndereco.error = "Informe um CEP válido"
-                binding.etEndereco.requestFocus()
-            } else {
-                val endereco = buscarEnderecoCorreio(valor)
-
-                if(endereco != null) {
-                    binding.etEndereco.setText(endereco.logradouro)
-                    binding.etEnderecoCidade.setText(endereco.localidade)
-                    binding.etBairro.setText(endereco.bairro)
-                } else {
-                    binding.etEndereco.error = "CEP não encontrado"
-                    binding.etEndereco.requestFocus()
-                }
-            }
-        }
+//        binding.etCep.setOnClickListener {
+//            val valor: String = binding.etCep.text.toString()
+//
+//            if (valor.isNullOrEmpty()) {
+//                binding.etCep.error = "O campo não pode estar vazio"
+//                binding.etCep.requestFocus()
+//                return@setOnClickListener
+//            }
+//
+//            val rgxCep: Pattern = Pattern.compile("(^\\d{5}-\\d{3}|^\\d{2}.\\d{3}-\\d{3}|\\d{8})")
+//            val matcher: Matcher = rgxCep.matcher(valor)
+//
+//            if (!matcher.matches()) {
+//                binding.etCep.error = "Informe um CEP válido"
+//                binding.etCep.requestFocus()
+//            } else {
+//                val endereco = buscarEnderecoCorreio(valor)
+//
+//                if(endereco != null) {
+//                    binding.etCep.setText(endereco.logradouro)
+//                    binding.etEnderecoCidade.setText(endereco.localidade)
+//                    binding.etBairro.setText(endereco.bairro)
+//                } else {
+//                    binding.etCep.error = "CEP não encontrado"
+//                    binding.etCep.requestFocus()
+//                }
+//            }
+//        }
     }
 
     private fun saveCliente() {
@@ -70,7 +70,7 @@ class ClienteCadastroActivity : BaseActivity() {
             nome = binding.etNome.text.toString(),
             cpf = binding.etCpf.text.toString(),
             email = binding.etEmail.text.toString(),
-            endereco = binding.etEndereco.text.toString(),
+            //endereco = binding.etEndereco.text.toString(),
             enderecoNumero = binding.etEnderecoNumero.text.toString(),
             enderecoCidade = binding.etEnderecoCidade.text.toString(),
             enderecoBairro = binding.etBairro.text.toString(),
