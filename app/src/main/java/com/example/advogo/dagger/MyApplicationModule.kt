@@ -1,5 +1,6 @@
 package com.example.advogo.dagger
 
+import android.content.Context
 import com.example.advogo.repositories.*
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
@@ -55,6 +56,7 @@ object MyApplicationModule {
     @Provides
     @Singleton
     fun provideProcessoRepository(
+        context: Context,
         firestore: FirebaseFirestore,
         advogadoRepository: AdvogadoRepository,
         clienteRepository: ClienteRepository,
@@ -63,6 +65,7 @@ object MyApplicationModule {
         statusProcessoRepository: ProcessoStatusRepository
     ): IProcessoRepository {
         return ProcessoRepository(
+            context,
             firestore,
             advogadoRepository,
             clienteRepository,
@@ -97,5 +100,17 @@ object MyApplicationModule {
     @Singleton
     fun provideTelefoneTipoRepository(firestore: FirebaseFirestore): ITelefoneTipoRepository {
         return TelefoneTipoRepository(firestore)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDiligenciaTipoRepository(firestore: FirebaseFirestore): IDiligenciaTipoRepository {
+        return DiligenciaTipoRepository(firestore)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDiligenciaStatusRepository(firestore: FirebaseFirestore): IDiligenciaStatusRepository {
+        return DiligenciaStatusRepository(firestore)
     }
 }

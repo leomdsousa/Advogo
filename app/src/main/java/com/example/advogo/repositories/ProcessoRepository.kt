@@ -1,22 +1,19 @@
 package com.example.advogo.repositories
 
-import com.example.advogo.models.Advogado
+import android.content.Context
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import com.example.advogo.models.Processo
 import com.example.advogo.utils.Constants
-import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
-import okhttp3.internal.wait
-import java.util.concurrent.CountDownLatch
+import kotlinx.coroutines.*
 import javax.inject.Inject
 import javax.inject.Provider
 
 class ProcessoRepository @Inject constructor(
+    context: Context,
     private val firebaseStore: FirebaseFirestore,
     private val advogadoRepository: AdvogadoRepository,
     private val clienteRepository: ClienteRepository,
@@ -24,7 +21,8 @@ class ProcessoRepository @Inject constructor(
     private val tipoProcessoRepository: ProcessoTipoRepository,
     private val statusProcessoRepository: ProcessoStatusRepository
 ): IProcessoRepository {
-    @OptIn(DelicateCoroutinesApi::class)
+    private val coroutineScope: CoroutineScope = (context as? LifecycleOwner)?.lifecycleScope ?: GlobalScope
+
     override fun ObterProcessos(onSuccessListener: (lista: List<Processo>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.PROCESSOS_TABLE)
@@ -33,7 +31,7 @@ class ProcessoRepository @Inject constructor(
                 if (!document.isEmpty) {
                     val processos = document.toObjects(Processo::class.java)
 
-                    val job = GlobalScope.launch {
+                    coroutineScope.launch {
                         if (processos.isNotEmpty()) {
                             for (item in processos) {
                                 val clienteDeferred = async { clienteRepository.ObterCliente(item.cliente!!) }
@@ -46,60 +44,10 @@ class ProcessoRepository @Inject constructor(
                                 item.statusObj = statusDeferred.await()
                                 item.tipoObj = tipoDeferred.await()
                             }
-                        }
-                    }
 
-                    job.invokeOnCompletion { cause ->
-                        if (cause != null) {
-                            onFailureListener(null)
-                        } else {
                             onSuccessListener(processos)
                         }
                     }
-
-//                    for (item in processos) {
-//                        GlobalScope.launch {
-//                            clienteRepository.ObterCliente(
-//                                item.cliente!!,
-//                                { ret ->
-//                                    item.clienteObj = ret
-//                                },
-//                                { null } //TODO("Implementar")
-//                            )
-//                        }
-//
-//                        GlobalScope.launch {
-//                            advogadoRepository.ObterAdvogado(
-//                                item.advogado!!,
-//                                { ret ->
-//                                    item.advogadoObj = ret
-//                                },
-//                                { null } //TODO("Implementar")
-//                            )
-//                        }
-//
-//                        GlobalScope.launch {
-//                            statusProcessoRepository.ObterProcessoStatus(
-//                                item.status!!,
-//                                { ret ->
-//                                    item.statusObj = ret
-//                                },
-//                                { null } //TODO("Implementar")
-//                            )
-//                        }
-//
-//                        GlobalScope.launch {
-//                            tipoProcessoRepository.ObterProcessoTipo(
-//                                item.tipo!!,
-//                                { ret ->
-//                                    item.tipoObj = ret
-//                                },
-//                                { null } //TODO("Implementar")
-//                            )
-//                        }
-//                    }
-//
-//                    onSuccessListener(processos)
                 } else {
                     onFailureListener(null)
                 }
@@ -118,50 +66,18 @@ class ProcessoRepository @Inject constructor(
                 if (document.exists()) {
                     val processo = document.toObject(Processo::class.java)!!
 
-                    val countDownLatch = CountDownLatch(4)
+                    coroutineScope.launch {
+                        val clienteDeferred = async { clienteRepository.ObterCliente(processo.cliente!!) }
+                        val advogadoDeferred = async { advogadoRepository.ObterAdvogado(processo.advogado!!) }
+                        val statusDeferred = async { statusProcessoRepository.ObterProcessoStatus(processo.status!!) }
+                        val tipoDeferred = async { tipoProcessoRepository.ObterProcessoTipo(processo.tipo!!) }
 
-                    GlobalScope.launch {
-                        clienteRepository.ObterCliente(
-                            processo.cliente!!,
-                            { ret ->
-                                processo.clienteObj = ret
-                            },
-                            { null } //TODO("Implementar")
-                        )
-                    }
+                        processo.clienteObj = clienteDeferred.await()
+                        processo.advogadoObj = advogadoDeferred.await()
+                        processo.statusObj = statusDeferred.await()
+                        processo.tipoObj = tipoDeferred.await()
 
-                    advogadoRepository.ObterAdvogado(
-                        processo.advogado!!,
-                        { ret ->
-                            processo.advogadoObj = ret
-                            countDownLatch.countDown()
-                        },
-                        { null } //TODO("Implementar")
-                    )
-
-                    statusProcessoRepository.ObterProcessoStatus(
-                        processo.status!!,
-                        { ret ->
-                            processo.statusObj = ret
-                            countDownLatch.countDown()
-                        },
-                        { null } //TODO("Implementar")
-                    )
-
-                    tipoProcessoRepository.ObterProcessoTipo(
-                        processo.tipo!!,
-                        { ret ->
-                            processo.tipoObj = ret
-                            countDownLatch.countDown()
-                        },
-                        { null } //TODO("Implementar")
-                    )
-
-                    try {
-                        countDownLatch.await()
                         onSuccessListener(processo)
-                    } catch (ex: InterruptedException) {
-                        onFailureListener(ex)
                     }
                 } else {
                     onFailureListener(null)
@@ -228,6 +144,10 @@ class ProcessoRepository @Inject constructor(
                 onFailureListener
             }
     }
+
+//    override fun setLifecycleScope(lifecycleScope: CoroutineScope) {
+//        this.lifecycleScope = lifecycleScope
+//    }
 }
 
 interface IProcessoRepository {
@@ -237,4 +157,6 @@ interface IProcessoRepository {
     fun AdicionarProcesso(model: Processo, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (ex: Exception?) -> Unit)
     fun AtualizarProcesso(model: Processo, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (ex: Exception?) -> Unit)
     fun DeletarProcesso(id: String, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (ex: Exception?) -> Unit)
+
+    //fun setLifecycleScope(lifecycleScope: CoroutineScope)
 }

@@ -160,7 +160,7 @@ class DiligenciaCadastroActivity : BaseActivity() {
     }
 
     private fun setupSpinnerStatusDiligencia() {
-        val spinnerStatus = findViewById<Spinner>(R.id.spinnerStatusProcesso)
+        val spinnerStatus = findViewById<Spinner>(R.id.spinnerStatusDiligencia)
 
         CoroutineScope(Dispatchers.Main).launch {
             val diligenciaStatusDeferred = async { diligenciaStatusRepository.ObterDiligenciasStatus() }
@@ -186,7 +186,7 @@ class DiligenciaCadastroActivity : BaseActivity() {
     }
 
     private fun setupSpinnerTipoDiligencia() {
-        val spinnerTipos = findViewById<Spinner>(R.id.spinnerTipoProcesso)
+        val spinnerTipos = findViewById<Spinner>(R.id.spinnerTipoDiligencia)
 
         CoroutineScope(Dispatchers.Main).launch {
             val diligenciaTiposDeferred = async { diligenciaTipoRepository.ObterDiligenciasTipos() }

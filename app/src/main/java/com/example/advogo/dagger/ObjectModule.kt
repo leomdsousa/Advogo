@@ -2,6 +2,7 @@ package com.example.advogo.dagger
 
 import android.app.Application
 import android.app.ProgressDialog
+import android.content.Context
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,5 +16,11 @@ object ObjectModule {
     @Singleton
     fun provideProgressDialog(application: Application): ProgressDialog {
         return ProgressDialog(application)
+    }
+
+    @Provides
+    @Singleton
+    fun provideApplicationContext(application: Application): Context {
+        return application
     }
 }

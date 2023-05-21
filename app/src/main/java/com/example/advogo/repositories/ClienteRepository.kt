@@ -35,7 +35,6 @@ class ClienteRepository @Inject constructor(
                 onFailureListener(exception)
             }
     }
-
     override fun ObterCliente(id: String, onSuccessListener: (cliente: Cliente) -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.CLIENTES_TABLE)
@@ -53,7 +52,6 @@ class ClienteRepository @Inject constructor(
                 onFailureListener(exception)
             }
     }
-
     override suspend fun ObterCliente(id: String): Cliente? = suspendCoroutine { continuation ->
         firebaseStore
             .collection(Constants.CLIENTES_TABLE)
@@ -89,7 +87,6 @@ class ClienteRepository @Inject constructor(
                 onFailureListener(exception)
             }
     }
-
     override fun AdicionarCliente(model: Cliente, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (exception: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.CLIENTES_TABLE)
@@ -102,7 +99,6 @@ class ClienteRepository @Inject constructor(
                 onFailureListener
             }
     }
-
     override fun AtualizarCliente(model: Cliente, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (exception: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.CLIENTES_TABLE)
@@ -115,7 +111,6 @@ class ClienteRepository @Inject constructor(
                 onFailureListener
             }
     }
-
     override fun DeletarCliente(id: String, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (exception: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.CLIENTES_TABLE)

@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.advogo.R
 import com.example.advogo.activities.ProcessoCadastroActivity
@@ -50,6 +51,7 @@ class ProcessosFragment : BaseFragment() {
             resultLauncher.launch(intent)
         }
 
+        //processoRepository.setLifecycleScope(lifecycleScope)
         processoRepository.ObterProcessos(
             { processos ->
                 setProcessosToUI(processos as ArrayList<Processo>)

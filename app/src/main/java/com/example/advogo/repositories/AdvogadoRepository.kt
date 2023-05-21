@@ -35,7 +35,6 @@ class AdvogadoRepository @Inject constructor(
                 onFailureListener(exception)
             }
     }
-
     override fun ObterAdvogado(id: String, onSuccessListener: (advogado: Advogado) -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.ADVOGADOS_TABLE)
@@ -53,7 +52,6 @@ class AdvogadoRepository @Inject constructor(
                 onFailureListener(exception)
             }
     }
-
     override suspend fun ObterAdvogado(id: String): Advogado? = suspendCoroutine { continuation ->
         firebaseStore
             .collection(Constants.ADVOGADOS_TABLE)
@@ -89,7 +87,6 @@ class AdvogadoRepository @Inject constructor(
                 onFailureListener(exception)
             }
     }
-
     override fun AdicionarAdvogado(model: Advogado, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (exception: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.ADVOGADOS_TABLE)
@@ -102,7 +99,6 @@ class AdvogadoRepository @Inject constructor(
                 onFailureListener
             }
     }
-
     override fun AtualizarAdvogado(model: Advogado, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (exception: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.ADVOGADOS_TABLE)
@@ -115,7 +111,6 @@ class AdvogadoRepository @Inject constructor(
                 onFailureListener
             }
     }
-
     override fun DeletarAdvogado(id: String, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (exception: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.ADVOGADOS_TABLE)
