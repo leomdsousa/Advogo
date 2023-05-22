@@ -1,7 +1,6 @@
 package com.example.advogo.repositories
 
 import com.example.advogo.models.DiligenciaStatus
-import com.example.advogo.models.DiligenciaTipo
 import com.example.advogo.utils.Constants
 import com.google.firebase.firestore.FirebaseFirestore
 import javax.inject.Inject
@@ -28,7 +27,6 @@ class DiligenciaStatusRepository @Inject constructor(
                 onFailureListener(exception)
             }
     }
-
     override fun ObterDiligenciaStatus(id: String, onSuccessListener: (processoStatus: DiligenciaStatus) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.DILIGENCIAS_STATUS_TABLE)
@@ -55,7 +53,7 @@ class DiligenciaStatusRepository @Inject constructor(
             .get()
             .addOnSuccessListener { document ->
                 if (!document.isEmpty) {
-                    val resultado = document.toObjects(DiligenciaStatus::class.java)!!
+                    val resultado = document.toObjects(DiligenciaStatus::class.java)
                     continuation.resume(resultado)
                 } else {
                     continuation.resume(null)

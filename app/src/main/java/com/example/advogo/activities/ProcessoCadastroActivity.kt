@@ -4,10 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
@@ -22,9 +20,6 @@ import com.example.advogo.repositories.*
 import com.example.advogo.utils.Constants
 import com.example.projmgr.dialogs.AdvogadosDialog
 import com.example.projmgr.dialogs.ClientesDialog
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
-import com.google.android.libraries.places.api.Places
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,27 +28,28 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 class ProcessoCadastroActivity : BaseActivity() {
+    private lateinit var binding: ActivityProcessoCadastroBinding
+    private lateinit var userName: String
+
     @Inject lateinit var processoRepository: IProcessoRepository
     @Inject lateinit var processoTipoRepository: IProcessoTipoRepository
     @Inject lateinit var processoStatusRepository: IProcessoStatusRepository
     @Inject lateinit var advogadoRepository: AdvogadoRepository
     @Inject lateinit var clienteRepository: ClienteRepository
 
-    private lateinit var binding: ActivityProcessoCadastroBinding
-    private lateinit var userName: String
-
     private var advogados: List<Advogado> = ArrayList()
     private var clientes: List<Cliente> = ArrayList()
     private var processosTipos: List<ProcessoTipo> = ArrayList()
     private var processosStatus: List<ProcessoStatus> = ArrayList()
+
     private var dataSelecionada: String? = null
+    private var clienteSelecionado: String? = null
+    private var advSelecionado: String? = null
 
     private var imagemSelecionadaURI: Uri? = null
     private var imagemSelecionadaURL: String? = null
@@ -67,8 +63,6 @@ class ProcessoCadastroActivity : BaseActivity() {
 
         setupActionBar()
         setupSpinners()
-        advogados = carregarAdvogados()
-        clientes = carregarClientes()
 
         if (intent.hasExtra(Constants.ADV_NOME_PARAM)) {
             userName = intent.getStringExtra(Constants.ADV_NOME_PARAM)!!
@@ -119,95 +113,83 @@ class ProcessoCadastroActivity : BaseActivity() {
     }
 
     private fun advogadosDialog() {
-        if(advogados.isEmpty()) {
-            advogados = carregarAdvogados()
-        }
+        CoroutineScope(Dispatchers.Main).launch {
+            if(advogados.isEmpty()) {
+                val advogadosDeferred = async { advogadoRepository.ObterAdvogados()!! }
+                advogados = advogadosDeferred.await()
+            }
 
-        val listDialog = object : AdvogadosDialog(
-            this@ProcessoCadastroActivity,
-            advogados as ArrayList<Advogado>,
-            resources.getString(R.string.selecionarAdvogado)
-        ) {
-            override fun onItemSelected(adv: Advogado, action: String) {
-                if (action == Constants.SELECIONAR) {
-//                    if (processoDetalhes.advogado != adv.id) {
-//                        processoDetalhes.advogado = adv.id
-//                        advogados[advogados.indexOf(adv)].selecionado = true
-//                    } else {
-//                        Toast.makeText(
-//                            this@ProcessoCadastroActivity,
-//                            "Advogado já selecionado! Favor escolher outro.",
-//                            Toast.LENGTH_LONG
-//                        ).show()
-//                    }
-                } else {
-                    //processoDetalhes.advogado = null
-                    advogados[advogados.indexOf(adv)].selecionado = false
+            val listDialog = object : AdvogadosDialog(
+                this@ProcessoCadastroActivity,
+                advogados as ArrayList<Advogado>,
+                resources.getString(R.string.selecionarAdvogado)
+            ) {
+                override fun onItemSelected(adv: Advogado, action: String) {
+                    if (action == Constants.SELECIONAR) {
+                        if (binding.etAdv.text.toString() != adv.id) {
+                            binding.etAdv.setText("${adv.nome} (${adv.oab})")
+                            advSelecionado = adv.id
+                            advogados[advogados.indexOf(adv)].selecionado = true
+                        } else {
+                            Toast.makeText(
+                                this@ProcessoCadastroActivity,
+                                "Advogado já selecionado! Favor escolher outro.",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    } else {
+                        binding.etAdv.text = null
+                        advSelecionado = null
+                        advogados[advogados.indexOf(adv)].selecionado = false
+                    }
                 }
             }
-        }
 
-        listDialog.show()
+            listDialog.show()
+        }
     }
 
     private fun clientesDialog() {
-        if(clientes.isEmpty()) {
-            clientes = carregarClientes()
-        }
+        CoroutineScope(Dispatchers.Main).launch {
+            if(clientes.isEmpty()) {
+                val clientesDeferred = async { clienteRepository.ObterClientes()!! }
+                clientes = clientesDeferred.await()
+            }
 
-        val listDialog = object : ClientesDialog(
-            this@ProcessoCadastroActivity,
-            advogados as ArrayList<Cliente>,
-            resources.getString(R.string.selecionarCliente)
-        ) {
-            override fun onItemSelected(adv: Cliente, action: String) {
-                if (action == Constants.SELECIONAR) {
-//                    if (processoDetalhes.cliente != adv.id) {
-//                        processoDetalhes.cliente = adv.id
-//                        advogados[clientes.indexOf(adv)].selecionado = true
-//                    } else {
-//                        Toast.makeText(
-//                            this@ProcessoCadastroActivity,
-//                            "Cliente já selecionado! Favor escolher outro.",
-//                            Toast.LENGTH_LONG
-//                        ).show()
-//                    }
-                } else {
-                    //processoDetalhes.cliente = null
-                    clientes[clientes.indexOf(adv)].selecionado = false
+            val listDialog = object : ClientesDialog(
+                this@ProcessoCadastroActivity,
+                clientes as ArrayList<Cliente>,
+                resources.getString(R.string.selecionarCliente)
+            ) {
+                override fun onItemSelected(cliente: Cliente, action: String) {
+                    if (action == Constants.SELECIONAR) {
+                        if (binding.etCliente.text.toString() != cliente.id) {
+                            binding.etAdv.setText("${cliente.nome} (${cliente.cpf})")
+                            clienteSelecionado = cliente.id
+                            clientes[clientes.indexOf(cliente)].selecionado = true
+                        } else {
+                            Toast.makeText(
+                                this@ProcessoCadastroActivity,
+                                "Cliente já selecionado! Favor escolher outro.",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    } else {
+                        binding.etCliente.text = null
+                        clienteSelecionado = null
+                        clientes[clientes.indexOf(cliente)].selecionado = false
+                    }
                 }
             }
-        }
 
-        listDialog.show()
+            listDialog.show()
+        }
     }
 
     private fun setupSpinners() {
         setupSpinnerTiposProcesso()
         setupSpinnerStatusProcesso()
 
-    }
-
-    private fun carregarAdvogados(): List<Advogado> {
-        var retorno: List<Advogado> = ArrayList()
-
-        advogadoRepository.ObterAdvogados(
-            { lista -> retorno = lista },
-            { null } //TODO("Implementar")
-        )
-
-        return retorno
-    }
-
-    private fun carregarClientes(): List<Cliente> {
-        var retorno: List<Cliente> = ArrayList()
-
-        clienteRepository.ObterClientes(
-            { lista -> retorno = lista },
-            { null } //TODO("Implementar")
-        )
-
-        return retorno
     }
 
     private fun setupSpinnerStatusProcesso() {
@@ -306,15 +288,15 @@ class ProcessoCadastroActivity : BaseActivity() {
         //TODO("showProgressDialog("Please wait...")")
 
         val processo = Processo(
-            id = null,
+            id = "",
             descricao = binding.etDescricao.text.toString(),
             numero = binding.etNumeroProcesso.text.toString(),
             tipo = binding.autoTvTipoProcesso.text.toString(),
             status = binding.autoTvStatusProcesso.text.toString(),
             data = dataSelecionada,
             imagem = imagemSelecionadaURL,
-            cliente = binding.etCliente.text.toString(),
-            advogado = binding.etAdv.text.toString(),
+            cliente = clienteSelecionado,
+            advogado = advSelecionado
         )
 
         processoRepository.AdicionarProcesso(

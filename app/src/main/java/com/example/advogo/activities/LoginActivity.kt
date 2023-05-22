@@ -15,8 +15,9 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class LoginActivity : BaseActivity() {
-    @Inject lateinit var _advRepository: IAdvogadoRepository
     private lateinit var binding: ActivityLoginBinding
+
+    @Inject lateinit var advRepository: IAdvogadoRepository
     private val firebaseAuth = FirebaseAuth.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,7 +52,7 @@ class LoginActivity : BaseActivity() {
                 .signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
                     if(task.isSuccessful) {
-                        _advRepository.ObterAdvogado(
+                        advRepository.ObterAdvogado(
                             getCurrentUserID(),
                             { advogado -> loginSuccess(advogado) },
                             { loginFailure() }

@@ -1,12 +1,14 @@
 package com.example.advogo.models
 
 import android.os.Parcelable
+import com.google.firebase.firestore.DocumentId
 import kotlinx.parcelize.Parcelize
 import java.util.*
 
 @Parcelize
 data class Diligencia(
-    var id: String? = null,
+    @DocumentId
+    var id: String = "",
     var descricao: String? = null,
     var data: String? = null,
     var status: String? = null,

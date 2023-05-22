@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Advogo</string>
     <string name="title_activity_map">Google Maps</string>
-    <string name="google_maps_api_key">AIzaSyAhI74ij4CwgG9w_mlPR1Bdg7vc96dZcpM</string>
+    <string name="google_maps_api_key">AIzaSyClSagttHxMtRJQ9XPUyiKyq0r3SKuBxdk</string>
 
     <!--SHARED-->
     <string name="sim">Sim</string>

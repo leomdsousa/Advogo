@@ -14,6 +14,7 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
 import android.net.Uri
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
@@ -184,7 +185,7 @@ open class BaseActivity : AppCompatActivity() {
     }
 
     fun showGoogleMapPlaces(context: Context, result: ActivityResultLauncher<Intent>) {
-        _result = result
+        //_result = result
 
         try {
             val fields = listOf(
@@ -200,7 +201,15 @@ open class BaseActivity : AppCompatActivity() {
             ).build(context)
             intent.putExtra(Constants.FROM_GOOGLE_PLACES, Constants.FROM_GOOGLE_PLACES)
 
-            _result.launch(intent)
+            val extraBundle = Bundle().apply {
+                putBoolean(Constants.FROM_GOOGLE_PLACES, true)
+            }
+
+            val intentWithExtra = Intent(intent).apply {
+                putExtras(extraBundle)
+            }
+
+            result.launch(intentWithExtra)
         } catch (e: Exception) {
             e.printStackTrace()
         }

@@ -4,15 +4,12 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.advogo.R
 import com.example.advogo.activities.ProcessoCadastroActivity
 import com.example.advogo.activities.ProcessoDetalheActivity
 import com.example.advogo.adapters.ProcessosAdapter
@@ -51,7 +48,6 @@ class ProcessosFragment : BaseFragment() {
             resultLauncher.launch(intent)
         }
 
-        //processoRepository.setLifecycleScope(lifecycleScope)
         processoRepository.ObterProcessos(
             { processos ->
                 setProcessosToUI(processos as ArrayList<Processo>)
@@ -90,9 +86,9 @@ class ProcessosFragment : BaseFragment() {
 
                 adapter.setOnItemClickListener(object :
                     ProcessosAdapter.OnItemClickListener {
-                    override fun onClick(model: Processo, position: Int) {
+                    override fun onClick(processo: Processo, position: Int, action: String) {
                         val intent = Intent(binding.root.context, ProcessoDetalheActivity::class.java)
-                        intent.putExtra(Constants.PROCESSO_PARAM, model)
+                        intent.putExtra(Constants.PROCESSO_PARAM, processo)
                         startActivity(intent)
                     }
                 })

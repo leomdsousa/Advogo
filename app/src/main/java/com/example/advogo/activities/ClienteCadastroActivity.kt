@@ -66,7 +66,7 @@ class ClienteCadastroActivity : BaseActivity() {
         //TODO("showProgressDialog("Please wait...")")
 
         val cliente = Cliente(
-            id = null,
+            id = "",
             nome = binding.etNome.text.toString(),
             cpf = binding.etCpf.text.toString(),
             email = binding.etEmail.text.toString(),

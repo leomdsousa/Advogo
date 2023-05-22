@@ -3,52 +3,58 @@ package com.example.advogo.activities
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.AdapterView
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
-import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.example.advogo.R
+import com.example.advogo.adapters.ProcessosStatusAdapter
+import com.example.advogo.adapters.ProcessosTiposAdapter
 import com.example.advogo.databinding.ActivityProcessoDetalheBinding
-import com.example.advogo.models.Advogado
-import com.example.advogo.models.Cliente
-import com.example.advogo.models.Diligencia
-import com.example.advogo.models.Processo
-import com.example.advogo.repositories.AdvogadoRepository
-import com.example.advogo.repositories.ClienteRepository
-import com.example.advogo.repositories.ProcessoRepository
+import com.example.advogo.models.*
+import com.example.advogo.repositories.*
 import com.example.advogo.utils.Constants
 import com.example.projmgr.dialogs.AdvogadosDialog
 import com.example.projmgr.dialogs.ClientesDialog
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import java.io.IOException
 import java.text.SimpleDateFormat
-import java.time.format.DateTimeFormatter
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 class ProcessoDetalheActivity : BaseActivity() {
-    @Inject lateinit var processoRepository: ProcessoRepository
-    @Inject lateinit var advogadoRepository: AdvogadoRepository
-    @Inject lateinit var clienteRepository: ClienteRepository
-
     private lateinit var binding: ActivityProcessoDetalheBinding
     private lateinit var processoDetalhes: Processo
 
+    @Inject lateinit var processoRepository: ProcessoRepository
+    @Inject lateinit var advogadoRepository: AdvogadoRepository
+    @Inject lateinit var clienteRepository: ClienteRepository
+    @Inject lateinit var processoTipoRepository: IProcessoTipoRepository
+    @Inject lateinit var processoStatusRepository: IProcessoStatusRepository
+
     private var advogados: List<Advogado> = ArrayList()
     private var clientes: List<Cliente> = ArrayList()
+    private var processosTipos: List<ProcessoTipo> = ArrayList()
+    private var processosStatus: List<ProcessoStatus> = ArrayList()
 
     private var dataSelecionada: String? = null
+    private var clienteSelecionado: String? = null
+    private var advSelecionado: String? = null
 
     private var imagemSelecionadaURI: Uri? = null
     private var imagemSelecionadaURL: String? = null
@@ -62,10 +68,9 @@ class ProcessoDetalheActivity : BaseActivity() {
 
         setupActionBar()
         obterIntentDados()
+        setupSpinners()
 
         setProcessoToUI(processoDetalhes)
-        advogados = carregarAdvogados()
-        clientes = carregarClientes()
 
         binding.tvSelectData.setOnClickListener {
             showDataPicker() { ano, mes, dia ->
@@ -111,6 +116,64 @@ class ProcessoDetalheActivity : BaseActivity() {
         }
     }
 
+    private fun setupSpinners() {
+        setupSpinnerTiposProcesso()
+        setupSpinnerStatusProcesso()
+
+    }
+
+    private fun setupSpinnerStatusProcesso() {
+        val spinnerStatus = findViewById<Spinner>(R.id.spinnerStatusProcesso)
+
+        CoroutineScope(Dispatchers.Main).launch {
+            val processosStatusDeferred = async { processoStatusRepository.ObterProcessoStatus() }
+            processosStatus = processosStatusDeferred.await()!!
+
+            val adapter = ProcessosStatusAdapter(this@ProcessoDetalheActivity, processosStatus)
+            spinnerStatus.adapter = adapter
+        }
+
+        spinnerStatus.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val selectedItem = parent?.getItemAtPosition(position) as? String
+                selectedItem?.let {
+                    binding.autoTvTipoProcesso.setText(it)
+                    spinnerStatus.setSelection(id.toInt())
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                // Nada selecionado
+            }
+        }
+    }
+
+    private fun setupSpinnerTiposProcesso() {
+        val spinnerTipos = findViewById<Spinner>(R.id.spinnerTipoProcesso)
+
+        CoroutineScope(Dispatchers.Main).launch {
+            val processosTiposDeferred = async { processoTipoRepository.ObterProcessosTipos() }
+            processosTipos = processosTiposDeferred.await()!!
+
+            val adapter = ProcessosTiposAdapter(this@ProcessoDetalheActivity, processosTipos)
+            spinnerTipos.adapter = adapter
+        }
+
+        spinnerTipos.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val selectedItem = parent?.getItemAtPosition(position) as? String
+                selectedItem?.let {
+                    binding.autoTvTipoProcesso.setText(it)
+                    spinnerTipos.setSelection(id.toInt())
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                // Nada selecionado
+            }
+        }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_processo_delete, menu)
         return super.onCreateOptionsMenu(menu)
@@ -119,7 +182,7 @@ class ProcessoDetalheActivity : BaseActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_deletar_processo -> {
-                alertDialogDeletarProcesso(processoDetalhes.id!!)
+                alertDialogDeletarProcesso(processoDetalhes.id)
                 return true
             }
         }
@@ -161,12 +224,12 @@ class ProcessoDetalheActivity : BaseActivity() {
             id = processoDetalhes.id,
             descricao = (if (binding.etDescricao.text.toString() != processoDetalhes.descricao) binding.etDescricao.text.toString() else processoDetalhes.descricao),
             numero = (if (binding.etNumeroProcesso.text.toString() != processoDetalhes.numero) binding.etNumeroProcesso.text.toString() else processoDetalhes.descricao),
-            tipo = (if (binding.etTipo.text.toString() != processoDetalhes.tipo) binding.etTipo.text.toString() else processoDetalhes.tipo),
-            status = (if (binding.etStatus.text.toString() != processoDetalhes.status) binding.etStatus.text.toString() else processoDetalhes.status),
+            tipo = (if (binding.autoTvTipoProcesso.text.toString() != processoDetalhes.tipo) binding.autoTvTipoProcesso.text.toString() else processoDetalhes.tipo),
+            status = (if (binding.autoTvStatusProcesso.text.toString() != processoDetalhes.status) binding.autoTvStatusProcesso.text.toString() else processoDetalhes.status),
             data = processoDetalhes.data,
             imagem = (if (imagemSelecionadaURL!!.isNotEmpty() && imagemSelecionadaURL != processoDetalhes.imagem) imagemSelecionadaURL else processoDetalhes.imagem),
-            cliente = (if (binding.etCliente.text.toString() != processoDetalhes.cliente.toString()) binding.etCliente.text.toString() else processoDetalhes.cliente.toString()),
-            advogado = (if (binding.etAdv.text.toString() != processoDetalhes.advogado) binding.etAdv.text.toString() else processoDetalhes.advogado),
+            cliente = (if (clienteSelecionado != processoDetalhes.cliente.toString()) clienteSelecionado else processoDetalhes.cliente.toString()),
+            advogado = (if (advSelecionado != processoDetalhes.advogado) advSelecionado else processoDetalhes.advogado),
         )
 
         processoRepository.AdicionarProcesso(
@@ -178,92 +241,91 @@ class ProcessoDetalheActivity : BaseActivity() {
 
     private fun deletarProcesso() {
         processoRepository.DeletarProcesso(
-            processoDetalhes.id!!,
+            processoDetalhes.id,
             { deletarProcessoSuccess() },
             { deletarProcessoFailure() }
         )
     }
 
     private fun advogadosDialog() {
-        if(advogados.isEmpty()) {
-            advogados = carregarAdvogados()
-        }
-        
-        val listDialog = object : AdvogadosDialog(
-            this@ProcessoDetalheActivity,
-            advogados as ArrayList<Advogado>,
-            resources.getString(R.string.selecionarAdvogado)
-        ) {
-            override fun onItemSelected(adv: Advogado, action: String) {
-                if (action == Constants.SELECIONAR) {
-                    if (processoDetalhes.advogado != adv.id) {
-                        processoDetalhes.advogado = adv.id                        
-                        advogados[advogados.indexOf(adv)].selecionado = true
+        CoroutineScope(Dispatchers.Main).launch {
+            if(advogados.isEmpty()) {
+                val advogadosDeferred = async { advogadoRepository.ObterAdvogados()!! }
+                advogados = advogadosDeferred.await()
+            }
+
+            val listDialog = object : AdvogadosDialog(
+                this@ProcessoDetalheActivity,
+                advogados as ArrayList<Advogado>,
+                resources.getString(R.string.selecionarAdvogado)
+            ) {
+                override fun onItemSelected(adv: Advogado, action: String) {
+                    if (action == Constants.SELECIONAR) {
+                        if (binding.etAdv.text.toString() != adv.id) {
+                            binding.etAdv.setText("${adv.nome} (${adv.oab})")
+                            advSelecionado = adv.id
+                            advogados[advogados.indexOf(adv)].selecionado = true
+                        } else {
+                            Toast.makeText(
+                                this@ProcessoDetalheActivity,
+                                "Advogado já selecionado! Favor escolher outro.",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
                     } else {
-                        Toast.makeText(
-                            this@ProcessoDetalheActivity,
-                            "Advogado já selecionado! Favor escolher outro.",
-                            Toast.LENGTH_LONG
-                        ).show()
+                        binding.etAdv.text = null
+                        advSelecionado = null
+                        advogados[advogados.indexOf(adv)].selecionado = false
                     }
-                } else {
-                    processoDetalhes.advogado = null
-                    advogados[advogados.indexOf(adv)].selecionado = false
                 }
             }
+
+            listDialog.show()
         }
-        
-        listDialog.show()
     }
 
     private fun clientesDialog() {
-        if(clientes.isEmpty()) {
-            clientes = carregarClientes()
-        }
+        CoroutineScope(Dispatchers.Main).launch {
+            if(clientes.isEmpty()) {
+                val clientesDeferred = async { clienteRepository.ObterClientes()!! }
+                clientes = clientesDeferred.await()
+            }
 
-        val listDialog = object : ClientesDialog(
-            this@ProcessoDetalheActivity,
-            advogados as ArrayList<Cliente>,
-            resources.getString(R.string.selecionarCliente)
-        ) {
-            override fun onItemSelected(adv: Cliente, action: String) {
-                if (action == Constants.SELECIONAR) {
-                    if (processoDetalhes.cliente != adv.id) {
-                        processoDetalhes.cliente = adv.id
-                        advogados[clientes.indexOf(adv)].selecionado = true
+            val listDialog = object : ClientesDialog(
+                this@ProcessoDetalheActivity,
+                clientes as ArrayList<Cliente>,
+                resources.getString(R.string.selecionarCliente)
+            ) {
+                override fun onItemSelected(cliente: Cliente, action: String) {
+                    if (action == Constants.SELECIONAR) {
+                        if (binding.etCliente.text.toString() != cliente.id) {
+                            binding.etCliente.setText("${cliente.nome} (${cliente.cpf})")
+                            clienteSelecionado = cliente.id
+                            clientes[clientes.indexOf(cliente)].selecionado = true
+                        } else {
+                            Toast.makeText(
+                                this@ProcessoDetalheActivity,
+                                "Cliente já selecionado! Favor escolher outro.",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
                     } else {
-                        Toast.makeText(
-                            this@ProcessoDetalheActivity,
-                            "Cliente já selecionado! Favor escolher outro.",
-                            Toast.LENGTH_LONG
-                        ).show()
+                        binding.etCliente.text = null
+                        clienteSelecionado = null
+                        clientes[clientes.indexOf(cliente)].selecionado = false
                     }
-                } else {
-                    processoDetalhes.cliente = null
-                    clientes[clientes.indexOf(adv)].selecionado = false
                 }
             }
+
+            listDialog.show()
         }
-
-        listDialog.show()
-    }
-
-    private fun carregarClientes(): List<Cliente> {
-        var retorno: List<Cliente> = ArrayList()
-
-        clienteRepository.ObterClientes(
-            { lista -> retorno = lista },
-            { null } //TODO("Implementar")
-        )
-
-        return retorno
     }
 
     private fun setProcessoToUI(processo: Processo) {
         binding.etProcessoName.setText(processo.titulo)
         binding.etDescricao.setText(processo.descricao)
-        binding.etTipo.setText(processo.tipoObj?.tipo)
-        binding.etStatus.setText(processo.statusObj?.status)
+        binding.autoTvTipoProcesso.setText(processo.tipoObj?.tipo)
+        binding.autoTvStatusProcesso.setText(processo.statusObj?.status)
         binding.etData.setText(processo.data)
         binding.etNumeroProcesso.setText(processo.numero)
         binding.etAdv.setText(processo.advogadoObj?.nome)
@@ -291,10 +353,6 @@ class ProcessoDetalheActivity : BaseActivity() {
 
         val selectedDate = "$sDayOfMonth/$sMonthOfYear/$year"
         binding.tvSelectData.text = selectedDate
-//
-//        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
-//        val theDate = sdf.parse(selectedDate)
-//        dataSelecionada = theDate!!.toLocaleString()
     }
 
     private fun alertDialogDeletarProcesso(numeroProcesso: String) {
@@ -322,17 +380,6 @@ class ProcessoDetalheActivity : BaseActivity() {
         alertDialog.show()
     }
 
-    private fun carregarAdvogados(): List<Advogado> {
-        var retorno: List<Advogado> = ArrayList()
-
-        advogadoRepository.ObterAdvogados(
-            { lista -> retorno = lista },
-            { null } //TODO("Implementar")
-        )
-
-        return retorno
-    }
-
     private fun setupActionBar() {
         setSupportActionBar(binding.toolbarProcessoDetalheActivity)
 
@@ -340,7 +387,7 @@ class ProcessoDetalheActivity : BaseActivity() {
         if(actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true)
             actionBar.setHomeAsUpIndicator(R.drawable.ic_white_color_back_24dp)
-            //actionBar.title = boardDetails.taskList?.get(taskListPosition)!!.cards!![cardPosition].name
+            actionBar.title = "Detalhe Processo"
         }
 
         binding.toolbarProcessoDetalheActivity.setNavigationOnClickListener { onBackPressed() }

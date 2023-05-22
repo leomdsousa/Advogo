@@ -3,12 +3,14 @@ package com.example.advogo.adapters
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.advogo.R
 import com.example.advogo.databinding.ItemProcessoBinding
 import com.example.advogo.models.Processo
+import com.example.advogo.utils.Constants
 
 open class ProcessosAdapter(
     private val context: Context,
@@ -33,9 +35,17 @@ open class ProcessosAdapter(
                 binding.tvTipoProcesso.text = "Tipo: ${item.tipoObj?.tipo}"
                 binding.tvStatusProcesso.text = "Status: ${item.statusObj?.status}"
 
+                if (item.selecionado) {
+                    binding.ivSelected.visibility = View.VISIBLE
+                } else {
+                    binding.ivSelected.visibility = View.GONE
+                }
+
                 binding.root.setOnClickListener {
-                    if (onItemClickListener != null) {
-                        onItemClickListener!!.onClick(item, position)
+                    if(item.selecionado) {
+                        onItemClickListener!!.onClick(item, position, Constants.DESELECIONAR)
+                    } else {
+                        onItemClickListener!!.onClick(item, position, Constants.SELECIONAR)
                     }
                 }
             }
@@ -61,7 +71,7 @@ open class ProcessosAdapter(
     override fun getItemCount(): Int = list.size
 
     interface OnItemClickListener {
-        fun onClick(processo: Processo, position: Int)
+        fun onClick(processo: Processo, position: Int, action: String)
     }
 
     fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {

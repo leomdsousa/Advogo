@@ -28,13 +28,18 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.io.IOException
 import javax.inject.Inject
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
+@AndroidEntryPoint
 class DiligenciaCadastroActivity : BaseActivity() {
     private lateinit var binding: ActivityDiligenciaCadastroBinding
     @Inject lateinit var diligenciaRepository: DiligenciaRepository
@@ -44,7 +49,6 @@ class DiligenciaCadastroActivity : BaseActivity() {
 
     private var advogados: List<Advogado> = ArrayList()
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-//    private var savedUriImage: Uri? = null
     private var savedLatitude: Double = 0.0
     private var savedLongitude: Double = 0.0
     private var dataSelecionada: String? = null
@@ -86,19 +90,8 @@ class DiligenciaCadastroActivity : BaseActivity() {
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 try {
-//                    if(result.data!!.hasExtra(Constants.FROM_DEVICE_GALLERY)) {
-//                        val contentUri = result.data!!.data
-//                        var bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, contentUri)
-//                        savedUriImage = saveImageToInternalStorage(bitmap)
-//                        Log.e("Info", savedUriImage?.path.toString())
-//                        binding.ivPlace.setImageURI(contentUri)
-//                    } else if(result.data!!.hasExtra(Constants.FROM_DEVICE_CAMERA)) {
-//                        val contentBitmap: Bitmap = data.extras!!.get("data") as Bitmap
-//                        savedUriImage = saveImageToInternalStorage(contentBitmap)
-//                        Log.e("Info", savedUriImage?.path.toString())
-//                        binding.ivPlace.setImageBitmap(contentBitmap)
-//                    }
-                    if(result.data!!.hasExtra(Constants.FROM_GOOGLE_PLACES)) {
+                    val data: Intent? = result.data
+                    if(data != null) {
                         val place: Place = Autocomplete.getPlaceFromIntent(result.data!!)
                         binding.etDiligenciaEndereco.setText(place.address)
                         savedLatitude = place.latLng!!.latitude
@@ -112,46 +105,38 @@ class DiligenciaCadastroActivity : BaseActivity() {
     }
 
     private fun advogadosDialog() {
-        if(advogados.isEmpty()) {
-            advogados = carregarAdvogados()
-        }
+        CoroutineScope(Dispatchers.Main).launch {
+            if(advogados.isEmpty()) {
+                val advogadosDeferred = async { advogadoRepository.ObterAdvogados()!! }
+                advogados = advogadosDeferred.await()
+            }
 
-        val listDialog = object : AdvogadosDialog(
-            this@DiligenciaCadastroActivity,
-            advogados as ArrayList<Advogado>,
-            resources.getString(R.string.selecionarAdvogado)
-        ) {
-            override fun onItemSelected(adv: Advogado, action: String) {
-                if (action == Constants.SELECIONAR) {
-//                    if (processoDetalhes.advogado != adv.id) {
-//                        processoDetalhes.advogado = adv.id
-//                        advogados[advogados.indexOf(adv)].selecionado = true
-//                    } else {
-//                        Toast.makeText(
-//                            this@DiligenciaCadastroActivity,
-//                            "Advogado já selecionado! Favor escolher outro.",
-//                            Toast.LENGTH_LONG
-//                        ).show()
-//                    }
-                } else {
-//                    processoDetalhes.advogado = null
-//                    advogados[advogados.indexOf(adv)].selecionado = false
+            val listDialog = object : AdvogadosDialog(
+                this@DiligenciaCadastroActivity,
+                advogados as ArrayList<Advogado>,
+                resources.getString(R.string.selecionarAdvogado)
+            ) {
+                override fun onItemSelected(adv: Advogado, action: String) {
+                    if (action == Constants.SELECIONAR) {
+                        if (binding.etDiligenciaAdvogado.text.toString() != adv.id) {
+                            binding.etDiligenciaAdvogado.setText(adv.id)
+                            advogados[advogados.indexOf(adv)].selecionado = true
+                        } else {
+                            Toast.makeText(
+                                this@DiligenciaCadastroActivity,
+                                "Advogado já selecionado! Favor escolher outro.",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    } else {
+                        binding.etDiligenciaAdvogado.setText(null)
+                        advogados[advogados.indexOf(adv)].selecionado = false
+                    }
                 }
             }
+
+            listDialog.show()
         }
-
-        listDialog.show()
-    }
-
-    private fun carregarAdvogados(): List<Advogado> {
-        var retorno: List<Advogado> = ArrayList()
-
-        advogadoRepository.ObterAdvogados(
-            { lista -> retorno = lista },
-            { null } //TODO("Implementar")
-        )
-
-        return retorno
     }
 
     private fun setupSpinners() {

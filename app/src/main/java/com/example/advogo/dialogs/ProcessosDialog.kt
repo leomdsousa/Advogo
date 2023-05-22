@@ -5,17 +5,17 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.advogo.adapters.ClientesAdapter
+import com.example.advogo.adapters.ProcessosAdapter
 import com.example.advogo.databinding.DialogListBinding
-import com.example.advogo.models.Cliente
+import com.example.advogo.models.Processo
 
-abstract class ClientesDialog(
+abstract class ProcessosDialog(
     context: Context,
-    private var list: ArrayList<Cliente>,
+    private var list: ArrayList<Processo>,
     private val titulo: String
 ): Dialog(context) {
     private lateinit var binding: DialogListBinding
-    private var adapter: ClientesAdapter? = null
+    private var adapter: ProcessosAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState ?: Bundle())
@@ -35,18 +35,18 @@ abstract class ClientesDialog(
         if (list.size > 0) {
 
             binding.rvList.layoutManager = LinearLayoutManager(context)
-            adapter = ClientesAdapter(context, list)
+            adapter = ProcessosAdapter(context, list)
             binding.rvList.adapter = adapter
 
             adapter!!.setOnItemClickListener(object :
-                ClientesAdapter.OnItemClickListener {
-                override fun onClick(cliente: Cliente, position: Int, acao: String?) {
+                ProcessosAdapter.OnItemClickListener {
+                override fun onClick(processo: Processo, position: Int, action: String) {
                     dismiss()
-                    onItemSelected(cliente, acao!!)
+                    onItemSelected(processo, action)
                 }
             })
         }
     }
 
-    protected abstract fun onItemSelected(cliente: Cliente, action:String)
+    protected abstract fun onItemSelected(user: Processo, action:String)
 }

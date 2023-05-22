@@ -21,9 +21,11 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class PerfilActivity : BaseActivity() {
-    @Inject lateinit var _advRepository: IAdvogadoRepository
     private lateinit var binding: ActivityPerfilBinding
     private lateinit var advogadoDetalhes: Advogado
+
+    @Inject lateinit var advRepository: IAdvogadoRepository
+
     private var imagemSelecionadaURI: Uri? = null
     private var imagemPerfilURL: String = ""
 
@@ -36,7 +38,7 @@ class PerfilActivity : BaseActivity() {
 
         setupActionBar()
 
-        _advRepository.ObterAdvogado(
+        advRepository.ObterAdvogado(
             getCurrentUserID(),
             { advogado -> setDadosPerfil(advogado) },
             { null }
@@ -101,7 +103,7 @@ class PerfilActivity : BaseActivity() {
             telefone = (if (binding.etTelefone.text.toString() != advogadoDetalhes.telefone) binding.etTelefone.text.toString() else advogadoDetalhes.telefone),
         )
 
-        _advRepository.AtualizarAdvogado(
+        advRepository.AtualizarAdvogado(
             advogado,
             { adv -> setDadosPerfil(advogado) },
             { null }
@@ -139,7 +141,7 @@ class PerfilActivity : BaseActivity() {
             }
     }
 
-    fun setDadosPerfil(advogado: Advogado) {
+    private fun setDadosPerfil(advogado: Advogado) {
         advogadoDetalhes = advogado
 
         Glide

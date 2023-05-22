@@ -24,7 +24,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="YOUR_API_KEY" />
+            android:value="@string/google_maps_api_key" />
 
         <activity
             android:name=".activities.ClienteCadastroActivity"
@@ -43,7 +43,6 @@
             android:theme="@style/Theme.Advogo.NoActionBar"/>
         <activity
             android:name=".activities.MapActivity"
-            android:exported="false"
             android:label="@string/title_activity_map"
             android:screenOrientation="portrait"
             android:theme="@style/CustomNoActionBarTheme" />

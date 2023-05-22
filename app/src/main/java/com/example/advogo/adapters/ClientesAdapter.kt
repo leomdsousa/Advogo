@@ -3,6 +3,7 @@ package com.example.advogo.adapters
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -11,6 +12,7 @@ import com.example.advogo.databinding.ItemClienteBinding
 import com.example.advogo.databinding.ItemProcessoBinding
 import com.example.advogo.models.Cliente
 import com.example.advogo.models.Processo
+import com.example.advogo.utils.Constants
 
 open class ClientesAdapter(
     private val context: Context,
@@ -28,9 +30,23 @@ open class ClientesAdapter(
                 binding.tvEmailCliente.text = "Email: ${item.email}"
                 binding.tvEnderecoCliente.text = "Endereço: ${item.endereco}"
 
+//                binding.root.setOnClickListener {
+//                    if (onItemClickListener != null) {
+//                        onItemClickListener!!.onClick(item, position, null)
+//                    }
+//                }
+
+                if (item.selecionado) {
+                    binding.ivSelectedCliente.visibility = View.VISIBLE
+                } else {
+                    binding.ivSelectedCliente.visibility = View.GONE
+                }
+
                 binding.root.setOnClickListener {
-                    if (onItemClickListener != null) {
-                        onItemClickListener!!.onClick(item, position, null)
+                    if(item.selecionado) {
+                        onItemClickListener!!.onClick(item, position, Constants.DESELECIONAR)
+                    } else {
+                        onItemClickListener!!.onClick(item, position, Constants.SELECIONAR)
                     }
                 }
             }

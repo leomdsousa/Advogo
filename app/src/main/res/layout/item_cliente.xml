@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/itemDiligenciaContentMarginBottom"
-    android:background="?attr/selectableItemBackground"
     android:orientation="vertical">
 
     <LinearLayout
@@ -16,9 +15,10 @@
         android:padding="@dimen/itemDiligenciaContentPadding">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/itemDiligenciaDescricaoLayoutMarginStart"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <TextView
@@ -53,6 +53,18 @@
                 android:textSize="@dimen/itemDiligenciaAdvTextSize"
                 tools:text="Rua 1, Nº 123, Vila Brasil, SP" />
         </LinearLayout>
+
+        <ImageView
+            android:id="@+id/iv_selected_cliente"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|end"
+            android:layout_marginEnd="@dimen/itemSelectedMarginEnd"
+            android:contentDescription="@string/imageContentDescription"
+            android:src="@drawable/ic_vector_color_accent_done_24dp"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
     </LinearLayout>
 
     <View

@@ -52,6 +52,23 @@ class ClienteRepository @Inject constructor(
                 onFailureListener(exception)
             }
     }
+
+    override suspend fun ObterClientes(): List<Cliente>? = suspendCoroutine { continuation ->
+        firebaseStore
+            .collection(Constants.CLIENTES_TABLE)
+            .get()
+            .addOnSuccessListener { document ->
+                if (!document.isEmpty) {
+                    val cliente = document.toObjects(Cliente::class.java)!!
+                    continuation.resume(cliente)
+                } else {
+                    continuation.resume(null)
+                }
+            }
+            .addOnFailureListener { exception ->
+                continuation.resumeWithException(exception)
+            }
+    }
     override suspend fun ObterCliente(id: String): Cliente? = suspendCoroutine { continuation ->
         firebaseStore
             .collection(Constants.CLIENTES_TABLE)
@@ -143,5 +160,6 @@ interface IClienteRepository {
     fun AtualizarCliente(model: Cliente, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (exception: Exception?) -> Unit)
     fun DeletarCliente(id: String, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (exception: Exception?) -> Unit)
 
+    suspend fun ObterClientes(): List<Cliente>?
     suspend fun ObterCliente(id: String): Cliente?
 }

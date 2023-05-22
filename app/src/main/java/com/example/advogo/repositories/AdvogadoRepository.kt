@@ -52,6 +52,23 @@ class AdvogadoRepository @Inject constructor(
                 onFailureListener(exception)
             }
     }
+
+    override suspend fun ObterAdvogados(): List<Advogado>? = suspendCoroutine { continuation ->
+        firebaseStore
+            .collection(Constants.ADVOGADOS_TABLE)
+            .get()
+            .addOnSuccessListener { document ->
+                if (!document.isEmpty) {
+                    val cliente = document.toObjects(Advogado::class.java)!!
+                    continuation.resume(cliente)
+                } else {
+                    continuation.resume(null)
+                }
+            }
+            .addOnFailureListener { exception ->
+                continuation.resumeWithException(exception)
+            }
+    }
     override suspend fun ObterAdvogado(id: String): Advogado? = suspendCoroutine { continuation ->
         firebaseStore
             .collection(Constants.ADVOGADOS_TABLE)
@@ -143,5 +160,6 @@ interface IAdvogadoRepository {
     fun AtualizarAdvogado(model: Advogado, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (exception: Exception?) -> Unit)
     fun DeletarAdvogado(id: String, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (exception: Exception?) -> Unit)
 
+    suspend fun ObterAdvogados(): List<Advogado>?
     suspend fun ObterAdvogado(id: String): Advogado?
 }

@@ -11,7 +11,7 @@ import kotlin.coroutines.suspendCoroutine
 class ProcessoStatusRepository @Inject constructor(
     private val firebaseStore: FirebaseFirestore
 ): IProcessoStatusRepository {
-    override fun ObterProcessosStatuss(onSuccessListener: (List<ProcessoStatus>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun ObterProcessosStatus(onSuccessListener: (List<ProcessoStatus>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.PROCESSOS_STATUS_TABLE)
             .get()
@@ -27,7 +27,6 @@ class ProcessoStatusRepository @Inject constructor(
                 onFailureListener(exception)
             }
     }
-
     override fun ObterProcessoStatus(id: String, onSuccessListener: (processoStatus: ProcessoStatus) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.PROCESSOS_STATUS_TABLE)
@@ -54,7 +53,7 @@ class ProcessoStatusRepository @Inject constructor(
             .get()
             .addOnSuccessListener { document ->
                 if (!document.isEmpty) {
-                    val lista = document.toObjects(ProcessoStatus::class.java)!!
+                    val lista = document.toObjects(ProcessoStatus::class.java)
                     continuation.resume(lista)
                 } else {
                     continuation.resume(null)
@@ -64,7 +63,6 @@ class ProcessoStatusRepository @Inject constructor(
                 continuation.resumeWithException(exception)
             }
     }
-
     override suspend fun ObterProcessoStatus(id: String): ProcessoStatus? = suspendCoroutine { continuation ->
         firebaseStore
             .collection(Constants.PROCESSOS_STATUS_TABLE)
@@ -85,7 +83,7 @@ class ProcessoStatusRepository @Inject constructor(
 }
 
 interface IProcessoStatusRepository {
-    fun ObterProcessosStatuss(onSuccessListener: (lista: List<ProcessoStatus>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun ObterProcessosStatus(onSuccessListener: (lista: List<ProcessoStatus>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
     fun ObterProcessoStatus(id: String, onSuccessListener: (processoStatus: ProcessoStatus) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
 
     suspend fun ObterProcessoStatus(): List<ProcessoStatus>?

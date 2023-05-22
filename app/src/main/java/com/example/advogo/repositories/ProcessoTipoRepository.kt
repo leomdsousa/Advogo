@@ -1,6 +1,5 @@
 package com.example.advogo.repositories
 
-import com.example.advogo.models.ProcessoStatus
 import com.example.advogo.models.ProcessoTipo
 import com.example.advogo.utils.Constants
 import com.google.firebase.firestore.FirebaseFirestore
@@ -54,7 +53,7 @@ class ProcessoTipoRepository @Inject constructor(
             .get()
             .addOnSuccessListener { document ->
                 if (!document.isEmpty) {
-                    val resultado = document.toObjects(ProcessoTipo::class.java)!!
+                    val resultado = document.toObjects(ProcessoTipo::class.java)
                     continuation.resume(resultado)
                 } else {
                     continuation.resume(null)

@@ -92,35 +92,107 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
+                <TextView
+                    android:id="@+id/labelTipoProcesso"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/processoCadastroTilMarginTop">
-
-                    <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/etTipo"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/hintTipoDescription"
-                        android:inputType="text"
-                        android:textSize="@dimen/etTextSize" />
-
-                </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_marginTop="@dimen/processoCadastroTilMarginTop"
+                    android:gravity="start"
+                    android:text="@string/hintTipoDescription"
+                    android:textColor="@color/primaryTextColor"
+                    android:textSize="@dimen/etTextSize"
+                    android:textStyle="bold" />
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilSpinnerTipo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/processoCadastroTilMarginTop">
+                    android:layout_margin="8dp"
+                    android:hint="@string/selecionar">
 
-                    <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/etStatus"
+                    <AutoCompleteTextView
+                        android:id="@+id/autoTvTipoProcesso"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/hintStatusDescription"
-                        android:inputType="text"
-                        android:textSize="@dimen/etTextSize" />
-
+                        android:background="@null"
+                        android:padding="8dp"
+                        android:singleLine="true" />
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <Spinner
+                    android:id="@+id/spinnerTipoProcesso"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:background="@drawable/spinner_background"
+                    android:popupBackground="@color/spinnerBackground"
+                    android:spinnerMode="dropdown" />
+
+                <TextView
+                    android:id="@+id/labelStatusProcesso"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/processoCadastroTilMarginTop"
+                    android:gravity="start"
+                    android:text="@string/hintStatusDescription"
+                    android:textColor="@color/primaryTextColor"
+                    android:textSize="@dimen/etTextSize"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilSpinnerStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:hint="@string/selecionar">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/autoTvStatusProcesso"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:padding="8dp"
+                        android:singleLine="true" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Spinner
+                    android:id="@+id/spinnerStatusProcesso"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:background="@drawable/spinner_background"
+                    android:popupBackground="@color/spinnerBackground"
+                    android:spinnerMode="dropdown" />
+
+<!--                <com.google.android.material.textfield.TextInputLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="@dimen/processoCadastroTilMarginTop">-->
+
+<!--                    <androidx.appcompat.widget.AppCompatEditText-->
+<!--                        android:id="@+id/etTipo"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:hint="@string/hintTipoDescription"-->
+<!--                        android:inputType="text"-->
+<!--                        android:textSize="@dimen/etTextSize" />-->
+
+<!--                </com.google.android.material.textfield.TextInputLayout>-->
+
+<!--                <com.google.android.material.textfield.TextInputLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="@dimen/processoCadastroTilMarginTop">-->
+
+<!--                    <androidx.appcompat.widget.AppCompatEditText-->
+<!--                        android:id="@+id/etStatus"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:hint="@string/hintStatusDescription"-->
+<!--                        android:inputType="text"-->
+<!--                        android:textSize="@dimen/etTextSize" />-->
+
+<!--                </com.google.android.material.textfield.TextInputLayout>-->
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
@@ -152,6 +224,10 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/hintClienteDescription"
                         android:inputType="text"
+                        android:clickable="false"
+                        android:cursorVisible="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
                         android:textSize="@dimen/etTextSize" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -167,6 +243,10 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/hintAdvDescription"
                         android:inputType="text"
+                        android:clickable="false"
+                        android:cursorVisible="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
                         android:textSize="@dimen/etTextSize" />
 
                 </com.google.android.material.textfield.TextInputLayout>

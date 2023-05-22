@@ -1,12 +1,14 @@
 package com.example.advogo.models
 
 import android.os.Parcelable
+import com.google.firebase.firestore.DocumentId
 import kotlinx.parcelize.Parcelize
 import java.util.*
 
 @Parcelize
 data class Processo(
-    var id: String? = null,
+    @DocumentId
+    var id: String = "",
     var titulo: String? = null,
     var numero: String? = null,
     var descricao: String? = null,
@@ -23,5 +25,6 @@ data class Processo(
     @Transient var clienteObj: Cliente? = null,
     @Transient var advogadoObj: Advogado? = null,
     @Transient var diligenciasLista: List<Diligencia>? = null,
+    @Transient var selecionado: Boolean = false,
 ): Parcelable {
 }

@@ -20,11 +20,13 @@ import com.example.advogo.databinding.ActivityDiligenciaDetalheBinding
 import com.example.advogo.models.*
 import com.example.advogo.repositories.*
 import com.example.advogo.utils.Constants
+import com.example.projmgr.dialogs.AdvogadosDialog
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -32,22 +34,27 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class DiligenciaDetalheActivity : BaseActivity() {
     private lateinit var binding: ActivityDiligenciaDetalheBinding
+    private lateinit var diligenciaDetalhes: Diligencia
+
     @Inject lateinit var diligenciaRepository: DiligenciaRepository
     @Inject lateinit var advogadoRepository: AdvogadoRepository
     @Inject lateinit var clienteRepository: ClienteRepository
     @Inject lateinit var diligenciaTipoRepository: DiligenciaTipoRepository
     @Inject lateinit var diligenciaStatusRepository: DiligenciaStatusRepository
-    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
-    private lateinit var diligenciaDetalhes: Diligencia
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+    private var advogados: List<Advogado> = ArrayList()
+    private var diligenciaStatus: List<DiligenciaStatus>? = ArrayList()
+    private var diligenciaTipos: List<DiligenciaTipo>? = ArrayList()
+
     private var savedLatitude: Double = 0.0
     private var savedLongitude: Double = 0.0
     private var dataSelecionada: String? = null
-
-    private var diligenciaStatus: List<DiligenciaStatus>? = ArrayList()
-    private var diligenciaTipos: List<DiligenciaTipo>? = ArrayList()
+    private var advSelecionado: String? = null
+    private var processoSelecionado: String? = null
 
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
@@ -79,22 +86,15 @@ class DiligenciaDetalheActivity : BaseActivity() {
             }
         }
 
+        binding.etDiligenciaAdvogado.setOnClickListener {
+            advogadosDialog()
+        }
+
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 try {
-//                    if(result.data!!.hasExtra(Constants.FROM_DEVICE_GALLERY)) {
-//                        val contentUri = result.data!!.data
-//                        var bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, contentUri)
-//                        savedUriImage = saveImageToInternalStorage(bitmap)
-//                        Log.e("Info", savedUriImage?.path.toString())
-//                        binding.ivPlace.setImageURI(contentUri)
-//                    } else if(result.data!!.hasExtra(Constants.FROM_DEVICE_CAMERA)) {
-//                        val contentBitmap: Bitmap = data.extras!!.get("data") as Bitmap
-//                        savedUriImage = saveImageToInternalStorage(contentBitmap)
-//                        Log.e("Info", savedUriImage?.path.toString())
-//                        binding.ivPlace.setImageBitmap(contentBitmap)
-//                    }
-                    if(result.data!!.hasExtra(Constants.FROM_GOOGLE_PLACES)) {
+                    val data: Intent? = result.data
+                    if(data != null) {
                         val place: Place = Autocomplete.getPlaceFromIntent(result.data!!)
                         binding.etDiligenciaEndereco.setText(place.address)
                         savedLatitude = place.latLng!!.latitude
@@ -119,8 +119,7 @@ class DiligenciaDetalheActivity : BaseActivity() {
             val diligenciaStatusDeferred = async { diligenciaStatusRepository.ObterDiligenciasStatus() }
             diligenciaStatus = diligenciaStatusDeferred.await()!!
 
-            val adapter = DiligenciasStatusAdapter(this@DiligenciaDetalheActivity, diligenciaStatus!!
-            )
+            val adapter = DiligenciasStatusAdapter(this@DiligenciaDetalheActivity, diligenciaStatus!!)
             spinnerStatus.adapter = adapter
         }
 
@@ -180,7 +179,16 @@ class DiligenciaDetalheActivity : BaseActivity() {
 
         //TODO("preencher obj para add ou alterar")
         val diligencia = Diligencia(
-
+            id = diligenciaDetalhes.id,
+            descricao = if (binding.etDiligenciaDescricao.text.toString() != diligenciaDetalhes.descricao) binding.etDiligenciaDescricao.text.toString() else diligenciaDetalhes.descricao,
+            data = if (dataSelecionada != diligenciaDetalhes.data) dataSelecionada else diligenciaDetalhes.data,
+            status = if (binding.autoTvStatusDiligencia.text.toString() != diligenciaDetalhes.status) binding.autoTvStatusDiligencia.text.toString() else diligenciaDetalhes.status,
+            tipo = if (binding.autoTvTipoDiligencia.text.toString() != diligenciaDetalhes.tipo) binding.autoTvTipoDiligencia.text.toString() else diligenciaDetalhes.tipo,
+            endereco = if (binding.etDiligenciaEndereco.text.toString() != diligenciaDetalhes.endereco) binding.etDiligenciaEndereco.text.toString() else diligenciaDetalhes.endereco,
+            enderecoLat = 0,
+            enderecoLong = 0,
+            processo = if (binding.etDiligenciaProcesso.text.toString() != diligenciaDetalhes.processo) binding.etDiligenciaProcesso.text.toString() else diligenciaDetalhes.processo,
+            advogado = if (processoSelecionado != diligenciaDetalhes.processo) processoSelecionado else diligenciaDetalhes.processo,
         )
 
         diligenciaRepository.AdicionarDiligencia(
@@ -188,6 +196,43 @@ class DiligenciaDetalheActivity : BaseActivity() {
             { diligenciaCadastroSuccess() },
             { diligenciaCadastroFailure() }
         )
+    }
+
+    private fun advogadosDialog() {
+        CoroutineScope(Dispatchers.Main).launch {
+            if(advogados.isEmpty()) {
+                val advogadosDeferred = async { advogadoRepository.ObterAdvogados()!! }
+                advogados = advogadosDeferred.await()
+            }
+
+            val listDialog = object : AdvogadosDialog(
+                this@DiligenciaDetalheActivity,
+                advogados as ArrayList<Advogado>,
+                resources.getString(R.string.selecionarAdvogado)
+            ) {
+                override fun onItemSelected(adv: Advogado, action: String) {
+                    if (action == Constants.SELECIONAR) {
+                        if (binding.etDiligenciaAdvogado.text.toString() != adv.id) {
+                            binding.etDiligenciaAdvogado.setText("${adv.nome} (${adv.oab})")
+                            advSelecionado = adv.id
+                            advogados[advogados.indexOf(adv)].selecionado = true
+                        } else {
+                            Toast.makeText(
+                                this@DiligenciaDetalheActivity,
+                                "Advogado já selecionado! Favor escolher outro.",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    } else {
+                        binding.etDiligenciaAdvogado.text = null
+                        advSelecionado = null
+                        advogados[advogados.indexOf(adv)].selecionado = false
+                    }
+                }
+            }
+
+            listDialog.show()
+        }
     }
 
     private fun setupActionBar() {
@@ -256,28 +301,6 @@ class DiligenciaDetalheActivity : BaseActivity() {
             { deletarDiligenciaSuccess() },
             { deletarDiligenciaFailure() }
         )
-    }
-
-    private fun carregarAdvogados(): List<Advogado> {
-        var retorno: List<Advogado> = ArrayList()
-
-        advogadoRepository.ObterAdvogados(
-            { lista -> retorno = lista },
-            { null } //TODO("Implementar")
-        )
-
-        return retorno
-    }
-
-    private fun carregarClientes(): List<Cliente> {
-        var retorno: List<Cliente> = ArrayList()
-
-        clienteRepository.ObterClientes(
-            { lista -> retorno = lista },
-            { null } //TODO("Implementar")
-        )
-
-        return retorno
     }
 
     private fun diligenciaCadastroSuccess() {

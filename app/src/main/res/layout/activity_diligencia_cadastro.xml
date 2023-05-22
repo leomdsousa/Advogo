@@ -106,7 +106,8 @@
                         android:layout_marginTop="3dp"
                         android:background="@drawable/spinner_background"
                         android:popupBackground="@color/spinnerBackground"
-                        android:spinnerMode="dropdown" />
+                        android:spinnerMode="dropdown"
+                        />
 
                     <TextView
                         android:id="@+id/labelStatusDiligencia"
@@ -142,7 +143,8 @@
                         android:layout_marginTop="3dp"
                         android:background="@drawable/spinner_background"
                         android:popupBackground="@color/spinnerBackground"
-                        android:spinnerMode="dropdown" />
+                        android:spinnerMode="dropdown"
+                        />
 
 <!--                    <com.google.android.material.textfield.TextInputLayout-->
 <!--                        android:layout_width="match_parent"-->
@@ -226,6 +228,8 @@
                             android:layout_height="wrap_content"
                             android:hint="@string/hintDiligenciaAdvogado"
                             android:inputType="text"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
                             android:textSize="@dimen/etTextSize" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -241,7 +245,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/hintDiligenciaEndereco"
-                            android:inputType="text"
+                            android:inputType="textCapSentences"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
                             android:textSize="@dimen/etTextSize" />
                     </com.google.android.material.textfield.TextInputLayout>
 
