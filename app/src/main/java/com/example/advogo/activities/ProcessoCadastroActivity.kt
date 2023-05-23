@@ -50,6 +50,8 @@ class ProcessoCadastroActivity : BaseActivity() {
     private var dataSelecionada: String? = null
     private var clienteSelecionado: String? = null
     private var advSelecionado: String? = null
+    private var tipoProcessoSelecionado: String? = null
+    private var statusProcessoSelecionado: String? = null
 
     private var imagemSelecionadaURI: Uri? = null
     private var imagemSelecionadaURL: String? = null
@@ -207,7 +209,7 @@ class ProcessoCadastroActivity : BaseActivity() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val selectedItem = parent?.getItemAtPosition(position) as? String
                 selectedItem?.let {
-                    binding.autoTvTipoProcesso.setText(it)
+                    statusProcessoSelecionado = selectedItem
                     spinnerStatus.setSelection(id.toInt())
                 }
             }
@@ -233,7 +235,7 @@ class ProcessoCadastroActivity : BaseActivity() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val selectedItem = parent?.getItemAtPosition(position) as? String
                 selectedItem?.let {
-                    binding.autoTvTipoProcesso.setText(it)
+                    tipoProcessoSelecionado = selectedItem
                     spinnerTipos.setSelection(id.toInt())
                 }
             }
@@ -291,8 +293,8 @@ class ProcessoCadastroActivity : BaseActivity() {
             id = "",
             descricao = binding.etDescricao.text.toString(),
             numero = binding.etNumeroProcesso.text.toString(),
-            tipo = binding.autoTvTipoProcesso.text.toString(),
-            status = binding.autoTvStatusProcesso.text.toString(),
+            tipo = tipoProcessoSelecionado,
+            status = statusProcessoSelecionado,
             data = dataSelecionada,
             imagem = imagemSelecionadaURL,
             cliente = clienteSelecionado,

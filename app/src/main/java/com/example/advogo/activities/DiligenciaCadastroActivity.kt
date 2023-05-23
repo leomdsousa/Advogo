@@ -49,9 +49,12 @@ class DiligenciaCadastroActivity : BaseActivity() {
 
     private var advogados: List<Advogado> = ArrayList()
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+
     private var savedLatitude: Double = 0.0
     private var savedLongitude: Double = 0.0
     private var dataSelecionada: String? = null
+    private var tipoDiligenciaSelecionada: String? = null
+    private var statusDiligenciaSelecionada: String? = null
 
     private var diligenciaStatus: List<DiligenciaStatus>? = ArrayList()
     private var diligenciaTipos: List<DiligenciaTipo>? = ArrayList()
@@ -159,7 +162,7 @@ class DiligenciaCadastroActivity : BaseActivity() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val selectedItem = parent?.getItemAtPosition(position) as? String
                 selectedItem?.let {
-                    binding.autoTvStatusDiligencia.setText(it)
+                    statusDiligenciaSelecionada = selectedItem
                     spinnerStatus.setSelection(id.toInt())
                 }
             }
@@ -185,7 +188,7 @@ class DiligenciaCadastroActivity : BaseActivity() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val selectedItem = parent?.getItemAtPosition(position) as? String
                 selectedItem?.let {
-                    binding.autoTvTipoDiligencia.setText(it)
+                    tipoDiligenciaSelecionada = selectedItem
                     spinnerTipos.setSelection(id.toInt())
                 }
             }

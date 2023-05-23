@@ -55,6 +55,8 @@ class ProcessoDetalheActivity : BaseActivity() {
     private var dataSelecionada: String? = null
     private var clienteSelecionado: String? = null
     private var advSelecionado: String? = null
+    private var tipoProcessoSelecionado: String? = null
+    private var statusProcessoSelecionado: String? = null
 
     private var imagemSelecionadaURI: Uri? = null
     private var imagemSelecionadaURL: String? = null
@@ -137,7 +139,7 @@ class ProcessoDetalheActivity : BaseActivity() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val selectedItem = parent?.getItemAtPosition(position) as? String
                 selectedItem?.let {
-                    binding.autoTvTipoProcesso.setText(it)
+                    statusProcessoSelecionado = selectedItem
                     spinnerStatus.setSelection(id.toInt())
                 }
             }
@@ -163,7 +165,7 @@ class ProcessoDetalheActivity : BaseActivity() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val selectedItem = parent?.getItemAtPosition(position) as? String
                 selectedItem?.let {
-                    binding.autoTvTipoProcesso.setText(it)
+                    tipoProcessoSelecionado = selectedItem
                     spinnerTipos.setSelection(id.toInt())
                 }
             }
@@ -224,8 +226,8 @@ class ProcessoDetalheActivity : BaseActivity() {
             id = processoDetalhes.id,
             descricao = (if (binding.etDescricao.text.toString() != processoDetalhes.descricao) binding.etDescricao.text.toString() else processoDetalhes.descricao),
             numero = (if (binding.etNumeroProcesso.text.toString() != processoDetalhes.numero) binding.etNumeroProcesso.text.toString() else processoDetalhes.descricao),
-            tipo = (if (binding.autoTvTipoProcesso.text.toString() != processoDetalhes.tipo) binding.autoTvTipoProcesso.text.toString() else processoDetalhes.tipo),
-            status = (if (binding.autoTvStatusProcesso.text.toString() != processoDetalhes.status) binding.autoTvStatusProcesso.text.toString() else processoDetalhes.status),
+            tipo = (if (tipoProcessoSelecionado != processoDetalhes.tipo) tipoProcessoSelecionado else processoDetalhes.tipo),
+            status = (if (statusProcessoSelecionado != processoDetalhes.status) statusProcessoSelecionado else processoDetalhes.status),
             data = processoDetalhes.data,
             imagem = (if (imagemSelecionadaURL!!.isNotEmpty() && imagemSelecionadaURL != processoDetalhes.imagem) imagemSelecionadaURL else processoDetalhes.imagem),
             cliente = (if (clienteSelecionado != processoDetalhes.cliente.toString()) clienteSelecionado else processoDetalhes.cliente.toString()),
@@ -323,9 +325,10 @@ class ProcessoDetalheActivity : BaseActivity() {
 
     private fun setProcessoToUI(processo: Processo) {
         binding.etProcessoName.setText(processo.titulo)
-        binding.etDescricao.setText(processo.descricao)
-        binding.autoTvTipoProcesso.setText(processo.tipoObj?.tipo)
-        binding.autoTvStatusProcesso.setText(processo.statusObj?.status)
+        binding.
+        etDescricao.setText(processo.descricao)
+        binding.spinnerTipoProcesso.setSelection(processosTipos.indexOf(processo.tipoObj))
+        binding.spinnerStatusProcesso.setSelection(processosStatus.indexOf(processo.statusObj))
         binding.etData.setText(processo.data)
         binding.etNumeroProcesso.setText(processo.numero)
         binding.etAdv.setText(processo.advogadoObj?.nome)

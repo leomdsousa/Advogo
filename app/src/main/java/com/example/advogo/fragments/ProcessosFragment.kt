@@ -33,7 +33,7 @@ class ProcessosFragment : BaseFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentProcessosBinding.inflate(inflater, container, false)
         return binding.root
     }

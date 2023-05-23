@@ -23,7 +23,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/screenContentMarginTop"
         android:orientation="vertical">
@@ -83,22 +83,6 @@
                         android:textSize="@dimen/etTextSize"
                         android:textStyle="bold" />
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilTipoDiligencia"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:hint="@string/selecionar">
-
-                        <AutoCompleteTextView
-                            android:id="@+id/autoTvTipoDiligencia"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@null"
-                            android:padding="8dp"
-                            android:singleLine="true" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
                     <Spinner
                         android:id="@+id/spinnerTipoDiligencia"
                         android:layout_width="match_parent"
@@ -120,22 +104,6 @@
                         android:textSize="@dimen/etTextSize"
                         android:textStyle="bold" />
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilSpinnerStatusDiligencia"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:hint="@string/selecionar">
-
-                        <AutoCompleteTextView
-                            android:id="@+id/autoTvStatusDiligencia"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@null"
-                            android:padding="8dp"
-                            android:singleLine="true" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
                     <Spinner
                         android:id="@+id/spinnerStatusDiligencia"
                         android:layout_width="match_parent"
@@ -145,39 +113,6 @@
                         android:popupBackground="@color/spinnerBackground"
                         android:spinnerMode="dropdown"
                         />
-
-<!--                    <com.google.android.material.textfield.TextInputLayout-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_marginStart="@dimen/diligenciaCadastroScreenTilMarginStartEnd"-->
-<!--                        android:layout_marginTop="@dimen/diligenciaCadastroScreenTilMarginTop"-->
-<!--                        android:layout_marginEnd="@dimen/diligenciaCadastroScreenTilMarginStartEnd">-->
-
-<!--                        <androidx.appcompat.widget.AppCompatEditText-->
-<!--                            android:id="@+id/etDiligenciaTipo"-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:hint="@string/diligenciaTipo"-->
-<!--                            android:inputType="text"-->
-<!--                            android:textSize="@dimen/etTextSize" />-->
-<!--                    </com.google.android.material.textfield.TextInputLayout>-->
-
-<!--                    <com.google.android.material.textfield.TextInputLayout-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--
-             android:layout_marginStart="@dimen/diligenciaCadastroScreenTilMarginStartEnd"-->
-<!--                        android:layout_marginTop="@dimen/diligenciaCadastroScreenTilMarginTop"-->
-<!--                        android:layout_marginEnd="@dimen/diligenciaCadastroScreenTilMarginStartEnd">-->
-
-<!--                        <androidx.appcompat.widget.AppCompatEditText-->
-<!--                            android:id="@+id/etDiligenciaStatus"-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:hint="@string/diligenciaStatus"-->
-<!--                            android:inputType="text"-->
-<!--                            android:textSize="@dimen/etTextSize" />-->
-<!--                    </com.google.android.material.textfield.TextInputLayout>-->
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
@@ -192,7 +127,6 @@
                             android:layout_height="wrap_content"
                             android:hint="@string/hintDataDescription"
                             android:inputType="text"
-                            android:clickable="false"
                             android:cursorVisible="false"
                             android:focusable="false"
                             android:focusableInTouchMode="false"
