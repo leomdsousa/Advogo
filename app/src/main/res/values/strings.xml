@@ -61,6 +61,7 @@
     <string name="cliqueNovamente">Clique novamente.</string>
     <string name="nenhumProcessoEncontrado">Nenhum processo encontrado!</string>
     <string name="nenhumClienteEncontrado">Nenhum cliente encontrado!</string>
+    <string name="nenhumaDiligenciaEncontrada">Nenhuma diligência encontrada!</string>
 
     <!--INTRO-->
     <string name="imageContentDescription">Imagem</string>
@@ -102,6 +103,7 @@
     <string name="deletarCliente">Deletar Cliente</string>
     <string name="deletarDiligencia">Deletar Diligência</string>
     <string name="selecionarAdvogado">Selecionar Advogado</string>
+    <string name="selecionarProcesso">Selecionar Processo</string>
     <string name="addAdvogado">Add Advogado</string>
 
     <!-- TODO: Remove or change this placeholder text -->

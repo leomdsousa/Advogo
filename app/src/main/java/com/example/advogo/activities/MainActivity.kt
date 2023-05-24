@@ -8,23 +8,19 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
-import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.GravityCompat
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.example.advogo.R
-import com.example.advogo.adapters.ProcessosAdapter
 import com.example.advogo.databinding.ActivityMainBinding
 import com.example.advogo.fragments.ClienteFragment
-import com.example.advogo.fragments.EventosFragment
+import com.example.advogo.fragments.DiligenciasFragment
 import com.example.advogo.fragments.ProcessosFragment
 import com.example.advogo.models.Advogado
-import com.example.advogo.models.Processo
 import com.example.advogo.repositories.IAdvogadoRepository
 import com.example.advogo.repositories.IDiligenciaRepository
 import com.example.advogo.repositories.IProcessoRepository
@@ -33,7 +29,6 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -93,7 +88,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         val adapter = TabsAdapter(this)
         adapter.addFragment(ClienteFragment(), "Clientes")
         adapter.addFragment(ProcessosFragment(), "Processos")
-        adapter.addFragment(EventosFragment(), "Eventos")
+        adapter.addFragment(DiligenciasFragment(), "Diligências")
         viewPager.adapter = adapter
 
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->

@@ -3,6 +3,7 @@ package com.example.advogo.repositories
 import android.content.Context
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
+import com.example.advogo.models.DiligenciaTipo
 import com.example.advogo.models.Processo
 import com.example.advogo.utils.Constants
 import com.google.android.gms.tasks.OnSuccessListener
@@ -11,6 +12,9 @@ import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.*
 import javax.inject.Inject
 import javax.inject.Provider
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 class ProcessoRepository @Inject constructor(
     context: Context,
@@ -56,7 +60,6 @@ class ProcessoRepository @Inject constructor(
                 onFailureListener(exception)
             }
     }
-
     override fun ObterProcesso(id: String, onSuccessListener: (process: Processo) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.PROCESSOS_TABLE)
@@ -87,7 +90,6 @@ class ProcessoRepository @Inject constructor(
                 onFailureListener(exception)
             }
     }
-
     override fun ObterProcessoPorNumero(numero: String, onSuccessListener: (processo: Processo) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.PROCESSOS_TABLE)
@@ -118,7 +120,6 @@ class ProcessoRepository @Inject constructor(
                 onFailureListener
             }
     }
-
     override fun AtualizarProcesso(model: Processo, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.ADVOGADOS_TABLE)
@@ -131,7 +132,6 @@ class ProcessoRepository @Inject constructor(
                 onFailureListener
             }
     }
-
     override fun DeletarProcesso(id: String, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.ADVOGADOS_TABLE)
@@ -145,9 +145,22 @@ class ProcessoRepository @Inject constructor(
             }
     }
 
-//    override fun setLifecycleScope(lifecycleScope: CoroutineScope) {
-//        this.lifecycleScope = lifecycleScope
-//    }
+    override suspend fun ObterProcessos(): List<Processo>? = suspendCoroutine { continuation ->
+        firebaseStore
+            .collection(Constants.PROCESSOS_TABLE)
+            .get()
+            .addOnSuccessListener { document ->
+                if (!document.isEmpty) {
+                    val resultado = document.toObjects(Processo::class.java)
+                    continuation.resume(resultado)
+                } else {
+                    continuation.resume(null)
+                }
+            }
+            .addOnFailureListener { exception ->
+                continuation.resumeWithException(exception)
+            }
+    }
 }
 
 interface IProcessoRepository {
@@ -158,5 +171,5 @@ interface IProcessoRepository {
     fun AtualizarProcesso(model: Processo, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (ex: Exception?) -> Unit)
     fun DeletarProcesso(id: String, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (ex: Exception?) -> Unit)
 
-    //fun setLifecycleScope(lifecycleScope: CoroutineScope)
+    suspend fun ObterProcessos(): List<Processo>?
 }

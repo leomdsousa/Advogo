@@ -14,6 +14,7 @@ import com.example.advogo.models.externals.CorreioResponse
 import com.example.advogo.repositories.ClienteRepository
 import com.example.advogo.services.CorreioApiService
 import com.example.advogo.utils.Constants
+import com.example.advogo.utils.CpfMaskTextWatcher
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -34,8 +35,9 @@ class ClienteDetalheActivity : BaseActivity() {
 
         obterIntentDados()
         setupActionBar()
-
         setClienteToUI(clienteDetalhes)
+
+        binding.etCpf.addTextChangedListener(CpfMaskTextWatcher(binding.etCpf))
 
         binding.btnAtualizarCliente.setOnClickListener {
             saveCliente()

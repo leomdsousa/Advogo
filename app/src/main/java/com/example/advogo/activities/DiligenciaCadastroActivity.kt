@@ -13,22 +13,16 @@ import com.example.advogo.R
 import com.example.advogo.adapters.DiligenciasStatusAdapter
 import com.example.advogo.adapters.DiligenciasTiposAdapter
 import com.example.advogo.databinding.ActivityDiligenciaCadastroBinding
-import com.example.advogo.models.Advogado
-import com.example.advogo.models.Diligencia
-import com.example.advogo.models.DiligenciaStatus
-import com.example.advogo.models.DiligenciaTipo
-import com.example.advogo.repositories.AdvogadoRepository
-import com.example.advogo.repositories.DiligenciaRepository
-import com.example.advogo.repositories.DiligenciaStatusRepository
-import com.example.advogo.repositories.DiligenciaTipoRepository
+import com.example.advogo.models.*
+import com.example.advogo.repositories.*
 import com.example.advogo.utils.Constants
 import com.example.projmgr.dialogs.AdvogadosDialog
+import com.example.projmgr.dialogs.ProcessosDialog
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
-import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -36,7 +30,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.io.IOException
 import javax.inject.Inject
-import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 @AndroidEntryPoint
@@ -46,6 +39,7 @@ class DiligenciaCadastroActivity : BaseActivity() {
     @Inject lateinit var diligenciaTipoRepository: DiligenciaTipoRepository
     @Inject lateinit var diligenciaStatusRepository: DiligenciaStatusRepository
     @Inject lateinit var advogadoRepository: AdvogadoRepository
+    @Inject lateinit var processoRepository: ProcessoRepository
 
     private var advogados: List<Advogado> = ArrayList()
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
@@ -53,11 +47,13 @@ class DiligenciaCadastroActivity : BaseActivity() {
     private var savedLatitude: Double = 0.0
     private var savedLongitude: Double = 0.0
     private var dataSelecionada: String? = null
+    private var processoSelecionado: String? = null
     private var tipoDiligenciaSelecionada: String? = null
     private var statusDiligenciaSelecionada: String? = null
 
     private var diligenciaStatus: List<DiligenciaStatus>? = ArrayList()
     private var diligenciaTipos: List<DiligenciaTipo>? = ArrayList()
+    private var processos: List<Processo> = ArrayList()
 
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
@@ -86,6 +82,10 @@ class DiligenciaCadastroActivity : BaseActivity() {
             }
         }
 
+        binding.etDiligenciaProcesso.setOnClickListener {
+            processosDialog()
+        }
+
         binding.etDiligenciaAdvogado.setOnClickListener {
             advogadosDialog()
         }
@@ -104,6 +104,43 @@ class DiligenciaCadastroActivity : BaseActivity() {
                     e.printStackTrace()
                 }
             }
+        }
+    }
+
+    private fun processosDialog() {
+        CoroutineScope(Dispatchers.Main).launch {
+            if(processos.isEmpty()) {
+                val processosDeferred = async { processoRepository.ObterProcessos()!! }
+                processos = processosDeferred.await()
+            }
+
+            val listDialog = object : ProcessosDialog(
+                this@DiligenciaCadastroActivity,
+                processos as ArrayList<Processo>,
+                resources.getString(R.string.selecionarProcesso)
+            ) {
+                override fun onItemSelected(processo: Processo, action: String) {
+                    if (action == Constants.SELECIONAR) {
+                        if (binding.etDiligenciaProcesso.text.toString() != processo.id) {
+                            binding.etDiligenciaProcesso.setText(processo.id)
+                            processoSelecionado = processo.id
+                            processos[processos.indexOf(processo)].selecionado = true
+                        } else {
+                            Toast.makeText(
+                                this@DiligenciaCadastroActivity,
+                                "Processo já selecionado! Favor escolher outro.",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    } else {
+                        binding.etDiligenciaProcesso.text = null
+                        processoSelecionado = null
+                        processos[processos.indexOf(processo)].selecionado = false
+                    }
+                }
+            }
+
+            listDialog.show()
         }
     }
 

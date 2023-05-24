@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.advogo.activities.DiligenciaCadastroActivity
 import com.example.advogo.activities.ProcessoDetalheActivity
 import com.example.advogo.adapters.ProcessosAdapter
-import com.example.advogo.databinding.FragmentEventosBinding
+import com.example.advogo.databinding.FragmentDiligenciasBinding
 import com.example.advogo.models.Cliente
 import com.example.advogo.models.Diligencia
 import com.example.advogo.models.Processo
@@ -26,8 +26,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class EventosFragment : BaseFragment() {
-    private lateinit var binding: FragmentEventosBinding
+class DiligenciasFragment : BaseFragment() {
+    private lateinit var binding: FragmentDiligenciasBinding
     @Inject lateinit var diligenciaRepository: IDiligenciaRepository
 
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
@@ -36,7 +36,7 @@ class EventosFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentEventosBinding.inflate(layoutInflater, container, false)
+        binding = FragmentDiligenciasBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 

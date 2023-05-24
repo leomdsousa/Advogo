@@ -45,7 +45,6 @@ class DiligenciaRepository @Inject constructor(
                 onFailureListener(exception)
             }
     }
-
     override fun ObterDiligencia(id: String, onSuccessListener: (diligencia: Diligencia) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.DILIGENCIAS_TABLE)
@@ -76,7 +75,6 @@ class DiligenciaRepository @Inject constructor(
                 onFailureListener(exception)
             }
     }
-
     override fun ObterDiligenciasPorProcesso(numeroProcesso: String, onSuccessListener: (lista: List<Diligencia>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.DILIGENCIAS_TABLE)
@@ -109,7 +107,6 @@ class DiligenciaRepository @Inject constructor(
                 onFailureListener(exception)
             }
     }
-
     override fun ObterDiligenciasPorAdvogado(emailAdvogado: String, onSuccessListener: (lista: List<Diligencia>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.DILIGENCIAS_TABLE)
@@ -142,7 +139,6 @@ class DiligenciaRepository @Inject constructor(
                 onFailureListener(exception)
             }
     }
-
     override fun AdicionarDiligencia(model: Diligencia, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.ADVOGADOS_TABLE)
@@ -155,7 +151,6 @@ class DiligenciaRepository @Inject constructor(
                 onFailureListener
             }
     }
-
     override fun AtualizarDiligencia(model: Diligencia, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.ADVOGADOS_TABLE)
@@ -168,7 +163,6 @@ class DiligenciaRepository @Inject constructor(
                 onFailureListener
             }
     }
-
     override fun DeletarDiligencia(id: String, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.ADVOGADOS_TABLE)

@@ -21,6 +21,7 @@ import com.example.advogo.databinding.ActivityProcessoDetalheBinding
 import com.example.advogo.models.*
 import com.example.advogo.repositories.*
 import com.example.advogo.utils.Constants
+import com.example.advogo.utils.ProcessMaskTextWatcher
 import com.example.projmgr.dialogs.AdvogadosDialog
 import com.example.projmgr.dialogs.ClientesDialog
 import com.google.firebase.storage.FirebaseStorage
@@ -71,8 +72,9 @@ class ProcessoDetalheActivity : BaseActivity() {
         setupActionBar()
         obterIntentDados()
         setupSpinners()
-
         setProcessoToUI(processoDetalhes)
+
+        binding.etNumeroProcesso.addTextChangedListener(ProcessMaskTextWatcher(binding.etNumeroProcesso))
 
         binding.tvSelectData.setOnClickListener {
             showDataPicker() { ano, mes, dia ->
@@ -184,7 +186,7 @@ class ProcessoDetalheActivity : BaseActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_deletar_processo -> {
-                alertDialogDeletarProcesso(processoDetalhes.id)
+                alertDialogDeletarProcesso("${processoDetalhes.numero.toString()} (${processoDetalhes.numero})")
                 return true
             }
         }

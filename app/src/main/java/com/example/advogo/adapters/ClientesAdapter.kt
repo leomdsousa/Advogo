@@ -30,12 +30,6 @@ open class ClientesAdapter(
                 binding.tvEmailCliente.text = "Email: ${item.email}"
                 binding.tvEnderecoCliente.text = "Endereço: ${item.endereco}"
 
-//                binding.root.setOnClickListener {
-//                    if (onItemClickListener != null) {
-//                        onItemClickListener!!.onClick(item, position, null)
-//                    }
-//                }
-
                 if (item.selecionado) {
                     binding.ivSelectedCliente.visibility = View.VISIBLE
                 } else {

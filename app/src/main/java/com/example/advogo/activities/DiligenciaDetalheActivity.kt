@@ -21,6 +21,7 @@ import com.example.advogo.models.*
 import com.example.advogo.repositories.*
 import com.example.advogo.utils.Constants
 import com.example.projmgr.dialogs.AdvogadosDialog
+import com.example.projmgr.dialogs.ProcessosDialog
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.libraries.places.api.Places
@@ -42,11 +43,13 @@ class DiligenciaDetalheActivity : BaseActivity() {
     @Inject lateinit var diligenciaRepository: DiligenciaRepository
     @Inject lateinit var advogadoRepository: AdvogadoRepository
     @Inject lateinit var clienteRepository: ClienteRepository
+    @Inject lateinit var processoRepository: ProcessoRepository
     @Inject lateinit var diligenciaTipoRepository: DiligenciaTipoRepository
     @Inject lateinit var diligenciaStatusRepository: DiligenciaStatusRepository
 
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private var advogados: List<Advogado> = ArrayList()
+    private var processos: List<Processo> = ArrayList()
     private var diligenciaStatus: List<DiligenciaStatus>? = ArrayList()
     private var diligenciaTipos: List<DiligenciaTipo>? = ArrayList()
 
@@ -55,6 +58,8 @@ class DiligenciaDetalheActivity : BaseActivity() {
     private var dataSelecionada: String? = null
     private var advSelecionado: String? = null
     private var processoSelecionado: String? = null
+    private var tipoDiligenciaSelecionada: String? = null
+    private var statusDiligenciaSelecionada: String? = null
 
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
@@ -84,6 +89,10 @@ class DiligenciaDetalheActivity : BaseActivity() {
             showDataPicker() { ano, mes, dia ->
                 onDatePickerResult(ano, mes, dia)
             }
+        }
+
+        binding.etDiligenciaProcesso.setOnClickListener {
+            processosDialog()
         }
 
         binding.etDiligenciaAdvogado.setOnClickListener {
@@ -127,7 +136,6 @@ class DiligenciaDetalheActivity : BaseActivity() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val selectedItem = parent?.getItemAtPosition(position) as? String
                 selectedItem?.let {
-                    binding.autoTvStatusDiligencia.setText(it)
                     spinnerStatus.setSelection(id.toInt())
                 }
             }
@@ -153,7 +161,6 @@ class DiligenciaDetalheActivity : BaseActivity() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val selectedItem = parent?.getItemAtPosition(position) as? String
                 selectedItem?.let {
-                    binding.autoTvTipoDiligencia.setText(it)
                     spinnerTipos.setSelection(id.toInt())
                 }
             }
@@ -166,8 +173,8 @@ class DiligenciaDetalheActivity : BaseActivity() {
 
     private fun setDiligenciaToUI(diligencia: Diligencia) {
         binding.etDiligenciaDescricao.setText(diligencia.descricao)
-        binding.autoTvTipoDiligencia.setText(diligencia.tipoObj?.tipo)
-        binding.autoTvStatusDiligencia.setText(diligencia.statusObj?.status)
+        binding.spinnerTipoDiligencia.setSelection(diligenciaTipos!!.indexOf(diligencia.tipoObj!!))
+        binding.spinnerStatusDiligencia.setSelection(diligenciaStatus!!.indexOf(diligencia.statusObj!!))
         binding.etDiligenciaData.setText(diligencia.data)
         binding.etDiligenciaProcesso.setText(diligencia.processoObj?.numero)
         binding.btnAtualizarDiligencia.text = diligencia.advogadoObj?.nome
@@ -182,8 +189,8 @@ class DiligenciaDetalheActivity : BaseActivity() {
             id = diligenciaDetalhes.id,
             descricao = if (binding.etDiligenciaDescricao.text.toString() != diligenciaDetalhes.descricao) binding.etDiligenciaDescricao.text.toString() else diligenciaDetalhes.descricao,
             data = if (dataSelecionada != diligenciaDetalhes.data) dataSelecionada else diligenciaDetalhes.data,
-            status = if (binding.autoTvStatusDiligencia.text.toString() != diligenciaDetalhes.status) binding.autoTvStatusDiligencia.text.toString() else diligenciaDetalhes.status,
-            tipo = if (binding.autoTvTipoDiligencia.text.toString() != diligenciaDetalhes.tipo) binding.autoTvTipoDiligencia.text.toString() else diligenciaDetalhes.tipo,
+            status = if (statusDiligenciaSelecionada != diligenciaDetalhes.status) statusDiligenciaSelecionada else diligenciaDetalhes.status,
+            tipo = if (tipoDiligenciaSelecionada != diligenciaDetalhes.tipo) tipoDiligenciaSelecionada else diligenciaDetalhes.tipo,
             endereco = if (binding.etDiligenciaEndereco.text.toString() != diligenciaDetalhes.endereco) binding.etDiligenciaEndereco.text.toString() else diligenciaDetalhes.endereco,
             enderecoLat = 0,
             enderecoLong = 0,
@@ -196,6 +203,43 @@ class DiligenciaDetalheActivity : BaseActivity() {
             { diligenciaCadastroSuccess() },
             { diligenciaCadastroFailure() }
         )
+    }
+
+    private fun processosDialog() {
+        CoroutineScope(Dispatchers.Main).launch {
+            if(processos == null) {
+                val processosDeferred = async { processoRepository.ObterProcessos()!! }
+                processos = processosDeferred.await()
+            }
+
+            val listDialog = object : ProcessosDialog(
+                this@DiligenciaDetalheActivity,
+                processos as ArrayList<Processo>,
+                resources.getString(R.string.selecionarProcesso)
+            ) {
+                override fun onItemSelected(processo: Processo, action: String) {
+                    if (action == Constants.SELECIONAR) {
+                        if (binding.etDiligenciaProcesso.text.toString() != processo.id) {
+                            binding.etDiligenciaProcesso.setText(processo.id)
+                            processoSelecionado = processo.id
+                            processos!![processos!!.indexOf(processo)].selecionado = true
+                        } else {
+                            Toast.makeText(
+                                this@DiligenciaDetalheActivity,
+                                "Processo já selecionado! Favor escolher outro.",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    } else {
+                        binding.etDiligenciaProcesso.text = null
+                        processoSelecionado = null
+                        processos!![processos!!.indexOf(processo)].selecionado = false
+                    }
+                }
+            }
+
+            listDialog.show()
+        }
     }
 
     private fun advogadosDialog() {

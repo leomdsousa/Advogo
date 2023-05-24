@@ -10,6 +10,7 @@ import com.example.advogo.models.Cliente
 import com.example.advogo.models.externals.CorreioResponse
 import com.example.advogo.repositories.ClienteRepository
 import com.example.advogo.services.CorreioApiService
+import com.example.advogo.utils.CpfMaskTextWatcher
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -28,38 +29,11 @@ class ClienteCadastroActivity : BaseActivity() {
 
         setupActionBar()
 
+        binding.etCpf.addTextChangedListener(CpfMaskTextWatcher(binding.etCpf))
+
         binding.btnCadastroCliente.setOnClickListener {
             saveCliente()
         }
-
-//        binding.etCep.setOnClickListener {
-//            val valor: String = binding.etCep.text.toString()
-//
-//            if (valor.isNullOrEmpty()) {
-//                binding.etCep.error = "O campo não pode estar vazio"
-//                binding.etCep.requestFocus()
-//                return@setOnClickListener
-//            }
-//
-//            val rgxCep: Pattern = Pattern.compile("(^\\d{5}-\\d{3}|^\\d{2}.\\d{3}-\\d{3}|\\d{8})")
-//            val matcher: Matcher = rgxCep.matcher(valor)
-//
-//            if (!matcher.matches()) {
-//                binding.etCep.error = "Informe um CEP válido"
-//                binding.etCep.requestFocus()
-//            } else {
-//                val endereco = buscarEnderecoCorreio(valor)
-//
-//                if(endereco != null) {
-//                    binding.etCep.setText(endereco.logradouro)
-//                    binding.etEnderecoCidade.setText(endereco.localidade)
-//                    binding.etBairro.setText(endereco.bairro)
-//                } else {
-//                    binding.etCep.error = "CEP não encontrado"
-//                    binding.etCep.requestFocus()
-//                }
-//            }
-//        }
     }
 
     private fun saveCliente() {

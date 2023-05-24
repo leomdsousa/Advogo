@@ -131,7 +131,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/hintEndereco"
-                            android:inputType="text"
+                            android:inputType="textEmailAddress"
                             android:textSize="@dimen/etTextSize" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -147,7 +147,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/hintEnderecoNumero"
-                            android:inputType="text"
+                            android:inputType="number"
+                            android:maxLength="5"
                             android:textSize="@dimen/etTextSize" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -164,6 +165,7 @@
                             android:layout_height="wrap_content"
                             android:hint="@string/hintEnderecoBairro"
                             android:inputType="text"
+                            android:maxLength="50"
                             android:textSize="@dimen/etTextSize" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -180,6 +182,7 @@
                             android:layout_height="wrap_content"
                             android:hint="@string/hintEnderecoCidade"
                             android:inputType="text"
+                            android:maxLength="50"
                             android:textSize="@dimen/etTextSize" />
                     </com.google.android.material.textfield.TextInputLayout>
 

@@ -48,5 +48,5 @@ abstract class ProcessosDialog(
         }
     }
 
-    protected abstract fun onItemSelected(user: Processo, action:String)
+    protected abstract fun onItemSelected(processo: Processo, action:String)
 }

@@ -18,6 +18,7 @@ import com.example.advogo.databinding.ActivityProcessoCadastroBinding
 import com.example.advogo.models.*
 import com.example.advogo.repositories.*
 import com.example.advogo.utils.Constants
+import com.example.advogo.utils.ProcessMaskTextWatcher
 import com.example.projmgr.dialogs.AdvogadosDialog
 import com.example.projmgr.dialogs.ClientesDialog
 import com.google.firebase.storage.FirebaseStorage
@@ -69,6 +70,8 @@ class ProcessoCadastroActivity : BaseActivity() {
         if (intent.hasExtra(Constants.ADV_NOME_PARAM)) {
             userName = intent.getStringExtra(Constants.ADV_NOME_PARAM)!!
         }
+
+        binding.etNumeroProcesso.addTextChangedListener(ProcessMaskTextWatcher(binding.etNumeroProcesso))
 
         binding.ivProcessoImage.setOnClickListener {
             chooseImage(this@ProcessoCadastroActivity, resultLauncher)
@@ -166,7 +169,7 @@ class ProcessoCadastroActivity : BaseActivity() {
                 override fun onItemSelected(cliente: Cliente, action: String) {
                     if (action == Constants.SELECIONAR) {
                         if (binding.etCliente.text.toString() != cliente.id) {
-                            binding.etAdv.setText("${cliente.nome} (${cliente.cpf})")
+                            binding.etCliente.setText("${cliente.nome} (${cliente.cpf})")
                             clienteSelecionado = cliente.id
                             clientes[clientes.indexOf(cliente)].selecionado = true
                         } else {
