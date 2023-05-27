@@ -52,42 +52,42 @@ class TelefoneRepository @Inject constructor(
             }
     }
 
-    override fun AdicionarTelefone(model: Telefone, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun AdicionarTelefone(model: Telefone, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
-            .collection(Constants.ADVOGADOS_TABLE)
+            .collection(Constants.TELEFONES_TABLE)
             .document(model.id!!)
             .set(model, SetOptions.merge())
             .addOnSuccessListener {
-                onSuccessListener
+                onSuccessListener()
             }
             .addOnFailureListener {
-                onFailureListener
+                onFailureListener(it)
             }
     }
 
-    override fun AtualizarTelefone(model: Telefone, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun AtualizarTelefone(model: Telefone, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
-            .collection(Constants.ADVOGADOS_TABLE)
-            .document(model.id!!)
+            .collection(Constants.TELEFONES_TABLE)
+            .document(model.id)
             .set(model, SetOptions.merge())
             .addOnSuccessListener {
-                onSuccessListener
+                onSuccessListener()
             }
             .addOnFailureListener {
-                onFailureListener
+                onFailureListener(it)
             }
     }
 
-    override fun DeletarTelefone(id: String, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun DeletarTelefone(id: String, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
-            .collection(Constants.ADVOGADOS_TABLE)
+            .collection(Constants.TELEFONES_TABLE)
             .document(id)
             .delete()
             .addOnSuccessListener {
-                onSuccessListener
+                onSuccessListener()
             }
             .addOnFailureListener {
-                onFailureListener
+                onFailureListener(it)
             }
     }
 }
@@ -95,7 +95,7 @@ class TelefoneRepository @Inject constructor(
 interface ITelefoneRepository {
     fun ObterTelefones(onSuccessListener: (List<Telefone>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
     fun ObterTelefone(id: String, onSuccessListener: (telefone: Telefone) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
-    fun AdicionarTelefone(model: Telefone, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (ex: Exception?) -> Unit)
-    fun AtualizarTelefone(model: Telefone, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (ex: Exception?) -> Unit)
-    fun DeletarTelefone(id: String, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (ex: Exception?) -> Unit)
+    fun AdicionarTelefone(model: Telefone, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun AtualizarTelefone(model: Telefone, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun DeletarTelefone(id: String, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
 }

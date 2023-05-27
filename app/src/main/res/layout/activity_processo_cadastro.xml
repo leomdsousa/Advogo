@@ -77,14 +77,17 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/processoCadastroTilMarginTop">
 
-                        <androidx.appcompat.widget.AppCompatEditText
+                        <com.santalu.maskara.widget.MaskEditText
                             android:id="@+id/etNumeroProcesso"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:inputType="text|number"
                             android:hint="@string/hintNumeroProcessoDescription"
-                            android:inputType="text"
-                            android:maxLength="25"
-                            android:textSize="@dimen/etTextSize" />
+                            android:textSize="@dimen/etTextSize"
+                            android:maxLength="20"
+                            app:mask="_______-__.____._.__.____"
+                            app:maskCharacter="_"
+                            app:maskStyle="normal" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -98,9 +101,13 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/hintProcessoDescription"
-                            android:inputType="text"
+                            android:inputType="textMultiLine"
                             android:maxLength="255"
-                            android:textSize="@dimen/etTextSize" />
+                            android:textSize="@dimen/etTextSize"
+                            android:lines="8"
+                            android:maxLines="10"
+                            android:minLines="6"
+                            android:scrollbars="vertical"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
 

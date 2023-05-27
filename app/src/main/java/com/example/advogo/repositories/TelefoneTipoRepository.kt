@@ -15,7 +15,7 @@ class TelefoneTipoRepository @Inject constructor(
 ): ITelefoneTipoRepository {
     override fun ObterTelefonesTipos(onSuccessListener: (List<TelefoneTipo>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
-            .collection(Constants.TELEFONES_TABLE)
+            .collection(Constants.TELEFONES_TIPOS_TABLE)
             .get()
             .addOnSuccessListener { document ->
                 if (!document.isEmpty) {

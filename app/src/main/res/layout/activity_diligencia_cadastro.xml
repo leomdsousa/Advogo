@@ -89,8 +89,7 @@
                         android:layout_marginTop="3dp"
                         android:background="@drawable/spinner_background"
                         android:popupBackground="@color/spinnerBackground"
-                        android:spinnerMode="dropdown"
-                        />
+                        android:spinnerMode="dropdown"/>
 
                     <TextView
                         android:id="@+id/labelStatusDiligencia"

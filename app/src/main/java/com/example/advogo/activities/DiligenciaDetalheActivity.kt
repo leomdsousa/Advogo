@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -33,7 +34,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 class DiligenciaDetalheActivity : BaseActivity() {
@@ -175,13 +179,25 @@ class DiligenciaDetalheActivity : BaseActivity() {
         binding.etDiligenciaDescricao.setText(diligencia.descricao)
         binding.spinnerTipoDiligencia.setSelection(diligenciaTipos!!.indexOf(diligencia.tipoObj!!))
         binding.spinnerStatusDiligencia.setSelection(diligenciaStatus!!.indexOf(diligencia.statusObj!!))
-        binding.etDiligenciaData.setText(diligencia.data)
         binding.etDiligenciaProcesso.setText(diligencia.processoObj?.numero)
         binding.btnAtualizarDiligencia.text = diligencia.advogadoObj?.nome
         binding.etDiligenciaEndereco.setText(diligencia.endereco)
+
+        dataSelecionada = diligencia.data
+        if(!dataSelecionada.isNullOrEmpty()) {
+            val fromFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+            val toFormat = SimpleDateFormat("dd/MM/yyyy", Locale("pt", "BR"))
+            val fromDate = fromFormat.parse(dataSelecionada)
+            val selectedDate = toFormat.format(fromDate)
+            binding.etDiligenciaData.setText(selectedDate)
+        }
     }
 
     private fun saveDiligencia() {
+        if(!validarFormulario()) {
+            return
+        }
+
         //TODO("showProgressDialog("Please wait...")")
 
         //TODO("preencher obj para add ou alterar")
@@ -345,6 +361,48 @@ class DiligenciaDetalheActivity : BaseActivity() {
             { deletarDiligenciaSuccess() },
             { deletarDiligenciaFailure() }
         )
+    }
+
+    private fun validarFormulario(): Boolean {
+        var validado = true
+
+        if (TextUtils.isEmpty(binding.etDiligenciaDescricao.text.toString())) {
+            binding.etDiligenciaDescricao.error = "Obrigatório"
+            binding.etDiligenciaDescricao.requestFocus()
+            validado = false
+        }
+
+        if (TextUtils.isEmpty(binding.etDiligenciaData.text.toString())) {
+            binding.etDiligenciaData.error = "Obrigatório"
+            binding.etDiligenciaData.requestFocus()
+            validado = false
+        }
+
+        if (TextUtils.isEmpty(binding.etDiligenciaEndereco.text.toString())) {
+            binding.etDiligenciaEndereco.error = "Obrigatório"
+            binding.etDiligenciaEndereco.requestFocus()
+            validado = false
+        }
+
+        if (TextUtils.isEmpty(tipoDiligenciaSelecionada)) {
+            validado = false
+        }
+
+        if (TextUtils.isEmpty(statusDiligenciaSelecionada)) {
+            validado = false
+        }
+
+        if (TextUtils.isEmpty(dataSelecionada)) {
+            validado = false
+        }
+
+        if (TextUtils.isEmpty(advSelecionado)) {
+            binding.etDiligenciaAdvogado.error = "Obrigatório"
+            binding.etDiligenciaAdvogado.requestFocus()
+            validado = false
+        }
+
+        return validado
     }
 
     private fun diligenciaCadastroSuccess() {

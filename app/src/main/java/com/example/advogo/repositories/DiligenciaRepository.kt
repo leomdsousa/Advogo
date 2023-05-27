@@ -139,40 +139,40 @@ class DiligenciaRepository @Inject constructor(
                 onFailureListener(exception)
             }
     }
-    override fun AdicionarDiligencia(model: Diligencia, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun AdicionarDiligencia(model: Diligencia, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
-            .collection(Constants.ADVOGADOS_TABLE)
+            .collection(Constants.DILIGENCIAS_TABLE)
             .document(model.id!!)
             .set(model, SetOptions.merge())
             .addOnSuccessListener {
-                onSuccessListener
+                onSuccessListener()
             }
             .addOnFailureListener {
-                onFailureListener
+                onFailureListener(it)
             }
     }
-    override fun AtualizarDiligencia(model: Diligencia, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun AtualizarDiligencia(model: Diligencia, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
-            .collection(Constants.ADVOGADOS_TABLE)
+            .collection(Constants.DILIGENCIAS_TABLE)
             .document(model.id!!)
             .set(model, SetOptions.merge())
             .addOnSuccessListener {
-                onSuccessListener
+                onSuccessListener()
             }
             .addOnFailureListener {
-                onFailureListener
+                onFailureListener(it)
             }
     }
-    override fun DeletarDiligencia(id: String, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun DeletarDiligencia(id: String, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
-            .collection(Constants.ADVOGADOS_TABLE)
+            .collection(Constants.DILIGENCIAS_TABLE)
             .document(id)
             .delete()
             .addOnSuccessListener {
-                onSuccessListener
+                onSuccessListener()
             }
             .addOnFailureListener {
-                onFailureListener
+                onFailureListener(it)
             }
     }
 }
@@ -182,7 +182,7 @@ interface IDiligenciaRepository {
     fun ObterDiligencia(id: String, onSuccessListener: (diligencia: Diligencia) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
     fun ObterDiligenciasPorProcesso(numeroProcesso: String, onSuccessListener: (lista: List<Diligencia>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
     fun ObterDiligenciasPorAdvogado(emailAdvogado: String, onSuccessListener: (lista: List<Diligencia>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
-    fun AdicionarDiligencia(model: Diligencia, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (ex: Exception?) -> Unit)
-    fun AtualizarDiligencia(model: Diligencia, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (ex: Exception?) -> Unit)
-    fun DeletarDiligencia(id: String, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (ex: Exception?) -> Unit)
+    fun AdicionarDiligencia(model: Diligencia, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun AtualizarDiligencia(model: Diligencia, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun DeletarDiligencia(id: String, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
 }

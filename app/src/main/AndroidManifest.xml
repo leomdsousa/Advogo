@@ -80,11 +80,12 @@
             android:name=".activities.CadastroActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Advogo.NoActionBar" />
+            android:theme="@style/Theme.Advogo.NoActionBar"/>
         <activity
             android:name=".activities.IntroActivity"
             android:exported="false"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Advogo.NoActionBar"/>
         <activity
             android:name=".activities.SplashScreenActivity"
             android:exported="true"

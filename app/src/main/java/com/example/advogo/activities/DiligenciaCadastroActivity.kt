@@ -3,6 +3,7 @@ package com.example.advogo.activities
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Spinner
@@ -50,6 +51,7 @@ class DiligenciaCadastroActivity : BaseActivity() {
     private var processoSelecionado: String? = null
     private var tipoDiligenciaSelecionada: String? = null
     private var statusDiligenciaSelecionada: String? = null
+    private var advogadoSelecionado: String? = null
 
     private var diligenciaStatus: List<DiligenciaStatus>? = ArrayList()
     private var diligenciaTipos: List<DiligenciaTipo>? = ArrayList()
@@ -159,7 +161,8 @@ class DiligenciaCadastroActivity : BaseActivity() {
                 override fun onItemSelected(adv: Advogado, action: String) {
                     if (action == Constants.SELECIONAR) {
                         if (binding.etDiligenciaAdvogado.text.toString() != adv.id) {
-                            binding.etDiligenciaAdvogado.setText(adv.id)
+                            binding.etDiligenciaAdvogado.setText("${adv.nome} (${adv.oab})")
+                            advogadoSelecionado = adv.id
                             advogados[advogados.indexOf(adv)].selecionado = true
                         } else {
                             Toast.makeText(
@@ -170,6 +173,7 @@ class DiligenciaCadastroActivity : BaseActivity() {
                         }
                     } else {
                         binding.etDiligenciaAdvogado.setText(null)
+                        advogadoSelecionado = adv.id
                         advogados[advogados.indexOf(adv)].selecionado = false
                     }
                 }
@@ -250,6 +254,9 @@ class DiligenciaCadastroActivity : BaseActivity() {
     }
 
     private fun saveDiligencia() {
+        if(!validarFormulario()) {
+            return
+        }
         //TODO("showProgressDialog("Please wait...")")
 
         //TODO("preencher obj para add ou alterar")
@@ -262,6 +269,48 @@ class DiligenciaCadastroActivity : BaseActivity() {
             { diligenciaCadastroSuccess() },
             { diligenciaCadastroFailure() }
         )
+    }
+
+    private fun validarFormulario(): Boolean {
+        var validado = true
+
+        if (TextUtils.isEmpty(binding.etDiligenciaDescricao.text.toString())) {
+            binding.etDiligenciaDescricao.error = "Obrigatório"
+            binding.etDiligenciaDescricao.requestFocus()
+            validado = false
+        }
+
+        if (TextUtils.isEmpty(binding.etDiligenciaData.text.toString())) {
+            binding.etDiligenciaData.error = "Obrigatório"
+            binding.etDiligenciaData.requestFocus()
+            validado = false
+        }
+
+        if (TextUtils.isEmpty(binding.etDiligenciaEndereco.text.toString())) {
+            binding.etDiligenciaEndereco.error = "Obrigatório"
+            binding.etDiligenciaEndereco.requestFocus()
+            validado = false
+        }
+
+        if (TextUtils.isEmpty(tipoDiligenciaSelecionada)) {
+            validado = false
+        }
+
+        if (TextUtils.isEmpty(statusDiligenciaSelecionada)) {
+            validado = false
+        }
+
+        if (TextUtils.isEmpty(dataSelecionada)) {
+            validado = false
+        }
+
+        if (TextUtils.isEmpty(advogadoSelecionado)) {
+            binding.etDiligenciaAdvogado.error = "Obrigatório"
+            binding.etDiligenciaAdvogado.requestFocus()
+            validado = false
+        }
+
+        return validado
     }
 
     private fun diligenciaCadastroSuccess() {

@@ -8,39 +8,51 @@
     android:orientation="vertical"
     tools:context=".activities.CadastroActivity">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbarSignUp"
+<!--    <androidx.appcompat.widget.Toolbar-->
+<!--        android:id="@+id/toolbarSignUp"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="?attr/actionBarSize">-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/tvTitle"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:gravity="center_vertical"-->
+<!--            android:text="@string/signUp"-->
+<!--            android:textColor="@color/primaryTextColor"-->
+<!--            android:textSize="@dimen/toolbarTitleTextSize"-->
+<!--            android:textStyle="bold" />-->
+
+<!--    </androidx.appcompat.widget.Toolbar>-->
+
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize">
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
 
-        <TextView
-            android:id="@+id/tvTitle"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbarSignUp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:text="@string/signUp"
-            android:textColor="@color/primaryTextColor"
-            android:textSize="@dimen/toolbarTitleTextSize"
-            android:textStyle="bold" />
-
-    </androidx.appcompat.widget.Toolbar>
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+    </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:layout_marginTop="@dimen/screenContentMarginTop"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/processoCadastroContentPadding">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/authenticationScreenMarginStartEnd"
-            android:layout_marginEnd="@dimen/authenticationScreenMarginStartEnd"
-            android:gravity="center"
-            android:text="@string/signUpDescriptionText"
-            android:textColor="@color/secondaryTextColor"
-            android:textSize="@dimen/authenticationDescriptionTextSize" />
+<!--        <TextView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="@dimen/authenticationScreenMarginStartEnd"-->
+<!--            android:layout_marginEnd="@dimen/authenticationScreenMarginStartEnd"-->
+<!--            android:gravity="center"-->
+<!--            android:text="@string/signUpDescriptionText"-->
+<!--            android:textColor="@color/secondaryTextColor"-->
+<!--            android:textSize="@dimen/authenticationDescriptionTextSize" />-->
 
         <ScrollView
             android:layout_width="fill_parent"
@@ -49,15 +61,13 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/authenticationScreenTilMarginStartEnd"
-                android:layout_marginTop="@dimen/authenticationScreenCardViewMarginTop"
-                android:layout_marginEnd="@dimen/authenticationScreenTilMarginStartEnd"
                 android:elevation="@dimen/cardViewElevation"
                 app:cardCornerRadius="@dimen/cardViewCornerRadius">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
                     android:orientation="vertical"
                     android:padding="@dimen/cardViewLayoutContentPadding">
 
@@ -136,19 +146,22 @@
                         android:paddingLeft="@dimen/cardViewLayoutContentPadding"
                         android:paddingRight="@dimen/cardViewLayoutContentPadding">
 
-                        <EditText
+                        <com.santalu.maskara.widget.MaskEditText
                             android:id="@+id/etCep"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:hint="@string/hintCep"
-                            android:inputType="text"
+                            android:inputType="number"
                             android:maxLength="9"
-                            android:digits="0123456789-"
-                            android:maxLines="1" />
+                            android:digits="0123456789"
+                            android:maxLines="1"
+                            app:mask="_____-___"
+                            app:maskCharacter="_"
+                            app:maskStyle="normal" />
 
                         <Button
-                            android:id="@+id/btnSearch"
+                            android:id="@+id/btnCep"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Confirmar" />
@@ -230,14 +243,16 @@
                         android:layout_marginTop="@dimen/authenticationScreenTilMarginTop"
                         android:layout_marginEnd="@dimen/authenticationScreenTilMarginStartEnd">
 
-                        <androidx.appcompat.widget.AppCompatEditText
+                        <com.santalu.maskara.widget.MaskEditText
                             android:id="@+id/etTelefone"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:inputType="number"
                             android:hint="@string/telefone"
-                            android:inputType="phone"
-                            android:digits="0123456789()- "
-                            android:textSize="@dimen/etTextSize" />
+                            android:textSize="@dimen/etTextSize"
+                            app:mask="+55 (__) _____-____"
+                            app:maskCharacter="_"
+                            app:maskStyle="normal" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -279,4 +294,3 @@
 
     </LinearLayout>
 </LinearLayout>
-    <!--END-->

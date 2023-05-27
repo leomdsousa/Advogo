@@ -9,7 +9,7 @@ import javax.inject.Inject
 class CorreioApiService @Inject constructor(
     private val apiService: ICorreioApiService
 ) {
-    fun obterEndereco(cep: String): CorreioResponse? {
+    suspend fun obterEndereco(cep: String): CorreioResponse? {
         val response = apiService.obterEndereco(cep)
         if (response.isSuccessful) {
             return response.body()
@@ -21,6 +21,6 @@ class CorreioApiService @Inject constructor(
 
 interface ICorreioApiService {
     @GET("{cep}/json")
-    fun obterEndereco(@Path("cep") cep: String): Response<CorreioResponse>
+    suspend fun obterEndereco(@Path("cep") cep: String): Response<CorreioResponse>
 }
 

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -69,8 +70,8 @@ class ProcessoDetalheActivity : BaseActivity() {
         binding = ActivityProcessoDetalheBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setupActionBar()
         obterIntentDados()
+        setupActionBar()
         setupSpinners()
         setProcessoToUI(processoDetalhes)
 
@@ -186,7 +187,7 @@ class ProcessoDetalheActivity : BaseActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_deletar_processo -> {
-                alertDialogDeletarProcesso("${processoDetalhes.numero.toString()} (${processoDetalhes.numero})")
+                alertDialogDeletarProcesso("${processoDetalhes.numero.toString()} (${processoDetalhes.titulo})")
                 return true
             }
         }
@@ -198,7 +199,7 @@ class ProcessoDetalheActivity : BaseActivity() {
         //TODO("showProgressDialog("Please wait...")")
 
         val sRef: StorageReference = FirebaseStorage.getInstance().reference.child(
-            "PROCESSO_IMAGE" + System.currentTimeMillis() + "."
+            "PROCESSO_${processoDetalhes.numero}_IMAGEM" + System.currentTimeMillis() + "."
                     + getFileExtension(imagemSelecionadaURI!!)
         )
 
@@ -222,6 +223,10 @@ class ProcessoDetalheActivity : BaseActivity() {
     }
 
     private fun saveProcesso() {
+        if(!validarFormulario()) {
+            return
+        }
+
         //TODO("showProgressDialog("Please wait...")")
 
         val processo = Processo(
@@ -327,11 +332,9 @@ class ProcessoDetalheActivity : BaseActivity() {
 
     private fun setProcessoToUI(processo: Processo) {
         binding.etProcessoName.setText(processo.titulo)
-        binding.
-        etDescricao.setText(processo.descricao)
+        binding.etDescricao.setText(processo.descricao)
         binding.spinnerTipoProcesso.setSelection(processosTipos.indexOf(processo.tipoObj))
         binding.spinnerStatusProcesso.setSelection(processosStatus.indexOf(processo.statusObj))
-        binding.etData.setText(processo.data)
         binding.etNumeroProcesso.setText(processo.numero)
         binding.etAdv.setText(processo.advogadoObj?.nome)
         binding.etCliente.setText(processo.clienteObj?.nome)
@@ -342,8 +345,58 @@ class ProcessoDetalheActivity : BaseActivity() {
             val toFormat = SimpleDateFormat("dd/MM/yyyy", Locale("pt", "BR"))
             val fromDate = fromFormat.parse(dataSelecionada)
             val selectedDate = toFormat.format(fromDate)
-            binding.tvSelectData.text = selectedDate
+            binding.etData.setText(selectedDate)
         }
+    }
+
+    private fun validarFormulario(): Boolean {
+        var validado = true
+
+        if (TextUtils.isEmpty(binding.etProcessoName.text.toString())) {
+            binding.etProcessoName.error = "Obrigatório"
+            binding.etProcessoName.requestFocus()
+            validado = false
+        }
+
+        if (TextUtils.isEmpty(binding.etNumeroProcesso.text.toString())) {
+            binding.etNumeroProcesso.error = "Obrigatório"
+            binding.etNumeroProcesso.requestFocus()
+            validado = false
+        }
+
+        if (TextUtils.isEmpty(binding.etDescricao.text.toString())) {
+            binding.etDescricao.error = "Obrigatório"
+            binding.etDescricao.requestFocus()
+            validado = false
+        }
+
+        if (TextUtils.isEmpty(tipoProcessoSelecionado)) {
+            validado = false
+        }
+
+        if (TextUtils.isEmpty(statusProcessoSelecionado)) {
+            validado = false
+        }
+
+        if (TextUtils.isEmpty(dataSelecionada)) {
+            binding.etData.error = "Obrigatório"
+            binding.etData.requestFocus()
+            validado = false
+        }
+
+        if (TextUtils.isEmpty(clienteSelecionado)) {
+            binding.etCliente.error = "Obrigatório"
+            binding.etCliente.requestFocus()
+            validado = false
+        }
+
+        if (TextUtils.isEmpty(advSelecionado)) {
+            binding.etAdv.error = "Obrigatório"
+            binding.etAdv.requestFocus()
+            validado = false
+        }
+
+        return validado
     }
 
     private fun obterIntentDados() {

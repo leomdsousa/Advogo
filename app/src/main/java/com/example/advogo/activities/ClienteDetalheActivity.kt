@@ -1,8 +1,8 @@
 package com.example.advogo.activities
 
 import android.app.Activity
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -14,7 +14,6 @@ import com.example.advogo.models.externals.CorreioResponse
 import com.example.advogo.repositories.ClienteRepository
 import com.example.advogo.services.CorreioApiService
 import com.example.advogo.utils.Constants
-import com.example.advogo.utils.CpfMaskTextWatcher
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -37,42 +36,40 @@ class ClienteDetalheActivity : BaseActivity() {
         setupActionBar()
         setClienteToUI(clienteDetalhes)
 
-        binding.etCpf.addTextChangedListener(CpfMaskTextWatcher(binding.etCpf))
-
         binding.btnAtualizarCliente.setOnClickListener {
             saveCliente()
         }
 
-        binding.etEndereco.setOnClickListener {
-            val valor: String = binding.etEndereco.text.toString()
-
-            if (valor.isEmpty()) {
-                binding.etEndereco.error = "O campo não pode estar vazio"
-                binding.etEndereco.requestFocus()
-                return@setOnClickListener
-            }
-
-            val rgxCep: Pattern = Pattern.compile("(^\\d{5}-\\d{3}|^\\d{2}.\\d{3}-\\d{3}|\\d{8})")
-            val matcher: Matcher = rgxCep.matcher(valor)
-
-            if (!matcher.matches()) {
-                binding.etEndereco.error = "Informe um CEP válido"
-                binding.etEndereco.requestFocus()
-                return@setOnClickListener
-            } else {
-                val endereco = buscarEnderecoCorreio(valor)
-
-                if(endereco != null) {
-                    binding.etEndereco.setText(endereco.logradouro)
-                    binding.etEnderecoCidade.setText(endereco.localidade)
-                    binding.etBairro.setText(endereco.bairro)
-                } else {
-                    binding.etEndereco.error = "CEP não encontrado"
-                    binding.etEndereco.requestFocus()
-                    return@setOnClickListener
-                }
-            }
-        }
+//        binding.etEndereco.setOnClickListener {
+//            val valor: String = binding.etEndereco.text.toString()
+//
+//            if (valor.isEmpty()) {
+//                binding.etEndereco.error = "O campo não pode estar vazio"
+//                binding.etEndereco.requestFocus()
+//                return@setOnClickListener
+//            }
+//
+//            val rgxCep: Pattern = Pattern.compile("(^\\d{5}-\\d{3}|^\\d{2}.\\d{3}-\\d{3}|\\d{8})")
+//            val matcher: Matcher = rgxCep.matcher(valor)
+//
+//            if (!matcher.matches()) {
+//                binding.etEndereco.error = "Informe um CEP válido"
+//                binding.etEndereco.requestFocus()
+//                return@setOnClickListener
+//            } else {
+//                val endereco = buscarEnderecoCorreio(valor)
+//
+//                if(endereco != null) {
+//                    binding.etEndereco.setText(endereco.logradouro)
+//                    binding.etEnderecoCidade.setText(endereco.localidade)
+//                    binding.etBairro.setText(endereco.bairro)
+//                } else {
+//                    binding.etEndereco.error = "CEP não encontrado"
+//                    binding.etEndereco.requestFocus()
+//                    return@setOnClickListener
+//                }
+//            }
+//        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -109,6 +106,10 @@ class ClienteDetalheActivity : BaseActivity() {
     }
 
     private fun saveCliente() {
+        if(!validarFormulario()) {
+            return
+        }
+
         //TODO("showProgressDialog("Please wait...")")
 
         val cliente = Cliente(
@@ -163,6 +164,60 @@ class ClienteDetalheActivity : BaseActivity() {
         alertDialog.show()
     }
 
+    private fun validarFormulario(): Boolean {
+        var validado = true
+
+        if (TextUtils.isEmpty(binding.etNome.text.toString())) {
+            binding.etNome.error = "Obrigatório"
+            binding.etNome.requestFocus()
+            validado = false
+        }
+
+        if (TextUtils.isEmpty(binding.etCpf.text.toString())) {
+            binding.etCpf.error = "Obrigatório"
+            binding.etCpf.requestFocus()
+            validado = false
+        }
+
+        if (TextUtils.isEmpty(binding.etEmail.text.toString())) {
+            binding.etEmail.error = "Obrigatório"
+            binding.etEmail.requestFocus()
+            validado = false
+        }
+
+        if (TextUtils.isEmpty(binding.etTelefone.text.toString())) {
+            binding.etTelefone.error = "Obrigatório"
+            binding.etTelefone.requestFocus()
+            validado = false
+        }
+
+        if (TextUtils.isEmpty(binding.etEndereco.text.toString())) {
+            binding.etEndereco.error = "Obrigatório"
+            binding.etEndereco.requestFocus()
+            validado = false
+        }
+
+        if (TextUtils.isEmpty(binding.etEnderecoNumero.text.toString())) {
+            binding.etEnderecoNumero.error = "Obrigatório"
+            binding.etEnderecoNumero.requestFocus()
+            validado = false
+        }
+
+        if (TextUtils.isEmpty(binding.etBairro.text.toString())) {
+            binding.etBairro.error = "Obrigatório"
+            binding.etBairro.requestFocus()
+            validado = false
+        }
+
+        if (TextUtils.isEmpty(binding.etEnderecoCidade.text.toString())) {
+            binding.etEnderecoCidade.error = "Obrigatório"
+            binding.etEnderecoCidade.requestFocus()
+            validado = false
+        }
+
+        return validado
+    }
+
     private fun clienteCadastroSuccess() {
         //TODO("hideProgressDialog()")
         setResult(Activity.RESULT_OK)
@@ -179,7 +234,7 @@ class ClienteDetalheActivity : BaseActivity() {
         ).show()
     }
 
-    private fun buscarEnderecoCorreio(cep: String): CorreioResponse? {
+    private suspend fun buscarEnderecoCorreio(cep: String): CorreioResponse? {
         return correioService.obterEndereco(cep)
     }
 

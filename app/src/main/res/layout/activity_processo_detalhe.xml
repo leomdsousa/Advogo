@@ -67,13 +67,17 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/processoCadastroTilMarginTop">
 
-                    <androidx.appcompat.widget.AppCompatEditText
+                    <com.santalu.maskara.widget.MaskEditText
                         android:id="@+id/etNumeroProcesso"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="text|number"
                         android:hint="@string/hintNumeroProcessoDescription"
-                        android:inputType="text"
-                        android:textSize="@dimen/etTextSize" />
+                        android:textSize="@dimen/etTextSize"
+                        android:maxLength="20"
+                        app:mask="_______-__.____._.__.____"
+                        app:maskCharacter="_"
+                        app:maskStyle="normal" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -87,8 +91,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/hintProcessoDescription"
-                        android:inputType="text"
-                        android:textSize="@dimen/etTextSize" />
+                        android:inputType="textMultiLine"
+                        android:maxLength="255"
+                        android:textSize="@dimen/etTextSize"
+                        android:lines="8"
+                        android:maxLines="10"
+                        android:minLines="6"
+                        android:scrollbars="vertical"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -143,7 +152,6 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/hintDataDescription"
                         android:inputType="text"
-                        android:cursorVisible="false"
                         android:focusable="false"
                         android:focusableInTouchMode="false"
                         android:textSize="@dimen/etTextSize" />
@@ -187,21 +195,6 @@
                         android:textSize="@dimen/etTextSize" />
 
                 </com.google.android.material.textfield.TextInputLayout>
-
-<!--                <com.google.android.material.textfield.TextInputLayout-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginTop="@dimen/processoCadastroTilMarginTop">-->
-
-<!--                    <androidx.appcompat.widget.AppCompatEditText-->
-<!--                        android:id="@+id/etDiligencias"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:hint="@string/hintDiligenciasDescription"-->
-<!--                        android:inputType="text"-->
-<!--                        android:textSize="@dimen/etTextSize" />-->
-
-<!--                </com.google.android.material.textfield.TextInputLayout>-->
 
                 <Button
                     android:id="@+id/btnProcessoCadastro"

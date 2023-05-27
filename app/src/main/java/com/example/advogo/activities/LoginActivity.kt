@@ -45,7 +45,7 @@ class LoginActivity : BaseActivity() {
         val email = binding.etEmail.text.toString().trim()
         val password = binding.etPassword.text.toString().trim()
 
-        if(validarFormulario(email, password)) {
+        if(validarFormulario()) {
             //TODO("Mostrar progress bar")
 
             firebaseAuth
@@ -68,19 +68,22 @@ class LoginActivity : BaseActivity() {
         }
     }
 
-    private fun validarFormulario(email: String, password: String): Boolean {
-        return when {
-            TextUtils.isEmpty(email) -> {
-                showErrorSnackBar("Por favor insira o e-mail")
-                false
-            }
-            TextUtils.isEmpty(password) -> {
-                showErrorSnackBar("Por favor insira a senha")
-                false
-            } else -> {
-                true
-            }
+    private fun validarFormulario(): Boolean {
+        var validado = true
+
+        if (TextUtils.isEmpty(binding.etEmail.text.toString())) {
+            binding.etEmail.error = "Obrigatório"
+            binding.etEmail.requestFocus()
+            validado = false
         }
+
+        if (TextUtils.isEmpty(binding.etPassword.text.toString())) {
+            binding.etPassword.error = "Obrigatório"
+            binding.etPassword.requestFocus()
+            validado = false
+        }
+
+        return validado
     }
 
     fun loginSuccess(advogado: Advogado) {

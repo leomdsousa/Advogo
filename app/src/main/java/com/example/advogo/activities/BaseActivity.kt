@@ -93,7 +93,6 @@ open class BaseActivity : AppCompatActivity() {
     }
 
     fun showErrorSnackBar(msg: String) {
-        TODO("Mudar para um singleton")
         val snackBar = Snackbar.make(findViewById(android.R.id.content), msg, Snackbar.LENGTH_LONG)
         val snackBarView = snackBar.view
         snackBarView.setBackgroundColor(ContextCompat.getColor(this, R.color.red))

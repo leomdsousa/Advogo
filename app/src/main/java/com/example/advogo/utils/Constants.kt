@@ -53,6 +53,8 @@ object Constants {
     const val TELEFONES_TIPOS_ID = "_id"
     const val TELEFONES_TIPOS_TIPO = "tipo"
 
+    const val ENDERECOS_TABLE = "telefones"
+
     //Shared
     const val SELECIONAR = "SELECIONAR"
     const val DESELECIONAR = "DESELECIONAR"
@@ -78,6 +80,7 @@ object Constants {
     const val FROM_GOOGLE_PLACES = "FROM_GOOGLE_PLACES"
     const val FROM_DEVICE_GALLERY = "FROM_DEVICE_GALLERY"
     const val FROM_DEVICE_CAMERA = "FROM_DEVICE_CAMERA"
+    const val FROM_REGISTRAR_ACTIVITY = "FROM_REGISTRAR_ACTIVITY"
 
     //Indica para Map Activity qual objeto obter
     const val PROCESSO_MAP = "PROCESSO_MAP"

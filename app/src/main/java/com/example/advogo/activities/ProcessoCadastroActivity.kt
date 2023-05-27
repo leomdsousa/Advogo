@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Spinner
@@ -36,6 +37,7 @@ import kotlin.collections.ArrayList
 class ProcessoCadastroActivity : BaseActivity() {
     private lateinit var binding: ActivityProcessoCadastroBinding
     private lateinit var userName: String
+    private lateinit var id: String
 
     @Inject lateinit var processoRepository: IProcessoRepository
     @Inject lateinit var processoTipoRepository: IProcessoTipoRepository
@@ -266,7 +268,7 @@ class ProcessoCadastroActivity : BaseActivity() {
         //TODO("showProgressDialog("Please wait...")")
 
         val sRef: StorageReference = FirebaseStorage.getInstance().reference.child(
-            "PROCESSO_IMAGE" + System.currentTimeMillis() + "."
+            "PROCESSO_${id}_IMAGEm" + System.currentTimeMillis() + "."
                     + getFileExtension(imagemSelecionadaURI!!)
         )
 
@@ -290,6 +292,10 @@ class ProcessoCadastroActivity : BaseActivity() {
     }
 
     private fun saveProcesso() {
+        if(!validarFormulario()) {
+            return
+        }
+
         //TODO("showProgressDialog("Please wait...")")
 
         val processo = Processo(
@@ -317,6 +323,55 @@ class ProcessoCadastroActivity : BaseActivity() {
 
         dataSelecionada = "$sDayOfMonth/$sMonthOfYear/$year"
         binding.etData.setText(dataSelecionada)
+    }
+
+    private fun validarFormulario(): Boolean {
+        var validado = true
+
+        if (TextUtils.isEmpty(binding.etProcessoName.text.toString())) {
+            binding.etProcessoName.error = "Obrigatório"
+            binding.etProcessoName.requestFocus()
+            validado = false
+        }
+
+        if (TextUtils.isEmpty(binding.etNumeroProcesso.text.toString())) {
+            binding.etNumeroProcesso.error = "Obrigatório"
+            binding.etNumeroProcesso.requestFocus()
+            validado = false
+        }
+
+        if (TextUtils.isEmpty(binding.etDescricao.text.toString())) {
+            binding.etDescricao.error = "Obrigatório"
+            validado = false
+        }
+
+        if (TextUtils.isEmpty(tipoProcessoSelecionado)) {
+            validado = false
+        }
+
+        if (TextUtils.isEmpty(statusProcessoSelecionado)) {
+            validado = false
+        }
+
+        if (TextUtils.isEmpty(dataSelecionada)) {
+            binding.etData.error = "Obrigatório"
+            binding.etData.requestFocus()
+            validado = false
+        }
+
+        if (TextUtils.isEmpty(clienteSelecionado)) {
+            binding.etCliente.error = "Obrigatório"
+            binding.etCliente.requestFocus()
+            validado = false
+        }
+
+        if (TextUtils.isEmpty(advSelecionado)) {
+            binding.etAdv.error = "Obrigatório"
+            binding.etAdv.requestFocus()
+            validado = false
+        }
+
+        return validado
     }
 
     private fun processoCadastroSuccess() {

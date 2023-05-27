@@ -3,6 +3,7 @@ package com.example.advogo.dagger
 import android.app.Application
 import android.app.ProgressDialog
 import android.content.Context
+import com.google.android.material.snackbar.Snackbar
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

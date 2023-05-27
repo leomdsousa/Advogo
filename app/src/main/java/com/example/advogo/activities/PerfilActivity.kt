@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.TextUtils
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -12,6 +13,7 @@ import com.example.advogo.R
 import com.example.advogo.databinding.ActivityPerfilBinding
 import com.example.advogo.models.Advogado
 import com.example.advogo.repositories.IAdvogadoRepository
+import com.example.advogo.utils.Constants
 import com.google.common.base.Converter
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -49,13 +51,15 @@ class PerfilActivity : BaseActivity() {
         }
 
         binding.btnUpdate.setOnClickListener {
-            if(imagemSelecionadaURI != null) {
-                atualizarAdvogadoImagem()
-            } else {
-                //TODO("Exibir Progress Dialog")
-                atualizarAdvogado()
-                //TODO("Esconder Progress Dialog")
-            }
+//            if(imagemSelecionadaURI != null) {
+//                atualizarAdvogadoImagem()
+//            } else {
+//                //TODO("Exibir Progress Dialog")
+//                atualizarAdvogado()
+//                //TODO("Esconder Progress Dialog")
+//            }
+
+              atualizarAdvogado()
         }
 
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -90,6 +94,10 @@ class PerfilActivity : BaseActivity() {
     }
 
     private fun atualizarAdvogado() {
+        if(!validarFormulario()) {
+            return
+        }
+
         val advogado = Advogado(
             id = getCurrentUserID(),
             nome = (if (binding.etName.text.toString() != advogadoDetalhes.nome) binding.etName.text.toString() else advogadoDetalhes.nome),
@@ -105,7 +113,14 @@ class PerfilActivity : BaseActivity() {
 
         advRepository.AtualizarAdvogado(
             advogado,
-            { adv -> setDadosPerfil(advogado) },
+            {
+                if(imagemSelecionadaURI != null) {
+                    atualizarAdvogadoImagem()
+                }
+
+                setDadosPerfil(advogado)
+                atualizarPerfilSuccess()
+            },
             { null }
         )
     }
@@ -114,7 +129,7 @@ class PerfilActivity : BaseActivity() {
         //TODO("Exibir Progress Dialog")
 
         val sRef: StorageReference = FirebaseStorage.getInstance().reference.child(
-            "ADVOGADO_IMAGE" + System.currentTimeMillis() + "." + getFileExtension(
+            "ADVOGADO_${advogadoDetalhes.oab}_IMAGEM" + System.currentTimeMillis() + "." + getFileExtension(
                 imagemSelecionadaURI!!
             )
         )
@@ -124,7 +139,14 @@ class PerfilActivity : BaseActivity() {
                 taskSnapshot.metadata!!.reference!!.downloadUrl
                     .addOnSuccessListener { uri ->
                         imagemPerfilURL = uri.toString()
-                        atualizarAdvogado()
+                        //atualizarAdvogado()
+                        advogadoDetalhes.imagem = imagemPerfilURL
+
+                        advRepository.AtualizarAdvogado(
+                            advogadoDetalhes,
+                            { null },
+                            { null }
+                        )
                     }
 
                 //TODO("Esconder Progress Dialog")
@@ -159,15 +181,56 @@ class PerfilActivity : BaseActivity() {
         binding.etTelefone.setText(advogadoDetalhes.telefone)
     }
 
+    private fun validarFormulario(): Boolean {
+        var validado = true
+
+        if (TextUtils.isEmpty(binding.etName.text.toString())) {
+            binding.etName.error = "Obrigatório"
+            binding.etName.requestFocus()
+            validado = false
+        }
+
+        if (TextUtils.isEmpty(binding.etSobrenome.text.toString())) {
+            binding.etSobrenome.error = "Obrigatório"
+            binding.etSobrenome.requestFocus()
+            validado = false
+        }
+
+        if (TextUtils.isEmpty(binding.etEmail.text.toString())) {
+            binding.etEmail.error = "Obrigatório"
+            binding.etEmail.requestFocus()
+            validado = false
+        }
+
+        if (TextUtils.isEmpty(binding.etTelefone.text.toString())) {
+            binding.etTelefone.error = "Obrigatório"
+            binding.etTelefone.requestFocus()
+            validado = false
+        }
+
+        if (TextUtils.isEmpty(binding.etOab.text.toString())) {
+            binding.etOab.error = "Obrigatório"
+            binding.etOab.requestFocus()
+            validado = false
+        }
+
+        if (TextUtils.isEmpty(binding.etEndereco.text.toString())) {
+            binding.etEndereco.error = "Obrigatório"
+            binding.etEndereco.requestFocus()
+            validado = false
+        }
+
+        return validado
+    }
+
     fun atualizarPerfilSuccess() {
-        //TODO("Exibir Progress Dialog")
+        //TODO("Fechar Progress Dialog")
 
-        Toast.makeText(this@PerfilActivity,
-            "Profile atualizado!",
-            Toast.LENGTH_SHORT
-        ).show()
+        var intent = Intent(this@PerfilActivity, MainActivity::class.java)
+        intent.putExtra(Constants.FROM_PERFIL_ACTIVITY, Constants.FROM_PERFIL_ACTIVITY)
 
-        setResult(Activity.RESULT_OK)
+        startActivity(intent)
+//        //setResult(Activity.RESULT_OK)
         finish()
     }
 }

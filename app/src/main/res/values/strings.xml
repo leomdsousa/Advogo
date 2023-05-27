@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Advogo</string>
+    <string name="app_name">AdvoGo</string>
     <string name="title_activity_map">Google Maps</string>
     <string name="google_maps_api_key">AIzaSyClSagttHxMtRJQ9XPUyiKyq0r3SKuBxdk</string>
 
@@ -22,7 +22,7 @@
     <string name="confirmacaoDeletarDiligencia">Deseja deletar a diligência \'%1$s\'?</string>
 
     <!--HINT-->
-    <string name="hintProcessoName">Nome</string>
+    <string name="hintProcessoName">Nome*</string>
     <string name="hintProcessoDescription">Descrição</string>
     <string name="hintNumeroProcessoDescription">Nº do processo</string>
     <string name="hintTipoDescription">Tipo do processo</string>
@@ -66,7 +66,7 @@
     <!--INTRO-->
     <string name="imageContentDescription">Imagem</string>
     <string name="letsGetStartedText">Vamos começar!</string>
-    <string name="introTextDescription">Gerencie e planeje seu processos em múltiplos aparelhos com o AdvoGo!.</string>
+    <string name="introTextDescription">Gerencie seus processos em múltiplos aparelhos com o AdvoGo!.</string>
     <string name="signIn">Entrar</string>
     <string name="signUp">Registrar-se</string>
 

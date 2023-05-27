@@ -80,8 +80,6 @@
                         android:id="@+id/etSobrenome"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false"
                         android:hint="@string/sobrenome"
                         android:inputType="text"
                         android:maxLength="50"
@@ -111,14 +109,17 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/profileEtMobileMarginTop">
 
-                    <androidx.appcompat.widget.AppCompatEditText
+                    <com.santalu.maskara.widget.MaskEditText
                         android:id="@+id/etTelefone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/mobile"
                         android:inputType="phone"
-                        android:textSize="@dimen/etTextSize" />
-
+                        android:hint="@string/telefone"
+                        android:textSize="@dimen/etTextSize"
+                        android:maxLength="19"
+                        app:mask="+55 (__) _____-____"
+                        app:maskCharacter="_"
+                        app:maskStyle="normal" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout

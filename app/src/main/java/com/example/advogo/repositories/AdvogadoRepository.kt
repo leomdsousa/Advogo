@@ -104,40 +104,40 @@ class AdvogadoRepository @Inject constructor(
                 onFailureListener(exception)
             }
     }
-    override fun AdicionarAdvogado(model: Advogado, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (exception: Exception?) -> Unit) {
+    override fun AdicionarAdvogado(model: Advogado, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.ADVOGADOS_TABLE)
             .document(getCurrentUserId())
             .set(model, SetOptions.merge())
             .addOnSuccessListener {
-                onSuccessListener
+                onSuccessListener()
             }
             .addOnFailureListener {
                 onFailureListener
             }
     }
-    override fun AtualizarAdvogado(model: Advogado, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (exception: Exception?) -> Unit) {
+    override fun AtualizarAdvogado(model: Advogado, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.ADVOGADOS_TABLE)
             .document(getCurrentUserId())
             .set(model, SetOptions.merge())
             .addOnSuccessListener {
-                onSuccessListener
+                onSuccessListener()
             }
             .addOnFailureListener {
-                onFailureListener
+                onFailureListener(it)
             }
     }
-    override fun DeletarAdvogado(id: String, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (exception: Exception?) -> Unit) {
+    override fun DeletarAdvogado(id: String, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.ADVOGADOS_TABLE)
             .document(getCurrentUserId())
             .delete()
             .addOnSuccessListener {
-                onSuccessListener
+                onSuccessListener()
             }
             .addOnFailureListener {
-                onFailureListener
+                onFailureListener(it)
             }
     }
 
@@ -156,9 +156,9 @@ interface IAdvogadoRepository {
     fun ObterAdvogados(onSuccessListener: (lista: List<Advogado>) -> Unit, onFailureListener: (exception: Exception?) -> Unit)
     fun ObterAdvogado(id: String, onSuccessListener: (advogado: Advogado) -> Unit, onFailureListener: (exception: Exception?) -> Unit)
     fun ObterAdvogadoPorEmail(email: String, onSuccessListener: (advogado: Advogado) -> Unit, onFailureListener: (exception: Exception?) -> Unit)
-    fun AdicionarAdvogado(model: Advogado, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (exception: Exception?) -> Unit)
-    fun AtualizarAdvogado(model: Advogado, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (exception: Exception?) -> Unit)
-    fun DeletarAdvogado(id: String, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (exception: Exception?) -> Unit)
+    fun AdicionarAdvogado(model: Advogado, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit)
+    fun AtualizarAdvogado(model: Advogado, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit)
+    fun DeletarAdvogado(id: String, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit)
 
     suspend fun ObterAdvogados(): List<Advogado>?
     suspend fun ObterAdvogado(id: String): Advogado?

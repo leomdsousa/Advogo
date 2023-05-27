@@ -104,40 +104,40 @@ class ClienteRepository @Inject constructor(
                 onFailureListener(exception)
             }
     }
-    override fun AdicionarCliente(model: Cliente, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (exception: Exception?) -> Unit) {
+    override fun AdicionarCliente(model: Cliente, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.CLIENTES_TABLE)
             .document(getCurrentUserId())
             .set(model, SetOptions.merge())
             .addOnSuccessListener {
-                onSuccessListener
+                onSuccessListener()
             }
             .addOnFailureListener {
-                onFailureListener
+                onFailureListener(it)
             }
     }
-    override fun AtualizarCliente(model: Cliente, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (exception: Exception?) -> Unit) {
+    override fun AtualizarCliente(model: Cliente, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.CLIENTES_TABLE)
             .document(getCurrentUserId())
             .set(model, SetOptions.merge())
             .addOnSuccessListener {
-                onSuccessListener
+                onSuccessListener()
             }
             .addOnFailureListener {
-                onFailureListener
+                onFailureListener(it)
             }
     }
-    override fun DeletarCliente(id: String, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (exception: Exception?) -> Unit) {
+    override fun DeletarCliente(id: String, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.CLIENTES_TABLE)
             .document(getCurrentUserId())
             .delete()
             .addOnSuccessListener {
-                onSuccessListener
+                onSuccessListener()
             }
             .addOnFailureListener {
-                onFailureListener
+                onFailureListener(it)
             }
     }
 
@@ -156,9 +156,9 @@ interface IClienteRepository {
     fun ObterClientes(onSuccessListener: (lista: List<Cliente>) -> Unit, onFailureListener: (exception: Exception?) -> Unit)
     fun ObterCliente(id: String, onSuccessListener: (cliente: Cliente) -> Unit, onFailureListener: (exception: Exception?) -> Unit)
     fun ObterClientePorEmail(email: String, onSuccessListener: (cliente: Cliente) -> Unit, onFailureListener: (exception: Exception?) -> Unit)
-    fun AdicionarCliente(model: Cliente, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (exception: Exception?) -> Unit)
-    fun AtualizarCliente(model: Cliente, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (exception: Exception?) -> Unit)
-    fun DeletarCliente(id: String, onSuccessListener: OnSuccessListener<Unit>, onFailureListener: (exception: Exception?) -> Unit)
+    fun AdicionarCliente(model: Cliente, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit)
+    fun AtualizarCliente(model: Cliente, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit)
+    fun DeletarCliente(id: String, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit)
 
     suspend fun ObterClientes(): List<Cliente>?
     suspend fun ObterCliente(id: String): Cliente?
