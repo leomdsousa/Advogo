@@ -4,22 +4,17 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.advogo.R
 import com.example.advogo.activities.ClienteCadastroActivity
 import com.example.advogo.activities.ClienteDetalheActivity
-import com.example.advogo.activities.ProcessoDetalheActivity
 import com.example.advogo.adapters.ClientesAdapter
-import com.example.advogo.adapters.ProcessosAdapter
 import com.example.advogo.databinding.FragmentClienteBinding
 import com.example.advogo.models.Cliente
-import com.example.advogo.models.Processo
 import com.example.advogo.repositories.IClienteRepository
 import com.example.advogo.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
@@ -64,7 +59,7 @@ class ClienteFragment : BaseFragment() {
             if (result.resultCode == Activity.RESULT_OK) {
                 if (result.data!!.hasExtra(Constants.FROM_CLIENTE_ACTIVITY)) {
                     clienteRepository.ObterClientes(
-                        { lista -> setClientesToUI(lista!! as ArrayList<Cliente>) },
+                        { lista -> setClientesToUI(lista as ArrayList<Cliente>) },
                         { ex -> null } //TODO("Imlementar OnFailure")
                     )
                 }
@@ -84,14 +79,14 @@ class ClienteFragment : BaseFragment() {
             binding.rvClientsList.layoutManager = LinearLayoutManager(binding.root.context)
             binding.rvClientsList.setHasFixedSize(true)
 
-            val adapter = ClientesAdapter(binding.root.context, lista)
+            val adapter = ClientesAdapter(binding.root.context, lista, true)
             binding.rvClientsList.adapter = adapter
 
             adapter.setOnItemClickListener(object :
                 ClientesAdapter.OnItemClickListener {
-                override fun onClick(model: Cliente, position: Int, acao: String?) {
+                override fun onClick(cliente: Cliente, position: Int, acao: String?) {
                     val intent = Intent(binding.root.context, ClienteDetalheActivity::class.java)
-                    intent.putExtra(Constants.CLIENTE_PARAM, model)
+                    intent.putExtra(Constants.CLIENTE_PARAM, cliente)
                     startActivity(intent)
                 }
             })

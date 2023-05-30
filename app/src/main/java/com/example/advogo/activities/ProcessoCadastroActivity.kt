@@ -205,6 +205,7 @@ class ProcessoCadastroActivity : BaseActivity() {
         CoroutineScope(Dispatchers.Main).launch {
             val processosStatusDeferred = async { processoStatusRepository.ObterProcessoStatus() }
             processosStatus = processosStatusDeferred.await()!!
+            (processosStatus as MutableList<ProcessoStatus>).add(0, ProcessoStatus(status = "Selecione"))
 
             val adapter = ProcessosStatusAdapter(this@ProcessoCadastroActivity, processosStatus)
             spinnerStatus.adapter = adapter
@@ -231,6 +232,7 @@ class ProcessoCadastroActivity : BaseActivity() {
         CoroutineScope(Dispatchers.Main).launch {
             val processosTiposDeferred = async { processoTipoRepository.ObterProcessosTipos() }
             processosTipos = processosTiposDeferred.await()!!
+            (processosTipos as MutableList<ProcessoTipo>).add(0, ProcessoTipo(tipo = "Selecione"))
 
             val adapter = ProcessosTiposAdapter(this@ProcessoCadastroActivity, processosTipos)
             spinnerTipos.adapter = adapter
@@ -376,7 +378,8 @@ class ProcessoCadastroActivity : BaseActivity() {
 
     private fun processoCadastroSuccess() {
         //TODO("hideProgressDialog()")
-        setResult(Activity.RESULT_OK)
+        intent.putExtra(Constants.FROM_PROCESSO_ACTIVITY, Constants.FROM_PROCESSO_ACTIVITY)
+        setResult(Activity.RESULT_OK, intent)
         finish()
     }
 

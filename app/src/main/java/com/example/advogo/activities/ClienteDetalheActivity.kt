@@ -115,9 +115,9 @@ class ClienteDetalheActivity : BaseActivity() {
         val cliente = Cliente(
             id = clienteDetalhes.id,
             nome = (if (binding.etNome.text.toString() != clienteDetalhes.nome) binding.etNome.text.toString() else clienteDetalhes.nome),
-            cpf = (if (binding.etCpf.text.toString() != clienteDetalhes.cpf) binding.etEmail.text.toString() else clienteDetalhes.nome),
-            email = (if (binding.etEmail.text.toString() != clienteDetalhes.email) binding.etCpf.text.toString() else clienteDetalhes.cpf),
-            endereco = (if (binding.etEndereco.text.toString() != clienteDetalhes.endereco) binding.etEmail.text.toString() else clienteDetalhes.email),
+            cpf = (if (binding.etCpf.text.toString() != clienteDetalhes.cpf) binding.etCpf.text.toString() else clienteDetalhes.cpf),
+            email = (if (binding.etEmail.text.toString() != clienteDetalhes.email) binding.etEmail.text.toString() else clienteDetalhes.email),
+            endereco = (if (binding.etEndereco.text.toString() != clienteDetalhes.endereco) binding.etEndereco.text.toString() else clienteDetalhes.endereco),
             enderecoNumero = (if (binding.etEnderecoNumero.text.toString() != clienteDetalhes.enderecoNumero.toString()) binding.etEnderecoNumero.text.toString() else clienteDetalhes.enderecoNumero.toString()),
             enderecoBairro = (if (binding.etBairro.text.toString() != clienteDetalhes.enderecoBairro.toString()) binding.etBairro.text.toString() else clienteDetalhes.enderecoBairro.toString()),
             enderecoCidade = (if (binding.etEnderecoCidade.text.toString() != clienteDetalhes.enderecoCidade.toString()) binding.etEnderecoCidade.text.toString() else clienteDetalhes.enderecoCidade.toString()),
@@ -133,7 +133,7 @@ class ClienteDetalheActivity : BaseActivity() {
 
     private fun deletarCliente() {
         clienteRepository.DeletarCliente(
-            clienteDetalhes.id!!,
+            clienteDetalhes.id,
             { deletarClienteSuccess() },
             { deletarClienteFailure() }
         )
@@ -220,7 +220,8 @@ class ClienteDetalheActivity : BaseActivity() {
 
     private fun clienteCadastroSuccess() {
         //TODO("hideProgressDialog()")
-        setResult(Activity.RESULT_OK)
+        intent.putExtra(Constants.FROM_CLIENTE_ACTIVITY, Constants.FROM_CLIENTE_ACTIVITY)
+        setResult(Activity.RESULT_OK, intent)
         finish()
     }
 
@@ -253,6 +254,8 @@ class ClienteDetalheActivity : BaseActivity() {
 
     private fun deletarClienteSuccess() {
         //TODO("hideProgressDialog()")
+        intent.putExtra(Constants.FROM_CLIENTE_ACTIVITY, Constants.FROM_CLIENTE_ACTIVITY)
+        setResult(Activity.RESULT_OK, intent)
         finish()
     }
 

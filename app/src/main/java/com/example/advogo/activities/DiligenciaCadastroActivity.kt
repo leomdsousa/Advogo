@@ -194,6 +194,7 @@ class DiligenciaCadastroActivity : BaseActivity() {
         CoroutineScope(Dispatchers.Main).launch {
             val diligenciaStatusDeferred = async { diligenciaStatusRepository.ObterDiligenciasStatus() }
             diligenciaStatus = diligenciaStatusDeferred.await()!!
+            (diligenciaStatus as MutableList<DiligenciaStatus>).add(0, DiligenciaStatus(status = "Selecione"))
 
             val adapter = DiligenciasStatusAdapter(this@DiligenciaCadastroActivity, diligenciaStatus!!)
             spinnerStatus.adapter = adapter
@@ -220,6 +221,7 @@ class DiligenciaCadastroActivity : BaseActivity() {
         CoroutineScope(Dispatchers.Main).launch {
             val diligenciaTiposDeferred = async { diligenciaTipoRepository.ObterDiligenciasTipos() }
             diligenciaTipos = diligenciaTiposDeferred.await()!!
+            (diligenciaTipos as MutableList<DiligenciaTipo>).add(0, DiligenciaTipo(tipo = "Selecione"))
 
             val adapter = DiligenciasTiposAdapter(this@DiligenciaCadastroActivity, diligenciaTipos!!)
             spinnerTipos.adapter = adapter
@@ -261,7 +263,16 @@ class DiligenciaCadastroActivity : BaseActivity() {
 
         //TODO("preencher obj para add ou alterar")
         val diligencia = Diligencia(
-
+            id = "",
+            descricao = binding.etDiligenciaDescricao.text.toString(),
+            data = dataSelecionada,
+            tipo = tipoDiligenciaSelecionada,
+            status = statusDiligenciaSelecionada,
+            endereco = dataSelecionada,
+            enderecoLat = savedLatitude,
+            enderecoLong = savedLongitude,
+            processo = processoSelecionado,
+            advogado = advogadoSelecionado
         )
 
         diligenciaRepository.AdicionarDiligencia(
@@ -315,7 +326,8 @@ class DiligenciaCadastroActivity : BaseActivity() {
 
     private fun diligenciaCadastroSuccess() {
         //TODO("hideProgressDialog()")
-        setResult(Activity.RESULT_OK)
+        intent.putExtra(Constants.FROM_DILIGENCIA_ACTIVITY, Constants.FROM_DILIGENCIA_ACTIVITY)
+        setResult(Activity.RESULT_OK, intent)
         finish()
     }
 

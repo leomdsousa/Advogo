@@ -131,6 +131,7 @@ class DiligenciaDetalheActivity : BaseActivity() {
         CoroutineScope(Dispatchers.Main).launch {
             val diligenciaStatusDeferred = async { diligenciaStatusRepository.ObterDiligenciasStatus() }
             diligenciaStatus = diligenciaStatusDeferred.await()!!
+            (diligenciaStatus as MutableList<DiligenciaStatus>).add(0, DiligenciaStatus(status = "Selecione"))
 
             val adapter = DiligenciasStatusAdapter(this@DiligenciaDetalheActivity, diligenciaStatus!!)
             spinnerStatus.adapter = adapter
@@ -156,6 +157,7 @@ class DiligenciaDetalheActivity : BaseActivity() {
         CoroutineScope(Dispatchers.Main).launch {
             val diligenciaTiposDeferred = async { diligenciaTipoRepository.ObterDiligenciasTipos() }
             diligenciaTipos = diligenciaTiposDeferred.await()!!
+            (diligenciaTipos as MutableList<DiligenciaTipo>).add(0, DiligenciaTipo(tipo = "Selecione"))
 
             val adapter = DiligenciasTiposAdapter(this@DiligenciaDetalheActivity, diligenciaTipos!!)
             spinnerTipos.adapter = adapter
@@ -184,6 +186,11 @@ class DiligenciaDetalheActivity : BaseActivity() {
         binding.etDiligenciaEndereco.setText(diligencia.endereco)
 
         dataSelecionada = diligencia.data
+        processoSelecionado = diligencia.processo
+        advSelecionado = diligencia.advogado
+        tipoDiligenciaSelecionada = diligencia.tipo
+        statusDiligenciaSelecionada = diligencia.status
+
         if(!dataSelecionada.isNullOrEmpty()) {
             val fromFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
             val toFormat = SimpleDateFormat("dd/MM/yyyy", Locale("pt", "BR"))
@@ -208,8 +215,8 @@ class DiligenciaDetalheActivity : BaseActivity() {
             status = if (statusDiligenciaSelecionada != diligenciaDetalhes.status) statusDiligenciaSelecionada else diligenciaDetalhes.status,
             tipo = if (tipoDiligenciaSelecionada != diligenciaDetalhes.tipo) tipoDiligenciaSelecionada else diligenciaDetalhes.tipo,
             endereco = if (binding.etDiligenciaEndereco.text.toString() != diligenciaDetalhes.endereco) binding.etDiligenciaEndereco.text.toString() else diligenciaDetalhes.endereco,
-            enderecoLat = 0,
-            enderecoLong = 0,
+            enderecoLat = 0.0,
+            enderecoLong = 0.0,
             processo = if (binding.etDiligenciaProcesso.text.toString() != diligenciaDetalhes.processo) binding.etDiligenciaProcesso.text.toString() else diligenciaDetalhes.processo,
             advogado = if (processoSelecionado != diligenciaDetalhes.processo) processoSelecionado else diligenciaDetalhes.processo,
         )
@@ -357,7 +364,7 @@ class DiligenciaDetalheActivity : BaseActivity() {
 
     private fun deletarDiligencia() {
         diligenciaRepository.DeletarDiligencia(
-            diligenciaDetalhes.id!!,
+            diligenciaDetalhes.id,
             { deletarDiligenciaSuccess() },
             { deletarDiligenciaFailure() }
         )
@@ -407,7 +414,8 @@ class DiligenciaDetalheActivity : BaseActivity() {
 
     private fun diligenciaCadastroSuccess() {
         //TODO("hideProgressDialog()")
-        setResult(Activity.RESULT_OK)
+        intent.putExtra(Constants.FROM_DILIGENCIA_ACTIVITY, Constants.FROM_DILIGENCIA_ACTIVITY)
+        setResult(Activity.RESULT_OK, intent)
         finish()
     }
 

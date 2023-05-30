@@ -38,7 +38,7 @@ class AdvogadoRepository @Inject constructor(
     override fun ObterAdvogado(id: String, onSuccessListener: (advogado: Advogado) -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.ADVOGADOS_TABLE)
-            .document(getCurrentUserId())
+            .document(id)
             .get()
             .addOnSuccessListener { document ->
                 if (document.exists()) {
@@ -131,7 +131,7 @@ class AdvogadoRepository @Inject constructor(
     override fun DeletarAdvogado(id: String, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.ADVOGADOS_TABLE)
-            .document(getCurrentUserId())
+            .document(id)
             .delete()
             .addOnSuccessListener {
                 onSuccessListener()

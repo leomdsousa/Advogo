@@ -178,7 +178,7 @@ open class BaseActivity : AppCompatActivity() {
         }
     }
 
-    fun consegueAbrirArquivo(intent: Intent): Boolean {
+    private fun consegueAbrirArquivo(intent: Intent): Boolean {
         val packageManager = packageManager
         return intent.resolveActivity(packageManager) != null
     }

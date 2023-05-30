@@ -10,6 +10,7 @@ import com.example.advogo.models.Cliente
 import com.example.advogo.models.externals.CorreioResponse
 import com.example.advogo.repositories.ClienteRepository
 import com.example.advogo.services.CorreioApiService
+import com.example.advogo.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -43,7 +44,7 @@ class ClienteCadastroActivity : BaseActivity() {
             nome = binding.etNome.text.toString(),
             cpf = binding.etCpf.text.toString(),
             email = binding.etEmail.text.toString(),
-            //endereco = binding.etEndereco.text.toString(),
+            endereco = binding.etEnderecoRua.text.toString(),
             enderecoNumero = binding.etEnderecoNumero.text.toString(),
             enderecoCidade = binding.etEnderecoCidade.text.toString(),
             enderecoBairro = binding.etBairro.text.toString(),
@@ -59,7 +60,8 @@ class ClienteCadastroActivity : BaseActivity() {
 
     private fun clienteCadastroSuccess() {
         //TODO("hideProgressDialog()")
-        setResult(Activity.RESULT_OK)
+        intent.putExtra(Constants.FROM_CLIENTE_ACTIVITY, Constants.FROM_CLIENTE_ACTIVITY)
+        setResult(Activity.RESULT_OK, intent)
         finish()
     }
 

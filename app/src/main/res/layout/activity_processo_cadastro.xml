@@ -81,10 +81,10 @@
                             android:id="@+id/etNumeroProcesso"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="text|number"
+                            android:inputType="text"
                             android:hint="@string/hintNumeroProcessoDescription"
                             android:textSize="@dimen/etTextSize"
-                            android:maxLength="20"
+                            android:digits="abcdefghijklmnopqrstuvwxyz1234567890"
                             app:mask="_______-__.____._.__.____"
                             app:maskCharacter="_"
                             app:maskStyle="normal" />

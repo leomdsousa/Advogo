@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">AdvoGo</string>
     <string name="title_activity_map">Google Maps</string>
     <string name="google_maps_api_key">AIzaSyClSagttHxMtRJQ9XPUyiKyq0r3SKuBxdk</string>
@@ -22,7 +22,7 @@
     <string name="confirmacaoDeletarDiligencia">Deseja deletar a diligência \'%1$s\'?</string>
 
     <!--HINT-->
-    <string name="hintProcessoName">Nome*</string>
+    <string name="hintProcessoName">Nome</string>
     <string name="hintProcessoDescription">Descrição</string>
     <string name="hintNumeroProcessoDescription">Nº do processo</string>
     <string name="hintTipoDescription">Tipo do processo</string>
@@ -32,7 +32,7 @@
     <string name="hintAdvDescription">Selecione o advogado</string>
     <string name="hintDiligenciasDescription">Diligências</string>
     <string name="hintCpf">CPF</string>
-    <string name="hintCep">Digite o CEP: </string>
+    <string name="hintCep">Digite o CEP</string>
 
     <string name="hintEndereco">Endereço</string>
     <string name="hintEnderecoOuCep">Rua ou CEP</string>
@@ -57,7 +57,7 @@
     <string name="navDeslogar">Sair</string>
 
     <!--GERAL-->
-    <string name="aguardePorfavor">Aguarde por favor...</string>
+    <string name="aguardePorfavor" tools:ignore="TypographyEllipsis">Aguarde por favor...</string>
     <string name="cliqueNovamente">Clique novamente.</string>
     <string name="nenhumProcessoEncontrado">Nenhum processo encontrado!</string>
     <string name="nenhumClienteEncontrado">Nenhum cliente encontrado!</string>

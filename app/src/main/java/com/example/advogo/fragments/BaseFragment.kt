@@ -6,18 +6,17 @@ import com.google.firebase.auth.FirebaseAuth
 import javax.inject.Inject
 
 open class BaseFragment : Fragment() {
-    //@Inject private lateinit var progressDialog: ProgressDialog
-
 //    class BaseFragment @Inject constructor(
 //        private val progressDialog: ProgressDialog
 //    ) { }
+//        @Inject lateinit var progressDialog: ProgressDialog
 
 //    fun showProgressDialog() {
 //        progressDialog.show()
 //    }
 //
 //    fun hideProgressDialog() {
-//        progressDialog.show()
+//        progressDialog.hide()
 //    }
 
     fun getCurrentUserID(): String {

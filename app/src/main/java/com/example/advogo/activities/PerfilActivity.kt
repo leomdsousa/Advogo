@@ -225,12 +225,8 @@ class PerfilActivity : BaseActivity() {
 
     fun atualizarPerfilSuccess() {
         //TODO("Fechar Progress Dialog")
-
-        var intent = Intent(this@PerfilActivity, MainActivity::class.java)
         intent.putExtra(Constants.FROM_PERFIL_ACTIVITY, Constants.FROM_PERFIL_ACTIVITY)
-
-        startActivity(intent)
-//        //setResult(Activity.RESULT_OK)
+        setResult(Activity.RESULT_OK, intent)
         finish()
     }
 }

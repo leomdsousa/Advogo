@@ -84,8 +84,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         tabLayout = findViewById(R.id.tabLayout)
 
         val adapter = TabsAdapter(this)
-        adapter.addFragment(ClienteFragment(), "Clientes")
         adapter.addFragment(ProcessosFragment(), "Processos")
+        adapter.addFragment(ClienteFragment(), "Clientes")
         //adapter.addFragment(DiligenciasFragment(), "Eventos")
         viewPager.adapter = adapter
 

@@ -2,23 +2,26 @@ package com.example.advogo.adapters
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.service.autofill.RegexValidator
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.example.advogo.R
 import com.example.advogo.databinding.ItemClienteBinding
-import com.example.advogo.databinding.ItemProcessoBinding
 import com.example.advogo.models.Cliente
-import com.example.advogo.models.Processo
 import com.example.advogo.utils.Constants
+
 
 open class ClientesAdapter(
     private val context: Context,
-    private var list: ArrayList<Cliente>
+    private var list: ArrayList<Cliente>,
+    private val exibirIconeTelefone: Boolean = false
 ): RecyclerView.Adapter<ClientesAdapter.MyViewHolder>() {
     private var onItemClickListener: OnItemClickListener? = null
+    private val regexTelefone = Regex("(\\+55\\s?)?\\(\\d{2}\\)\\s?\\d{4,5}-\\d{4}")
 
     inner class MyViewHolder(private val binding: ItemClienteBinding)
         : RecyclerView.ViewHolder(binding.root) {
@@ -34,6 +37,20 @@ open class ClientesAdapter(
                     binding.ivSelectedCliente.visibility = View.VISIBLE
                 } else {
                     binding.ivSelectedCliente.visibility = View.GONE
+                }
+
+                if(exibirIconeTelefone
+                    && (item.telefone != null && regexTelefone.matches(item.telefone!!))
+                ) {
+                    binding.imageTelefone.visibility = View.VISIBLE
+                    binding.imageTelefone.setOnClickListener { _ ->
+                        val numeroTelefone = item.telefone!!
+                        val uri: Uri = Uri.parse("tel:$numeroTelefone")
+                        val intent = Intent(Intent.ACTION_DIAL, uri)
+                        context.startActivity(intent)
+                    }
+                } else {
+                    binding.imageTelefone.visibility = View.GONE
                 }
 
                 binding.root.setOnClickListener {

@@ -142,8 +142,7 @@ class DiligenciaRepository @Inject constructor(
     override fun AdicionarDiligencia(model: Diligencia, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.DILIGENCIAS_TABLE)
-            .document(model.id!!)
-            .set(model, SetOptions.merge())
+            .add(model)
             .addOnSuccessListener {
                 onSuccessListener()
             }
@@ -154,7 +153,7 @@ class DiligenciaRepository @Inject constructor(
     override fun AtualizarDiligencia(model: Diligencia, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.DILIGENCIAS_TABLE)
-            .document(model.id!!)
+            .document(model.id)
             .set(model, SetOptions.merge())
             .addOnSuccessListener {
                 onSuccessListener()

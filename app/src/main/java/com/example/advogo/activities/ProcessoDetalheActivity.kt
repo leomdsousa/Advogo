@@ -133,6 +133,7 @@ class ProcessoDetalheActivity : BaseActivity() {
         CoroutineScope(Dispatchers.Main).launch {
             val processosStatusDeferred = async { processoStatusRepository.ObterProcessoStatus() }
             processosStatus = processosStatusDeferred.await()!!
+            (processosStatus as MutableList<ProcessoStatus>).add(0, ProcessoStatus(status = "Selecione"))
 
             val adapter = ProcessosStatusAdapter(this@ProcessoDetalheActivity, processosStatus)
             spinnerStatus.adapter = adapter
@@ -159,6 +160,7 @@ class ProcessoDetalheActivity : BaseActivity() {
         CoroutineScope(Dispatchers.Main).launch {
             val processosTiposDeferred = async { processoTipoRepository.ObterProcessosTipos() }
             processosTipos = processosTiposDeferred.await()!!
+            (processosTipos as MutableList<ProcessoTipo>).add(0, ProcessoTipo(tipo = "Selecione"))
 
             val adapter = ProcessosTiposAdapter(this@ProcessoDetalheActivity, processosTipos)
             spinnerTipos.adapter = adapter
@@ -236,7 +238,7 @@ class ProcessoDetalheActivity : BaseActivity() {
             tipo = (if (tipoProcessoSelecionado != processoDetalhes.tipo) tipoProcessoSelecionado else processoDetalhes.tipo),
             status = (if (statusProcessoSelecionado != processoDetalhes.status) statusProcessoSelecionado else processoDetalhes.status),
             data = processoDetalhes.data,
-            imagem = (if (imagemSelecionadaURL!!.isNotEmpty() && imagemSelecionadaURL != processoDetalhes.imagem) imagemSelecionadaURL else processoDetalhes.imagem),
+            imagem = (if (imagemSelecionadaURL != processoDetalhes.imagem) imagemSelecionadaURL else processoDetalhes.imagem),
             cliente = (if (clienteSelecionado != processoDetalhes.cliente.toString()) clienteSelecionado else processoDetalhes.cliente.toString()),
             advogado = (if (advSelecionado != processoDetalhes.advogado) advSelecionado else processoDetalhes.advogado),
         )
@@ -339,7 +341,12 @@ class ProcessoDetalheActivity : BaseActivity() {
         binding.etAdv.setText(processo.advogadoObj?.nome)
         binding.etCliente.setText(processo.clienteObj?.nome)
 
+        advSelecionado = processoDetalhes.advogado
+        clienteSelecionado = processoDetalhes.cliente
+        tipoProcessoSelecionado = processoDetalhes.tipo
+        statusProcessoSelecionado = processoDetalhes.status
         dataSelecionada = processoDetalhes.data
+
         if(!dataSelecionada.isNullOrEmpty()) {
             val fromFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
             val toFormat = SimpleDateFormat("dd/MM/yyyy", Locale("pt", "BR"))
@@ -453,7 +460,8 @@ class ProcessoDetalheActivity : BaseActivity() {
 
     private fun atualizarProcessoSuccess() {
         //TODO("hideProgressDialog()")
-        setResult(RESULT_OK)
+        intent.putExtra(Constants.FROM_PROCESSO_ACTIVITY, Constants.FROM_PROCESSO_ACTIVITY)
+        setResult(Activity.RESULT_OK, intent)
         finish()
     }
 
@@ -463,6 +471,8 @@ class ProcessoDetalheActivity : BaseActivity() {
 
     private fun deletarProcessoSuccess() {
         //TODO("hideProgressDialog()")
+        intent.putExtra(Constants.FROM_PROCESSO_ACTIVITY, Constants.FROM_PROCESSO_ACTIVITY)
+        setResult(Activity.RESULT_OK, intent)
         finish()
     }
 

@@ -107,8 +107,7 @@ class ClienteRepository @Inject constructor(
     override fun AdicionarCliente(model: Cliente, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.CLIENTES_TABLE)
-            .document(getCurrentUserId())
-            .set(model, SetOptions.merge())
+            .add(model)
             .addOnSuccessListener {
                 onSuccessListener()
             }
@@ -119,7 +118,7 @@ class ClienteRepository @Inject constructor(
     override fun AtualizarCliente(model: Cliente, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.CLIENTES_TABLE)
-            .document(getCurrentUserId())
+            .document(model.id)
             .set(model, SetOptions.merge())
             .addOnSuccessListener {
                 onSuccessListener()
@@ -131,7 +130,7 @@ class ClienteRepository @Inject constructor(
     override fun DeletarCliente(id: String, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.CLIENTES_TABLE)
-            .document(getCurrentUserId())
+            .document(id)
             .delete()
             .addOnSuccessListener {
                 onSuccessListener()
