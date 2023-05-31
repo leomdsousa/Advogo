@@ -53,7 +53,12 @@ object Constants {
     const val TELEFONES_TIPOS_ID = "_id"
     const val TELEFONES_TIPOS_TIPO = "tipo"
 
-    const val ENDERECOS_TABLE = "telefones"
+    const val ENDERECOS_TABLE = "enderecos"
+
+    const val ANEXOS_TABLE = "anexos"
+    const val ANEXOS_ID = "_id"
+    const val ANEXOS_NOME = "nome"
+    const val ANEXOS_URI = "uri"
 
     //Shared
     const val SELECIONAR = "SELECIONAR"

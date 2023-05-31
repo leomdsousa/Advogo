@@ -11,12 +11,10 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.advogo.activities.DiligenciaCadastroActivity
-import com.example.advogo.activities.ProcessoDetalheActivity
-import com.example.advogo.adapters.ProcessosAdapter
+import com.example.advogo.activities.DiligenciaDetalheActivity
+import com.example.advogo.adapters.DiligenciasAdapter
 import com.example.advogo.databinding.FragmentDiligenciasBinding
-import com.example.advogo.models.Cliente
 import com.example.advogo.models.Diligencia
-import com.example.advogo.models.Processo
 import com.example.advogo.repositories.IDiligenciaRepository
 import com.example.advogo.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
@@ -45,7 +43,7 @@ class DiligenciasFragment : BaseFragment() {
 
         binding.fabDiligenciaCadastro.setOnClickListener {
             val intent = Intent(binding.root.context, DiligenciaCadastroActivity::class.java)
-            intent.putExtra(Constants.FROM_CLIENTE_ACTIVITY, Constants.FROM_CLIENTE_ACTIVITY)
+            intent.putExtra(Constants.FROM_DILIGENCIA_ACTIVITY, Constants.FROM_DILIGENCIA_ACTIVITY)
             resultLauncher.launch(intent)
         }
 
@@ -71,31 +69,31 @@ class DiligenciasFragment : BaseFragment() {
     private fun setDiligenciasToUI(lista: ArrayList<Diligencia>) {
         //TODO("hideProgressDialog()")
 
-//        CoroutineScope(Dispatchers.Main).launch {
-//            if(lista.size > 0) {
-//                binding.rvBoardsList.visibility = View.VISIBLE
-//                binding.tvNoBoardsAvailable.visibility = View.GONE
-//
-//                binding.rvBoardsList.layoutManager = LinearLayoutManager(binding.root.context)
-//                binding.rvBoardsList.setHasFixedSize(true)
-//
-//                val adapter = ProcessosAdapter(binding.root.context, lista)
-//                binding.rvBoardsList.adapter = adapter
-//
-//                adapter.setOnItemClickListener(object :
-//                    ProcessosAdapter.OnItemClickListener {
-//                    override fun onClick(model: Processo, position: Int) {
-//                        val intent = Intent(binding.root.context, ProcessoDetalheActivity::class.java)
-//                        intent.putExtra(Constants.PROCESSO_PARAM, model)
-//                        startActivity(intent)
-//                    }
-//                })
-//
-//            } else {
-//                binding.rvBoardsList.visibility = View.GONE
-//                binding.tvNoBoardsAvailable.visibility = View.VISIBLE
-//            }
-//        }
+        CoroutineScope(Dispatchers.Main).launch {
+            if(lista.size > 0) {
+                binding.rvDiligenciasList.visibility = View.VISIBLE
+                binding.tvNoDiligenciasEncontrado.visibility = View.GONE
+
+                binding.rvDiligenciasList.layoutManager = LinearLayoutManager(binding.root.context)
+                binding.rvDiligenciasList.setHasFixedSize(true)
+
+                val adapter = DiligenciasAdapter(binding.root.context, lista)
+                binding.rvDiligenciasList.adapter = adapter
+
+                adapter.setOnItemClickListener(object :
+                    DiligenciasAdapter.OnItemClickListener {
+                    override fun onClick(diligencia: Diligencia, position: Int) {
+                        val intent = Intent(binding.root.context, DiligenciaDetalheActivity::class.java)
+                        intent.putExtra(Constants.DILIGENCIA_PARAM, diligencia)
+                        startActivity(intent)
+                    }
+                })
+
+            } else {
+                binding.rvDiligenciasList.visibility = View.GONE
+                binding.tvNoDiligenciasEncontrado.visibility = View.VISIBLE
+            }
+        }
     }
 
 //    calendarView.setOnDateChangedListener { widget, date, selected ->

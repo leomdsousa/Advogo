@@ -8,6 +8,7 @@ import kotlinx.parcelize.Parcelize
 data class Anexo(
     @DocumentId
     var id: String = "",
-    var nome: String? = null
+    var nome: String? = null,
+    var uri: String? = null
 ): Parcelable {
 }

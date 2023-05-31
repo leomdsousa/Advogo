@@ -27,7 +27,7 @@
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/activity_cliente_cadastro.xml" value="0.25" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/activity_cliente_detalhe.xml" value="0.17" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/activity_diligencia_cadastro.xml" value="0.2" />
-        <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/activity_diligencia_detalhe.xml" value="0.2422062350119904" />
+        <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/activity_diligencia_detalhe.xml" value="0.21212121212121213" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/activity_intro.xml" value="0.196513470681458" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/activity_main.xml" value="0.1" />
@@ -41,6 +41,8 @@
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/dialog_list.xml" value="0.1" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/dialog_progress.xml" value="0.1" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/fragment_cliente.xml" value="0.1" />
+        <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/fragment_diligencia_detalhe.xml" value="0.1" />
+        <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/fragment_diligencias.xml" value="0.109375" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/fragment_eventos.xml" value="0.22" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/fragment_map.xml" value="0.1" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/fragment_processo_anexo.xml" value="0.1546875" />

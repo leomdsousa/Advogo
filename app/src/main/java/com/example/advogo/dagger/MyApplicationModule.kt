@@ -40,11 +40,21 @@ object MyApplicationModule {
     @Provides
     @Singleton
     fun provideDiligenciaRepository(
+        context: Context,
         firestore: FirebaseFirestore,
         processoRepository: Provider<ProcessoRepository>,
-        advogadoRepository: Provider<AdvogadoRepository>
+        advogadoRepository: Provider<AdvogadoRepository>,
+        tipoDiligenciaRepository: DiligenciaTipoRepository,
+        statusDiligenciaRepository: DiligenciaStatusRepository
     ): IDiligenciaRepository {
-        return DiligenciaRepository(firestore, processoRepository, advogadoRepository)
+        return DiligenciaRepository(
+            context,
+            firestore,
+            processoRepository,
+            advogadoRepository,
+            tipoDiligenciaRepository,
+            statusDiligenciaRepository
+        )
     }
 
     @Provides
@@ -112,5 +122,11 @@ object MyApplicationModule {
     @Singleton
     fun provideDiligenciaStatusRepository(firestore: FirebaseFirestore): IDiligenciaStatusRepository {
         return DiligenciaStatusRepository(firestore)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAnexoRepository(firestore: FirebaseFirestore): IAnexoRepository {
+        return AnexoRepository(firestore)
     }
 }

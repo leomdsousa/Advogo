@@ -161,6 +161,23 @@ class ProcessoRepository @Inject constructor(
                 continuation.resumeWithException(exception)
             }
     }
+    override suspend fun ObterProcesso(id: String): Processo? = suspendCoroutine { continuation ->
+        firebaseStore
+            .collection(Constants.PROCESSOS_TABLE)
+            .document(id)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    val resultado = document.toObject(Processo::class.java)
+                    continuation.resume(resultado)
+                } else {
+                    continuation.resume(null)
+                }
+            }
+            .addOnFailureListener { exception ->
+                continuation.resumeWithException(exception)
+            }
+    }
 }
 
 interface IProcessoRepository {
@@ -172,4 +189,5 @@ interface IProcessoRepository {
     fun DeletarProcesso(id: String, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
 
     suspend fun ObterProcessos(): List<Processo>?
+    suspend fun ObterProcesso(id: String): Processo?
 }

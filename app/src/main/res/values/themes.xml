@@ -58,4 +58,8 @@
         <item name="android:textColor">@color/colorSecondary</item>
         <item name="android:textStyle">bold</item>
     </style>
+
+    <style name="TextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+<!--        <item name="android:textColor">YOUR_TEXT_COLOR</item>-->
+    </style>
 </resources>

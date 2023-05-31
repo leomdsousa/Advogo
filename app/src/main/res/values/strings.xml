@@ -62,6 +62,7 @@
     <string name="nenhumProcessoEncontrado">Nenhum processo encontrado!</string>
     <string name="nenhumClienteEncontrado">Nenhum cliente encontrado!</string>
     <string name="nenhumaDiligenciaEncontrada">Nenhuma diligência encontrada!</string>
+    <string name="nenhumAnexoEncontrado">Nenhum anexo encontrado!</string>
 
     <!--INTRO-->
     <string name="imageContentDescription">Imagem</string>

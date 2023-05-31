@@ -5,6 +5,8 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.advogo.R
 import com.example.advogo.databinding.ItemDiligenciaBinding
 import com.example.advogo.models.Diligencia
 
@@ -19,17 +21,12 @@ open class DiligenciasAdapter(
         @SuppressLint("SetTextI18n")
         fun bind(item: Diligencia, position: Int) {
             binding.apply {
-//                Glide
-//                    .with(context)
-//                    .load(item.imagem)
-//                    .centerCrop()
-//                    .placeholder(R.drawable.ic_diligencia_place_holder)
-//                    .into(binding.ivdiligenciaImage)
-//
-//                binding.tvDescricaodiligencia.text = item.descricao
-//                binding.tvNumerodiligencia.text = "Nº diligencia: ${item.numero}"
-//                binding.tvTipodiligencia.text = "Tipo: ${item.tipoObj?.tipo}"
-//                binding.tvStatusdiligencia.text = "Status: ${item.statusObj?.status}"
+                binding.tvDescricaoDiligencia.text = item.descricao
+                binding.tvProcessoDiligencia.text = "Nº diligencia: ${item.processo}"
+                binding.tvAdvDiligencia.text = "Advogado: ${item.advogadoObj?.nome} (${item.advogadoObj?.oab})"
+                binding.tvDataDiligencia.text = "Data: ${item.data}"
+                binding.tvTipoDiligencia.text = "Tipo: ${item.tipoObj?.tipo}"
+                binding.tvStatusDiligencia.text = "Status: ${item.statusObj?.status}"
 
                 binding.root.setOnClickListener {
                     if (onItemClickListener != null) {

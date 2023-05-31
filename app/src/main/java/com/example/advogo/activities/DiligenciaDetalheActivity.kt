@@ -21,6 +21,7 @@ import com.example.advogo.databinding.ActivityDiligenciaDetalheBinding
 import com.example.advogo.models.*
 import com.example.advogo.repositories.*
 import com.example.advogo.utils.Constants
+import com.example.advogo.utils.Constants.DILIGENCIA_MAP
 import com.example.projmgr.dialogs.AdvogadosDialog
 import com.example.projmgr.dialogs.ProcessosDialog
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -101,6 +102,12 @@ class DiligenciaDetalheActivity : BaseActivity() {
 
         binding.etDiligenciaAdvogado.setOnClickListener {
             advogadosDialog()
+        }
+
+        binding.btnGoogleMaps.setOnClickListener {
+            val intent = Intent(this, MapActivity::class.java)
+            intent.putExtra(Constants.DILIGENCIA_MAP, diligenciaDetalhes)
+            startActivity(intent)
         }
 
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->

@@ -1,19 +1,31 @@
 package com.example.advogo.repositories
 
+import android.content.Context
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import com.example.advogo.models.Diligencia
 import com.example.advogo.utils.Constants
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Provider
 
 
 class DiligenciaRepository @Inject constructor(
+    context: Context,
     private val firebaseStore: FirebaseFirestore,
     private val processoRepository: Provider<ProcessoRepository>,
-    private val advogadoRepository: Provider<AdvogadoRepository>
+    private val advogadoRepository: Provider<AdvogadoRepository>,
+    private val tipoDiligenciaRepository: DiligenciaTipoRepository,
+    private val statusDiligenciaRepository: DiligenciaStatusRepository
 ) : IDiligenciaRepository {
+    private val coroutineScope: CoroutineScope = (context as? LifecycleOwner)?.lifecycleScope ?: GlobalScope
+
     override fun ObterDiligencias(onSuccessListener: (lista: List<Diligencia>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.DILIGENCIAS_TABLE)
@@ -22,21 +34,23 @@ class DiligenciaRepository @Inject constructor(
                 if (!document.isEmpty) {
                     val diligencias = document.toObjects(Diligencia::class.java)
 
-                    for (item in diligencias) {
-                        processoRepository.get().ObterProcesso(
-                            item.processo!!,
-                            { ret -> item.processoObj = ret },
-                            { null } //TODO("Implementar")
-                        )
+                    coroutineScope.launch {
+                        if (diligencias.isNotEmpty()) {
+                            for (item in diligencias) {
+                                val advogadoDeferred = async { advogadoRepository.get().ObterAdvogado(item.advogado!!) }
+                                val processoDeferred = async { processoRepository.get().ObterProcesso(item.processo!!) }
+                                val statusDeferred = async { statusDiligenciaRepository.ObterDiligenciaStatus(item.status!!) }
+                                val tipoDeferred = async { tipoDiligenciaRepository.ObterDiligenciaTipo(item.tipo!!) }
 
-                        advogadoRepository.get().ObterAdvogado(
-                            item.advogado!!,
-                            { ret -> item.advogadoObj = ret },
-                            { null } //TODO("Implementar")
-                        )
+                                item.advogadoObj = advogadoDeferred.await()
+                                item.processoObj = processoDeferred.await()
+                                item.statusObj = statusDeferred.await()
+                                item.tipoObj = tipoDeferred.await()
+                            }
+
+                            onSuccessListener(diligencias)
+                        }
                     }
-
-                    onSuccessListener(diligencias)
                 } else {
                     onFailureListener(null)
                 }
@@ -54,19 +68,19 @@ class DiligenciaRepository @Inject constructor(
                 if (document.exists()) {
                     val diligencia = document.toObject(Diligencia::class.java)!!
 
-                    processoRepository.get().ObterProcesso(
-                        diligencia.processo!!,
-                        { ret -> diligencia.processoObj = ret },
-                        { null } //TODO("Implementar")
-                    )
+                    coroutineScope.launch {
+                        val advogadoDeferred = async { advogadoRepository.get().ObterAdvogado(diligencia.advogado!!) }
+                        val processoDeferred = async { processoRepository.get().ObterProcesso(diligencia.processo!!) }
+                        val statusDeferred = async { statusDiligenciaRepository.ObterDiligenciaStatus(diligencia.status!!) }
+                        val tipoDeferred = async { tipoDiligenciaRepository.ObterDiligenciaTipo(diligencia.tipo!!) }
 
-                    advogadoRepository.get().ObterAdvogado(
-                        diligencia.advogado!!,
-                        { ret -> diligencia.advogadoObj = ret },
-                        { null } //TODO("Implementar")
-                    )
+                        diligencia.advogadoObj = advogadoDeferred.await()
+                        diligencia.processoObj = processoDeferred.await()
+                        diligencia.statusObj = statusDeferred.await()
+                        diligencia.tipoObj = tipoDeferred.await()
 
-                    onSuccessListener(diligencia)
+                        onSuccessListener(diligencia)
+                    }
                 } else {
                     onFailureListener(null)
                 }
@@ -84,21 +98,23 @@ class DiligenciaRepository @Inject constructor(
                 if (!document.isEmpty) {
                     val diligencias = document.toObjects(Diligencia::class.java)!!
 
-                    for (item in diligencias) {
-                        processoRepository.get().ObterProcesso(
-                            item.processo!!,
-                            { ret -> item.processoObj = ret },
-                            { null } //TODO("Implementar")
-                        )
+                    coroutineScope.launch {
+                        if (diligencias.isNotEmpty()) {
+                            for (item in diligencias) {
+                                val advogadoDeferred = async { advogadoRepository.get().ObterAdvogado(item.advogado!!) }
+                                val processoDeferred = async { processoRepository.get().ObterProcesso(item.processo!!) }
+                                val statusDeferred = async { statusDiligenciaRepository.ObterDiligenciaStatus(item.status!!) }
+                                val tipoDeferred = async { tipoDiligenciaRepository.ObterDiligenciaTipo(item.tipo!!) }
 
-                        advogadoRepository.get().ObterAdvogado(
-                            item.advogado!!,
-                            { ret -> item.advogadoObj = ret },
-                            { null } //TODO("Implementar")
-                        )
+                                item.advogadoObj = advogadoDeferred.await()
+                                item.processoObj = processoDeferred.await()
+                                item.statusObj = statusDeferred.await()
+                                item.tipoObj = tipoDeferred.await()
+                            }
+
+                            onSuccessListener(diligencias)
+                        }
                     }
-
-                    onSuccessListener(diligencias)
                 } else {
                     onFailureListener(null)
                 }
@@ -114,23 +130,25 @@ class DiligenciaRepository @Inject constructor(
             .get()
             .addOnSuccessListener { document ->
                 if (!document.isEmpty) {
-                    val diligencias = document.toObjects(Diligencia::class.java)!!
+                    val diligencias = document.toObjects(Diligencia::class.java)
 
-                    for (item in diligencias) {
-                        processoRepository.get().ObterProcesso(
-                            item.processo!!,
-                            { ret -> item.processoObj = ret },
-                            { null } //TODO("Implementar")
-                        )
+                    coroutineScope.launch {
+                        if (diligencias.isNotEmpty()) {
+                            for (item in diligencias) {
+                                val advogadoDeferred = async { advogadoRepository.get().ObterAdvogado(item.advogado!!) }
+                                val processoDeferred = async { processoRepository.get().ObterProcesso(item.processo!!) }
+                                val statusDeferred = async { statusDiligenciaRepository.ObterDiligenciaStatus(item.status!!) }
+                                val tipoDeferred = async { tipoDiligenciaRepository.ObterDiligenciaTipo(item.tipo!!) }
 
-                        advogadoRepository.get().ObterAdvogado(
-                            item.advogado!!,
-                            { ret -> item.advogadoObj = ret },
-                            { null } //TODO("Implementar")
-                        )
+                                item.advogadoObj = advogadoDeferred.await()
+                                item.processoObj = processoDeferred.await()
+                                item.statusObj = statusDeferred.await()
+                                item.tipoObj = tipoDeferred.await()
+                            }
+
+                            onSuccessListener(diligencias)
+                        }
                     }
-
-                    onSuccessListener(diligencias)
                 } else {
                     onFailureListener(null)
                 }

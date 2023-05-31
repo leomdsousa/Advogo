@@ -111,12 +111,12 @@
                             android:id="@+id/etDiligenciaData"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/hintDataDescription"
-                            android:inputType="text"
                             android:clickable="false"
                             android:cursorVisible="false"
                             android:focusable="false"
                             android:focusableInTouchMode="false"
+                            android:hint="@string/hintDataDescription"
+                            android:inputType="text"
                             android:textSize="@dimen/etTextSize" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -131,11 +131,11 @@
                             android:id="@+id/etDiligenciaProcesso"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/selecionarProcesso"
-                            android:inputType="text"
                             android:cursorVisible="false"
                             android:focusable="false"
                             android:focusableInTouchMode="false"
+                            android:hint="@string/selecionarProcesso"
+                            android:inputType="text"
                             android:textSize="@dimen/etTextSize" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -162,17 +162,36 @@
                         android:layout_marginTop="@dimen/diligenciaDetalheScreenTilMarginTop"
                         android:layout_marginEnd="@dimen/diligenciaDetalheScreenTilMarginStartEnd">
 
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:id="@+id/etDiligenciaEndereco"
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/hintDiligenciaEndereco"
-                            android:inputType="text"
-                            android:clickable="false"
-                            android:cursorVisible="false"
-                            android:focusable="false"
-                            android:focusableInTouchMode="false"
-                            android:textSize="@dimen/etTextSize" />
+                            android:orientation="horizontal">
+
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/etDiligenciaEndereco"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:clickable="false"
+                                android:cursorVisible="false"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:hint="@string/hintDiligenciaEndereco"
+                                android:inputType="text"
+                                android:textSize="@dimen/etTextSize"
+                                android:background="?attr/colorControlHighlight"
+                                style="@style/TextInputLayoutStyle" />
+
+                            <ImageButton
+                                android:id="@+id/btnGoogleMaps"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/shape_button_rounded"
+                                android:contentDescription="Google Maps"
+                                android:padding="8dp"
+                                android:src="@drawable/ic_baseline_place_24" />
+
+                        </LinearLayout>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <Button

@@ -86,7 +86,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         val adapter = TabsAdapter(this)
         adapter.addFragment(ProcessosFragment(), "Processos")
         adapter.addFragment(ClienteFragment(), "Clientes")
-        //adapter.addFragment(DiligenciasFragment(), "Eventos")
+        adapter.addFragment(DiligenciasFragment(), "Eventos")
         viewPager.adapter = adapter
 
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->

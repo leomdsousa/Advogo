@@ -33,19 +33,28 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
             processo = intent.getParcelableExtra(Constants.PROCESSO_MAP) as Processo?
 
             localizacao = Localizacao(
-
+                title = "",
+                location = "",
+                latitude = 0.0,
+                longitude = 0.0
             )
-        } else if (intent.hasExtra(Constants.PROCESSO_MAP)) {
+        } else if (intent.hasExtra(Constants.DILIGENCIA_MAP)) {
             diligencia = intent.getParcelableExtra(Constants.DILIGENCIA_MAP) as Diligencia?
 
             localizacao = Localizacao(
-
+                title = diligencia!!.descricao!!,
+                location = diligencia!!.endereco!!,
+                latitude = diligencia!!.enderecoLat!!,
+                longitude = diligencia!!.enderecoLong!!
             )
         } else if (intent.hasExtra(Constants.ADVOGADO_MAP)) {
             advogado = intent.getParcelableExtra(Constants.ADVOGADO_MAP) as Advogado?
 
             localizacao = Localizacao(
-
+                title = "",
+                location = "",
+                latitude = 0.0,
+                longitude = 0.0
             )
         }
 
