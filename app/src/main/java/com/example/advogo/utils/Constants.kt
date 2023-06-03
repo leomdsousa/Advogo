@@ -35,6 +35,7 @@ object Constants {
     const val DILIGENCIAS_ID = "_id"
     const val DILIGENCIAS_PROCESSO = "processo"
     const val DILIGENCIAS_ADVOGADO = "advogado"
+    const val DILIGENCIAS_DATA = "data"
 
     const val DILIGENCIAS_STATUS_TABLE = "diligenciasStatus"
     const val DILIGENCIAS_STATUS_ID = "_id"

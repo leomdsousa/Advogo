@@ -9,10 +9,12 @@ import com.bumptech.glide.Glide
 import com.example.advogo.R
 import com.example.advogo.databinding.ItemDiligenciaBinding
 import com.example.advogo.models.Diligencia
+import java.text.SimpleDateFormat
+import java.util.*
 
 open class DiligenciasAdapter(
     private val context: Context,
-    private var list: ArrayList<Diligencia>
+    private var list: List<Diligencia>
 ): RecyclerView.Adapter<DiligenciasAdapter.MyViewHolder>() {
     private var onItemClickListener: OnItemClickListener? = null
 
@@ -22,9 +24,17 @@ open class DiligenciasAdapter(
         fun bind(item: Diligencia, position: Int) {
             binding.apply {
                 binding.tvDescricaoDiligencia.text = item.descricao
-                binding.tvProcessoDiligencia.text = "Nº diligencia: ${item.processo}"
+                binding.tvProcessoDiligencia.text = "Nº diligencia: ${item.processoObj?.numero}"
                 binding.tvAdvDiligencia.text = "Advogado: ${item.advogadoObj?.nome} (${item.advogadoObj?.oab})"
-                binding.tvDataDiligencia.text = "Data: ${item.data}"
+
+                if(!item.data.isNullOrEmpty()) {
+                    val fromFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+                    val toFormat = SimpleDateFormat("dd/MM/yyyy", Locale("pt", "BR"))
+                    val fromDate = fromFormat.parse(item.data)
+                    val data = toFormat.format(fromDate)
+                    binding.tvDataDiligencia.text = "Data: $data"
+                }
+
                 binding.tvTipoDiligencia.text = "Tipo: ${item.tipoObj?.tipo}"
                 binding.tvStatusDiligencia.text = "Status: ${item.statusObj?.status}"
 

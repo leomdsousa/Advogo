@@ -18,14 +18,21 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/divider">
 
-        <CalendarView
+        <com.prolificinteractive.materialcalendarview.MaterialCalendarView
             android:id="@+id/calendarView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white"
-            android:dateTextAppearance="@style/CalendarViewDateTextAppearance"
-            android:weekDayTextAppearance="@style/CalendarViewWeekDayTextAppearance"
-            android:weekSeparatorLineColor="@color/dividerColor" />
+             />
+
+<!--        <CalendarView-->
+<!--            android:id="@+id/calendarView"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:background="@color/white"-->
+<!--            android:dateTextAppearance="@style/CalendarViewDateTextAppearance"-->
+<!--            android:weekDayTextAppearance="@style/CalendarViewWeekDayTextAppearance"-->
+<!--            android:weekSeparatorLineColor="@color/dividerColor" />-->
 
     </com.google.android.material.card.MaterialCardView>
 
@@ -33,7 +40,7 @@
         android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="@dimen/itemProcessoDividerHeight"
-        android:background="@color/dividerColor"
+        android:background="@color/colorOnPrimary"
         app:layout_constraintTop_toBottomOf="@id/calendarCardView"
         app:layout_constraintBottom_toTopOf="@id/recyclerViewCardView" />
 
@@ -42,8 +49,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@android:color/white"
-        android:elevation="@dimen/cardViewElevation"
-        app:cardCornerRadius="@dimen/cardViewCornerRadius"
         app:layout_constraintTop_toBottomOf="@id/divider"
         app:layout_constraintBottom_toTopOf="@id/fab_diligencia_cadastro">
 

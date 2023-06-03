@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.example.advogo.models.Diligencia
+import com.example.advogo.models.DiligenciaStatus
 import com.example.advogo.utils.Constants
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.firestore.FirebaseFirestore
@@ -14,6 +15,9 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Provider
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 
 class DiligenciaRepository @Inject constructor(
@@ -192,6 +196,43 @@ class DiligenciaRepository @Inject constructor(
                 onFailureListener(it)
             }
     }
+
+    override suspend fun ObterDiligenciasPorData(data: String): List<Diligencia>? = suspendCoroutine { continuation ->
+        firebaseStore
+            .collection(Constants.DILIGENCIAS_TABLE)
+            .whereGreaterThanOrEqualTo(Constants.DILIGENCIAS_DATA, data)
+            .whereLessThanOrEqualTo(Constants.DILIGENCIAS_DATA, data)
+            .get()
+            .addOnSuccessListener { document ->
+                if (!document.isEmpty) {
+                    coroutineScope.launch {
+                        val resultado = document.toObjects(Diligencia::class.java)
+
+                        if (resultado.isNotEmpty()) {
+                            for (item in resultado) {
+                                val advogadoDeferred = async { advogadoRepository.get().ObterAdvogado(item.advogado!!) }
+                                val processoDeferred = async { processoRepository.get().ObterProcesso(item.processo!!) }
+                                val statusDeferred = async { statusDiligenciaRepository.ObterDiligenciaStatus(item.status!!) }
+                                val tipoDeferred = async { tipoDiligenciaRepository.ObterDiligenciaTipo(item.tipo!!) }
+
+                                item.advogadoObj = advogadoDeferred.await()
+                                item.processoObj = processoDeferred.await()
+                                item.statusObj = statusDeferred.await()
+                                item.tipoObj = tipoDeferred.await()
+                            }
+
+                            continuation.resume(resultado)
+                        }
+                    }
+                } else {
+                    continuation.resume(null)
+                }
+            }
+            .addOnFailureListener { exception ->
+                continuation.resumeWithException(exception)
+            }
+    }
+
 }
 
 interface IDiligenciaRepository {
@@ -202,4 +243,9 @@ interface IDiligenciaRepository {
     fun AdicionarDiligencia(model: Diligencia, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
     fun AtualizarDiligencia(model: Diligencia, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
     fun DeletarDiligencia(id: String, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+
+    suspend fun ObterDiligenciasPorData(data: String): List<Diligencia>?
+
+
 }
+

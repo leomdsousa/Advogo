@@ -17,25 +17,50 @@ import com.example.advogo.databinding.FragmentDiligenciasBinding
 import com.example.advogo.models.Diligencia
 import com.example.advogo.repositories.IDiligenciaRepository
 import com.example.advogo.utils.Constants
+import com.example.advogo.utils.DataSelecionadaDecorator
+import com.prolificinteractive.materialcalendarview.CalendarDay
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
+
 
 @AndroidEntryPoint
 class DiligenciasFragment : BaseFragment() {
     private lateinit var binding: FragmentDiligenciasBinding
     @Inject lateinit var diligenciaRepository: IDiligenciaRepository
 
+    private var diligencias: List<Diligencia> = ArrayList()
+
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentDiligenciasBinding.inflate(layoutInflater, container, false)
+
+        configurarCalendarView()
+
         return binding.root
+    }
+
+    private fun configurarCalendarView() {
+        val dataSelecionadaMap = HashMap<CalendarDay, Int>()
+
+        val decorator = DataSelecionadaDecorator(dataSelecionadaMap)
+        binding.calendarView.addDecorator(decorator)
+
+        binding.calendarView
+            .state().edit()
+            .setMinimumDate(CalendarDay.from(2023, Calendar.JANUARY + 1, 1))
+            .setMaximumDate(CalendarDay.from(2023, Calendar.DECEMBER + 1, 31))
+            .commit()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -48,9 +73,18 @@ class DiligenciasFragment : BaseFragment() {
         }
 
         diligenciaRepository.ObterDiligencias(
-            { diligencias -> setDiligenciasToUI(diligencias as ArrayList<Diligencia>) },
+            { diligencias -> setDiligenciasToUI(diligencias) },
             { null } //TODO("Implementar")
         )
+
+        binding.calendarView.setOnDateChangedListener { widget, date, selected ->
+            val data = "${date.year}-${date.month}-${date.day}"
+
+            CoroutineScope(Dispatchers.Main).launch {
+                val diligencias = obterDiligenciasPorData(data)
+                setDiligenciasToUI(diligencias)
+            }
+        }
 
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -66,11 +100,11 @@ class DiligenciasFragment : BaseFragment() {
         }
     }
 
-    private fun setDiligenciasToUI(lista: ArrayList<Diligencia>) {
+    private fun setDiligenciasToUI(lista: List<Diligencia>) {
         //TODO("hideProgressDialog()")
 
         CoroutineScope(Dispatchers.Main).launch {
-            if(lista.size > 0) {
+            if(lista.isNotEmpty()) {
                 binding.rvDiligenciasList.visibility = View.VISIBLE
                 binding.tvNoDiligenciasEncontrado.visibility = View.GONE
 
@@ -96,34 +130,10 @@ class DiligenciasFragment : BaseFragment() {
         }
     }
 
-//    calendarView.setOnDateChangedListener { widget, date, selected ->
-//        // Obter eventos para a data selecionada
-//        val events = getEventsForDate(date)
-//
-//        // Exibir eventos no ListView
-//        eventsListView.adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, events)
-//    }
+    private suspend fun obterDiligenciasPorData(data: String): List<Diligencia> {
+        return withContext(Dispatchers.Main) {
+            diligenciaRepository.ObterDiligenciasPorData(data) ?: listOf()
+        }
+    }
 
-//    fun getEventsForDate(date: Date): List<String> {
-//        // Conectar-se à base de dados MongoDB
-//        val mongoClient = MongoClient("localhost", 27017)
-//        val database = mongoClient.getDatabase("myDatabase")
-//        val collection = database.getCollection("events")
-//
-//        // Executar consulta para obter eventos para o mês selecionado
-//        val calendar = Calendar.getInstance()
-//        calendar.time = date
-//        val firstDayOfMonth = calendar.getActualMinimum(Calendar.DAY_OF_MONTH)
-//        val lastDayOfMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
-//        val query = and(
-//            gte("dueDate", firstDayOfMonth),
-//            lte("dueDate", lastDayOfMonth)
-//        )
-//        val events = mutableListOf<String>()
-//        collection.find(query).forEach {
-//            events.add(it["description"].toString())
-//        }
-//
-//        return events
-//    }
 }
