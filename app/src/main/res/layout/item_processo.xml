@@ -40,6 +40,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/primaryTextColor"
                 android:textSize="@dimen/itemProcessoDescricaoTextSize"
+                app:fontFamily="@font/montserrat_medium"
                 tools:text="Processo Descrição" />
 
             <TextView
@@ -48,6 +49,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/secondaryTextColor"
                 android:textSize="@dimen/itemProcessoNumeroTextSize"
+                app:fontFamily="@font/lato"
                 tools:text="Nº: 123456456789" />
 
             <TextView
@@ -56,6 +58,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/secondaryTextColor"
                 android:textSize="@dimen/itemProcessoTipoTextSize"
+                app:fontFamily="@font/lato"
                 tools:text="Tipo: Penal" />
 
             <TextView
@@ -64,6 +67,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/secondaryTextColor"
                 android:textSize="@dimen/itemProcessoStatusTextSize"
+                app:fontFamily="@font/lato"
                 tools:text="Status: Em Andamento" />
         </LinearLayout>
 

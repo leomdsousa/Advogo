@@ -2,6 +2,7 @@ package com.example.advogo.activities
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
@@ -13,6 +14,7 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import com.example.advogo.R
 import com.example.advogo.adapters.DiligenciasStatusAdapter
@@ -68,6 +70,7 @@ class DiligenciaDetalheActivity : BaseActivity() {
 
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityDiligenciaDetalheBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
@@ -76,7 +79,7 @@ class DiligenciaDetalheActivity : BaseActivity() {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
         obterIntentDados()
-        setupActionBar()
+        setupActionBar("Detalhe Diligência", binding.toolbarDiligenciaDetalhe)
         configurarGoogleMapPlaces()
         setupSpinners()
 
@@ -309,19 +312,6 @@ class DiligenciaDetalheActivity : BaseActivity() {
         }
     }
 
-    private fun setupActionBar() {
-        setSupportActionBar(binding.toolbarDiligenciaDetalhe)
-
-        val actionBar = supportActionBar
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true)
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_white_color_back_24dp)
-            actionBar.title = "Detalhe Diligência"
-        }
-
-        binding.toolbarDiligenciaDetalhe.setNavigationOnClickListener { onBackPressed() }
-    }
-
     private fun obterIntentDados() {
         if (intent.hasExtra(Constants.DILIGENCIA_PARAM)) {
             diligenciaDetalhes = intent.getParcelableExtra<Diligencia>(Constants.DILIGENCIA_PARAM)!!
@@ -335,6 +325,10 @@ class DiligenciaDetalheActivity : BaseActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                return true
+            }
             R.id.action_deletar_diligencia -> {
                 alertDialogDeletarDiligencia("${diligenciaDetalhes.descricao!!} (Processo ${diligenciaDetalhes.processo})")
                 return true

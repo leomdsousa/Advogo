@@ -61,6 +61,8 @@ class DiligenciasFragment : BaseFragment() {
             .setMinimumDate(CalendarDay.from(2023, Calendar.JANUARY + 1, 1))
             .setMaximumDate(CalendarDay.from(2023, Calendar.DECEMBER + 1, 31))
             .commit()
+
+        binding.calendarView.setPadding(5, 5, 5, 5)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -27,6 +27,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/primaryTextColor"
                 android:textSize="@dimen/itemDiligenciaDescricaoTextSize"
+                app:fontFamily="@font/montserrat_medium"
                 tools:text="Diligencia Descrição" />
 
             <TextView
@@ -35,6 +36,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/secondaryTextColor"
                 android:textSize="@dimen/itemDiligenciaProcessoTextSize"
+                app:fontFamily="@font/lato"
                 tools:text="Nº Processo: 123456456789" />
 
             <TextView
@@ -43,6 +45,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/secondaryTextColor"
                 android:textSize="@dimen/itemDiligenciaTipoTextSize"
+                app:fontFamily="@font/lato"
                 tools:text="Tipo: Audiência" />
 
             <TextView
@@ -51,6 +54,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/secondaryTextColor"
                 android:textSize="@dimen/itemDiligenciaAdvTextSize"
+                app:fontFamily="@font/lato"
                 tools:text="Advogado: Leonardo Monteiro de Sousa (Nº OAB)" />
 
             <TextView
@@ -59,6 +63,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/secondaryTextColor"
                 android:textSize="@dimen/itemDiligenciaDataTextSize"
+                app:fontFamily="@font/lato"
                 tools:text="Data: 12/12/2023" />
 
             <TextView
@@ -67,6 +72,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/secondaryTextColor"
                 android:textSize="@dimen/itemDiligenciaStatusTextSize"
+                app:fontFamily="@font/lato"
                 tools:text="Status: Em Andamento" />
         </LinearLayout>
     </LinearLayout>

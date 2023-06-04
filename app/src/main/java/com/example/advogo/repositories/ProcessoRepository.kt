@@ -23,7 +23,8 @@ class ProcessoRepository @Inject constructor(
     private val clienteRepository: ClienteRepository,
     private val diligenciaRepository: Provider<DiligenciaRepository>,
     private val tipoProcessoRepository: ProcessoTipoRepository,
-    private val statusProcessoRepository: ProcessoStatusRepository
+    private val statusProcessoRepository: ProcessoStatusRepository,
+    private val anexoRepository: AnexoRepository
 ): IProcessoRepository {
     private val coroutineScope: CoroutineScope = (context as? LifecycleOwner)?.lifecycleScope ?: GlobalScope
 
@@ -47,6 +48,11 @@ class ProcessoRepository @Inject constructor(
                                 item.advogadoObj = advogadoDeferred.await()
                                 item.statusObj = statusDeferred.await()
                                 item.tipoObj = tipoDeferred.await()
+
+                                if(item.anexos?.isNotEmpty() == true) {
+                                    val anexosDeferred = async { anexoRepository.ObterAnexosPorLista(item.anexos!!) }
+                                    item.anexosLista = anexosDeferred.await()
+                                }
                             }
 
                             onSuccessListener(processos)
@@ -79,6 +85,11 @@ class ProcessoRepository @Inject constructor(
                         processo.advogadoObj = advogadoDeferred.await()
                         processo.statusObj = statusDeferred.await()
                         processo.tipoObj = tipoDeferred.await()
+
+                        if(processo.anexos?.isNotEmpty() == true) {
+                            val anexosDeferred = async { anexoRepository.ObterAnexosPorLista(processo.anexos!!) }
+                            processo.anexosLista = anexosDeferred.await()
+                        }
 
                         onSuccessListener(processo)
                     }

@@ -39,6 +39,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/primaryTextColor"
                 android:textSize="@dimen/itemAdvNameTextSize"
+                app:fontFamily="@font/montserrat_medium"
                 tools:text="Adv Name" />
 
             <TextView
@@ -47,6 +48,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/secondaryTextColor"
                 android:textSize="@dimen/itemAdvEmailTextSize"
+                app:fontFamily="@font/lato"
                 tools:text="Email" />
         </LinearLayout>
 

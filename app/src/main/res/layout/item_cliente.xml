@@ -27,6 +27,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/primaryTextColor"
                 android:textSize="@dimen/itemDiligenciaDescricaoTextSize"
+                app:fontFamily="@font/montserrat_medium"
                 tools:text="Jucimar" />
 
             <TextView
@@ -35,6 +36,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/secondaryTextColor"
                 android:textSize="@dimen/itemClienteTextSize"
+                app:fontFamily="@font/lato"
                 tools:text="(11) 98701-5859" />
 
             <TextView
@@ -43,6 +45,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/secondaryTextColor"
                 android:textSize="@dimen/itemClienteTextSize"
+                app:fontFamily="@font/lato"
                 tools:text="jucimar123@gmail.com" />
 
             <TextView
@@ -51,6 +54,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/secondaryTextColor"
                 android:textSize="@dimen/itemDiligenciaAdvTextSize"
+                app:fontFamily="@font/lato"
                 tools:text="Rua 1, Nº 123, Vila Brasil, SP" />
         </LinearLayout>
 

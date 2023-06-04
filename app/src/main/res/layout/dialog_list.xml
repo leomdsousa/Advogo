@@ -28,8 +28,9 @@
                 android:textColor="@color/primaryTextColor"
                 android:textSize="@dimen/dialogListTitleTextSize"
                 android:textStyle="bold"
+                app:fontFamily="@font/montserrat_medium"
                 android:visibility="visible"
-                tools:text="Select" />
+                tools:text="Selecione" />
 
             <View
                 android:layout_width="match_parent"

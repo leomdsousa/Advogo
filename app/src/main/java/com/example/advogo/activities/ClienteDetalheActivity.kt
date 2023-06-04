@@ -1,11 +1,13 @@
 package com.example.advogo.activities
 
 import android.app.Activity
+import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import com.example.advogo.R
 import com.example.advogo.databinding.ActivityClienteDetalheBinding
@@ -27,49 +29,19 @@ class ClienteDetalheActivity : BaseActivity() {
 
     private lateinit var clienteDetalhes: Cliente
 
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityClienteDetalheBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
         obterIntentDados()
-        setupActionBar()
+        setupActionBar("Detalhe Cliente", binding.toolbarClienteDetalhe)
         setClienteToUI(clienteDetalhes)
 
         binding.btnAtualizarCliente.setOnClickListener {
             saveCliente()
         }
-
-//        binding.etEndereco.setOnClickListener {
-//            val valor: String = binding.etEndereco.text.toString()
-//
-//            if (valor.isEmpty()) {
-//                binding.etEndereco.error = "O campo não pode estar vazio"
-//                binding.etEndereco.requestFocus()
-//                return@setOnClickListener
-//            }
-//
-//            val rgxCep: Pattern = Pattern.compile("(^\\d{5}-\\d{3}|^\\d{2}.\\d{3}-\\d{3}|\\d{8})")
-//            val matcher: Matcher = rgxCep.matcher(valor)
-//
-//            if (!matcher.matches()) {
-//                binding.etEndereco.error = "Informe um CEP válido"
-//                binding.etEndereco.requestFocus()
-//                return@setOnClickListener
-//            } else {
-//                val endereco = buscarEnderecoCorreio(valor)
-//
-//                if(endereco != null) {
-//                    binding.etEndereco.setText(endereco.logradouro)
-//                    binding.etEnderecoCidade.setText(endereco.localidade)
-//                    binding.etBairro.setText(endereco.bairro)
-//                } else {
-//                    binding.etEndereco.error = "CEP não encontrado"
-//                    binding.etEndereco.requestFocus()
-//                    return@setOnClickListener
-//                }
-//            }
-//        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -79,6 +51,10 @@ class ClienteDetalheActivity : BaseActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                return true
+            }
             R.id.action_deletar_cliente -> {
                 alertDialogDeletarCliente(clienteDetalhes.nome!!)
                 return true
@@ -237,19 +213,6 @@ class ClienteDetalheActivity : BaseActivity() {
 
     private suspend fun buscarEnderecoCorreio(cep: String): CorreioResponse? {
         return correioService.obterEndereco(cep)
-    }
-
-    private fun setupActionBar() {
-        setSupportActionBar(binding.toolbarClienteDetalhe)
-
-        val actionBar = supportActionBar
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true)
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_white_color_back_24dp)
-            actionBar.title = "Detalhe Cliente"
-        }
-
-        binding.toolbarClienteDetalhe.setNavigationOnClickListener { onBackPressed() }
     }
 
     private fun deletarClienteSuccess() {

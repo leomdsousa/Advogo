@@ -1,9 +1,12 @@
 package com.example.advogo.activities
 
 import android.app.Activity
+import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.MenuItem
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import com.example.advogo.R
 import com.example.advogo.databinding.ActivityClienteCadastroBinding
 import com.example.advogo.models.Cliente
@@ -20,12 +23,13 @@ class ClienteCadastroActivity : BaseActivity() {
     @Inject lateinit var clienteRepository: ClienteRepository
     @Inject lateinit var correioService: CorreioApiService
 
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityClienteCadastroBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        setupActionBar()
+        setupActionBar("Cadastro Cliente", binding.toolbarClienteCadastro)
 
         binding.btnCadastroCliente.setOnClickListener {
             saveCliente()
@@ -133,16 +137,13 @@ class ClienteCadastroActivity : BaseActivity() {
         return correioService.obterEndereco(cep)
     }
 
-    private fun setupActionBar() {
-        setSupportActionBar(binding.toolbarClienteCadastro)
-
-        val actionBar = supportActionBar
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true)
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_white_color_back_24dp)
-            actionBar.title = "Cadastro Cliente"
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
-
-        binding.toolbarClienteCadastro.setNavigationOnClickListener { onBackPressed() }
     }
 }

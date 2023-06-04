@@ -35,7 +35,6 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/diligenciaDetalheScreenCardViewMarginTop"
                 android:elevation="@dimen/cardViewElevation"
                 app:cardCornerRadius="@dimen/cardViewCornerRadius">
 
@@ -47,9 +46,7 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/diligenciaDetalheScreenTilMarginStartEnd"
-                        android:layout_marginEnd="@dimen/diligenciaDetalheScreenTilMarginStartEnd">
+                        android:layout_height="wrap_content">
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etDiligenciaDescricao"
@@ -103,9 +100,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/diligenciaDetalheScreenTilMarginStartEnd"
-                        android:layout_marginTop="@dimen/diligenciaDetalheScreenTilMarginTop"
-                        android:layout_marginEnd="@dimen/diligenciaDetalheScreenTilMarginStartEnd">
+                        android:layout_marginTop="@dimen/diligenciaDetalheScreenTilMarginTop">
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etDiligenciaData"
@@ -123,9 +118,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/diligenciaDetalheScreenTilMarginStartEnd"
-                        android:layout_marginTop="@dimen/diligenciaDetalheScreenTilMarginTop"
-                        android:layout_marginEnd="@dimen/diligenciaDetalheScreenTilMarginStartEnd">
+                        android:layout_marginTop="@dimen/diligenciaDetalheScreenTilMarginTop">
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etDiligenciaProcesso"
@@ -142,9 +135,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/diligenciaDetalheScreenTilMarginStartEnd"
-                        android:layout_marginTop="@dimen/diligenciaDetalheScreenTilMarginTop"
-                        android:layout_marginEnd="@dimen/diligenciaDetalheScreenTilMarginStartEnd">
+                        android:layout_marginTop="@dimen/diligenciaDetalheScreenTilMarginTop">
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etDiligenciaAdvogado"
@@ -158,9 +149,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/diligenciaDetalheScreenTilMarginStartEnd"
-                        android:layout_marginTop="@dimen/diligenciaDetalheScreenTilMarginTop"
-                        android:layout_marginEnd="@dimen/diligenciaDetalheScreenTilMarginStartEnd">
+                        android:layout_marginTop="@dimen/diligenciaDetalheScreenTilMarginTop">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -199,9 +188,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginStart="@dimen/btnMarginStartEnd"
                         android:layout_marginTop="@dimen/btnBtnMarginTop"
-                        android:layout_marginEnd="@dimen/btnMarginStartEnd"
                         android:background="@drawable/shape_button_rounded"
                         android:foreground="?attr/selectableItemBackground"
                         android:gravity="center"

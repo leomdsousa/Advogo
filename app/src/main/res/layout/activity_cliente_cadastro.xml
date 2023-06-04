@@ -27,16 +27,6 @@
         android:layout_marginTop="@dimen/screenContentMarginTop"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/cadastroClienteScreenMarginStartEnd"
-            android:layout_marginEnd="@dimen/cadastroClienteScreenMarginStartEnd"
-            android:gravity="center"
-            android:text="@string/cadastroClienteDescriptionText"
-            android:textColor="@color/secondaryTextColor"
-            android:textSize="@dimen/cadastroClienteDescriptionTextSize" />
-
         <ScrollView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">

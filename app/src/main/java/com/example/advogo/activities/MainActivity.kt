@@ -5,13 +5,20 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.TypefaceSpan
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.GravityCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
@@ -47,6 +54,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     private lateinit var viewPager: ViewPager2
     private lateinit var tabLayout: TabLayout
 
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -86,16 +94,29 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         val adapter = TabsAdapter(this)
         adapter.addFragment(ProcessosFragment(), "Processos")
         adapter.addFragment(ClienteFragment(), "Clientes")
-        adapter.addFragment(DiligenciasFragment(), "Eventos")
+        adapter.addFragment(DiligenciasFragment(), "Diligências")
         viewPager.adapter = adapter
 
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            tab.text = adapter.getTabTitle(position)
+            val customView = LayoutInflater.from(this@MainActivity)
+                .inflate(R.layout.item_tab_layout, tabLayout, false)
+
+            val tabIcon: ImageView = customView.findViewById(R.id.tab_icon)
+            val tabTitle: TextView = customView.findViewById(R.id.tab_title)
+
+            tabIcon.setImageResource(getTabIcon(position))
+            tabTitle.text = adapter.getTabTitle(position)
+
+            tab.customView = customView
         }.attach()
     }
 
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
         when(menuItem.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                return true
+            }
             R.id.navPerfil -> {
                 val intent = Intent(this@MainActivity, PerfilActivity::class.java)
                 intent.putExtra(Constants.FROM_PERFIL_ACTIVITY, Constants.FROM_PERFIL_ACTIVITY)
@@ -133,12 +154,28 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         navUserName.text = advNome
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     private fun setupActionBar() {
         setSupportActionBar(binding.appBarMain.toolbarMain)
         binding.appBarMain.toolbarMain.setNavigationIcon(R.drawable.ic_action_navigation_menu)
 
         binding.appBarMain.toolbarMain.setNavigationOnClickListener {
             toggleDrawer()
+        }
+
+        val actionBar = supportActionBar
+
+        if(actionBar != null) {
+            val spannableTitle = SpannableString(getString(R.string.app_name))
+
+            spannableTitle.setSpan(
+                TypefaceSpan(ResourcesCompat.getFont(this, R.font.montserrat_medium)!!),
+                0,
+                title.length,
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE
+            )
+
+            actionBar.title = spannableTitle
         }
     }
 
@@ -147,6 +184,15 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             binding.drawerLayout.closeDrawer(GravityCompat.START)
         } else {
             binding.drawerLayout.openDrawer(GravityCompat.START)
+        }
+    }
+
+    private fun getTabIcon(position: Int): Int {
+        return when (position) {
+            0 -> R.drawable.ic_baseline_shopping_bag_24
+            1 -> R.drawable.ic_baseline_event_24
+            2 -> R.drawable.ic_baseline_contacts_24
+            else -> 0
         }
     }
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -16,7 +17,8 @@
         android:text="@string/app_name"
         android:textColor="@color/primaryTextColor"
         android:textSize="@dimen/introScreenTitleTextSize"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        app:fontFamily="@font/montserrat_semibold" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -32,7 +34,8 @@
         android:text="@string/letsGetStartedText"
         android:textColor="@color/primaryTextColor"
         android:textSize="@dimen/letsGetStartedTextSize"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        app:fontFamily="@font/montserrat_semibold" />
 
     <TextView
         android:layout_width="match_parent"
@@ -44,39 +47,53 @@
         android:lineSpacingExtra="@dimen/introTextLineSpacingExtra"
         android:text="@string/introTextDescription"
         android:textColor="@color/black"
-        android:textSize="@dimen/introTextSize" />
+        android:textSize="@dimen/introTextSize"
+        app:fontFamily="@font/lato" />
 
-    <Button
-        android:id="@+id/btnLogin"
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginStart="@dimen/btnMarginStartEnd"
-        android:layout_marginTop="@dimen/introScreenSignInBtnMarginTop"
-        android:layout_marginEnd="@dimen/btnMarginStartEnd"
-        android:background="@drawable/shape_button_rounded"
-        android:foreground="?attr/selectableItemBackground"
-        android:gravity="center"
-        android:paddingTop="@dimen/btnPaddingTopBottom"
-        android:paddingBottom="@dimen/btnPaddingTopBottom"
-        android:text="@string/signIn"
-        android:textColor="@color/white"
-        android:textSize="@dimen/btnTextSize" />
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/btnMarginStartEnd"
+        android:layout_marginBottom="@dimen/btnMarginStartEnd">
 
-    <Button
-        android:id="@+id/btnCadastro"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginStart="@dimen/btnMarginStartEnd"
-        android:layout_marginTop="@dimen/introScreenSignUpBtnMarginTop"
-        android:layout_marginEnd="@dimen/btnMarginStartEnd"
-        android:background="@drawable/white_border_shape_button_rounded"
-        android:foreground="?attr/selectableItemBackground"
-        android:gravity="center"
-        android:paddingTop="@dimen/btnPaddingTopBottom"
-        android:paddingBottom="@dimen/btnPaddingTopBottom"
-        android:text="@string/signUp"
-        android:textColor="@color/white"
-        android:textSize="@dimen/btnTextSize" />
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/btnMarginStartEnd"
+            android:layout_marginTop="@dimen/introScreenSignInBtnMarginTop"
+            android:layout_marginEnd="@dimen/btnMarginStartEnd"
+            android:background="@drawable/shape_button_rounded"
+            android:foreground="?attr/selectableItemBackground"
+            android:gravity="center"
+            android:paddingTop="@dimen/btnPaddingTopBottom"
+            android:paddingBottom="@dimen/btnPaddingTopBottom"
+            android:text="@string/signIn"
+            android:textColor="@color/white"
+            android:textSize="@dimen/btnTextSize" />
+
+        <Button
+            android:id="@+id/btnCadastro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/btnMarginStartEnd"
+            android:layout_marginTop="@dimen/introScreenSignUpBtnMarginTop"
+            android:layout_marginEnd="@dimen/btnMarginStartEnd"
+            android:background="@drawable/white_border_shape_button_rounded"
+            android:foreground="?attr/selectableItemBackground"
+            android:gravity="center"
+            android:paddingTop="@dimen/btnPaddingTopBottom"
+            android:paddingBottom="@dimen/btnPaddingTopBottom"
+            android:text="@string/signUp"
+            android:textColor="@color/white"
+            android:textSize="@dimen/btnTextSize" />
+
+    </LinearLayout>
+
 </LinearLayout>

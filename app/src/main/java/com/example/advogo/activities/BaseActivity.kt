@@ -14,18 +14,25 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
 import android.provider.Settings
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.TypefaceSpan
 import android.util.Log
 import android.webkit.MimeTypeMap
 import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
 import androidx.activity.result.ActivityResultLauncher
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.advogo.R
 import com.example.advogo.repositories.IAdvogadoRepository
@@ -341,6 +348,28 @@ open class BaseActivity : AppCompatActivity() {
 
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
                 || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.P)
+    fun setupActionBar(text: String, toolbar: Toolbar) {
+        setSupportActionBar(toolbar)
+        val actionBar = supportActionBar
+
+        if(actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true)
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back_ios_24)
+
+            val spannableTitle = SpannableString(text)
+
+            spannableTitle.setSpan(
+                TypefaceSpan(ResourcesCompat.getFont(this, R.font.montserrat_medium)!!),
+                0,
+                title.length,
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE
+            )
+
+            actionBar.title = spannableTitle
+        }
     }
 
     companion object {

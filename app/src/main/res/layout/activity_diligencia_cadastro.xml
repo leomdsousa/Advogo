@@ -24,19 +24,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="@dimen/screenContentMarginTop"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/diligenciaCadastroScreenMarginStartEnd"
-            android:layout_marginEnd="@dimen/diligenciaCadastroScreenMarginStartEnd"
-            android:gravity="center"
-            android:text="@string/diligenciaCadastroDescriptionText"
-            android:textColor="@color/secondaryTextColor"
-            android:textSize="@dimen/diligenciaCadastroDescriptionTextSize" />
+        android:orientation="vertical"
+        android:padding="@dimen/processoCadastroContentPadding">
 
         <ScrollView
             android:layout_width="fill_parent"
@@ -45,21 +34,20 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/diligenciaCadastroScreenCardViewMarginTop"
                 android:elevation="@dimen/cardViewElevation"
                 app:cardCornerRadius="@dimen/cardViewCornerRadius">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
                     android:orientation="vertical"
                     android:padding="@dimen/cardViewLayoutContentPadding">
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/diligenciaCadastroScreenTilMarginStartEnd"
-                        android:layout_marginEnd="@dimen/diligenciaCadastroScreenTilMarginStartEnd">
+                        android:layout_marginTop="@dimen/processoCadastroTilMarginTop">
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etDiligenciaDescricao"
@@ -114,9 +102,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/diligenciaCadastroScreenTilMarginStartEnd"
-                        android:layout_marginTop="@dimen/diligenciaCadastroScreenTilMarginTop"
-                        android:layout_marginEnd="@dimen/diligenciaCadastroScreenTilMarginStartEnd">
+                        android:layout_marginTop="@dimen/processoCadastroTilMarginTop">
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etDiligenciaData"
@@ -133,9 +119,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/diligenciaCadastroScreenTilMarginStartEnd"
-                        android:layout_marginTop="@dimen/diligenciaCadastroScreenTilMarginTop"
-                        android:layout_marginEnd="@dimen/diligenciaCadastroScreenTilMarginStartEnd">
+                        android:layout_marginTop="@dimen/processoCadastroTilMarginTop">
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etDiligenciaProcesso"
@@ -152,9 +136,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/diligenciaCadastroScreenTilMarginStartEnd"
-                        android:layout_marginTop="@dimen/diligenciaCadastroScreenTilMarginTop"
-                        android:layout_marginEnd="@dimen/diligenciaCadastroScreenTilMarginStartEnd">
+                        android:layout_marginTop="@dimen/processoCadastroTilMarginTop">
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etDiligenciaAdvogado"
@@ -171,9 +153,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/diligenciaCadastroScreenTilMarginStartEnd"
-                        android:layout_marginTop="@dimen/diligenciaCadastroScreenTilMarginTop"
-                        android:layout_marginEnd="@dimen/diligenciaCadastroScreenTilMarginStartEnd">
+                        android:layout_marginTop="@dimen/processoCadastroTilMarginTop">
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etDiligenciaEndereco"
@@ -192,9 +172,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginStart="@dimen/btnMarginStartEnd"
                         android:layout_marginTop="@dimen/btnBtnMarginTop"
-                        android:layout_marginEnd="@dimen/btnMarginStartEnd"
                         android:background="@drawable/shape_button_rounded"
                         android:foreground="?attr/selectableItemBackground"
                         android:gravity="center"

@@ -19,12 +19,13 @@ data class Processo(
     var cliente: String? = null,
     var advogado: String? = null,
     var diligencias: List<String>? = null,
-    var arquivos: List<String>? = null,
+    var anexos: List<String>? = null,
     @Transient var tipoObj: ProcessoTipo? = null,
     @Transient var statusObj: ProcessoStatus? = null,
     @Transient var clienteObj: Cliente? = null,
     @Transient var advogadoObj: Advogado? = null,
     @Transient var diligenciasLista: List<Diligencia>? = null,
+    @Transient var anexosLista: List<Anexo>? = null,
     @Transient var selecionado: Boolean = false,
 ): Parcelable {
 }

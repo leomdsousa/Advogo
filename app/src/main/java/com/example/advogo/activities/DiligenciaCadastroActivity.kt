@@ -2,14 +2,17 @@ package com.example.advogo.activities
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import com.example.advogo.R
 import com.example.advogo.adapters.DiligenciasStatusAdapter
 import com.example.advogo.adapters.DiligenciasTiposAdapter
@@ -59,6 +62,7 @@ class DiligenciaCadastroActivity : BaseActivity() {
 
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityDiligenciaCadastroBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
@@ -66,7 +70,7 @@ class DiligenciaCadastroActivity : BaseActivity() {
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
-        setupActionBar()
+        setupActionBar("Cadastro Diligência", binding.toolbarDiligenciaCadastro)
         configurarGoogleMapPlaces()
         setupSpinners()
 
@@ -242,19 +246,6 @@ class DiligenciaCadastroActivity : BaseActivity() {
         }
     }
 
-    private fun setupActionBar() {
-        setSupportActionBar(binding.toolbarDiligenciaCadastro)
-
-        val actionBar = supportActionBar
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true)
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_white_color_back_24dp)
-            actionBar.title = "Cadastro Diligência"
-        }
-
-        binding.toolbarDiligenciaCadastro.setNavigationOnClickListener { onBackPressed() }
-    }
-
     private fun saveDiligencia() {
         if(!validarFormulario()) {
             return
@@ -354,5 +345,15 @@ class DiligenciaCadastroActivity : BaseActivity() {
 
         dataSelecionada = "$sDayOfMonth/$sMonthOfYear/$ano"
         binding.etDiligenciaData.setText(dataSelecionada)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }

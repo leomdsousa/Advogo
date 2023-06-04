@@ -1,9 +1,17 @@
 package com.example.advogo.activities
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
 import android.text.TextUtils
+import android.text.style.TypefaceSpan
+import android.view.MenuItem
 import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.get
 import com.example.advogo.R
 import com.example.advogo.databinding.ActivityCadastroBinding
 import com.example.advogo.models.Advogado
@@ -24,16 +32,21 @@ class CadastroActivity : BaseActivity() {
     @Inject lateinit var advRepository: IAdvogadoRepository
     @Inject lateinit var correioService: CorreioApiService
 
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCadastroBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setupActionBar()
+        setupActionBar("Registre-se", binding.toolbarSignUp)
 
         binding.btnSignUp.setOnClickListener { registrar() }
 
         binding.btnCep.setOnClickListener {
+            binding.etEnderecoRua.setEnabled(false)
+            binding.etEnderecoCidade.setEnabled(false)
+            binding.etBairro.setEnabled(false)
+
             var valor: String = binding.etCep.text.toString()
 
             if (valor.isNullOrEmpty()) {
@@ -58,6 +71,10 @@ class CadastroActivity : BaseActivity() {
                         binding.etEnderecoRua.setText(endereco.logradouro)
                         binding.etEnderecoCidade.setText(endereco.localidade)
                         binding.etBairro.setText(endereco.bairro)
+
+                        binding.etEnderecoRua.setEnabled(true)
+                        binding.etEnderecoCidade.setEnabled(true)
+                        binding.etBairro.setEnabled(true)
                     } else {
                         binding.etCep.error = "CEP não encontrado"
                         binding.etCep.requestFocus()
@@ -71,17 +88,36 @@ class CadastroActivity : BaseActivity() {
         return correioService.obterEndereco(cep)
     }
 
-    private fun setupActionBar() {
-        setSupportActionBar(binding.toolbarSignUp)
-        val actionBar = supportActionBar
+//    @RequiresApi(Build.VERSION_CODES.P)
+//    private fun setupActionBar() {
+//        setSupportActionBar(binding.toolbarSignUp)
+//        val actionBar = supportActionBar
+//
+//        if(actionBar != null) {
+//            actionBar.setDisplayHomeAsUpEnabled(true)
+//            actionBar.setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back_ios_24)
+//
+//            val spannableTitle = SpannableString("Registrar-se")
+//
+//            spannableTitle.setSpan(
+//                TypefaceSpan(ResourcesCompat.getFont(this, R.font.montserrat_medium)!!),
+//                0,
+//                title.length,
+//                Spannable.SPAN_INCLUSIVE_INCLUSIVE
+//            )
+//
+//            actionBar.title = spannableTitle
+//        }
+//    }
 
-        if(actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true)
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back_ios_24)
-            actionBar.title = "Registrar-se"
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
-
-        binding.toolbarSignUp.setOnClickListener { onBackPressed() }
     }
 
     private fun registrar() {

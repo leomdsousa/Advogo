@@ -33,6 +33,7 @@
         android:layout_marginBottom="@dimen/navContentMarginBottom"
         android:textColor="@android:color/white"
         android:textSize="@dimen/navUserNameTextSize"
+        app:fontFamily="@font/montserrat_medium"
         tools:text="Username" />
 
     <View

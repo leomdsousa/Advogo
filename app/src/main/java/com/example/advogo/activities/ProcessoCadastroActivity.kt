@@ -3,14 +3,17 @@ package com.example.advogo.activities
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import com.bumptech.glide.Glide
 import com.example.advogo.R
 import com.example.advogo.adapters.ProcessosStatusAdapter
@@ -61,12 +64,13 @@ class ProcessoCadastroActivity : BaseActivity() {
 
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProcessoCadastroBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setupActionBar()
+        setupActionBar("Cadastro Processo", binding.toolbarProcessoCadastroActivity)
         setupSpinners()
 
         if (intent.hasExtra(Constants.ADV_NOME_PARAM)) {
@@ -253,19 +257,6 @@ class ProcessoCadastroActivity : BaseActivity() {
         }
     }
 
-    private fun setupActionBar() {
-        setSupportActionBar(binding.toolbarProcessoCadastroActivity)
-
-        val actionBar = supportActionBar
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true)
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_white_color_back_24dp)
-            actionBar.title = "Cadastro Processo"
-        }
-
-        binding.toolbarProcessoCadastroActivity.setNavigationOnClickListener { onBackPressed() }
-    }
-
     private fun salvarImagemProcesso() {
         //TODO("showProgressDialog("Please wait...")")
 
@@ -391,5 +382,15 @@ class ProcessoCadastroActivity : BaseActivity() {
             "Um erro ocorreu ao criar o processo.",
             Toast.LENGTH_SHORT
         ).show()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }

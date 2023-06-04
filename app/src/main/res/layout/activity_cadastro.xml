@@ -8,23 +8,6 @@
     android:orientation="vertical"
     tools:context=".activities.CadastroActivity">
 
-<!--    <androidx.appcompat.widget.Toolbar-->
-<!--        android:id="@+id/toolbarSignUp"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="?attr/actionBarSize">-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/tvTitle"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:gravity="center_vertical"-->
-<!--            android:text="@string/signUp"-->
-<!--            android:textColor="@color/primaryTextColor"-->
-<!--            android:textSize="@dimen/toolbarTitleTextSize"-->
-<!--            android:textStyle="bold" />-->
-
-<!--    </androidx.appcompat.widget.Toolbar>-->
-
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -43,16 +26,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="@dimen/processoCadastroContentPadding">
-
-<!--        <TextView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginStart="@dimen/authenticationScreenMarginStartEnd"-->
-<!--            android:layout_marginEnd="@dimen/authenticationScreenMarginStartEnd"-->
-<!--            android:gravity="center"-->
-<!--            android:text="@string/signUpDescriptionText"-->
-<!--            android:textColor="@color/secondaryTextColor"-->
-<!--            android:textSize="@dimen/authenticationDescriptionTextSize" />-->
 
         <ScrollView
             android:layout_width="fill_parent"
@@ -182,7 +155,8 @@
                             android:hint="@string/hintEndereco"
                             android:inputType="text"
                             android:maxLength="255"
-                            android:textSize="@dimen/etTextSize" />
+                            android:textSize="@dimen/etTextSize"
+                            android:enabled="false" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -199,7 +173,8 @@
                             android:hint="@string/hintEnderecoNumero"
                             android:inputType="number"
                             android:maxLength="5"
-                            android:textSize="@dimen/etTextSize" />
+                            android:textSize="@dimen/etTextSize"
+                            android:enabled="false" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -216,7 +191,8 @@
                             android:hint="@string/hintEnderecoBairro"
                             android:inputType="text"
                             android:maxLength="50"
-                            android:textSize="@dimen/etTextSize" />
+                            android:textSize="@dimen/etTextSize"
+                            android:enabled="false" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -233,7 +209,8 @@
                             android:hint="@string/hintEnderecoCidade"
                             android:inputType="text"
                             android:maxLength="50"
-                            android:textSize="@dimen/etTextSize" />
+                            android:textSize="@dimen/etTextSize"
+                            android:enabled="false" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout

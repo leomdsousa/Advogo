@@ -72,7 +72,8 @@ object MyApplicationModule {
         clienteRepository: ClienteRepository,
         diligenciaRepository: Provider<DiligenciaRepository>,
         tipoProcessoRepository: ProcessoTipoRepository,
-        statusProcessoRepository: ProcessoStatusRepository
+        statusProcessoRepository: ProcessoStatusRepository,
+        anexoRepository: AnexoRepository
     ): IProcessoRepository {
         return ProcessoRepository(
             context,
@@ -81,7 +82,8 @@ object MyApplicationModule {
             clienteRepository,
             diligenciaRepository,
             tipoProcessoRepository,
-            statusProcessoRepository
+            statusProcessoRepository,
+            anexoRepository
         )
     }
 
