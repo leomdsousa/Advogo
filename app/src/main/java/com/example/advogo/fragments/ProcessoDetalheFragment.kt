@@ -162,8 +162,9 @@ class ProcessoDetalheFragment : BaseFragment() {
 
         val processo = Processo(
             id = processoDetalhes.id,
+            titulo = (if (binding.etProcessoName.text.toString() != processoDetalhes.titulo) binding.etProcessoName.text.toString() else processoDetalhes.titulo),
             descricao = (if (binding.etDescricao.text.toString() != processoDetalhes.descricao) binding.etDescricao.text.toString() else processoDetalhes.descricao),
-            numero = (if (binding.etNumeroProcesso.text.toString() != processoDetalhes.numero) binding.etNumeroProcesso.text.toString() else processoDetalhes.descricao),
+            numero = (if (binding.etNumeroProcesso.text.toString() != processoDetalhes.numero) binding.etNumeroProcesso.text.toString() else processoDetalhes.numero),
             tipo = (if (tipoProcessoSelecionado != processoDetalhes.tipo) tipoProcessoSelecionado else processoDetalhes.tipo),
             status = (if (statusProcessoSelecionado != processoDetalhes.status) statusProcessoSelecionado else processoDetalhes.status),
             data = processoDetalhes.data,
@@ -182,7 +183,6 @@ class ProcessoDetalheFragment : BaseFragment() {
     private fun setupSpinners() {
         setupSpinnerTiposProcesso()
         setupSpinnerStatusProcesso()
-
     }
 
     private fun setupSpinnerStatusProcesso() {

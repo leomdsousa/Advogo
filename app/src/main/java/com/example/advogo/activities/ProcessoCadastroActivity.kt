@@ -293,6 +293,7 @@ class ProcessoCadastroActivity : BaseActivity() {
 
         val processo = Processo(
             id = "",
+            titulo = binding.etProcessoName.text.toString(),
             descricao = binding.etDescricao.text.toString(),
             numero = binding.etNumeroProcesso.text.toString(),
             tipo = tipoProcessoSelecionado,

@@ -113,15 +113,16 @@ open class BaseFragment : Fragment() {
                 intent.setDataAndType(fileUri, "application/pdf")
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
-                if (consegueAbrirArquivo(intent)) {
-                    startActivity(intent)
-                } else {
-                    Toast.makeText(
-                        requireContext(),
-                        "Nenhum aplicativo encontrado para visualizar o PDF.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
+                startActivity(intent)
+//                if (consegueAbrirArquivo(intent)) {
+//                    startActivity(intent)
+//                } else {
+//                    Toast.makeText(
+//                        requireContext(),
+//                        "Nenhum aplicativo encontrado para visualizar o PDF.",
+//                        Toast.LENGTH_SHORT
+//                    ).show()
+//                }
             }
             .addOnFailureListener {
                 Toast.makeText(requireContext(), "Erro ao baixar o arquivo.", Toast.LENGTH_SHORT).show()

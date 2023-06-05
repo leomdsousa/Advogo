@@ -68,7 +68,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
             }
 
             val supportMapFragment: SupportMapFragment =
-                supportFragmentManager.findFragmentById(R.id.toolbarMap) as SupportMapFragment
+                supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
 
             supportMapFragment.getMapAsync(this)
         }
