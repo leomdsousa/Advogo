@@ -364,7 +364,7 @@ open class BaseActivity : AppCompatActivity() {
             spannableTitle.setSpan(
                 TypefaceSpan(ResourcesCompat.getFont(this, R.font.montserrat_medium)!!),
                 0,
-                title.length,
+                text.length,
                 Spannable.SPAN_INCLUSIVE_INCLUSIVE
             )
 
@@ -375,5 +375,27 @@ open class BaseActivity : AppCompatActivity() {
     companion object {
         const val READ_STORAGE_PERMISSION_CODE = 1
         const val PICK_IMAGE_REQUEST_CODE = "PICK_IMAGE_REQUEST_CODE"
+    }
+
+    fun updateFCMToken(token: String, activity: Activity) {
+        val userHashMap = HashMap<String, Any>()
+        userHashMap[Constants.FCM_TOKEN] = token
+
+        //showProgressDialog(resources.getString(R.string.please_wait))
+        //FirestoreService().updateUserProfileData(activity, userHashMap)
+    }
+
+    fun tokenUpdateSuccess(activity: Activity) {
+        //hideProgressDialog()
+
+        _sharedPreferences =
+            this.getSharedPreferences(Constants.ADVOGO_PREFERENCES, Context.MODE_PRIVATE)
+
+        val editor: SharedPreferences.Editor = _sharedPreferences.edit()
+        editor.putBoolean(Constants.FCM_TOKEN_UPDATED, true)
+        editor.apply()
+
+        //showProgressDialog(resources.getString(R.string.please_wait))
+        //FirestoreService().loadUserData(activity, true)
     }
 }

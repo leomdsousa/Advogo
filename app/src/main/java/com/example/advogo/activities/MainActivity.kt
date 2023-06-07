@@ -36,6 +36,7 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -73,6 +74,19 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         sharedPreferences =
             this.getSharedPreferences(Constants.ADVOGO_PREFERENCES, Context.MODE_PRIVATE)
+
+//        val tokenUpdated = sharedPreferences.getBoolean(Constants.FCM_TOKEN_UPDATED, false)
+//
+//        if (tokenUpdated) {
+//            //showProgressDialog(resources.getString(R.string.please_wait))
+//            //FirestoreService().loadUserData(this@MainActivity, true)
+//        } else {
+//            FirebaseMessaging.getInstance()
+//                .token
+//                .addOnSuccessListener(this@MainActivity) { instanceIdResult ->
+//                    updateFCMToken(instanceIdResult, this@MainActivity)
+//                }
+//        }
 
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {

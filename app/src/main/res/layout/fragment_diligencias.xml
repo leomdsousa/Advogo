@@ -12,7 +12,6 @@
         android:layout_height="0dp"
         android:layout_marginTop="12dp"
         android:layout_marginBottom="12dp"
-        android:padding="0dp"
         app:cardBackgroundColor="@color/dividerColor"
         app:cardElevation="4dp"
         app:cardCornerRadius="8dp"
@@ -23,17 +22,10 @@
             android:id="@+id/calendarView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:padding="0dp"
+            style="@style/CalendarViewStyle"
             android:background="@color/white"
              />
-
-<!--        <CalendarView-->
-<!--            android:id="@+id/calendarView"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:background="@color/white"-->
-<!--            android:dateTextAppearance="@style/CalendarViewDateTextAppearance"-->
-<!--            android:weekDayTextAppearance="@style/CalendarViewWeekDayTextAppearance"-->
-<!--            android:weekSeparatorLineColor="@color/dividerColor" />-->
 
     </com.google.android.material.card.MaterialCardView>
 

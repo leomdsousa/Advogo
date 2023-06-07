@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.advogo.R
 import com.example.advogo.activities.DiligenciaCadastroActivity
 import com.example.advogo.activities.DiligenciaDetalheActivity
 import com.example.advogo.adapters.DiligenciasAdapter
@@ -62,7 +63,10 @@ class DiligenciasFragment : BaseFragment() {
             .setMaximumDate(CalendarDay.from(2023, Calendar.DECEMBER + 1, 31))
             .commit()
 
-        binding.calendarView.setPadding(5, 5, 5, 5)
+        //binding.calendarView.setPadding(5, 5, 5, 5)
+        //binding.calendarView.setPadding(0, 0, 0, 0);
+        //binding.calendarView.setDateTextAppearance(R.style.CalendarViewDateTextAppearance);
+        //binding.calendarView.setWeekDayTextAppearance(R.style.CalendarViewWeekDayTextAppearance);
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

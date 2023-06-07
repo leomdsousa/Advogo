@@ -43,9 +43,10 @@ class CadastroActivity : BaseActivity() {
         binding.btnSignUp.setOnClickListener { registrar() }
 
         binding.btnCep.setOnClickListener {
-            binding.etEnderecoRua.setEnabled(false)
-            binding.etEnderecoCidade.setEnabled(false)
-            binding.etBairro.setEnabled(false)
+            binding.etEnderecoRua.isEnabled = false
+            binding.etEnderecoCidade.isEnabled = false
+            binding.etBairro.isEnabled = false
+            binding.etEnderecoNumero.isEnabled = false
 
             var valor: String = binding.etCep.text.toString()
 
@@ -72,9 +73,10 @@ class CadastroActivity : BaseActivity() {
                         binding.etEnderecoCidade.setText(endereco.localidade)
                         binding.etBairro.setText(endereco.bairro)
 
-                        binding.etEnderecoRua.setEnabled(true)
-                        binding.etEnderecoCidade.setEnabled(true)
-                        binding.etBairro.setEnabled(true)
+                        binding.etEnderecoRua.isEnabled = true
+                        binding.etEnderecoCidade.isEnabled = true
+                        binding.etBairro.isEnabled = true
+                        binding.etEnderecoNumero.isEnabled = true
                     } else {
                         binding.etCep.error = "CEP não encontrado"
                         binding.etCep.requestFocus()
