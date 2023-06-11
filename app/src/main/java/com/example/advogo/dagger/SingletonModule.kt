@@ -3,6 +3,7 @@ package com.example.advogo.dagger
 import android.app.Application
 import android.app.ProgressDialog
 import android.content.Context
+import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import dagger.Module
 import dagger.Provides
@@ -19,5 +20,17 @@ object SingletonModule {
     @Singleton
     fun provideApplicationContext(application: Application): Context {
         return application
+    }
+
+    @Provides
+    @Singleton
+    fun provideProgressDialog(application: Application): ProgressDialog {
+        return ProgressDialog(application)
+    }
+
+    @Provides
+    @Singleton
+    fun provideProgressBar(context: Context): ProgressBar {
+        return ProgressBar(context)
     }
 }

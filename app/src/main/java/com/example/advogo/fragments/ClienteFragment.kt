@@ -79,7 +79,10 @@ class ClienteFragment : BaseFragment() {
             binding.rvClientsList.layoutManager = LinearLayoutManager(binding.root.context)
             binding.rvClientsList.setHasFixedSize(true)
 
-            val adapter = ClientesAdapter(binding.root.context, lista, true)
+            val adapter = ClientesAdapter(binding.root.context, lista,
+                exibirIconeTelefone = true,
+                exibirIconeEmail = true
+            )
             binding.rvClientsList.adapter = adapter
 
             adapter.setOnItemClickListener(object :

@@ -31,6 +31,8 @@ object Constants {
     const val PROCESSOS_STATUS_ID = "_id"
     const val PROCESSOS_STATUS_STATUS = "status"
 
+    const val PROCESSOS_ANDAMENTOS_TABLE = "processosAndamentos"
+
     const val DILIGENCIAS_TABLE = "diligencias"
     const val DILIGENCIAS_ID = "_id"
     const val DILIGENCIAS_PROCESSO = "processo"
@@ -44,6 +46,8 @@ object Constants {
     const val DILIGENCIAS_TIPOS_TABLE = "diligenciasTipos"
     const val DILIGENCIAS_TIPOS_ID = "_id"
     const val DILIGENCIAS_TIPOS_TIPO = "tipo"
+
+    const val DILIGENCIAS_HISTORICOS_TABLE = "diligenciasHistoricos"
 
     const val TELEFONES_TABLE = "telefones"
     const val TELEFONES_ID = "_id"
@@ -100,7 +104,7 @@ object Constants {
     const val FCM_BASE_URL:String = "https://fcm.googleapis.com/fcm/send"
     const val FCM_AUTHORIZATION:String = "authorization"
     const val FCM_KEY:String = "key"
-    const val FCM_SERVER_KEY:String = "AAAA-_vvGNI:APA91bF9xfSzbacs2j9RKkmEg7aYqY4pmRr89vYoy8pOfr0Ds2yHyVlhkhDiryrPndNYbXHUYyCdzZakvrlxxDLjsyQv5Ybtom5dFr7VWaMzDOL6YcSF-09GAOoxHU7SAisyZ222PW3w"
+    const val FCM_SERVER_KEY:String = "BIwk5LBYS3IENQU7wxFo-G5_ko259-kUjai-_NusVWOMdNlUgf9qtDtO9E6kdWFWEsod5FMq-P8urdmXxzMZY58"
     const val FCM_KEY_TITLE:String = "title"
     const val FCM_KEY_MESSAGE:String = "message"
     const val FCM_KEY_DATA:String = "data"

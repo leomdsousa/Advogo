@@ -75,18 +75,23 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         sharedPreferences =
             this.getSharedPreferences(Constants.ADVOGO_PREFERENCES, Context.MODE_PRIVATE)
 
-//        val tokenUpdated = sharedPreferences.getBoolean(Constants.FCM_TOKEN_UPDATED, false)
-//
-//        if (tokenUpdated) {
-//            //showProgressDialog(resources.getString(R.string.please_wait))
-//            //FirestoreService().loadUserData(this@MainActivity, true)
-//        } else {
-//            FirebaseMessaging.getInstance()
-//                .token
-//                .addOnSuccessListener(this@MainActivity) { instanceIdResult ->
-//                    updateFCMToken(instanceIdResult, this@MainActivity)
-//                }
-//        }
+        val tokenUpdated = sharedPreferences.getBoolean(Constants.FCM_TOKEN_UPDATED, false)
+
+        if (tokenUpdated) {
+            //showProgressDialog(resources.getString(R.string.please_wait))
+            //FirestoreService().loadUserData(this@MainActivity, true)
+            advRepository.ObterAdvogado(
+                getCurrentUserID(),
+                { adv -> setNavigationAdvDetalhes(adv) },
+                { ex -> null } //TODO("Imlementar OnFailure")
+            )
+        } else {
+            FirebaseMessaging.getInstance()
+                .token
+                .addOnSuccessListener(this@MainActivity) { instanceIdResult ->
+                    updateFCMToken(instanceIdResult)
+                }
+        }
 
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {

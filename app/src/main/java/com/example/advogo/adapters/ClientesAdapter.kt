@@ -18,10 +18,13 @@ import com.example.advogo.utils.Constants
 open class ClientesAdapter(
     private val context: Context,
     private var list: ArrayList<Cliente>,
-    private val exibirIconeTelefone: Boolean = false
+    private val exibirIconeTelefone: Boolean = false,
+    private val exibirIconeEmail: Boolean = false
 ): RecyclerView.Adapter<ClientesAdapter.MyViewHolder>() {
     private var onItemClickListener: OnItemClickListener? = null
+
     private val regexTelefone = Regex("(\\+55\\s?)?\\(\\d{2}\\)\\s?\\d{4,5}-\\d{4}")
+    private val regexEmail = Regex("(\\+55\\s?)?\\(\\d{2}\\)\\s?\\d{4,5}-\\d{4}")
 
     inner class MyViewHolder(private val binding: ItemClienteBinding)
         : RecyclerView.ViewHolder(binding.root) {
@@ -51,6 +54,23 @@ open class ClientesAdapter(
                     }
                 } else {
                     binding.imageTelefone.visibility = View.GONE
+                }
+
+                if(exibirIconeEmail
+                    && (item.email != null && android.util.Patterns.EMAIL_ADDRESS.matcher(item.email!!).matches())
+                ) {
+                    binding.imageEmail.visibility = View.VISIBLE
+                    binding.imageEmail.setOnClickListener { _ ->
+                        val enderecoEmail = item.email
+
+                        val intent = Intent(Intent.ACTION_SENDTO).apply {
+                            data = Uri.parse("mailto:$enderecoEmail")
+                        }
+
+                        context.startActivity(intent)
+                    }
+                } else {
+                    binding.imageEmail.visibility = View.GONE
                 }
 
                 binding.root.setOnClickListener {

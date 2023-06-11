@@ -164,7 +164,8 @@ class CadastroActivity : BaseActivity() {
                             enderecoLong = 0,
                             imagem = null,
                             oab = oab.toLong(),
-                            telefone = telefone
+                            telefone = telefone,
+                            fcmToken = null
                         )
 
                         advRepository.AdicionarAdvogado(

@@ -1,6 +1,8 @@
 package com.example.advogo.fragments
 
 import android.app.Activity
+import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +12,7 @@ import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.advogo.R
 import com.example.advogo.activities.ProcessoCadastroActivity
 import com.example.advogo.activities.ProcessoDetalheActivity
 import com.example.advogo.adapters.ProcessosAdapter
@@ -40,7 +43,7 @@ class ProcessosFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //showProgressDialog()
+        showProgressDialog("Aguarde por favor")
 
         binding.fabProcessoCadastro.setOnClickListener {
             val intent = Intent(binding.root.context, ProcessoCadastroActivity::class.java)
@@ -51,7 +54,7 @@ class ProcessosFragment : BaseFragment() {
         processoRepository.ObterProcessos(
             { processos ->
                 setProcessosToUI(processos as ArrayList<Processo>)
-                //hideProgressDialog()
+                hideProgressDialog()
             },
             { null } //TODO("Implementar")
         )

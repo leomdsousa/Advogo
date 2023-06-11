@@ -81,6 +81,7 @@ class ProcessoDetalheActivity : BaseActivity() {
 
         val adapter = TabsAdapter(this)
         adapter.addFragment(ProcessoDetalheFragment(), "Dados")
+        adapter.addFragment(ProcessoAndamentoFragment(), "Andamentos")
         adapter.addFragment(ProcessoAnexoFragment(), "Anexos")
         viewPager.adapter = adapter
 

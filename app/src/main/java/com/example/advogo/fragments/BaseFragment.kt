@@ -10,7 +10,10 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.MediaStore
+import android.view.View
+import android.view.ViewGroup
 import android.webkit.MimeTypeMap
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.app.ActivityCompat
@@ -23,16 +26,49 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
+import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import java.util.*
 import javax.inject.Inject
 
+@AndroidEntryPoint
 open class BaseFragment : Fragment() {
     private lateinit var _sharedPreferences: SharedPreferences
     private lateinit var _result: ActivityResultLauncher<Intent>
     private var _doubleBackToExitPressureOnce = false
-
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+
+    @Inject lateinit var progressDialog: ProgressDialog
+    @Inject lateinit var progressBar: ProgressBar
+
+    fun showProgressDialog(texto: String? = null) {
+        val activity = requireActivity()
+        if (!activity.isFinishing && isAdded && !progressDialog.isShowing) {
+            progressDialog = ProgressDialog(activity)
+            progressDialog.setCancelable(false)
+            if (texto != null) {
+                progressDialog.setTitle(texto)
+            }
+            progressDialog.show()
+        }
+    }
+
+    fun hideProgressDialog() {
+        if(progressDialog.isShowing) {
+            progressDialog.dismiss()
+        }
+    }
+
+    private fun showProgressBar() {
+        //progressBar.visibility = View.VISIBLE
+        val progressBar = ProgressBar(requireContext())
+        (view as? ViewGroup)?.addView(progressBar)
+    }
+
+    private fun hideProgressBar() {
+        //progressBar.visibility = View.GONE
+        (view as? ViewGroup)?.removeView(progressBar)
+    }
 
     fun showDataPicker(context: Context, onSuccess: (year: Int, monthOfYear: Int, dayOfMonth: Int) -> Unit) {
         val c = Calendar.getInstance()
@@ -42,7 +78,7 @@ open class BaseFragment : Fragment() {
 
         val dpd = DatePickerDialog(
             context,
-            DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
+            { _, year, monthOfYear, dayOfMonth ->
                 onSuccess(year, monthOfYear, dayOfMonth)
             },
             year,

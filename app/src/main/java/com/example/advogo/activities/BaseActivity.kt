@@ -377,7 +377,7 @@ open class BaseActivity : AppCompatActivity() {
         const val PICK_IMAGE_REQUEST_CODE = "PICK_IMAGE_REQUEST_CODE"
     }
 
-    fun updateFCMToken(token: String, activity: Activity) {
+    fun updateFCMToken(token: String) {
         val userHashMap = HashMap<String, Any>()
         userHashMap[Constants.FCM_TOKEN] = token
 
@@ -385,7 +385,7 @@ open class BaseActivity : AppCompatActivity() {
         //FirestoreService().updateUserProfileData(activity, userHashMap)
     }
 
-    fun tokenUpdateSuccess(activity: Activity) {
+    fun tokenUpdateSuccess() {
         //hideProgressDialog()
 
         _sharedPreferences =

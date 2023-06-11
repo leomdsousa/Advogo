@@ -18,6 +18,7 @@ data class Advogado(
     var imagem: String? = null,
     var oab: Long? = null,
     var telefone: String? = null,
+    var fcmToken: String? = null,
     @Transient var telefoneObj: Telefone? = null,
     @Transient var selecionado: Boolean = false
 ): Parcelable { }
