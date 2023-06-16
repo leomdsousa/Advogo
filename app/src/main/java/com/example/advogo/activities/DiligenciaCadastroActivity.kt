@@ -33,7 +33,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 import kotlin.coroutines.suspendCoroutine
 
 @AndroidEntryPoint
@@ -202,19 +205,19 @@ class DiligenciaCadastroActivity : BaseActivity() {
 
             val adapter = DiligenciasStatusAdapter(this@DiligenciaCadastroActivity, diligenciaStatus!!)
             spinnerStatus.adapter = adapter
-        }
 
-        spinnerStatus.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val selectedItem = parent?.getItemAtPosition(position) as? String
-                selectedItem?.let {
-                    statusDiligenciaSelecionada = selectedItem
-                    spinnerStatus.setSelection(id.toInt())
+            spinnerStatus.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    val selectedItem = spinnerStatus.selectedItem as? DiligenciaStatus
+                    selectedItem?.let {
+                        statusDiligenciaSelecionada = selectedItem.id
+                        spinnerStatus.setSelection(id.toInt())
+                    }
                 }
-            }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                // Nada selecionado
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    // Nada selecionado
+                }
             }
         }
     }
@@ -229,19 +232,19 @@ class DiligenciaCadastroActivity : BaseActivity() {
 
             val adapter = DiligenciasTiposAdapter(this@DiligenciaCadastroActivity, diligenciaTipos!!)
             spinnerTipos.adapter = adapter
-        }
 
-        spinnerTipos.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val selectedItem = parent?.getItemAtPosition(position) as? String
-                selectedItem?.let {
-                    tipoDiligenciaSelecionada = selectedItem
-                    spinnerTipos.setSelection(id.toInt())
+            spinnerTipos.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    val selectedItem = spinnerTipos.selectedItem as? DiligenciaTipo
+                    selectedItem?.let {
+                        tipoDiligenciaSelecionada = selectedItem.id
+                        spinnerTipos.setSelection(id.toInt())
+                    }
                 }
-            }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                // Nada selecionado
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    // Nada selecionado
+                }
             }
         }
     }
@@ -250,16 +253,16 @@ class DiligenciaCadastroActivity : BaseActivity() {
         if(!validarFormulario()) {
             return
         }
-        //TODO("showProgressDialog("Please wait...")")
 
-        //TODO("preencher obj para add ou alterar")
+        showProgressDialog(getString(R.string.aguardePorfavor))
+
         val diligencia = Diligencia(
             id = "",
             descricao = binding.etDiligenciaDescricao.text.toString(),
             data = dataSelecionada,
             tipo = tipoDiligenciaSelecionada,
             status = statusDiligenciaSelecionada,
-            endereco = dataSelecionada,
+            endereco = binding.etDiligenciaEndereco.text.toString(),
             enderecoLat = savedLatitude,
             enderecoLong = savedLongitude,
             processo = processoSelecionado,
@@ -316,14 +319,15 @@ class DiligenciaCadastroActivity : BaseActivity() {
     }
 
     private fun diligenciaCadastroSuccess() {
-        //TODO("hideProgressDialog()")
+        hideProgressDialog()
+
         intent.putExtra(Constants.FROM_DILIGENCIA_ACTIVITY, Constants.FROM_DILIGENCIA_ACTIVITY)
         setResult(Activity.RESULT_OK, intent)
         finish()
     }
 
     private fun diligenciaCadastroFailure() {
-        //TODO("hideProgressDialog()")
+        hideProgressDialog()
 
         Toast.makeText(
             this@DiligenciaCadastroActivity,
@@ -343,8 +347,8 @@ class DiligenciaCadastroActivity : BaseActivity() {
         val sDayOfMonth = if (dia < 10) "0$dia" else "$dia"
         val sMonthOfYear = if ((mes + 1) < 10) "0${mes + 1}" else "${mes + 1}"
 
-        dataSelecionada = "$sDayOfMonth/$sMonthOfYear/$ano"
-        binding.etDiligenciaData.setText(dataSelecionada)
+        dataSelecionada = "$ano-$sMonthOfYear/$sDayOfMonth"
+        binding.etDiligenciaData.setText("$sDayOfMonth/$sMonthOfYear/$ano")
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

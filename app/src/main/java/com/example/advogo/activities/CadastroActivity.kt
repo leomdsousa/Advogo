@@ -146,7 +146,7 @@ class CadastroActivity : BaseActivity() {
                 telefone,
                 password)
         ) {
-            //TODO("Exibir Progress Dialog")
+            showProgressDialog(getString(R.string.aguardePorfavor))
 
             FirebaseAuth.getInstance()
                 .createUserWithEmailAndPassword(email, password)
@@ -253,8 +253,8 @@ class CadastroActivity : BaseActivity() {
             return validado
     }
 
-    fun registrarSuccess() {
-        //TODO("Fechar Progress Dialog")
+    private fun registrarSuccess() {
+        hideProgressDialog()
 
 //        Toast.makeText(
 //            this@CadastroActivity,
@@ -271,7 +271,7 @@ class CadastroActivity : BaseActivity() {
         finish()
     }
 
-    fun registrarFailure() {
-        //TODO("Fechar Progress Dialog")
+    private fun registrarFailure() {
+        hideProgressDialog()
     }
 }

@@ -55,8 +55,7 @@ class TelefoneRepository @Inject constructor(
     override fun AdicionarTelefone(model: Telefone, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.TELEFONES_TABLE)
-            .document(model.id)
-            .set(model, SetOptions.merge())
+            .add(model)
             .addOnSuccessListener {
                 onSuccessListener()
             }

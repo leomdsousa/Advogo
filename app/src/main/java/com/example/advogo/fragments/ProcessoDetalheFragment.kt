@@ -28,10 +28,8 @@ import com.example.projmgr.dialogs.ClientesDialog
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import okhttp3.internal.wait
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -77,8 +75,17 @@ class ProcessoDetalheFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         obterIntentDados()
-        setupSpinners()
-        setProcessoToUI(processoDetalhes)
+
+        CoroutineScope(Dispatchers.Main).launch {
+            setupSpinners()
+
+//            while (!spinnersInicializados) {
+//                delay(100)
+//            }
+
+            setProcessoToUI(processoDetalhes)
+        }
+
 
         binding.etNumeroProcesso.addTextChangedListener(ProcessMaskTextWatcher(binding.etNumeroProcesso))
 
@@ -127,8 +134,6 @@ class ProcessoDetalheFragment : BaseFragment() {
     }
 
     private fun salvarImagemProcesso() {
-        //TODO("showProgressDialog("Please wait...")")
-
         val sRef: StorageReference = FirebaseStorage.getInstance().reference.child(
             "PROCESSO_${processoDetalhes.numero}_IMAGEM" + System.currentTimeMillis() + "."
                     + getFileExtension(imagemSelecionadaURI!!)
@@ -139,17 +144,15 @@ class ProcessoDetalheFragment : BaseFragment() {
                 taskSnapshot.metadata!!.reference!!.downloadUrl
                     .addOnSuccessListener { uri ->
                         imagemSelecionadaURL = uri.toString()
-                        saveProcesso()
+                        //saveProcesso()
                     }
             }
             .addOnFailureListener { exception ->
                 Toast.makeText(
                     requireContext(),
-                    exception.message,
+                    "Erro ao inserir imagem",
                     Toast.LENGTH_LONG
                 ).show()
-
-                //TODO("hideProgressDialog()")
             }
     }
 
@@ -158,7 +161,7 @@ class ProcessoDetalheFragment : BaseFragment() {
             return
         }
 
-        //TODO("showProgressDialog("Please wait...")")
+        showProgressDialog(getString(R.string.aguardePorfavor))
 
         val processo = Processo(
             id = processoDetalhes.id,
@@ -173,7 +176,7 @@ class ProcessoDetalheFragment : BaseFragment() {
             advogado = (if (advSelecionado != processoDetalhes.advogado) advSelecionado else processoDetalhes.advogado),
         )
 
-        processoRepository.AdicionarProcesso(
+        processoRepository.AtualizarProcesso(
             processo,
             { atualizarProcessoSuccess() },
             { atualizarProcessoFailure() }
@@ -195,19 +198,19 @@ class ProcessoDetalheFragment : BaseFragment() {
 
             val adapter = ProcessosStatusAdapter(requireContext(), processosStatus)
             spinnerStatus.adapter = adapter
-        }
 
-        spinnerStatus.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val selectedItem = parent?.getItemAtPosition(position) as? String
-                selectedItem?.let {
-                    statusProcessoSelecionado = selectedItem
-                    spinnerStatus.setSelection(id.toInt())
+            spinnerStatus.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    val selectedItem = spinnerStatus.selectedItem as? ProcessoStatus
+                    selectedItem?.let {
+                        statusProcessoSelecionado = selectedItem.id
+                        spinnerStatus.setSelection(id.toInt())
+                    }
                 }
-            }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                // Nada selecionado
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    // Nada selecionado
+                }
             }
         }
     }
@@ -222,19 +225,19 @@ class ProcessoDetalheFragment : BaseFragment() {
 
             val adapter = ProcessosTiposAdapter(requireContext(), processosTipos)
             spinnerTipos.adapter = adapter
-        }
 
-        spinnerTipos.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val selectedItem = parent?.getItemAtPosition(position) as? String
-                selectedItem?.let {
-                    tipoProcessoSelecionado = selectedItem
-                    spinnerTipos.setSelection(id.toInt())
+            spinnerTipos.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    val selectedItem = spinnerTipos.selectedItem as? ProcessoTipo
+                    selectedItem?.let {
+                        tipoProcessoSelecionado = selectedItem.id
+                        spinnerTipos.setSelection(id.toInt())
+                    }
                 }
-            }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                // Nada selecionado
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    // Nada selecionado
+                }
             }
         }
     }
@@ -397,39 +400,23 @@ class ProcessoDetalheFragment : BaseFragment() {
         val sDayOfMonth = if (day < 10) "0$day" else "$day"
         val sMonthOfYear = if ((month + 1) < 10) "0${month + 1}" else "${month + 1}"
 
-        val selectedDate = "$sDayOfMonth/$sMonthOfYear/$year"
-        binding.tvSelectData.text = selectedDate
+        dataSelecionada = "$year-$sMonthOfYear-$sDayOfMonth"
+        binding.tvSelectData.text = "$sDayOfMonth/$sMonthOfYear/$year"
     }
 
-//    private fun atualizarProcessoSuccess() {
-//        //TODO("hideProgressDialog()")
-//        intent.putExtra(Constants.FROM_PROCESSO_ACTIVITY, Constants.FROM_PROCESSO_ACTIVITY)
-//        setResult(Activity.RESULT_OK, intent)
-//        finish()
-//    }
-
     private fun atualizarProcessoSuccess() {
-        val result = Bundle().apply {
-            putString(Constants.FROM_PROCESSO_ACTIVITY, Constants.FROM_PROCESSO_ACTIVITY)
-        }
+        hideProgressDialog()
+
+//        val result = Bundle().apply {
+//            putString(Constants.FROM_PROCESSO_ACTIVITY, Constants.FROM_PROCESSO_ACTIVITY)
+//        }
 
         //setFragmentResult(Constants.RESULT_KEY, result)
-        requireActivity().setResult(Activity.RESULT_OK)
+        requireActivity().setResult(Activity.RESULT_OK, requireActivity().intent)
         requireActivity().finish()
     }
 
     private fun atualizarProcessoFailure() {
-        //TODO("hideProgressDialog()")
+        hideProgressDialog()
     }
-
-//    private fun deletarProcessoSuccess() {
-//        //TODO("hideProgressDialog()")
-//        intent.putExtra(Constants.FROM_PROCESSO_ACTIVITY, Constants.FROM_PROCESSO_ACTIVITY)
-//        setResult(Activity.RESULT_OK, intent)
-//        finish()
-//    }
-//
-//    private fun deletarProcessoFailure() {
-//        //TODO("hideProgressDialog()")
-//    }
 }

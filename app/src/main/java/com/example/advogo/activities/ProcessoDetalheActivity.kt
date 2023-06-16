@@ -86,7 +86,18 @@ class ProcessoDetalheActivity : BaseActivity() {
         viewPager.adapter = adapter
 
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            tab.text = adapter.getTabTitle(position)
+            //tab.text = adapter.getTabTitle(position)]
+
+            val customView = LayoutInflater.from(this@ProcessoDetalheActivity)
+                .inflate(R.layout.item_tab_layout, tabLayout, false)
+
+            val tabIcon: ImageView = customView.findViewById(R.id.tab_icon)
+            val tabTitle: TextView = customView.findViewById(R.id.tab_title)
+
+            tabIcon.setImageResource(getTabIcon(position))
+            tabTitle.text = adapter.getTabTitle(position)
+
+            tab.customView = customView
         }.attach()
     }
 
@@ -144,14 +155,24 @@ class ProcessoDetalheActivity : BaseActivity() {
     }
 
     private fun deletarProcessoSuccess() {
-        //TODO("hideProgressDialog()")
+        hideProgressDialog()
+
         intent.putExtra(Constants.FROM_PROCESSO_ACTIVITY, Constants.FROM_PROCESSO_ACTIVITY)
         setResult(Activity.RESULT_OK, intent)
         finish()
     }
 
     private fun deletarProcessoFailure() {
-        //TODO("hideProgressDialog()")
+        hideProgressDialog()
+    }
+
+    private fun getTabIcon(position: Int): Int {
+        return when (position) {
+            0 -> R.drawable.ic_baseline_app_registration_24
+            1 -> R.drawable.ic_baseline_timeline_24
+            2 -> R.drawable.ic_baseline_attachment_24
+            else -> 0
+        }
     }
 }
 

@@ -48,6 +48,8 @@
     <string name="hintDiligenciaData">Data da Diligência</string>
     <string name="hintDiligenciaProcesso">Nº do Processo</string>
     <string name="hintDiligenciaAdvogado">Advogado designado</string>
+    <string name="hintStatusDiligenciaDescription">Status da Diligência</string>
+    <string name="hintTipoDiligenciaDescription">Tipo da Diligência</string>
 
     <!--SPLASH SCREEN-->
     <string name="splashScreenTexto">Advogo</string>
@@ -63,6 +65,7 @@
     <string name="nenhumClienteEncontrado">Nenhum cliente encontrado!</string>
     <string name="nenhumaDiligenciaEncontrada">Nenhuma diligência encontrada!</string>
     <string name="nenhumAnexoEncontrado">Nenhum anexo encontrado!</string>
+    <string name="nenhumAndamentoEncontrado">Nenhum andamento encontrado!</string>
 
     <!--INTRO-->
     <string name="imageContentDescription">Imagem</string>

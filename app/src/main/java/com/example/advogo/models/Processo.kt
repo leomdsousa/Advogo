@@ -26,6 +26,7 @@ data class Processo(
     @Transient var advogadoObj: Advogado? = null,
     @Transient var diligenciasLista: List<Diligencia>? = null,
     @Transient var anexosLista: List<Anexo>? = null,
+    @Transient var andamentosLista: List<ProcessoAndamento>? = null,
     @Transient var selecionado: Boolean = false,
 ): Parcelable {
 }

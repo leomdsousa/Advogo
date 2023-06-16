@@ -213,19 +213,19 @@ class ProcessoCadastroActivity : BaseActivity() {
 
             val adapter = ProcessosStatusAdapter(this@ProcessoCadastroActivity, processosStatus)
             spinnerStatus.adapter = adapter
-        }
 
-        spinnerStatus.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val selectedItem = parent?.getItemAtPosition(position) as? String
-                selectedItem?.let {
-                    statusProcessoSelecionado = selectedItem
-                    spinnerStatus.setSelection(id.toInt())
+            spinnerStatus.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    val selectedItem = spinnerStatus.selectedItem as? ProcessoStatus
+                    selectedItem?.let {
+                        statusProcessoSelecionado = selectedItem.id
+                        spinnerStatus.setSelection(id.toInt())
+                    }
                 }
-            }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                // Nada selecionado
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    // Nada selecionado
+                }
             }
         }
     }
@@ -240,28 +240,26 @@ class ProcessoCadastroActivity : BaseActivity() {
 
             val adapter = ProcessosTiposAdapter(this@ProcessoCadastroActivity, processosTipos)
             spinnerTipos.adapter = adapter
-        }
 
-        spinnerTipos.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val selectedItem = parent?.getItemAtPosition(position) as? String
-                selectedItem?.let {
-                    tipoProcessoSelecionado = selectedItem
-                    spinnerTipos.setSelection(id.toInt())
+            spinnerTipos.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    val selectedItem = spinnerTipos.selectedItem as? ProcessoTipo
+                    selectedItem?.let {
+                        tipoProcessoSelecionado = selectedItem.id
+                        spinnerTipos.setSelection(id.toInt())
+                    }
                 }
-            }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                // Nada selecionado
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    // Nada selecionado
+                }
             }
         }
     }
 
     private fun salvarImagemProcesso() {
-        //TODO("showProgressDialog("Please wait...")")
-
         val sRef: StorageReference = FirebaseStorage.getInstance().reference.child(
-            "PROCESSO_${id}_IMAGEm" + System.currentTimeMillis() + "."
+            "PROCESSO_${id}_IMAGEM" + System.currentTimeMillis() + "."
                     + getFileExtension(imagemSelecionadaURI!!)
         )
 
@@ -276,11 +274,9 @@ class ProcessoCadastroActivity : BaseActivity() {
             .addOnFailureListener { exception ->
                 Toast.makeText(
                     this@ProcessoCadastroActivity,
-                    exception.message,
+                    "Erro ao inserir imagem",
                     Toast.LENGTH_LONG
                 ).show()
-
-                //TODO("hideProgressDialog()")
             }
     }
 
@@ -289,7 +285,7 @@ class ProcessoCadastroActivity : BaseActivity() {
             return
         }
 
-        //TODO("showProgressDialog("Please wait...")")
+        showProgressDialog(getString(R.string.aguardePorfavor))
 
         val processo = Processo(
             id = "",
@@ -315,8 +311,8 @@ class ProcessoCadastroActivity : BaseActivity() {
         val sDayOfMonth = if (day < 10) "0$day" else "$day"
         val sMonthOfYear = if ((month + 1) < 10) "0${month + 1}" else "${month + 1}"
 
-        dataSelecionada = "$sDayOfMonth/$sMonthOfYear/$year"
-        binding.etData.setText(dataSelecionada)
+        dataSelecionada = "$year-$sMonthOfYear-$sDayOfMonth"
+        binding.etData.setText("$sDayOfMonth/$sMonthOfYear/$year")
     }
 
     private fun validarFormulario(): Boolean {
@@ -369,14 +365,15 @@ class ProcessoCadastroActivity : BaseActivity() {
     }
 
     private fun processoCadastroSuccess() {
-        //TODO("hideProgressDialog()")
+        hideProgressDialog()
+
         intent.putExtra(Constants.FROM_PROCESSO_ACTIVITY, Constants.FROM_PROCESSO_ACTIVITY)
         setResult(Activity.RESULT_OK, intent)
         finish()
     }
 
     private fun processoCadastroFailure() {
-        //TODO("hideProgressDialog()")
+        hideProgressDialog()
 
         Toast.makeText(
             this@ProcessoCadastroActivity,

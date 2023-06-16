@@ -52,14 +52,6 @@ class PerfilActivity : BaseActivity() {
         }
 
         binding.btnUpdate.setOnClickListener {
-//            if(imagemSelecionadaURI != null) {
-//                atualizarAdvogadoImagem()
-//            } else {
-//                //TODO("Exibir Progress Dialog")
-//                atualizarAdvogado()
-//                //TODO("Esconder Progress Dialog")
-//            }
-
               atualizarAdvogado()
         }
 
@@ -123,13 +115,11 @@ class PerfilActivity : BaseActivity() {
                 setDadosPerfil(advogado)
                 atualizarPerfilSuccess()
             },
-            { null }
+            { atualizarPerfilFailure() }
         )
     }
 
     private fun atualizarAdvogadoImagem() {
-        //TODO("Exibir Progress Dialog")
-
         val sRef: StorageReference = FirebaseStorage.getInstance().reference.child(
             "ADVOGADO_${advogadoDetalhes.oab}_IMAGEM" + System.currentTimeMillis() + "." + getFileExtension(
                 imagemSelecionadaURI!!
@@ -141,27 +131,15 @@ class PerfilActivity : BaseActivity() {
                 taskSnapshot.metadata!!.reference!!.downloadUrl
                     .addOnSuccessListener { uri ->
                         imagemPerfilURL = uri.toString()
-                        //atualizarAdvogado()
                         advogadoDetalhes.imagem = imagemPerfilURL
-
-                        advRepository.AtualizarAdvogado(
-                            advogadoDetalhes,
-                            { null },
-                            { null }
-                        )
                     }
-
-                //TODO("Esconder Progress Dialog")
-                finish()
             }
             .addOnFailureListener { exception ->
                 Toast.makeText(
                     this@PerfilActivity,
-                    exception.message,
+                    "Erro au atualizar imagem",
                     Toast.LENGTH_LONG
                 ).show()
-
-                //TODO("Esconder Progress Dialog")
             }
     }
 
@@ -225,11 +203,16 @@ class PerfilActivity : BaseActivity() {
         return validado
     }
 
-    fun atualizarPerfilSuccess() {
-        //TODO("Fechar Progress Dialog")
+    private fun atualizarPerfilSuccess() {
+        hideProgressDialog()
+
         intent.putExtra(Constants.FROM_PERFIL_ACTIVITY, Constants.FROM_PERFIL_ACTIVITY)
         setResult(Activity.RESULT_OK, intent)
         finish()
+    }
+
+    private fun atualizarPerfilFailure() {
+        hideProgressDialog()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

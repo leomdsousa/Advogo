@@ -1,8 +1,6 @@
 package com.example.advogo.utils
 
 object Constants {
-
-
     const val ADVOGADOS_TABLE = "advogados"
     const val ADVOGADOS_ID = "_id"
     const val ADVOGADOS_NOME = "nome"
@@ -32,6 +30,10 @@ object Constants {
     const val PROCESSOS_STATUS_STATUS = "status"
 
     const val PROCESSOS_ANDAMENTOS_TABLE = "processosAndamentos"
+
+    const val PROCESSOS_STATUS_ANDAMENTOS_TABLE = "processosStatusAndamentos"
+
+    const val PROCESSOS_TIPOS_ANDAMENTOS_TABLE = "processosTiposAndamentos"
 
     const val DILIGENCIAS_TABLE = "diligencias"
     const val DILIGENCIAS_ID = "_id"
@@ -91,6 +93,8 @@ object Constants {
     const val FROM_DEVICE_GALLERY = "FROM_DEVICE_GALLERY"
     const val FROM_DEVICE_CAMERA = "FROM_DEVICE_CAMERA"
     const val FROM_REGISTRAR_ACTIVITY = "FROM_REGISTRAR_ACTIVITY"
+    const val FROM_ANEXOS_ACTIVITY = "FROM_ANEXOS_ACTIVITY"
+    const val FROM_ANDAMENTOS_ACTIVITY = "FROM_ANDAMENTOS_ACTIVITY"
 
     //Indica para Map Activity qual objeto obter
     const val PROCESSO_MAP = "PROCESSO_MAP"

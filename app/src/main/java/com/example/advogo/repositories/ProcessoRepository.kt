@@ -122,8 +122,7 @@ class ProcessoRepository @Inject constructor(
     override fun AdicionarProcesso(model: Processo, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.PROCESSOS_TABLE)
-            .document(model.id)
-            .set(model, SetOptions.merge())
+            .add(model)
             .addOnSuccessListener {
                 onSuccessListener()
             }

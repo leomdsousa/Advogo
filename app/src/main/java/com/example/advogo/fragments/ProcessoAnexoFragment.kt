@@ -54,12 +54,12 @@ class ProcessoAnexoFragment : BaseFragment() {
 
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-//                if (result.data!!.hasExtra(Constants.FROM_ANEXOS_ACTIVITY)) {
-//                    anexoRepository.ObterDiligencias(
-//                        { lista -> setDiligenciasToUI(lista as ArrayList<Diligencia>) },
-//                        { ex -> null } //TODO("Imlementar OnFailure")
-//                    )
-//                }
+                if (result.data!!.hasExtra(Constants.FROM_ANEXOS_ACTIVITY)) {
+                    anexoRepository.ObterAnexos(
+                        { lista -> setAnexosToUI(lista as ArrayList<Anexo>) },
+                        { ex -> null } //TODO("Imlementar OnFailure")
+                    )
+                }
             } else {
                 Log.e("Cancelado", "Cancelado")
             }
@@ -73,8 +73,6 @@ class ProcessoAnexoFragment : BaseFragment() {
     }
 
     private fun setAnexosToUI(lista: ArrayList<Anexo>) {
-        //TODO("hideProgressDialog()")
-
         if(lista.size > 0) {
             binding.rvAnexosLista.visibility = View.VISIBLE
             binding.tvNenhumAnexoDisponivel.visibility = View.GONE

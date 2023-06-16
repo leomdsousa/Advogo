@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.advogo.R
 import com.example.advogo.activities.ClienteCadastroActivity
 import com.example.advogo.activities.ClienteDetalheActivity
 import com.example.advogo.adapters.ClientesAdapter
@@ -51,16 +52,22 @@ class ClienteFragment : BaseFragment() {
         }
 
         clienteRepository.ObterClientes(
-            { Clientes -> setClientesToUI(Clientes as ArrayList<Cliente>) },
-            { null } //TODO("Implementar")
+            { Clientes ->
+                setClientesToUI(Clientes as ArrayList<Cliente>)
+                hideProgressDialog()
+            },
+            { hideProgressDialog() }
         )
 
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 if (result.data!!.hasExtra(Constants.FROM_CLIENTE_ACTIVITY)) {
                     clienteRepository.ObterClientes(
-                        { lista -> setClientesToUI(lista as ArrayList<Cliente>) },
-                        { ex -> null } //TODO("Imlementar OnFailure")
+                        { lista ->
+                            setClientesToUI(lista as ArrayList<Cliente>)
+                            hideProgressDialog()
+                        },
+                        { hideProgressDialog() }
                     )
                 }
             } else {
@@ -70,8 +77,6 @@ class ClienteFragment : BaseFragment() {
     }
 
     private fun setClientesToUI(lista: ArrayList<Cliente>) {
-        //TODO("hideProgressDialog()")
-
         if(lista.size > 0) {
             binding.rvClientsList.visibility = View.VISIBLE
             binding.tvNoClientsAvailable.visibility = View.GONE

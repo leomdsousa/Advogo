@@ -56,15 +56,18 @@ class ProcessosFragment : BaseFragment() {
                 setProcessosToUI(processos as ArrayList<Processo>)
                 hideProgressDialog()
             },
-            { null } //TODO("Implementar")
+            { hideProgressDialog() }
         )
 
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 if (result.data!!.hasExtra(Constants.FROM_PROCESSO_ACTIVITY)) {
                     processoRepository.ObterProcessos(
-                        { lista -> setProcessosToUI(lista!! as ArrayList<Processo>) },
-                        { ex -> null } //TODO("Imlementar OnFailure")
+                        { lista ->
+                            setProcessosToUI(lista!! as ArrayList<Processo>)
+                            hideProgressDialog()
+                        },
+                        { hideProgressDialog() }
                     )
                 }
             } else {
@@ -74,8 +77,6 @@ class ProcessosFragment : BaseFragment() {
     }
 
     private fun setProcessosToUI(lista: ArrayList<Processo>) {
-        //TODO("hideProgressDialog()")
-
         CoroutineScope(Dispatchers.Main).launch {
             if(lista.size > 0) {
                 binding.rvBoardsList.visibility = View.VISIBLE

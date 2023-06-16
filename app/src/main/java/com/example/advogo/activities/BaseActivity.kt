@@ -60,15 +60,30 @@ import java.util.*
 import javax.inject.Inject
 
 open class BaseActivity : AppCompatActivity() {
-    class BaseActivity @Inject constructor(
-        private val progressDialog: ProgressDialog
-    ) { }
+    @Inject lateinit var progressDialog: ProgressDialog
 
     private lateinit var _sharedPreferences: SharedPreferences
     private lateinit var _result: ActivityResultLauncher<Intent>
     private var _doubleBackToExitPressureOnce = false
 
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+
+    fun showProgressDialog(texto: String? = null) {
+        if (!::progressDialog.isInitialized || !progressDialog.isShowing) {
+            progressDialog = ProgressDialog(this)
+            progressDialog.setCancelable(false)
+            if (texto != null) {
+                progressDialog.setTitle(texto)
+            }
+            progressDialog.show()
+        }
+    }
+
+    fun hideProgressDialog() {
+        if(progressDialog.isShowing) {
+            progressDialog.dismiss()
+        }
+    }
 
     fun isUserLoggedIn(): Boolean {
         return getCurrentUserID().isNotEmpty()

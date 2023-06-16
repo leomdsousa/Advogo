@@ -86,7 +86,7 @@ class ClienteDetalheActivity : BaseActivity() {
             return
         }
 
-        //TODO("showProgressDialog("Please wait...")")
+        showProgressDialog(getString(R.string.aguardePorfavor))
 
         val cliente = Cliente(
             id = clienteDetalhes.id,
@@ -102,8 +102,8 @@ class ClienteDetalheActivity : BaseActivity() {
 
         clienteRepository.AtualizarCliente(
             cliente,
-            { clienteCadastroSuccess() },
-            { clienteCadastroFailure() }
+            { clienteEdicaoSuccess() },
+            { clienteEdicaoFailure() }
         )
     }
 
@@ -194,15 +194,16 @@ class ClienteDetalheActivity : BaseActivity() {
         return validado
     }
 
-    private fun clienteCadastroSuccess() {
-        //TODO("hideProgressDialog()")
+    private fun clienteEdicaoSuccess() {
+        hideProgressDialog()
+
         intent.putExtra(Constants.FROM_CLIENTE_ACTIVITY, Constants.FROM_CLIENTE_ACTIVITY)
         setResult(Activity.RESULT_OK, intent)
         finish()
     }
 
-    private fun clienteCadastroFailure() {
-        //TODO("hideProgressDialog()")
+    private fun clienteEdicaoFailure() {
+        hideProgressDialog()
 
         Toast.makeText(
             this@ClienteDetalheActivity,
@@ -216,13 +217,14 @@ class ClienteDetalheActivity : BaseActivity() {
     }
 
     private fun deletarClienteSuccess() {
-        //TODO("hideProgressDialog()")
+        hideProgressDialog()
+
         intent.putExtra(Constants.FROM_CLIENTE_ACTIVITY, Constants.FROM_CLIENTE_ACTIVITY)
         setResult(Activity.RESULT_OK, intent)
         finish()
     }
 
     private fun deletarClienteFailure() {
-        //TODO("hideProgressDialog()")
+        hideProgressDialog()
     }
 }

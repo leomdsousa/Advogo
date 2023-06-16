@@ -79,8 +79,11 @@ class DiligenciasFragment : BaseFragment() {
         }
 
         diligenciaRepository.ObterDiligencias(
-            { diligencias -> setDiligenciasToUI(diligencias) },
-            { null } //TODO("Implementar")
+            { diligencias ->
+                setDiligenciasToUI(diligencias)
+                hideProgressDialog()
+            },
+            { hideProgressDialog() }
         )
 
         binding.calendarView.setOnDateChangedListener { widget, date, selected ->
@@ -96,8 +99,11 @@ class DiligenciasFragment : BaseFragment() {
             if (result.resultCode == Activity.RESULT_OK) {
                 if (result.data!!.hasExtra(Constants.FROM_DILIGENCIA_ACTIVITY)) {
                     diligenciaRepository.ObterDiligencias(
-                        { lista -> setDiligenciasToUI(lista as ArrayList<Diligencia>) },
-                        { ex -> null } //TODO("Imlementar OnFailure")
+                        { lista ->
+                            setDiligenciasToUI(lista as ArrayList<Diligencia>)
+                            hideProgressDialog()
+                        },
+                        { hideProgressDialog() }
                     )
                 }
             } else {
@@ -107,8 +113,6 @@ class DiligenciasFragment : BaseFragment() {
     }
 
     private fun setDiligenciasToUI(lista: List<Diligencia>) {
-        //TODO("hideProgressDialog()")
-
         CoroutineScope(Dispatchers.Main).launch {
             if(lista.isNotEmpty()) {
                 binding.rvDiligenciasList.visibility = View.VISIBLE

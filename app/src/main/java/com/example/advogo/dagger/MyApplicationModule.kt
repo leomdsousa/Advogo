@@ -59,6 +59,14 @@ object MyApplicationModule {
 
     @Provides
     @Singleton
+    fun provideDiligenciaHistoricoRepository(
+        firestore: FirebaseFirestore
+    ): IDiligenciaHistoricoRepository {
+        return DiligenciaHistoricoRepository(firestore)
+    }
+
+    @Provides
+    @Singleton
     fun provideEnderecoRepository(firestore: FirebaseFirestore): IEnderecoRepository {
         return EnderecoRepository(firestore)
     }
@@ -97,6 +105,24 @@ object MyApplicationModule {
     @Singleton
     fun provideProcessoTipoRepository(firestore: FirebaseFirestore): IProcessoTipoRepository {
         return ProcessoTipoRepository(firestore)
+    }
+
+    @Provides
+    @Singleton
+    fun provideProcessoAndamentoRepository(firestore: FirebaseFirestore): IProcessoAndamentoRepository {
+        return ProcessoAndamentoRepository(firestore)
+    }
+
+    @Provides
+    @Singleton
+    fun provideProcessoTipoAndamentoRepository(firestore: FirebaseFirestore): IProcessoTipoAndamentoRepository {
+        return ProcessoTipoAndamentoRepository(firestore)
+    }
+
+    @Provides
+    @Singleton
+    fun provideProcessoStatusAndamentoRepository(firestore: FirebaseFirestore): IProcessoStatusAndamentoRepository {
+        return ProcessoStatusAndamentoRepository(firestore)
     }
 
     @Provides

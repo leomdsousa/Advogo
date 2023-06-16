@@ -38,7 +38,7 @@ class LoginActivity : BaseActivity() {
         val password = binding.etPassword.text.toString().trim()
 
         if(validarFormulario()) {
-            //TODO("Mostrar progress bar")
+            showProgressDialog(getString(R.string.aguardePorfavor))
 
             firebaseAuth
                 .signInWithEmailAndPassword(email, password)
@@ -78,16 +78,17 @@ class LoginActivity : BaseActivity() {
         return validado
     }
 
-    fun loginSuccess(advogado: Advogado) {
-        //TODO("Fechar progress bar")
+    private fun loginSuccess(advogado: Advogado) {
+        hideProgressDialog()
+
         val intent = Intent(this@LoginActivity, MainActivity::class.java)
         intent.putExtra(Constants.FROM_LOGIN_ACTIVITY, Constants.FROM_LOGIN_ACTIVITY)
         startActivity(intent)
         finish()
     }
 
-    fun loginFailure() {
-        //TODO("Fechar progress bar")
+    private fun loginFailure() {
+        hideProgressDialog()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

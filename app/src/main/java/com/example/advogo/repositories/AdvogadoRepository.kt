@@ -107,13 +107,12 @@ class AdvogadoRepository @Inject constructor(
     override fun AdicionarAdvogado(model: Advogado, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.ADVOGADOS_TABLE)
-            .document(getCurrentUserId())
-            .set(model, SetOptions.merge())
+            .add(model)
             .addOnSuccessListener {
                 onSuccessListener()
             }
             .addOnFailureListener {
-                onFailureListener
+                onFailureListener(it)
             }
     }
     override fun AtualizarAdvogado(model: Advogado, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit) {

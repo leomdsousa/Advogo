@@ -41,7 +41,7 @@ class ClienteCadastroActivity : BaseActivity() {
             return
         }
 
-        //TODO("showProgressDialog("Please wait...")")
+        showProgressDialog(getString(R.string.aguardePorfavor))
 
         val cliente = Cliente(
             id = "",
@@ -63,14 +63,15 @@ class ClienteCadastroActivity : BaseActivity() {
     }
 
     private fun clienteCadastroSuccess() {
-        //TODO("hideProgressDialog()")
+        hideProgressDialog()
+
         intent.putExtra(Constants.FROM_CLIENTE_ACTIVITY, Constants.FROM_CLIENTE_ACTIVITY)
         setResult(Activity.RESULT_OK, intent)
         finish()
     }
 
     private fun clienteCadastroFailure() {
-        //TODO("hideProgressDialog()")
+        hideProgressDialog()
 
         Toast.makeText(
             this@ClienteCadastroActivity,

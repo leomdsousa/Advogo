@@ -145,18 +145,19 @@ class DiligenciaDetalheActivity : BaseActivity() {
 
             val adapter = DiligenciasStatusAdapter(this@DiligenciaDetalheActivity, diligenciaStatus!!)
             spinnerStatus.adapter = adapter
-        }
 
-        spinnerStatus.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val selectedItem = parent?.getItemAtPosition(position) as? String
-                selectedItem?.let {
-                    spinnerStatus.setSelection(id.toInt())
+            spinnerStatus.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    val selectedItem = spinnerStatus.selectedItem as? DiligenciaStatus
+                    selectedItem?.let {
+                        statusDiligenciaSelecionada = selectedItem.id
+                        spinnerStatus.setSelection(id.toInt())
+                    }
                 }
-            }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                // Nada selecionado
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    // Nada selecionado
+                }
             }
         }
     }
@@ -171,18 +172,19 @@ class DiligenciaDetalheActivity : BaseActivity() {
 
             val adapter = DiligenciasTiposAdapter(this@DiligenciaDetalheActivity, diligenciaTipos!!)
             spinnerTipos.adapter = adapter
-        }
 
-        spinnerTipos.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val selectedItem = parent?.getItemAtPosition(position) as? String
-                selectedItem?.let {
-                    spinnerTipos.setSelection(id.toInt())
+            spinnerTipos.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    val selectedItem = spinnerTipos.selectedItem as? DiligenciaTipo
+                    selectedItem?.let {
+                        tipoDiligenciaSelecionada = selectedItem.id
+                        spinnerTipos.setSelection(id.toInt())
+                    }
                 }
-            }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                // Nada selecionado
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    // Nada selecionado
+                }
             }
         }
     }
@@ -215,9 +217,8 @@ class DiligenciaDetalheActivity : BaseActivity() {
             return
         }
 
-        //TODO("showProgressDialog("Please wait...")")
+        showProgressDialog(getString(R.string.aguardePorfavor))
 
-        //TODO("preencher obj para add ou alterar")
         val diligencia = Diligencia(
             id = diligenciaDetalhes.id,
             descricao = if (binding.etDiligenciaDescricao.text.toString() != diligenciaDetalhes.descricao) binding.etDiligenciaDescricao.text.toString() else diligenciaDetalhes.descricao,
@@ -231,10 +232,10 @@ class DiligenciaDetalheActivity : BaseActivity() {
             advogado = if (processoSelecionado != diligenciaDetalhes.processo) processoSelecionado else diligenciaDetalhes.processo,
         )
 
-        diligenciaRepository.AdicionarDiligencia(
+        diligenciaRepository.AtualizarDiligencia(
             diligencia,
-            { diligenciaCadastroSuccess() },
-            { diligenciaCadastroFailure() }
+            { diligenciaEdicaoSuccess() },
+            { diligenciaEdicaoFailure() }
         )
     }
 
@@ -413,15 +414,16 @@ class DiligenciaDetalheActivity : BaseActivity() {
         return validado
     }
 
-    private fun diligenciaCadastroSuccess() {
-        //TODO("hideProgressDialog()")
+    private fun diligenciaEdicaoSuccess() {
+        hideProgressDialog()
+
         intent.putExtra(Constants.FROM_DILIGENCIA_ACTIVITY, Constants.FROM_DILIGENCIA_ACTIVITY)
         setResult(Activity.RESULT_OK, intent)
         finish()
     }
 
-    private fun diligenciaCadastroFailure() {
-        //TODO("hideProgressDialog()")
+    private fun diligenciaEdicaoFailure() {
+        hideProgressDialog()
 
         Toast.makeText(
             this@DiligenciaDetalheActivity,
@@ -431,12 +433,15 @@ class DiligenciaDetalheActivity : BaseActivity() {
     }
 
     private fun deletarDiligenciaSuccess() {
-        //TODO("hideProgressDialog()")
+        hideProgressDialog()
+
+        intent.putExtra(Constants.FROM_DILIGENCIA_ACTIVITY, Constants.FROM_DILIGENCIA_ACTIVITY)
+        setResult(Activity.RESULT_OK, intent)
         finish()
     }
 
     private fun deletarDiligenciaFailure() {
-        //TODO("hideProgressDialog()")
+        hideProgressDialog()
     }
 
     private fun configurarGoogleMapPlaces() {
@@ -450,7 +455,7 @@ class DiligenciaDetalheActivity : BaseActivity() {
         val sDayOfMonth = if (dia < 10) "0$dia" else "$dia"
         val sMonthOfYear = if ((mes + 1) < 10) "0${mes + 1}" else "${mes + 1}"
 
-        dataSelecionada = "$sDayOfMonth/$sMonthOfYear/$ano"
-        binding.etDiligenciaData.setText(dataSelecionada)
+        dataSelecionada = "$ano-$sMonthOfYear-$sDayOfMonth"
+        binding.etDiligenciaData.setText("$sDayOfMonth/$sMonthOfYear/$ano")
     }
 }

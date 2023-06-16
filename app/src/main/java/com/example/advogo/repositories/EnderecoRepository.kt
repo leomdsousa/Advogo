@@ -51,8 +51,7 @@ class EnderecoRepository @Inject constructor(
     override fun AdicionarEndereco(model: Endereco, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.ENDERECOS_TABLE)
-            .document(model.id)
-            .set(model, SetOptions.merge())
+            .add(model)
             .addOnSuccessListener {
                 onSuccessListener()
             }
