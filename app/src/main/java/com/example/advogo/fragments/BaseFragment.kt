@@ -165,6 +165,49 @@ open class BaseFragment : Fragment() {
             }
     }
 
+    fun deletarArquivo(url: String) {
+//        val intent = Intent(Intent.ACTION_VIEW)
+//        intent.setDataAndType(Uri.parse(url), "application/pdf")
+//        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+//
+//        if(consegueAbrirArquivo(intent)) {
+//            startActivity(intent)
+//        } else {
+//            Toast.makeText(requireContext(), "Nenhum aplicativo encontrado para visualizar o PDF.", Toast.LENGTH_SHORT).show()
+//        }
+
+        val storageReference = Firebase.storage.getReferenceFromUrl(url)
+
+        val localFile = File.createTempFile("temp", "pdf")
+
+        storageReference.getFile(localFile)
+            .addOnSuccessListener {
+                val fileUri = FileProvider.getUriForFile(
+                    requireContext(),
+                    requireContext().packageName + ".fileprovider",
+                    localFile
+                )
+
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.setDataAndType(fileUri, "application/pdf")
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+
+                startActivity(intent)
+//                if (consegueAbrirArquivo(intent)) {
+//                    startActivity(intent)
+//                } else {
+//                    Toast.makeText(
+//                        requireContext(),
+//                        "Nenhum aplicativo encontrado para visualizar o PDF.",
+//                        Toast.LENGTH_SHORT
+//                    ).show()
+//                }
+            }
+            .addOnFailureListener {
+                Toast.makeText(requireContext(), "Erro ao baixar o arquivo.", Toast.LENGTH_SHORT).show()
+            }
+    }
+
     private fun consegueAbrirArquivo(intent: Intent): Boolean {
         val packageManager = requireContext().packageManager
         return intent.resolveActivity(packageManager) != null

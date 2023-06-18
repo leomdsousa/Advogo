@@ -4,42 +4,124 @@ import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.widget.AdapterView
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.get
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.advogo.adapters.ProcessosAdapter
+import com.example.advogo.adapters.ProcessosStatusAndamentosAdapter
+import com.example.advogo.adapters.ProcessosTiposAndamentosAdapter
 import com.example.advogo.databinding.DialogListBinding
-import com.example.advogo.models.Processo
-import com.example.advogo.models.ProcessoAndamento
+import com.example.advogo.databinding.DialogProcessoAndamentoBinding
+import com.example.advogo.models.*
+import com.example.advogo.repositories.IProcessoStatusAndamentoRepository
+import com.example.advogo.repositories.IProcessoTipoAndamentoRepository
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 abstract class ProcessoAndamentoDialog(
     context: Context,
     private var andamento: ProcessoAndamento,
-    private val titulo: String
+    private var tiposAndamentos: List<ProcessoTipoAndamento>,
+    private var statusAndamentos: List<ProcessoStatusAndamento>
 ): Dialog(context) {
-    private lateinit var binding: DialogListBinding
+    private lateinit var binding: DialogProcessoAndamentoBinding
+
+    private var tipoAndamentoSelecionado: String? = null
+    private var statusAndamentoSelecionado: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState ?: Bundle())
 
-        binding = DialogListBinding.inflate(layoutInflater)
-        val view = binding.root
+        binding = DialogProcessoAndamentoBinding.inflate(layoutInflater)
 
-        setContentView(view)
+        setContentView(binding.root)
         setCanceledOnTouchOutside(true)
         setCancelable(true)
-        setDados()
+        setupSpinners()
+        setDados(andamento)
 
-        view.setOnClickListener {
-//            override fun onSubmit(andamento: ProcessoAndamento) {
-//                dismiss()
-//                onItemSelected(processo)
-//            }
+        binding.btnSubmitProcessoAndamento.setOnClickListener {
+            dismiss()
+            onSubmit(andamento)
         }
 
     }
 
-    private fun setDados() {
-        binding.tvTitle.text = titulo
+    private fun setupSpinners() {
+        setupSpinnerStatusAndamento()
+        setupSpinnerTiposAndamento()
+    }
+
+    private fun setupSpinnerTiposAndamento() {
+        val spinnerTipos = binding.spinnerTipoAndamentoProcesso
+
+        (tiposAndamentos as MutableList<ProcessoTipoAndamento>).add(0, ProcessoTipoAndamento(tipo = "Selecione"))
+
+        val adapter = ProcessosTiposAndamentosAdapter(context, tiposAndamentos)
+        spinnerTipos.adapter = adapter
+
+        if(andamento.tipoObj != null)
+            binding.spinnerTipoAndamentoProcesso.setSelection(tiposAndamentos.indexOf(andamento.tipoObj))
+
+        spinnerTipos.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val selectedItem = spinnerTipos.selectedItem as? ProcessoTipoAndamento
+                selectedItem?.let {
+                    tipoAndamentoSelecionado = selectedItem.id
+                    spinnerTipos.setSelection(id.toInt())
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                // Nada selecionado
+            }
+        }
+    }
+
+    private fun setupSpinnerStatusAndamento() {
+        val spinnerStatus = binding.spinnerStatusProcessoAndamento
+
+        (statusAndamentos as MutableList<ProcessoStatusAndamento>).add(0, ProcessoStatusAndamento(status = "Selecione"))
+
+        val adapter = ProcessosStatusAndamentosAdapter(context, statusAndamentos)
+        spinnerStatus.adapter = adapter
+
+        if(andamento.statusObj != null)
+            binding.spinnerStatusProcessoAndamento.setSelection(statusAndamentos.indexOf(andamento.statusObj))
+
+        spinnerStatus.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val selectedItem = spinnerStatus.selectedItem as? ProcessoTipoAndamento
+                selectedItem?.let {
+                    statusAndamentoSelecionado = selectedItem.id
+                    spinnerStatus.setSelection(id.toInt())
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                // Nada selecionado
+            }
+        }
+    }
+
+    private fun setDados(andamento: ProcessoAndamento) {
+        if(andamento.id.isBlank()) {
+            binding.tvTitle.text = "Cadastro Andamento"
+            binding.btnSubmitProcessoAndamento.text = "Cadastrar"
+        } else {
+            binding.tvTitle.text = "Detalhes Andamento"
+            binding.btnSubmitProcessoAndamento.text = "Atualizar"
+
+            binding.etDescricaoAndamento.setText(andamento.descricao)
+            binding.etDataAndamento.setText(andamento.data)
+            binding.spinnerTipoAndamentoProcesso.setSelection(tiposAndamentos.indexOf(andamento.tipoObj))
+            binding.spinnerStatusProcessoAndamento.setSelection(statusAndamentos.indexOf(andamento.statusObj))
+        }
     }
 
     protected abstract fun onSubmit(andamento: ProcessoAndamento)

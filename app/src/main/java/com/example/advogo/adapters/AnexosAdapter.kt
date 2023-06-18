@@ -31,6 +31,10 @@ open class AnexosAdapter(
                 binding.btnRemoverAnexo.setOnClickListener {
                     onItemClickListener!!.onDelete(item, position)
                 }
+
+                binding.root.setOnClickListener {
+                    onItemClickListener!!.onClick(item)
+                }
             }
 
         }
@@ -54,6 +58,7 @@ open class AnexosAdapter(
     override fun getItemCount(): Int = list.size
 
     interface OnItemClickListener {
+        fun onClick(Anexo: Anexo)
         fun onView(Anexo: Anexo, position: Int)
         fun onDelete(Anexo: Anexo, position: Int)
     }

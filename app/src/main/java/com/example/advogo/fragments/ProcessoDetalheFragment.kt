@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -17,7 +16,6 @@ import com.bumptech.glide.Glide
 import com.example.advogo.R
 import com.example.advogo.adapters.ProcessosStatusAdapter
 import com.example.advogo.adapters.ProcessosTiposAdapter
-import com.example.advogo.databinding.FragmentClienteBinding
 import com.example.advogo.databinding.FragmentProcessoDetalheBinding
 import com.example.advogo.models.*
 import com.example.advogo.repositories.*
@@ -29,12 +27,12 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
+import okhttp3.internal.notifyAll
 import okhttp3.internal.wait
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
-import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 class ProcessoDetalheFragment : BaseFragment() {
@@ -63,6 +61,10 @@ class ProcessoDetalheFragment : BaseFragment() {
 
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
+    private val lock = Any()
+    private var spinnersSetUp = false
+    private var spinnersSettingUp = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -76,16 +78,8 @@ class ProcessoDetalheFragment : BaseFragment() {
 
         obterIntentDados()
 
-        CoroutineScope(Dispatchers.Main).launch {
-            setupSpinners()
-
-//            while (!spinnersInicializados) {
-//                delay(100)
-//            }
-
-            setProcessoToUI(processoDetalhes)
-        }
-
+        setupSpinners()
+        setProcessoToUI(processoDetalhes)
 
         binding.etNumeroProcesso.addTextChangedListener(ProcessMaskTextWatcher(binding.etNumeroProcesso))
 
@@ -199,6 +193,9 @@ class ProcessoDetalheFragment : BaseFragment() {
             val adapter = ProcessosStatusAdapter(requireContext(), processosStatus)
             spinnerStatus.adapter = adapter
 
+            if(processoDetalhes.statusObj != null)
+                binding.spinnerStatusProcesso.setSelection(processosStatus.indexOf(processoDetalhes.statusObj))
+
             spinnerStatus.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                     val selectedItem = spinnerStatus.selectedItem as? ProcessoStatus
@@ -225,6 +222,9 @@ class ProcessoDetalheFragment : BaseFragment() {
 
             val adapter = ProcessosTiposAdapter(requireContext(), processosTipos)
             spinnerTipos.adapter = adapter
+
+            if(processoDetalhes.tipoObj != null)
+                binding.spinnerTipoProcesso.setSelection(processosTipos.indexOf(processoDetalhes.tipoObj))
 
             spinnerTipos.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {

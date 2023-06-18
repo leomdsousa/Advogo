@@ -24,7 +24,8 @@ class ProcessoRepository @Inject constructor(
     private val diligenciaRepository: Provider<DiligenciaRepository>,
     private val tipoProcessoRepository: ProcessoTipoRepository,
     private val statusProcessoRepository: ProcessoStatusRepository,
-    private val anexoRepository: AnexoRepository
+    private val anexoRepository: AnexoRepository,
+    private val andamentoRepository: IProcessoAndamentoRepository
 ): IProcessoRepository {
     private val coroutineScope: CoroutineScope = (context as? LifecycleOwner)?.lifecycleScope ?: GlobalScope
 
@@ -52,6 +53,15 @@ class ProcessoRepository @Inject constructor(
                                 if(item.anexos?.isNotEmpty() == true) {
                                     val anexosDeferred = async { anexoRepository.ObterAnexosPorLista(item.anexos!!) }
                                     item.anexosLista = anexosDeferred.await()
+                                } else {
+                                    item.anexosLista = emptyList()
+                                }
+
+                                if(item.andamentos?.isNotEmpty() == true) {
+                                    val andamentosDeferred = async { andamentoRepository.ObterAndamentosPorLista(item.andamentos!!) }
+                                    item.andamentosLista = andamentosDeferred.await()
+                                } else {
+                                    item.andamentosLista = emptyList()
                                 }
                             }
 
@@ -89,6 +99,15 @@ class ProcessoRepository @Inject constructor(
                         if(processo.anexos?.isNotEmpty() == true) {
                             val anexosDeferred = async { anexoRepository.ObterAnexosPorLista(processo.anexos!!) }
                             processo.anexosLista = anexosDeferred.await()
+                        } else {
+                            processo.anexosLista = emptyList()
+                        }
+
+                        if(processo.andamentos?.isNotEmpty() == true) {
+                            val andamentosDeferred = async { andamentoRepository.ObterAndamentosPorLista(processo.andamentos!!) }
+                            processo.andamentosLista = andamentosDeferred.await()
+                        } else {
+                            processo.andamentosLista = emptyList()
                         }
 
                         onSuccessListener(processo)
@@ -109,7 +128,34 @@ class ProcessoRepository @Inject constructor(
             .addOnSuccessListener { documents ->
                 if (!documents.isEmpty) {
                     val processo = documents.first().toObject(Processo::class.java)!!
-                    onSuccessListener(processo)
+
+                    coroutineScope.launch {
+                        val clienteDeferred = async { clienteRepository.ObterCliente(processo.cliente!!) }
+                        val advogadoDeferred = async { advogadoRepository.ObterAdvogado(processo.advogado!!) }
+                        val statusDeferred = async { statusProcessoRepository.ObterProcessoStatus(processo.status!!) }
+                        val tipoDeferred = async { tipoProcessoRepository.ObterProcessoTipo(processo.tipo!!) }
+
+                        processo.clienteObj = clienteDeferred.await()
+                        processo.advogadoObj = advogadoDeferred.await()
+                        processo.statusObj = statusDeferred.await()
+                        processo.tipoObj = tipoDeferred.await()
+
+                        if(processo.anexos?.isNotEmpty() == true) {
+                            val anexosDeferred = async { anexoRepository.ObterAnexosPorLista(processo.anexos!!) }
+                            processo.anexosLista = anexosDeferred.await()
+                        } else {
+                            processo.anexosLista = emptyList()
+                        }
+
+                        if(processo.andamentos?.isNotEmpty() == true) {
+                            val andamentosDeferred = async { andamentoRepository.ObterAndamentosPorLista(processo.andamentos!!) }
+                            processo.andamentosLista = andamentosDeferred.await()
+                        } else {
+                            processo.andamentosLista = emptyList()
+                        }
+
+                        onSuccessListener(processo)
+                    }
                 } else {
                     onFailureListener(null)
                 }
@@ -144,7 +190,7 @@ class ProcessoRepository @Inject constructor(
     }
     override fun DeletarProcesso(id: String, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
-            .collection(Constants.ADVOGADOS_TABLE)
+            .collection(Constants.PROCESSOS_TABLE)
             .document(id)
             .delete()
             .addOnSuccessListener {
@@ -162,7 +208,38 @@ class ProcessoRepository @Inject constructor(
             .addOnSuccessListener { document ->
                 if (!document.isEmpty) {
                     val resultado = document.toObjects(Processo::class.java)
-                    continuation.resume(resultado)
+
+                    coroutineScope.launch {
+                        if (resultado.isNotEmpty()) {
+                            for (item in resultado) {
+                                val clienteDeferred = async { clienteRepository.ObterCliente(item.cliente!!) }
+                                val advogadoDeferred = async { advogadoRepository.ObterAdvogado(item.advogado!!) }
+                                val statusDeferred = async { statusProcessoRepository.ObterProcessoStatus(item.status!!) }
+                                val tipoDeferred = async { tipoProcessoRepository.ObterProcessoTipo(item.tipo!!) }
+
+                                item.clienteObj = clienteDeferred.await()
+                                item.advogadoObj = advogadoDeferred.await()
+                                item.statusObj = statusDeferred.await()
+                                item.tipoObj = tipoDeferred.await()
+
+                                if(item.anexos?.isNotEmpty() == true) {
+                                    val anexosDeferred = async { anexoRepository.ObterAnexosPorLista(item.anexos!!) }
+                                    item.anexosLista = anexosDeferred.await()
+                                } else {
+                                    item.anexosLista = emptyList()
+                                }
+
+                                if(item.andamentos?.isNotEmpty() == true) {
+                                    val andamentosDeferred = async { andamentoRepository.ObterAndamentosPorLista(item.andamentos!!) }
+                                    item.andamentosLista = andamentosDeferred.await()
+                                } else {
+                                    item.andamentosLista = emptyList()
+                                }
+                            }
+
+                            continuation.resume(resultado)
+                        }
+                    }
                 } else {
                     continuation.resume(null)
                 }
@@ -178,8 +255,35 @@ class ProcessoRepository @Inject constructor(
             .get()
             .addOnSuccessListener { document ->
                 if (document.exists()) {
-                    val resultado = document.toObject(Processo::class.java)
-                    continuation.resume(resultado)
+                    val resultado = document.toObject(Processo::class.java)!!
+
+                    coroutineScope.launch {
+                        val clienteDeferred = async { clienteRepository.ObterCliente(resultado.cliente!!) }
+                        val advogadoDeferred = async { advogadoRepository.ObterAdvogado(resultado.advogado!!) }
+                        val statusDeferred = async { statusProcessoRepository.ObterProcessoStatus(resultado.status!!) }
+                        val tipoDeferred = async { tipoProcessoRepository.ObterProcessoTipo(resultado.tipo!!) }
+
+                        resultado.clienteObj = clienteDeferred.await()
+                        resultado.advogadoObj = advogadoDeferred.await()
+                        resultado.statusObj = statusDeferred.await()
+                        resultado.tipoObj = tipoDeferred.await()
+
+                        if(resultado.anexos?.isNotEmpty() == true) {
+                            val anexosDeferred = async { anexoRepository.ObterAnexosPorLista(resultado.anexos!!) }
+                            resultado.anexosLista = anexosDeferred.await()
+                        } else {
+                            resultado.anexosLista = emptyList()
+                        }
+
+                        if(resultado.andamentos?.isNotEmpty() == true) {
+                            val andamentosDeferred = async { andamentoRepository.ObterAndamentosPorLista(resultado.andamentos!!) }
+                            resultado.andamentosLista = andamentosDeferred.await()
+                        } else {
+                            resultado.andamentosLista = emptyList()
+                        }
+
+                        continuation.resume(resultado)
+                    }
                 } else {
                     continuation.resume(null)
                 }

@@ -9,6 +9,7 @@ data class Anexo(
     @DocumentId
     var id: String = "",
     var nome: String? = null,
-    var uri: String? = null
+    var uri: String? = null,
+    var descricao: String? = null
 ): Parcelable {
 }

@@ -141,6 +141,8 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/hintDataDescription"
                         android:inputType="text"
+                        android:clickable="false"
+                        android:cursorVisible="false"
                         android:focusable="false"
                         android:focusableInTouchMode="false"
                         android:textSize="@dimen/etTextSize" />

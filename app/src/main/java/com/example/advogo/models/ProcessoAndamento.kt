@@ -12,9 +12,11 @@ data class ProcessoAndamento(
     var advogado: String? = null,
     var processo: String? = null,
     var tipo: String? = null,
+    var status: String? = null,
     var data: String? = null,
     @Transient var advogadoObj: Advogado? = null,
     @Transient var tipoObj: ProcessoTipoAndamento? = null,
+    @Transient var statusObj: ProcessoStatusAndamento? = null,
     @Transient var processoObj: Processo? = null,
 ): Parcelable {
 }

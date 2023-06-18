@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.advogo.R
 
-class ProcessoHistoricoFragment : Fragment() {
+class ProcessoHistoricoFragment : BaseFragment() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

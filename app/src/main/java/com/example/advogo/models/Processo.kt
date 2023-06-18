@@ -20,6 +20,7 @@ data class Processo(
     var advogado: String? = null,
     var diligencias: List<String>? = null,
     var anexos: List<String>? = null,
+    var andamentos: List<String>? = null,
     @Transient var tipoObj: ProcessoTipo? = null,
     @Transient var statusObj: ProcessoStatus? = null,
     @Transient var clienteObj: Cliente? = null,

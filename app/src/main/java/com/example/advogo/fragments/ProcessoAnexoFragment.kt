@@ -20,8 +20,11 @@ import com.example.advogo.databinding.FragmentProcessoAnexoBinding
 import com.example.advogo.databinding.FragmentProcessoDetalheBinding
 import com.example.advogo.models.Anexo
 import com.example.advogo.models.Processo
+import com.example.advogo.models.ProcessoAndamento
 import com.example.advogo.repositories.IAnexoRepository
 import com.example.advogo.utils.Constants
+import com.example.projmgr.dialogs.ProcessoAndamentoDialog
+import com.example.projmgr.dialogs.ProcessoAnexoDialog
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -29,10 +32,7 @@ import javax.inject.Inject
 class ProcessoAnexoFragment : BaseFragment() {
     private lateinit var binding: FragmentProcessoAnexoBinding
     @Inject lateinit var anexoRepository: IAnexoRepository
-
     private lateinit var processoDetalhes: Processo
-    //private var anexos: List<Anexo> = emptyList()
-
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreateView(
@@ -48,8 +48,10 @@ class ProcessoAnexoFragment : BaseFragment() {
 
         obterIntentDados()
 
-        if(processoDetalhes.anexosLista?.isNotEmpty() == true) {
-            setAnexosToUI(processoDetalhes.anexosLista as ArrayList<Anexo>)
+        setAnexosToUI(processoDetalhes.anexosLista as ArrayList<Anexo>?)
+
+        binding.fabAddAnexo.setOnClickListener {
+            anexoProcessoDialog(null)
         }
 
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -68,47 +70,115 @@ class ProcessoAnexoFragment : BaseFragment() {
 
     private fun obterIntentDados() {
         if (requireActivity().intent.hasExtra(Constants.PROCESSO_PARAM)) {
-            processoDetalhes = requireActivity().intent.getParcelableExtra<Processo>(Constants.PROCESSO_PARAM)!!
+            processoDetalhes = requireActivity().intent.getParcelableExtra(Constants.PROCESSO_PARAM)!!
         }
     }
 
-    private fun setAnexosToUI(lista: ArrayList<Anexo>) {
-        if(lista.size > 0) {
-            binding.rvAnexosLista.visibility = View.VISIBLE
-            binding.tvNenhumAnexoDisponivel.visibility = View.GONE
+    private fun setAnexosToUI(lista: ArrayList<Anexo>?) {
+        if (lista != null) {
+            if(lista.size > 0) {
+                binding.rvAnexosLista.visibility = View.VISIBLE
+                binding.tvNenhumAnexoDisponivel.visibility = View.GONE
 
-            binding.rvAnexosLista.layoutManager = LinearLayoutManager(binding.root.context)
-            binding.rvAnexosLista.setHasFixedSize(true)
+                binding.rvAnexosLista.layoutManager = LinearLayoutManager(binding.root.context)
+                binding.rvAnexosLista.setHasFixedSize(true)
 
-            val adapter = AnexosAdapter(binding.root.context, lista)
-            binding.rvAnexosLista.adapter = adapter
+                val adapter = AnexosAdapter(binding.root.context, lista)
+                binding.rvAnexosLista.adapter = adapter
 
-            adapter.setOnItemClickListener(object :
-                AnexosAdapter.OnItemClickListener {
-                override fun onView(anexo: Anexo, position: Int) {
-                    if(!TextUtils.isEmpty(anexo.uri)) {
-                        abrirArquivo(anexo.uri!!)
+                adapter.setOnItemClickListener(object :
+                    AnexosAdapter.OnItemClickListener {
+                    override fun onClick(anexo: Anexo) {
+                        anexoProcessoDialog(anexo)
                     }
+                    override fun onView(anexo: Anexo, position: Int) {
+                        if(!TextUtils.isEmpty(anexo.uri)) {
+                            abrirArquivo(anexo.uri!!)
+                        }
 
-                }
-                override fun onDelete(anexo: Anexo, position: Int) {
-//                    val intent = Intent(binding.root.context, ClienteDetalheActivity::class.java)
-//                    intent.putExtra(Constants.CLIENTE_PARAM, anexo)
-//                    startActivity(intent)
-                }
-            })
+                    }
+                    override fun onDelete(anexo: Anexo, position: Int) {
+                        if(!TextUtils.isEmpty(anexo.uri)) {
+                            deletarArquivo(anexo.uri!!)
+                        }
+                    }
+                })
 
-        } else {
-            binding.rvAnexosLista.visibility = View.GONE
-            binding.tvNenhumAnexoDisponivel.visibility = View.VISIBLE
+            } else {
+                binding.rvAnexosLista.visibility = View.GONE
+                binding.tvNenhumAnexoDisponivel.visibility = View.VISIBLE
+            }
         }
     }
 
-//    fun onAnexosAtualizados(anexos: List<Anexo>) {
-//        this.anexos = anexos
-//    }
-}
+    private fun anexoProcessoDialog(anexo: Anexo? = null) {
+        val dialog = object : ProcessoAnexoDialog(
+            requireContext(),
+            anexo ?: Anexo()
+        ) {
+            override fun onSubmit(anexo: Anexo) {
+                if(anexo.id.isBlank()) {
+                    adicionarAnexo(anexo)
+                } else {
+                    atualizarAnexo(anexo)
+                }
+            }
+        }
 
-//interface AnexoCallback {
-//    fun onAnexosAtualizados(anexos: List<Anexo>)
-//}
+        dialog.show()
+    }
+
+    private fun atualizarAnexo(anexo: Anexo) {
+        if(!validarFormulario()) {
+            return
+        }
+
+        showProgressDialog(getString(R.string.aguardePorfavor))
+
+        //val anexo = Anexo(
+        //id = processoDetalhes.id,
+        //descricao = (if (binding. .text.toString() != processoDetalhes.descricao) binding.etDescricao.text.toString() else processoDetalhes.descricao),
+        //nome = (if (binding.etNumeroProcesso.text.toString() != processoDetalhes.numero) binding.etNumeroProcesso.text.toString() else processoDetalhes.numero),
+        //uri = processoDetalhes.data,
+        //)
+
+        anexoRepository.AtualizarAnexo(
+            anexo,
+            { saveAnexoSuccess() },
+            { saveAnexoFailure() }
+        )
+    }
+
+    private fun adicionarAnexo(anexo: Anexo) {
+        if(!validarFormulario()) {
+            return
+        }
+
+        showProgressDialog(getString(R.string.aguardePorfavor))
+
+        //val anexo = Anexo(
+            //id = processoDetalhes.id,
+            //descricao = (if (binding. .text.toString() != processoDetalhes.descricao) binding.etDescricao.text.toString() else processoDetalhes.descricao),
+            //nome = (if (binding.etNumeroProcesso.text.toString() != processoDetalhes.numero) binding.etNumeroProcesso.text.toString() else processoDetalhes.numero),
+            //uri = processoDetalhes.data,
+        //)
+
+        anexoRepository.AdicionarAnexo(
+            anexo,
+            { saveAnexoSuccess() },
+            { saveAnexoFailure() }
+        )
+    }
+
+    private fun saveAnexoSuccess() {
+        hideProgressDialog()
+    }
+
+    private fun saveAnexoFailure() {
+        hideProgressDialog()
+    }
+
+    private fun validarFormulario(): Boolean {
+        return true
+    }
+}

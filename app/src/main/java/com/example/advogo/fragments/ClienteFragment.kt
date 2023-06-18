@@ -37,7 +37,7 @@ class ClienteFragment : BaseFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentClienteBinding.inflate(inflater, container, false)
         return binding.root
     }

@@ -64,6 +64,18 @@ class AnexoRepository @Inject constructor(
                 onFailureListener(it)
             }
     }
+    override fun AtualizarAnexo(model: Anexo, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+        firebaseStore
+            .collection(Constants.ANEXOS_TABLE)
+            .document(model.id)
+            .set(model, SetOptions.merge())
+            .addOnSuccessListener {
+                onSuccessListener()
+            }
+            .addOnFailureListener {
+                onFailureListener(it)
+            }
+    }
     override fun DeletarAnexo(id: String, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.ANEXOS_TABLE)
@@ -102,6 +114,7 @@ interface IAnexoRepository {
     fun ObterAnexos(onSuccessListener: (lista: List<Anexo>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
     fun ObterAnexo(id: String, onSuccessListener: (Anexo: Anexo) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
     fun AdicionarAnexo(model: Anexo, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun AtualizarAnexo(model: Anexo, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
     fun DeletarAnexo(id: String, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
 
     suspend fun ObterAnexosPorLista(ids: List<String>): List<Anexo>?

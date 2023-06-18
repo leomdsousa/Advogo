@@ -81,7 +81,8 @@ object MyApplicationModule {
         diligenciaRepository: Provider<DiligenciaRepository>,
         tipoProcessoRepository: ProcessoTipoRepository,
         statusProcessoRepository: ProcessoStatusRepository,
-        anexoRepository: AnexoRepository
+        anexoRepository: AnexoRepository,
+        andamentoRepository: IProcessoAndamentoRepository
     ): IProcessoRepository {
         return ProcessoRepository(
             context,
@@ -91,7 +92,8 @@ object MyApplicationModule {
             diligenciaRepository,
             tipoProcessoRepository,
             statusProcessoRepository,
-            anexoRepository
+            anexoRepository,
+            andamentoRepository
         )
     }
 
@@ -109,8 +111,20 @@ object MyApplicationModule {
 
     @Provides
     @Singleton
-    fun provideProcessoAndamentoRepository(firestore: FirebaseFirestore): IProcessoAndamentoRepository {
-        return ProcessoAndamentoRepository(firestore)
+    fun provideProcessoAndamentoRepository(
+        context: Context,
+        firestore: FirebaseFirestore,
+        advogadoRepository: AdvogadoRepository,
+        processoTipoAndamentoRepository: ProcessoTipoAndamentoRepository,
+        processoStatusAndamentoRepository: ProcessoStatusAndamentoRepository
+    ): IProcessoAndamentoRepository {
+        return ProcessoAndamentoRepository(
+            context,
+            firestore,
+            advogadoRepository,
+            processoTipoAndamentoRepository,
+            processoStatusAndamentoRepository
+        )
     }
 
     @Provides

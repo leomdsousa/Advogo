@@ -22,7 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class DiligenciaHistoricoFragment : Fragment() {
+class DiligenciaHistoricoFragment : BaseFragment() {
     private lateinit var binding: FragmentDiligenciaHistoricoBinding
     @Inject lateinit var diligenciaHistoricoRepository: IDiligenciaHistoricoRepository
     private lateinit var diligenciaDetalhes: Diligencia

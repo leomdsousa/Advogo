@@ -33,6 +33,9 @@
     <dimen name="progressTextMarginStart">16dp</dimen>
     <dimen name="progressTextSize">16sp</dimen>
 
+    <!-- PROCESSO ANDAMENTO DIALOG -->
+    <dimen name="processoAndamentoSubmitBtnMarginTop">30dp</dimen>
+
     <!--INTRO-->
     <dimen name="introScreenTitleTextSize">40sp</dimen>
     <dimen name="introScreenTitleTextMarginTop">40dp</dimen>

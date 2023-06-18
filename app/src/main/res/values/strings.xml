@@ -10,6 +10,7 @@
     <string name="create">Salvar</string>
     <string name="update">Atualizar</string>
     <string name="cadastrar">Cadastrar</string>
+    <string name="submit">Confirmar</string>
     <string name="adv">Advogado</string>
     <string name="data">Data</string>
     <string name="selecionar">Selecionar</string>
@@ -24,10 +25,14 @@
     <!--HINT-->
     <string name="hintProcessoName">Nome</string>
     <string name="hintProcessoDescription">Descrição</string>
+    <string name="hintProcessoAndamentoDescription">Descrição</string>
     <string name="hintNumeroProcessoDescription">Nº do processo</string>
     <string name="hintTipoDescription">Tipo do processo</string>
     <string name="hintStatusDescription">Status do processo</string>
+    <string name="hintTipoAndamentoDescription">Tipo do andamento</string>
+    <string name="hintStatusAndamentoDescription">Status do andamento</string>
     <string name="hintDataDescription">Data do processo</string>
+    <string name="hintDataAndamentoDescription">Data do andamento</string>
     <string name="hintClienteDescription">Selecione o cliente</string>
     <string name="hintAdvDescription">Selecione o advogado</string>
     <string name="hintDiligenciasDescription">Diligências</string>

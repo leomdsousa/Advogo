@@ -35,6 +35,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.advogo.R
+import com.example.advogo.models.Advogado
+import com.example.advogo.repositories.AdvogadoRepository
 import com.example.advogo.repositories.IAdvogadoRepository
 import com.example.advogo.utils.Constants
 import com.example.advogo.utils.ObterEnderecoFromLatLng
@@ -54,13 +56,16 @@ import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
+@AndroidEntryPoint
 open class BaseActivity : AppCompatActivity() {
     @Inject lateinit var progressDialog: ProgressDialog
+    @Inject lateinit var baseAdvogadoRepository: AdvogadoRepository
 
     private lateinit var _sharedPreferences: SharedPreferences
     private lateinit var _result: ActivityResultLauncher<Intent>
@@ -392,25 +397,40 @@ open class BaseActivity : AppCompatActivity() {
         const val PICK_IMAGE_REQUEST_CODE = "PICK_IMAGE_REQUEST_CODE"
     }
 
-    fun updateFCMToken(token: String) {
-        val userHashMap = HashMap<String, Any>()
-        userHashMap[Constants.FCM_TOKEN] = token
-
-        //showProgressDialog(resources.getString(R.string.please_wait))
-        //FirestoreService().updateUserProfileData(activity, userHashMap)
+    fun updateFCMToken(usuario: Advogado, token: String) {
+        usuario.fcmToken = token
+        baseAdvogadoRepository.AtualizarAdvogado(
+            usuario,
+            { tokenUpdateSuccess() },
+            { null }
+        )
     }
 
-    fun tokenUpdateSuccess() {
-        //hideProgressDialog()
-
+    private fun tokenUpdateSuccess() {
         _sharedPreferences =
             this.getSharedPreferences(Constants.ADVOGO_PREFERENCES, Context.MODE_PRIVATE)
 
         val editor: SharedPreferences.Editor = _sharedPreferences.edit()
         editor.putBoolean(Constants.FCM_TOKEN_UPDATED, true)
         editor.apply()
+    }
 
-        //showProgressDialog(resources.getString(R.string.please_wait))
-        //FirestoreService().loadUserData(activity, true)
+    fun showFileChooser(result: ActivityResultLauncher<Intent>) {
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = "*/*"
+
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf(
+            "image/jpeg",
+            "image/png",
+            "application/pdf",
+            "application/msword",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "application/vnd.ms-powerpoint",
+            "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+            "application/vnd.ms-excel",
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        ))
+
+        result.launch(Intent.createChooser(intent, "Escolha um arquivo"))
     }
 }
