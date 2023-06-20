@@ -58,6 +58,8 @@ class ProcessoDetalheActivity : BaseActivity() {
     private lateinit var viewPager: ViewPager2
     private lateinit var tabLayout: TabLayout
 
+    private lateinit var resultLauncher: ActivityResultLauncher<Intent>
+
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,6 +69,20 @@ class ProcessoDetalheActivity : BaseActivity() {
         obterIntentDados()
         setupActionBar("Detalhe Processo", binding.toolbarProcessoDetalheActivity)
         setupTabsLayout()
+
+        resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                if (result.data!!.hasExtra(Constants.FROM_PROCESSO_ACTIVITY)) {
+                    processoRepository.ObterProcessos(
+                        { lista ->
+//                            setProcessosToUI(lista!! as ArrayList<Processo>)
+//                            hideProgressDialog()
+                        },
+                        { hideProgressDialog() }
+                    )
+                }
+            }
+        }
     }
 
     private fun obterIntentDados() {

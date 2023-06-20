@@ -109,7 +109,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/hintDataAndamentoDescription"
-                    android:clickable="false"
                     android:cursorVisible="false"
                     android:inputType="text"
                     android:focusable="false"
@@ -132,6 +131,18 @@
                 android:text="@string/submit"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/btnTextSize" />
+
+<!--            <TextView-->
+<!--                android:id="@+id/advHidden"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="0dp"-->
+<!--                android:visibility="invisible" />-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/processoHidden"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="0dp"-->
+<!--                android:visibility="invisible" />-->
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

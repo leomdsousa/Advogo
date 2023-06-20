@@ -18,6 +18,7 @@ import com.example.advogo.models.Diligencia
 import com.example.advogo.models.Processo
 import com.example.advogo.repositories.IAnexoRepository
 import com.example.advogo.repositories.IDiligenciaHistoricoRepository
+import com.example.advogo.repositories.ProcessoAndamentoRepository
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

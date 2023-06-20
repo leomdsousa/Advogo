@@ -153,11 +153,11 @@
     <dimen name="itemDiligenciaImageCircularBorderWidth">0.5dp</dimen>
     <dimen name="itemDiligenciaDescricaoLayoutMarginStart">10dp</dimen>
     <dimen name="itemDiligenciaDescricaoTextSize">16sp</dimen>
-    <dimen name="itemDiligenciaProcessoTextSize">12sp</dimen>
-    <dimen name="itemDiligenciaTipoTextSize">12sp</dimen>
-    <dimen name="itemDiligenciaAdvTextSize">12sp</dimen>
-    <dimen name="itemDiligenciaDataTextSize">12sp</dimen>
-    <dimen name="itemDiligenciaStatusTextSize">12sp</dimen>
+    <dimen name="itemDiligenciaProcessoTextSize">13sp</dimen>
+    <dimen name="itemDiligenciaTipoTextSize">13sp</dimen>
+    <dimen name="itemDiligenciaAdvTextSize">13sp</dimen>
+    <dimen name="itemDiligenciaDataTextSize">13sp</dimen>
+    <dimen name="itemDiligenciaStatusTextSize">13sp</dimen>
     <dimen name="itemDiligenciaDividerMarginTop">5dp</dimen>
     <dimen name="itemDiligenciaDividerHeight">0.3dp</dimen>
 

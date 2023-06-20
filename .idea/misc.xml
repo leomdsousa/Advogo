@@ -19,6 +19,7 @@
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/drawable/ic_baseline_place_24.xml" value="0.1" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/drawable/ic_vector_add_24dp.xml" value="0.145" />
+        <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/drawable/ic_whatsapp_icon.xml" value="0.111" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/drawable/ic_white_color_back_24dp.xml" value="0.1035" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/drawable/nav_header_main_background.xml" value="0.1" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/drawable/spinner_background.xml" value="0.1" />
@@ -59,11 +60,11 @@
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/fragment_processo_detalhe.xml" value="0.1" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/fragment_processos.xml" value="0.22" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/item_advogado.xml" value="0.22259136212624583" />
-        <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/item_andamento.xml" value="0.22" />
+        <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/item_andamento.xml" value="0.350597609561753" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/item_anexo.xml" value="0.25" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/item_cliente.xml" value="0.33" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/item_diligencia.xml" value="0.25" />
-        <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/item_diligencia_historico.xml" value="0.25" />
+        <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/item_diligencia_historico.xml" value="0.350597609561753" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/item_processo.xml" value="0.33" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/item_tab_layout.xml" value="0.1" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/nav_header_main.xml" value="0.25" />

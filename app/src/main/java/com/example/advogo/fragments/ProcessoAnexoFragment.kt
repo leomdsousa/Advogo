@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,6 +17,8 @@ import com.example.advogo.R
 import com.example.advogo.activities.ClienteDetalheActivity
 import com.example.advogo.adapters.AnexosAdapter
 import com.example.advogo.adapters.ClientesAdapter
+import com.example.advogo.databinding.DialogProcessoAndamentoBinding
+import com.example.advogo.databinding.DialogProcessoAnexoBinding
 import com.example.advogo.databinding.FragmentProcessoAnexoBinding
 import com.example.advogo.databinding.FragmentProcessoDetalheBinding
 import com.example.advogo.models.Anexo
@@ -31,6 +34,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class ProcessoAnexoFragment : BaseFragment() {
     private lateinit var binding: FragmentProcessoAnexoBinding
+    private lateinit var bindingDialog: DialogProcessoAnexoBinding
     @Inject lateinit var anexoRepository: IAnexoRepository
     private lateinit var processoDetalhes: Processo
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
@@ -126,6 +130,8 @@ class ProcessoAnexoFragment : BaseFragment() {
         }
 
         dialog.show()
+
+        bindingDialog = DialogProcessoAnexoBinding.inflate(dialog.layoutInflater)
     }
 
     private fun atualizarAnexo(anexo: Anexo) {
@@ -135,12 +141,12 @@ class ProcessoAnexoFragment : BaseFragment() {
 
         showProgressDialog(getString(R.string.aguardePorfavor))
 
-        //val anexo = Anexo(
-        //id = processoDetalhes.id,
-        //descricao = (if (binding. .text.toString() != processoDetalhes.descricao) binding.etDescricao.text.toString() else processoDetalhes.descricao),
-        //nome = (if (binding.etNumeroProcesso.text.toString() != processoDetalhes.numero) binding.etNumeroProcesso.text.toString() else processoDetalhes.numero),
-        //uri = processoDetalhes.data,
-        //)
+        val anexo = Anexo(
+            id = processoDetalhes.id,
+            descricao = bindingDialog.etDescricaoAnexo.text.toString(),
+            nome = bindingDialog.tvTitle.text.toString(),
+            //uri = uri,
+        )
 
         anexoRepository.AtualizarAnexo(
             anexo,
@@ -156,12 +162,12 @@ class ProcessoAnexoFragment : BaseFragment() {
 
         showProgressDialog(getString(R.string.aguardePorfavor))
 
-        //val anexo = Anexo(
-            //id = processoDetalhes.id,
-            //descricao = (if (binding. .text.toString() != processoDetalhes.descricao) binding.etDescricao.text.toString() else processoDetalhes.descricao),
-            //nome = (if (binding.etNumeroProcesso.text.toString() != processoDetalhes.numero) binding.etNumeroProcesso.text.toString() else processoDetalhes.numero),
-            //uri = processoDetalhes.data,
-        //)
+        val anexo = Anexo(
+            id = processoDetalhes.id,
+            descricao = bindingDialog.etDescricaoAnexo.text.toString(),
+            nome = bindingDialog.tvTitle.text.toString(),
+            //uri = uri,
+        )
 
         anexoRepository.AdicionarAnexo(
             anexo,
@@ -171,14 +177,40 @@ class ProcessoAnexoFragment : BaseFragment() {
     }
 
     private fun saveAnexoSuccess() {
-        hideProgressDialog()
+        anexoRepository.ObterAnexos(
+            {
+                setAnexosToUI(it as ArrayList<Anexo>)
+                hideProgressDialog()
+            },
+            { hideProgressDialog() }
+        )
     }
 
     private fun saveAnexoFailure() {
         hideProgressDialog()
+
+        Toast.makeText(
+            requireContext(),
+            "Erro para salvar o anexo!",
+            Toast.LENGTH_LONG
+        ).show()
     }
 
     private fun validarFormulario(): Boolean {
-        return true
+        var validado = true
+
+        if (TextUtils.isEmpty(bindingDialog.etDescricaoAnexo.text.toString())) {
+            bindingDialog.etDescricaoAnexo.error = "Obrigatório"
+            bindingDialog.etDescricaoAnexo.requestFocus()
+            validado = false
+        }
+
+//        if (TextUtils.isEmpty(bindingDialog.etDataAndamento.text.toString())) {
+//            bindingDialog.etDataAndamento.error = "Obrigatório"
+//            bindingDialog.etDataAndamento.requestFocus()
+//            validado = false
+//        }
+
+         return validado
     }
 }

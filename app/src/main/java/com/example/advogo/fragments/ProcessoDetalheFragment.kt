@@ -138,7 +138,7 @@ class ProcessoDetalheFragment : BaseFragment() {
                 taskSnapshot.metadata!!.reference!!.downloadUrl
                     .addOnSuccessListener { uri ->
                         imagemSelecionadaURL = uri.toString()
-                        //saveProcesso()
+                        saveProcesso()
                     }
             }
             .addOnFailureListener { exception ->
@@ -338,6 +338,13 @@ class ProcessoDetalheFragment : BaseFragment() {
             val selectedDate = toFormat.format(fromDate)
             binding.etData.setText(selectedDate)
         }
+
+        Glide
+            .with(requireContext())
+            .load(processoDetalhes.imagem)
+            .centerCrop()
+            .placeholder(R.drawable.ic_processo_place_holder)
+            .into(binding.ivProcessoImage)
     }
 
     private fun validarFormulario(): Boolean {
@@ -412,6 +419,7 @@ class ProcessoDetalheFragment : BaseFragment() {
 //        }
 
         //setFragmentResult(Constants.RESULT_KEY, result)
+        requireActivity().intent.putExtra(Constants.FROM_PROCESSO_ACTIVITY, Constants.FROM_PROCESSO_ACTIVITY)
         requireActivity().setResult(Activity.RESULT_OK, requireActivity().intent)
         requireActivity().finish()
     }

@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.advogo.R
 import com.example.advogo.activities.ClienteCadastroActivity
 import com.example.advogo.adapters.*
+import com.example.advogo.databinding.DialogProcessoAndamentoBinding
 import com.example.advogo.databinding.FragmentProcessoAndamentoBinding
 import com.example.advogo.databinding.FragmentProcessoAnexoBinding
 import com.example.advogo.models.*
@@ -34,11 +35,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import okhttp3.internal.wait
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 class ProcessoAndamentoFragment : BaseFragment() {
     private lateinit var binding: FragmentProcessoAndamentoBinding
+    private lateinit var bindingDialog: DialogProcessoAndamentoBinding
     @Inject lateinit var processoAndamentoRepository: IProcessoAndamentoRepository
     @Inject lateinit var tipoAndamentoRepository: IProcessoTipoAndamentoRepository
     @Inject lateinit var statusAndamentoRepository: IProcessoStatusAndamentoRepository
@@ -139,6 +144,12 @@ class ProcessoAndamentoFragment : BaseFragment() {
         }
 
         dialog.show()
+
+        //bindingDialog = DialogProcessoAndamentoBinding.bind(dialog.roo)
+
+        val inflater = LayoutInflater.from(requireContext())
+        bindingDialog = DialogProcessoAndamentoBinding.inflate(inflater)
+        //dialog.setContentView(bindingDialog.root)
     }
 
     private fun atualizarAndamento(andamento: ProcessoAndamento) {
@@ -148,15 +159,25 @@ class ProcessoAndamentoFragment : BaseFragment() {
 
         showProgressDialog(getString(R.string.aguardePorfavor))
 
-        //val anexo = Anexo(
-        //id = processoDetalhes.id,
-        //descricao = (if (binding. .text.toString() != processoDetalhes.descricao) binding.etDescricao.text.toString() else processoDetalhes.descricao),
-        //nome = (if (binding.etNumeroProcesso.text.toString() != processoDetalhes.numero) binding.etNumeroProcesso.text.toString() else processoDetalhes.numero),
-        //uri = processoDetalhes.data,
-        //)
+        val input = ProcessoAndamento(
+            id = andamento.id,
+            descricao = bindingDialog.etDescricaoAndamento.text.toString(),
+            advogado = getCurrentUserID(),
+            processo = processoDetalhes.numero,
+            tipo = (bindingDialog.spinnerTipoAndamentoProcesso.selectedItem as ProcessoTipoAndamento)?.id,
+            status = (bindingDialog.spinnerStatusProcessoAndamento .selectedItem as ProcessoStatusAndamento)?.id,
+        )
+
+        if(bindingDialog.etDataAndamento.text.toString().isNotEmpty()) {
+            val fromFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+            val toFormat = SimpleDateFormat("dd/MM/yyyy", Locale("pt", "BR"))
+            val fromDate = fromFormat.parse(bindingDialog.etDataAndamento.text.toString())
+            val selectedDate = toFormat.format(fromDate)
+            input.data = selectedDate
+        }
 
         processoAndamentoRepository.AtualizarProcessoAndamento(
-            andamento,
+            input,
             { saveAndamentoSuccess() },
             { saveAndamentoFailure() }
         )
@@ -169,29 +190,73 @@ class ProcessoAndamentoFragment : BaseFragment() {
 
         showProgressDialog(getString(R.string.aguardePorfavor))
 
-        //val anexo = Anexo(
-        //id = processoDetalhes.id,
-        //descricao = (if (binding. .text.toString() != processoDetalhes.descricao) binding.etDescricao.text.toString() else processoDetalhes.descricao),
-        //nome = (if (binding.etNumeroProcesso.text.toString() != processoDetalhes.numero) binding.etNumeroProcesso.text.toString() else processoDetalhes.numero),
-        //uri = processoDetalhes.data,
-        //)
+        val input = ProcessoAndamento(
+            id = andamento.id,
+            descricao = bindingDialog.etDescricaoAndamento.text.toString(),
+            advogado = getCurrentUserID(),
+            processo = processoDetalhes.numero,
+            tipo = (bindingDialog.spinnerTipoAndamentoProcesso.selectedItem as ProcessoTipoAndamento)?.id,
+            status = (bindingDialog.spinnerStatusProcessoAndamento .selectedItem as ProcessoStatusAndamento)?.id,
+        )
+
+        if(bindingDialog.etDataAndamento.text.toString().isNotEmpty()) {
+            val fromFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+            val toFormat = SimpleDateFormat("dd/MM/yyyy", Locale("pt", "BR"))
+            val fromDate = fromFormat.parse(bindingDialog.etDataAndamento.text.toString())
+            val selectedDate = toFormat.format(fromDate)
+            input.data = selectedDate
+        }
 
         processoAndamentoRepository.AdicionarProcessoAndamento(
-            andamento,
+            input,
             { saveAndamentoSuccess() },
             { saveAndamentoFailure() }
         )
     }
 
     private fun saveAndamentoSuccess() {
-        hideProgressDialog()
+        processoAndamentoRepository.ObterProcessosAndamentos(
+            {
+                setProcessoAndamentosToUI(it as ArrayList<ProcessoAndamento>)
+                hideProgressDialog()
+            },
+            { hideProgressDialog() }
+        )
     }
 
     private fun saveAndamentoFailure() {
         hideProgressDialog()
+
+        Toast.makeText(
+            requireContext(),
+            "Erro para salvar o andamento!",
+            Toast.LENGTH_LONG
+        ).show()
     }
 
     private fun validarFormulario(): Boolean {
-        return true
+        var validado = true
+
+        if (TextUtils.isEmpty(bindingDialog.etDescricaoAndamento .text.toString())) {
+            bindingDialog.etDescricaoAndamento.error = "Obrigatório"
+            bindingDialog.etDescricaoAndamento.requestFocus()
+            validado = false
+        }
+
+        if (TextUtils.isEmpty(bindingDialog.etDataAndamento.text.toString())) {
+            bindingDialog.etDataAndamento.error = "Obrigatório"
+            bindingDialog.etDataAndamento.requestFocus()
+            validado = false
+        }
+
+        if (bindingDialog.spinnerTipoAndamentoProcesso.selectedItem == null) {
+            validado = false
+        }
+
+        if (bindingDialog.spinnerStatusProcessoAndamento.selectedItem == null) {
+            validado = false
+        }
+
+        return validado
     }
 }

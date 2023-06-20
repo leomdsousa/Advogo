@@ -146,6 +146,10 @@ class DiligenciaDetalheActivity : BaseActivity() {
             val adapter = DiligenciasStatusAdapter(this@DiligenciaDetalheActivity, diligenciaStatus!!)
             spinnerStatus.adapter = adapter
 
+            if(diligenciaDetalhes.statusObj != null) {
+                binding.spinnerStatusDiligencia.setSelection((diligenciaStatus as MutableList<DiligenciaStatus>).indexOf(diligenciaDetalhes.statusObj))
+            }
+
             spinnerStatus.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                     val selectedItem = spinnerStatus.selectedItem as? DiligenciaStatus
@@ -173,6 +177,10 @@ class DiligenciaDetalheActivity : BaseActivity() {
             val adapter = DiligenciasTiposAdapter(this@DiligenciaDetalheActivity, diligenciaTipos!!)
             spinnerTipos.adapter = adapter
 
+            if(diligenciaDetalhes.tipoObj != null) {
+                binding.spinnerTipoDiligencia.setSelection((diligenciaTipos as MutableList<DiligenciaTipo>).indexOf(diligenciaDetalhes.tipoObj))
+            }
+
             spinnerTipos.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                     val selectedItem = spinnerTipos.selectedItem as? DiligenciaTipo
@@ -194,7 +202,7 @@ class DiligenciaDetalheActivity : BaseActivity() {
         binding.spinnerTipoDiligencia.setSelection(diligenciaTipos!!.indexOf(diligencia.tipoObj!!))
         binding.spinnerStatusDiligencia.setSelection(diligenciaStatus!!.indexOf(diligencia.statusObj!!))
         binding.etDiligenciaProcesso.setText(diligencia.processoObj?.numero)
-        binding.btnAtualizarDiligencia.text = diligencia.advogadoObj?.nome
+        binding.etDiligenciaAdvogado.setText("${diligencia.advogadoObj?.nome} (${diligencia.advogadoObj?.oab})")
         binding.etDiligenciaEndereco.setText(diligencia.endereco)
 
         dataSelecionada = diligencia.data

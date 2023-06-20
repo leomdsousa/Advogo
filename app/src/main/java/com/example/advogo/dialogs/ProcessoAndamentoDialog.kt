@@ -16,11 +16,14 @@ import com.example.advogo.databinding.DialogProcessoAndamentoBinding
 import com.example.advogo.models.*
 import com.example.advogo.repositories.IProcessoStatusAndamentoRepository
 import com.example.advogo.repositories.IProcessoTipoAndamentoRepository
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 abstract class ProcessoAndamentoDialog(
@@ -118,9 +121,16 @@ abstract class ProcessoAndamentoDialog(
             binding.btnSubmitProcessoAndamento.text = "Atualizar"
 
             binding.etDescricaoAndamento.setText(andamento.descricao)
-            binding.etDataAndamento.setText(andamento.data)
             binding.spinnerTipoAndamentoProcesso.setSelection(tiposAndamentos.indexOf(andamento.tipoObj))
             binding.spinnerStatusProcessoAndamento.setSelection(statusAndamentos.indexOf(andamento.statusObj))
+
+            if(andamento.data?.isNotEmpty() == true) {
+                val fromFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+                val toFormat = SimpleDateFormat("dd/MM/yyyy", Locale("pt", "BR"))
+                val fromDate = fromFormat.parse(andamento.data)
+                val selectedDate = toFormat.format(fromDate)
+                binding.etDataAndamento.setText(selectedDate)
+            }
         }
     }
 

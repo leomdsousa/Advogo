@@ -26,7 +26,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/secondaryTextColor"
-                android:textSize="@dimen/itemDiligenciaTipoTextSize"
+                android:textSize="@dimen/itemProcessoNumeroTextSize"
                 app:fontFamily="@font/lato"
                 tools:text="Tipo: Certidão Instrução Julgamento" />
 
@@ -35,7 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/secondaryTextColor"
-                android:textSize="@dimen/itemDiligenciaAdvTextSize"
+                android:textSize="@dimen/itemProcessoNumeroTextSize"
                 app:fontFamily="@font/lato"
                 tools:text="Advogado: Leonardo Monteiro de Sousa (Nº OAB)" />
 
@@ -44,7 +44,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/secondaryTextColor"
-                android:textSize="@dimen/itemDiligenciaDataTextSize"
+                android:textSize="@dimen/itemProcessoNumeroTextSize"
                 app:fontFamily="@font/lato"
                 tools:text="Data: 12/12/2023" />
 
@@ -55,7 +55,6 @@
                 android:textColor="@color/secondaryTextColor"
                 android:textSize="@dimen/itemProcessoNumeroTextSize"
                 app:fontFamily="@font/lato"
-                android:layout_marginTop="8dp"
                 tools:text="Descrição: Descrição do Andamento"
                 android:maxLines="4"
                 android:ellipsize="end" />

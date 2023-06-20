@@ -69,6 +69,16 @@
             tools:visibility="visible" />
 
         <ImageView
+            android:id="@+id/image_wpp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_whatsapp_icon"
+            android:clickable="true"
+            android:padding="8dp"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <ImageView
             android:id="@+id/image_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

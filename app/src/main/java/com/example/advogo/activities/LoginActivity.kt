@@ -50,6 +50,8 @@ class LoginActivity : BaseActivity() {
                             { loginFailure() }
                         )
                     } else {
+                        loginFailure()
+
                         Toast.makeText(
                             this@LoginActivity,
                             task.exception!!.message,
