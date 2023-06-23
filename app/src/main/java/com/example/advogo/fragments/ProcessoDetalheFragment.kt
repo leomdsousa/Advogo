@@ -254,7 +254,7 @@ class ProcessoDetalheFragment : BaseFragment() {
                 advogados as ArrayList<Advogado>,
                 resources.getString(R.string.selecionarAdvogado)
             ) {
-                override fun onItemSelected(adv: Advogado, action: String) {
+                override fun onItemSelected(adv: Advogado, action: String?) {
                     if (action == Constants.SELECIONAR) {
                         if (binding.etAdv.text.toString() != adv.id) {
                             binding.etAdv.setText("${adv.nome} (${adv.oab})")

@@ -232,6 +232,41 @@ class DiligenciaRepository @Inject constructor(
                 continuation.resumeWithException(exception)
             }
     }
+    override suspend fun ObterDiligenciasPorData(dataInicio: String, dataFinal: String): List<Diligencia>? = suspendCoroutine { continuation ->
+        firebaseStore
+            .collection(Constants.DILIGENCIAS_TABLE)
+            .whereGreaterThanOrEqualTo(Constants.DILIGENCIAS_DATA, dataInicio)
+            .whereLessThanOrEqualTo(Constants.DILIGENCIAS_DATA, dataFinal)
+            .get()
+            .addOnSuccessListener { document ->
+                if (!document.isEmpty) {
+                    coroutineScope.launch {
+                        val resultado = document.toObjects(Diligencia::class.java)
+
+                        if (resultado.isNotEmpty()) {
+                            for (item in resultado) {
+                                val advogadoDeferred = async { advogadoRepository.get().ObterAdvogado(item.advogado!!) }
+                                val processoDeferred = async { processoRepository.get().ObterProcesso(item.processo!!) }
+                                val statusDeferred = async { statusDiligenciaRepository.ObterDiligenciaStatus(item.status!!) }
+                                val tipoDeferred = async { tipoDiligenciaRepository.ObterDiligenciaTipo(item.tipo!!) }
+
+                                item.advogadoObj = advogadoDeferred.await()
+                                item.processoObj = processoDeferred.await()
+                                item.statusObj = statusDeferred.await()
+                                item.tipoObj = tipoDeferred.await()
+                            }
+
+                            continuation.resume(resultado)
+                        }
+                    }
+                } else {
+                    continuation.resume(null)
+                }
+            }
+            .addOnFailureListener { exception ->
+                continuation.resumeWithException(exception)
+            }
+    }
 
 }
 
@@ -245,6 +280,7 @@ interface IDiligenciaRepository {
     fun DeletarDiligencia(id: String, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
 
     suspend fun ObterDiligenciasPorData(data: String): List<Diligencia>?
+    suspend fun ObterDiligenciasPorData(dataInicio: String, dataFinal: String): List<Diligencia>?
 
 
 }

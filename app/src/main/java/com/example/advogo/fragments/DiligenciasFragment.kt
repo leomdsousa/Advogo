@@ -2,13 +2,17 @@ package com.example.advogo.fragments
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.advogo.R
 import com.example.advogo.activities.DiligenciaCadastroActivity
@@ -25,6 +29,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.DayOfWeek
+import java.time.LocalDate
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
@@ -47,8 +53,74 @@ class DiligenciasFragment : BaseFragment() {
         binding = FragmentDiligenciasBinding.inflate(layoutInflater, container, false)
 
         configurarCalendarView()
+        configurarSpinnerFiltros()
 
         return binding.root
+    }
+
+    private fun configurarSpinnerFiltros() {
+        val adapter = ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.spinner_filtros_opcoes,
+            android.R.layout.simple_spinner_item
+        )
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerFiltros.adapter = adapter
+
+        binding.spinnerFiltros.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            @RequiresApi(Build.VERSION_CODES.O)
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                val selectedItem = parent.getItemAtPosition(position).toString()
+
+                selectedItem.let { item ->
+                    when(item) {
+                        "Mensal" -> {
+                            val dataInicial = LocalDate.now()
+                            val dataFinal = obterProximosDiasUteis(dataInicial, 7).last()
+
+                            val dataInicialStr = "${dataInicial.year}-${dataInicial.month}-${dataInicial.dayOfMonth}"
+                            val dataFinalStr = "${dataFinal.year}-${dataFinal.month}-${dataFinal.dayOfMonth}"
+
+                            CoroutineScope(Dispatchers.Main).launch {
+                                val diligencias = obterDiligenciasPorData(dataInicialStr, dataFinalStr)
+                                setDiligenciasToUI(diligencias)
+                            }
+                        }
+                        "Quinzenal" -> {
+                            val dataInicial = LocalDate.now()
+                            val dataFinal = obterProximosDiasUteis(dataInicial, 15).last()
+
+                            val dataInicialStr = "${dataInicial.year}-${dataInicial.month}-${dataInicial.dayOfMonth}"
+                            val dataFinalStr = "${dataFinal.year}-${dataFinal.month}-${dataFinal.dayOfMonth}"
+
+                            CoroutineScope(Dispatchers.Main).launch {
+                                val diligencias = obterDiligenciasPorData(dataInicialStr, dataFinalStr)
+                                setDiligenciasToUI(diligencias)
+                            }
+                        }
+                        "Semanal" -> {
+                            val dataInicial = LocalDate.now()
+                            val dataFinal = obterProximosDiasUteis(dataInicial, 30).last()
+
+                            val dataInicialStr = "${dataInicial.year}-${dataInicial.month}-${dataInicial.dayOfMonth}"
+                            val dataFinalStr = "${dataFinal.year}-${dataFinal.month}-${dataFinal.dayOfMonth}"
+
+                            CoroutineScope(Dispatchers.Main).launch {
+                                val diligencias = obterDiligenciasPorData(dataInicialStr, dataFinalStr)
+                                setDiligenciasToUI(diligencias)
+                            }
+                        } else -> {
+                            //Validar o que implementar
+                        }
+                    }
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+
+            }
+        }
     }
 
     private fun configurarCalendarView() {
@@ -146,4 +218,24 @@ class DiligenciasFragment : BaseFragment() {
         }
     }
 
+    private suspend fun obterDiligenciasPorData(dataInicial: String, dataFinal: String): List<Diligencia> {
+        return withContext(Dispatchers.Main) {
+            diligenciaRepository.ObterDiligenciasPorData(dataInicial, dataFinal) ?: listOf()
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun obterProximosDiasUteis(dataInicial: LocalDate, quantidadeDias: Int): List<LocalDate> {
+        val diasUteis = mutableListOf<LocalDate>()
+        var data = dataInicial
+
+        while (diasUteis.size < quantidadeDias) {
+            if (data.dayOfWeek != DayOfWeek.SATURDAY && data.dayOfWeek != DayOfWeek.SUNDAY) {
+                diasUteis.add(data)
+            }
+            data = data.plusDays(1)
+        }
+
+        return diasUteis
+    }
 }

@@ -69,7 +69,7 @@ open class AdvogadosAdapter(
     override fun getItemCount(): Int = list.size
 
     interface OnItemClickListener {
-        fun onClick(position: Int, user: Advogado, action: String)
+        fun onClick(position: Int, user: Advogado, action: String? = null)
     }
 
     fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {

@@ -21,6 +21,7 @@
     <string name="confirmacaoDeletarProcesso">Deseja deletar o processo \'%1$s\'?</string>
     <string name="confirmacaoDeletarCliente">Deseja deletar o cliente \'%1$s\'?</string>
     <string name="confirmacaoDeletarDiligencia">Deseja deletar a diligência \'%1$s\'?</string>
+    <string name="confirmacaoDeletarAdvogado">Deseja deletar o advogado \'%1$s\'?</string>
 
     <!--HINT-->
     <string name="hintProcessoName">Nome</string>
@@ -61,6 +62,7 @@
 
     <!--NAV-->
     <string name="navPerfil">Perfil</string>
+    <string name="navAdvogados">Advogados</string>
     <string name="navDeslogar">Sair</string>
 
     <!--GERAL-->
@@ -68,6 +70,7 @@
     <string name="cliqueNovamente">Clique novamente.</string>
     <string name="nenhumProcessoEncontrado">Nenhum processo encontrado!</string>
     <string name="nenhumClienteEncontrado">Nenhum cliente encontrado!</string>
+    <string name="nenhumAdvogadoEncontrado">Nenhum advogado encontrado!</string>
     <string name="nenhumaDiligenciaEncontrada">Nenhuma diligência encontrada!</string>
     <string name="nenhumAnexoEncontrado">Nenhum anexo encontrado!</string>
     <string name="nenhumAndamentoEncontrado">Nenhum andamento encontrado!</string>
@@ -113,6 +116,7 @@
     <string name="deletarDiligencia">Deletar Diligência</string>
     <string name="selecionarAdvogado">Selecionar Advogado</string>
     <string name="selecionarProcesso">Selecionar Processo</string>
+    <string name="deletarAdvogado">Deletar Advogado</string>
     <string name="addAdvogado">Add Advogado</string>
 
     <!-- TODO: Remove or change this placeholder text -->

@@ -28,11 +28,6 @@ class ClienteFragment : BaseFragment() {
 
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
     
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//
-//    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -86,7 +81,8 @@ class ClienteFragment : BaseFragment() {
 
             val adapter = ClientesAdapter(binding.root.context, lista,
                 exibirIconeTelefone = true,
-                exibirIconeEmail = true
+                exibirIconeEmail = true,
+                exibirIconeWhatsapp = true
             )
             binding.rvClientsList.adapter = adapter
 

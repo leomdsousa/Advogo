@@ -5,6 +5,7 @@
     <dimen name="cardViewCornerRadius">10dp</dimen>
     <dimen name="mainScreenContentPadding">16dp</dimen>
     <dimen name="noProcessAvailableTextSize">16sp</dimen>
+    <dimen name="noAdvAvailableTextSize">16sp</dimen>
     <dimen name="nenhumaDiligenciaEncontradaTextSize">16sp</dimen>
     <dimen name="fabMargin">16dp</dimen>
     <dimen name="itemSelectedMarginEnd">10dp</dimen>

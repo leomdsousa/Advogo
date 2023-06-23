@@ -3,12 +3,13 @@ package com.example.advogo.adapters
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
-import android.service.autofill.RegexValidator
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.advogo.databinding.ItemClienteBinding
 import com.example.advogo.models.Cliente
@@ -19,7 +20,8 @@ open class ClientesAdapter(
     private val context: Context,
     private var list: ArrayList<Cliente>,
     private val exibirIconeTelefone: Boolean = false,
-    private val exibirIconeEmail: Boolean = false
+    private val exibirIconeEmail: Boolean = false,
+    private val exibirIconeWhatsapp: Boolean = false
 ): RecyclerView.Adapter<ClientesAdapter.MyViewHolder>() {
     private var onItemClickListener: OnItemClickListener? = null
 
@@ -71,6 +73,23 @@ open class ClientesAdapter(
                     }
                 } else {
                     binding.imageEmail.visibility = View.GONE
+                }
+
+                if(exibirIconeWhatsapp
+                    && (item.telefone != null && regexTelefone.matches(item.telefone!!))
+                ) {
+                    binding.imageWpp.visibility = View.VISIBLE
+                    binding.imageWpp.setOnClickListener { _ ->
+                        try {
+                            val intent = Intent(Intent.ACTION_VIEW)
+                            intent.data = Uri.parse("https://api.whatsapp.com/send?phone=${item.telefone}")
+                            context.startActivity(intent)
+                        } catch (e: Exception) {
+                            Toast.makeText(context, "WhatsApp não instalado", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                } else {
+                    binding.imageWpp.visibility = View.GONE
                 }
 
                 binding.root.setOnClickListener {

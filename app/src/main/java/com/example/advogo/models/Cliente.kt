@@ -16,6 +16,7 @@ data class Cliente(
     var enderecoCidade: String? = null,
     var enderecoBairro: String? = null,
     var telefone: String? = null,
+    var whatsapp: Boolean? = false,
     @Transient var telefoneObj: Telefone? = null,
     @Transient var selecionado: Boolean = false
 ): Parcelable {

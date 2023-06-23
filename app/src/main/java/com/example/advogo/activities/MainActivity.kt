@@ -148,6 +148,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 intent.putExtra(Constants.FROM_PERFIL_ACTIVITY, Constants.FROM_PERFIL_ACTIVITY)
                 resultLauncher.launch(intent)
             }
+            R.id.navAdvogados -> {
+                val intent = Intent(this@MainActivity, AdvogadoActivity::class.java)
+                startActivity(intent)
+            }
             R.id.navDeslogar -> {
                 FirebaseAuth.getInstance().signOut()
                 sharedPreferences.edit().clear().apply()

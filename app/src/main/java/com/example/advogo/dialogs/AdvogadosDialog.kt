@@ -40,7 +40,7 @@ abstract class AdvogadosDialog(
 
             adapter!!.setOnItemClickListener(object :
                 AdvogadosAdapter.OnItemClickListener {
-                override fun onClick(position: Int, user: Advogado, action:String) {
+                override fun onClick(position: Int, user: Advogado, action:String?) {
                     dismiss()
                     onItemSelected(user, action)
                 }
@@ -48,5 +48,5 @@ abstract class AdvogadosDialog(
         }
     }
 
-    protected abstract fun onItemSelected(user: Advogado, action:String)
+    protected abstract fun onItemSelected(user: Advogado, action:String?)
 }

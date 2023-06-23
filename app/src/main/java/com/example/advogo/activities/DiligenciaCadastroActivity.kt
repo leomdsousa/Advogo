@@ -165,7 +165,7 @@ class DiligenciaCadastroActivity : BaseActivity() {
                 advogados as ArrayList<Advogado>,
                 resources.getString(R.string.selecionarAdvogado)
             ) {
-                override fun onItemSelected(adv: Advogado, action: String) {
+                override fun onItemSelected(adv: Advogado, action: String?) {
                     if (action == Constants.SELECIONAR) {
                         if (binding.etDiligenciaAdvogado.text.toString() != adv.id) {
                             binding.etDiligenciaAdvogado.setText("${adv.nome} (${adv.oab})")
@@ -179,7 +179,7 @@ class DiligenciaCadastroActivity : BaseActivity() {
                             ).show()
                         }
                     } else {
-                        binding.etDiligenciaAdvogado.setText(null)
+                        binding.etDiligenciaAdvogado.text = null
                         advogadoSelecionado = adv.id
                         advogados[advogados.indexOf(adv)].selecionado = false
                     }
