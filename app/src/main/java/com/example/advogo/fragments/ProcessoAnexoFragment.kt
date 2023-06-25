@@ -103,7 +103,11 @@ class ProcessoAnexoFragment : BaseFragment() {
                     }
                     override fun onDelete(anexo: Anexo, position: Int) {
                         if(!TextUtils.isEmpty(anexo.uri)) {
-                            deletarArquivo(anexo.uri!!)
+                            deletarArquivo(
+                                anexo.uri!!
+                            ) {
+                                deleteAnexoSuccess()
+                            }
                         }
                     }
                 })
@@ -194,6 +198,16 @@ class ProcessoAnexoFragment : BaseFragment() {
             "Erro para salvar o anexo!",
             Toast.LENGTH_LONG
         ).show()
+    }
+
+    private fun deleteAnexoSuccess() {
+        anexoRepository.ObterAnexos(
+            {
+                setAnexosToUI(it as ArrayList<Anexo>)
+                hideProgressDialog()
+            },
+            { hideProgressDialog() }
+        )
     }
 
     private fun validarFormulario(): Boolean {

@@ -10,6 +10,7 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.MimeTypeMap
@@ -23,6 +24,7 @@ import androidx.fragment.app.Fragment
 import com.example.advogo.activities.BaseActivity
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
@@ -165,46 +167,16 @@ open class BaseFragment : Fragment() {
             }
     }
 
-    fun deletarArquivo(url: String) {
-//        val intent = Intent(Intent.ACTION_VIEW)
-//        intent.setDataAndType(Uri.parse(url), "application/pdf")
-//        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-//
-//        if(consegueAbrirArquivo(intent)) {
-//            startActivity(intent)
-//        } else {
-//            Toast.makeText(requireContext(), "Nenhum aplicativo encontrado para visualizar o PDF.", Toast.LENGTH_SHORT).show()
-//        }
+    fun deletarArquivo(caminhoArquivo: String, onSuccess: () -> Unit) {
+        val db = FirebaseFirestore.getInstance()
 
-        val storageReference = Firebase.storage.getReferenceFromUrl(url)
-
-        val localFile = File.createTempFile("temp", "pdf")
-
-        storageReference.getFile(localFile)
+        db.document(caminhoArquivo)
+            .delete()
             .addOnSuccessListener {
-                val fileUri = FileProvider.getUriForFile(
-                    requireContext(),
-                    requireContext().packageName + ".fileprovider",
-                    localFile
-                )
-
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.setDataAndType(fileUri, "application/pdf")
-                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-
-                startActivity(intent)
-//                if (consegueAbrirArquivo(intent)) {
-//                    startActivity(intent)
-//                } else {
-//                    Toast.makeText(
-//                        requireContext(),
-//                        "Nenhum aplicativo encontrado para visualizar o PDF.",
-//                        Toast.LENGTH_SHORT
-//                    ).show()
-//                }
+                onSuccess()
             }
-            .addOnFailureListener {
-                Toast.makeText(requireContext(), "Erro ao baixar o arquivo.", Toast.LENGTH_SHORT).show()
+            .addOnFailureListener { e ->
+                Toast.makeText(requireContext(), "Erro ao excluir o documento", Toast.LENGTH_LONG).show()
             }
     }
 

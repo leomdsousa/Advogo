@@ -27,6 +27,7 @@ import com.example.advogo.models.*
 import com.example.advogo.repositories.*
 import com.example.advogo.utils.Constants
 import com.example.advogo.utils.ProcessMaskTextWatcher
+import com.example.advogo.utils.interfaces.OnProcessoEditListener
 import com.example.projmgr.dialogs.AdvogadosDialog
 import com.example.projmgr.dialogs.ClientesDialog
 import com.google.android.material.tabs.TabLayout
@@ -45,7 +46,9 @@ import javax.inject.Inject
 import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
-class ProcessoDetalheActivity : BaseActivity() {
+class ProcessoDetalheActivity : BaseActivity()
+    //, OnProcessoEditListener
+{
     private lateinit var binding: ActivityProcessoDetalheBinding
     private lateinit var processoDetalhes: Processo
 
@@ -59,6 +62,13 @@ class ProcessoDetalheActivity : BaseActivity() {
     private lateinit var tabLayout: TabLayout
 
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
+
+//    val processoDetalheFragment = ProcessoDetalheFragment.newInstance(object : OnProcessoEditListener {
+//        override fun onProcessoEditCompleted() {
+//            //obterProcessos()
+//            //setProcessosToUI()
+//        }
+//    })
 
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -95,8 +105,23 @@ class ProcessoDetalheActivity : BaseActivity() {
         viewPager = findViewById(R.id.viewPager)
         tabLayout = findViewById(R.id.tabLayout)
 
+//        val processoDetalheFragment = ProcessoDetalheFragment.newInstance(object: OnProcessoEditListener {
+//            override fun onProcessoEditCompleted() {
+//                val processoFragment3 = supportFragmentManager.findFragmentByTag("fragment_processos") as ProcessosFragment?
+//                val processoFragment2 = supportFragmentManager.findFragmentByTag("processo_fragment") as ProcessosFragment?
+//                val processoFragment = supportFragmentManager.findFragmentByTag("processos_fragment") as ProcessosFragment?
+//                val isInLayout = processoFragment?.isInLayout
+//                val isAdded = processoFragment?.isAdded
+//                val isVisible = processoFragment?.isVisible
+//                val isHidden = processoFragment?.isHidden
+//                val isStateSaved = processoFragment?.isStateSaved
+//                processoFragment?.obterProcessos()
+//            }
+//        })
+
         val adapter = TabsAdapter(this)
         adapter.addFragment(ProcessoDetalheFragment(), "Dados")
+        //adapter.addFragment(processoDetalheFragment, "Dados")
         adapter.addFragment(ProcessoAndamentoFragment(), "Andamentos")
         adapter.addFragment(ProcessoAnexoFragment(), "Anexos")
         viewPager.adapter = adapter
@@ -188,4 +213,13 @@ class ProcessoDetalheActivity : BaseActivity() {
             else -> 0
         }
     }
+
+//    override fun onProcessoEditCompleted() {
+//        val processoFragment3 = supportFragmentManager.findFragmentByTag("fragment_processos") as ProcessosFragment?
+//        val processoFragment2 = supportFragmentManager.findFragmentByTag("processo_fragment") as ProcessosFragment?
+//        val processoFragment = supportFragmentManager.findFragmentByTag("processos_fragment") as ProcessosFragment?
+//        processoFragment3?.obterProcessos()
+//        processoFragment2?.obterProcessos()
+//        processoFragment?.obterProcessos()
+//    }
 }

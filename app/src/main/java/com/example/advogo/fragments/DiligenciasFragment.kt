@@ -42,9 +42,8 @@ class DiligenciasFragment : BaseFragment() {
     private lateinit var binding: FragmentDiligenciasBinding
     @Inject lateinit var diligenciaRepository: IDiligenciaRepository
 
-    private var diligencias: List<Diligencia> = ArrayList()
-
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
+    private var onCreateCarregouLista = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,6 +55,53 @@ class DiligenciasFragment : BaseFragment() {
         configurarSpinnerFiltros()
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.fabDiligenciaCadastro.setOnClickListener {
+            val intent = Intent(binding.root.context, DiligenciaCadastroActivity::class.java)
+            intent.putExtra(Constants.FROM_DILIGENCIA_ACTIVITY, Constants.FROM_DILIGENCIA_ACTIVITY)
+            resultLauncher.launch(intent)
+        }
+
+        obterDiligencias()
+        onCreateCarregouLista = true
+
+        binding.calendarView.setOnDateChangedListener { widget, date, selected ->
+            val data = "${date.year}-${date.month}-${date.day}"
+
+            CoroutineScope(Dispatchers.Main).launch {
+                val diligencias = obterDiligenciasPorData(data)
+                setDiligenciasToUI(diligencias)
+            }
+        }
+
+        resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                if (result.data!!.hasExtra(Constants.FROM_DILIGENCIA_ACTIVITY)) {
+                    diligenciaRepository.ObterDiligencias(
+                        { lista ->
+                            setDiligenciasToUI(lista as ArrayList<Diligencia>)
+                            hideProgressDialog()
+                        },
+                        { hideProgressDialog() }
+                    )
+                }
+            } else {
+                Log.e("Cancelado", "Cancelado")
+            }
+        }
+    }
+
+    override fun onResume() {
+        if(!onCreateCarregouLista) {
+            obterDiligencias()
+        }
+
+        onCreateCarregouLista = false
+        super.onResume()
     }
 
     private fun configurarSpinnerFiltros() {
@@ -134,22 +180,9 @@ class DiligenciasFragment : BaseFragment() {
             .setMinimumDate(CalendarDay.from(2023, Calendar.JANUARY + 1, 1))
             .setMaximumDate(CalendarDay.from(2023, Calendar.DECEMBER + 1, 31))
             .commit()
-
-        //binding.calendarView.setPadding(5, 5, 5, 5)
-        //binding.calendarView.setPadding(0, 0, 0, 0);
-        //binding.calendarView.setDateTextAppearance(R.style.CalendarViewDateTextAppearance);
-        //binding.calendarView.setWeekDayTextAppearance(R.style.CalendarViewWeekDayTextAppearance);
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        binding.fabDiligenciaCadastro.setOnClickListener {
-            val intent = Intent(binding.root.context, DiligenciaCadastroActivity::class.java)
-            intent.putExtra(Constants.FROM_DILIGENCIA_ACTIVITY, Constants.FROM_DILIGENCIA_ACTIVITY)
-            resultLauncher.launch(intent)
-        }
-
+    private fun obterDiligencias() {
         diligenciaRepository.ObterDiligencias(
             { diligencias ->
                 setDiligenciasToUI(diligencias)
@@ -157,31 +190,6 @@ class DiligenciasFragment : BaseFragment() {
             },
             { hideProgressDialog() }
         )
-
-        binding.calendarView.setOnDateChangedListener { widget, date, selected ->
-            val data = "${date.year}-${date.month}-${date.day}"
-
-            CoroutineScope(Dispatchers.Main).launch {
-                val diligencias = obterDiligenciasPorData(data)
-                setDiligenciasToUI(diligencias)
-            }
-        }
-
-        resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                if (result.data!!.hasExtra(Constants.FROM_DILIGENCIA_ACTIVITY)) {
-                    diligenciaRepository.ObterDiligencias(
-                        { lista ->
-                            setDiligenciasToUI(lista as ArrayList<Diligencia>)
-                            hideProgressDialog()
-                        },
-                        { hideProgressDialog() }
-                    )
-                }
-            } else {
-                Log.e("Cancelado", "Cancelado")
-            }
-        }
     }
 
     private fun setDiligenciasToUI(lista: List<Diligencia>) {

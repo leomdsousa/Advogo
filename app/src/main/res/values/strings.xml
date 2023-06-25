@@ -74,6 +74,7 @@
     <string name="nenhumaDiligenciaEncontrada">Nenhuma diligência encontrada!</string>
     <string name="nenhumAnexoEncontrado">Nenhum anexo encontrado!</string>
     <string name="nenhumAndamentoEncontrado">Nenhum andamento encontrado!</string>
+    <string name="nenhumaDiligenciaHistoricoEncontrado">Nenhum histórico encontrado!</string>
 
     <!--INTRO-->
     <string name="imageContentDescription">Imagem</string>

@@ -1,6 +1,7 @@
 package com.example.advogo.fragments
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -21,6 +22,7 @@ import com.example.advogo.models.*
 import com.example.advogo.repositories.*
 import com.example.advogo.utils.Constants
 import com.example.advogo.utils.ProcessMaskTextWatcher
+import com.example.advogo.utils.interfaces.OnProcessoEditListener
 import com.example.projmgr.dialogs.AdvogadosDialog
 import com.example.projmgr.dialogs.ClientesDialog
 import com.google.firebase.storage.FirebaseStorage
@@ -60,10 +62,6 @@ class ProcessoDetalheFragment : BaseFragment() {
     private var imagemSelecionadaURL: String? = null
 
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
-
-    private val lock = Any()
-    private var spinnersSetUp = false
-    private var spinnersSettingUp = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -414,14 +412,10 @@ class ProcessoDetalheFragment : BaseFragment() {
     private fun atualizarProcessoSuccess() {
         hideProgressDialog()
 
-//        val result = Bundle().apply {
-//            putString(Constants.FROM_PROCESSO_ACTIVITY, Constants.FROM_PROCESSO_ACTIVITY)
-//        }
-
-        //setFragmentResult(Constants.RESULT_KEY, result)
-        requireActivity().intent.putExtra(Constants.FROM_PROCESSO_ACTIVITY, Constants.FROM_PROCESSO_ACTIVITY)
-        requireActivity().setResult(Activity.RESULT_OK, requireActivity().intent)
-        requireActivity().finish()
+        val activity = requireActivity()
+        activity.intent.putExtra(Constants.FROM_PROCESSO_ACTIVITY, Constants.FROM_PROCESSO_ACTIVITY)
+        activity.setResult(Activity.RESULT_OK, requireActivity().intent)
+        activity.finish()
     }
 
     private fun atualizarProcessoFailure() {

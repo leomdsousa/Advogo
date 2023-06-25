@@ -26,12 +26,15 @@ import com.example.advogo.R
 import com.example.advogo.databinding.ActivityMainBinding
 import com.example.advogo.fragments.ClienteFragment
 import com.example.advogo.fragments.DiligenciasFragment
+import com.example.advogo.fragments.ProcessoDetalheFragment
 import com.example.advogo.fragments.ProcessosFragment
 import com.example.advogo.models.Advogado
+import com.example.advogo.models.Processo
 import com.example.advogo.repositories.IAdvogadoRepository
 import com.example.advogo.repositories.IDiligenciaRepository
 import com.example.advogo.repositories.IProcessoRepository
 import com.example.advogo.utils.Constants
+import com.example.advogo.utils.interfaces.OnProcessoEditListener
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -41,7 +44,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener
+{
     @Inject lateinit var processoRepository: IProcessoRepository
     @Inject lateinit var advRepository: IAdvogadoRepository
     @Inject lateinit var diligenciaRepository: IDiligenciaRepository
@@ -77,8 +81,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 val tokenUpdated = sharedPreferences.getBoolean(Constants.FCM_TOKEN_UPDATED, false)
 
                 if (tokenUpdated) {
-                    //showProgressDialog(resources.getString(R.string.please_wait))
-                    //FirestoreService().loadUserData(this@MainActivity, true)
                     advRepository.ObterAdvogado(
                         getCurrentUserID(),
                         { adv ->
@@ -220,8 +222,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     private fun getTabIcon(position: Int): Int {
         return when (position) {
             0 -> R.drawable.ic_baseline_shopping_bag_24
-            1 -> R.drawable.ic_baseline_event_24
-            2 -> R.drawable.ic_baseline_contacts_24
+            1 -> R.drawable.ic_baseline_contacts_24
+            2 -> R.drawable.ic_baseline_event_24
             else -> 0
         }
     }

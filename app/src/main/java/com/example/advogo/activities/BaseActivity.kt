@@ -433,4 +433,26 @@ open class BaseActivity : AppCompatActivity() {
 
         result.launch(Intent.createChooser(intent, "Escolha um arquivo"))
     }
+
+    fun openGoogleMaps(endereco: String) {
+        val uri = Uri.parse("geo:0,0?q=${Uri.encode(endereco)}")
+
+        val mapIntent = Intent(Intent.ACTION_VIEW, uri)
+        mapIntent.setPackage("com.google.android.apps.maps")
+
+        if (mapIntent.resolveActivity(packageManager) != null) {
+            startActivity(mapIntent)
+        }
+    }
+
+    fun openGoogleMaps(latitude: Double, longitude: Double) {
+        val uri = Uri.parse("geo:$latitude,$longitude")
+
+        val mapIntent = Intent(Intent.ACTION_VIEW, uri)
+        mapIntent.setPackage("com.google.android.apps.maps")
+
+        if (mapIntent.resolveActivity(packageManager) != null) {
+            startActivity(mapIntent)
+        }
+    }
 }

@@ -27,6 +27,7 @@ class ClienteFragment : BaseFragment() {
     @Inject lateinit var clienteRepository: IClienteRepository
 
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
+    private var onCreateCarregouLista = false
     
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,13 +47,8 @@ class ClienteFragment : BaseFragment() {
             resultLauncher.launch(intent)
         }
 
-        clienteRepository.ObterClientes(
-            { Clientes ->
-                setClientesToUI(Clientes as ArrayList<Cliente>)
-                hideProgressDialog()
-            },
-            { hideProgressDialog() }
-        )
+        obterClientes()
+        onCreateCarregouLista = true
 
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -69,6 +65,25 @@ class ClienteFragment : BaseFragment() {
                 Log.e("Cancelado", "Cancelado")
             }
         }
+    }
+
+    override fun onResume() {
+        if(!onCreateCarregouLista) {
+            obterClientes()
+        }
+
+        onCreateCarregouLista = false
+        super.onResume()
+    }
+
+    private fun obterClientes() {
+        clienteRepository.ObterClientes(
+            { Clientes ->
+                setClientesToUI(Clientes as ArrayList<Cliente>)
+                hideProgressDialog()
+            },
+            { hideProgressDialog() }
+        )
     }
 
     private fun setClientesToUI(lista: ArrayList<Cliente>) {

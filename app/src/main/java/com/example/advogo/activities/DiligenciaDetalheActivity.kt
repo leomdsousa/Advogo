@@ -108,9 +108,17 @@ class DiligenciaDetalheActivity : BaseActivity() {
         }
 
         binding.btnGoogleMaps.setOnClickListener {
-            val intent = Intent(this, MapActivity::class.java)
-            intent.putExtra(Constants.DILIGENCIA_MAP, diligenciaDetalhes)
-            startActivity(intent)
+//            val intent = Intent(this, MapActivity::class.java)
+//            intent.putExtra(Constants.DILIGENCIA_MAP, diligenciaDetalhes)
+//            startActivity(intent)
+
+            if(diligenciaDetalhes.enderecoLat != null && diligenciaDetalhes.enderecoLong != null) {
+                openGoogleMaps(diligenciaDetalhes.enderecoLat!!, diligenciaDetalhes.enderecoLong!!)
+            } else if (!diligenciaDetalhes.endereco.isNullOrBlank()) {
+                openGoogleMaps(diligenciaDetalhes.endereco!!)
+            } else {
+                Toast.makeText(this, "Sem informação de local", Toast.LENGTH_LONG).show()
+            }
         }
 
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->

@@ -145,11 +145,8 @@ class ProcessoAndamentoFragment : BaseFragment() {
 
         dialog.show()
 
-        //bindingDialog = DialogProcessoAndamentoBinding.bind(dialog.roo)
-
         val inflater = LayoutInflater.from(requireContext())
         bindingDialog = DialogProcessoAndamentoBinding.inflate(inflater)
-        //dialog.setContentView(bindingDialog.root)
     }
 
     private fun atualizarAndamento(andamento: ProcessoAndamento) {

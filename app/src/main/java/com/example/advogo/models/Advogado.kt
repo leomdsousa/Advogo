@@ -19,6 +19,7 @@ data class Advogado(
     var oab: Long? = null,
     var telefone: String? = null,
     var fcmToken: String? = null,
+    var whatsapp: Boolean? = null,
     @Transient var telefoneObj: Telefone? = null,
     @Transient var selecionado: Boolean = false
 ): Parcelable { }

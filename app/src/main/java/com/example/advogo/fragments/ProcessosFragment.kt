@@ -20,6 +20,7 @@ import com.example.advogo.databinding.FragmentProcessosBinding
 import com.example.advogo.models.Processo
 import com.example.advogo.repositories.IProcessoRepository
 import com.example.advogo.utils.Constants
+import com.example.advogo.utils.interfaces.OnProcessoEditListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -32,6 +33,8 @@ class ProcessosFragment : BaseFragment() {
     @Inject lateinit var processoRepository: IProcessoRepository
 
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
+
+    private var onCreateCarregouLista = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,13 +54,8 @@ class ProcessosFragment : BaseFragment() {
             resultLauncher.launch(intent)
         }
 
-        processoRepository.ObterProcessos(
-            { processos ->
-                setProcessosToUI(processos as ArrayList<Processo>)
-                hideProgressDialog()
-            },
-            { hideProgressDialog() }
-        )
+        obterProcessos()
+        onCreateCarregouLista = true
 
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -76,6 +74,25 @@ class ProcessosFragment : BaseFragment() {
         }
     }
 
+    override fun onResume() {
+        if(!onCreateCarregouLista) {
+            obterProcessos()
+        }
+
+        onCreateCarregouLista = false
+        super.onResume()
+    }
+
+    private fun obterProcessos() {
+        processoRepository.ObterProcessos(
+            { processos ->
+                setProcessosToUI(processos as ArrayList<Processo>)
+                hideProgressDialog()
+            },
+            { hideProgressDialog() }
+        )
+    }
+
     private fun setProcessosToUI(lista: ArrayList<Processo>) {
         CoroutineScope(Dispatchers.Main).launch {
             if(lista.size > 0) {
@@ -87,6 +104,8 @@ class ProcessosFragment : BaseFragment() {
 
                 val adapter = ProcessosAdapter(binding.root.context, lista)
                 binding.rvBoardsList.adapter = adapter
+
+                adapter.notifyItemChanged(1, null)
 
                 adapter.setOnItemClickListener(object :
                     ProcessosAdapter.OnItemClickListener {
