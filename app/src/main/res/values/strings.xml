@@ -75,6 +75,7 @@
     <string name="nenhumAnexoEncontrado">Nenhum anexo encontrado!</string>
     <string name="nenhumAndamentoEncontrado">Nenhum andamento encontrado!</string>
     <string name="nenhumaDiligenciaHistoricoEncontrado">Nenhum histórico encontrado!</string>
+    <string name="nenhumProcessoHistoricoEncontrado">Nenhum histórico encontrado!</string>
 
     <!--INTRO-->
     <string name="imageContentDescription">Imagem</string>
@@ -119,10 +120,7 @@
     <string name="selecionarProcesso">Selecionar Processo</string>
     <string name="deletarAdvogado">Deletar Advogado</string>
     <string name="addAdvogado">Add Advogado</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="selecionarCliente">Selecione um cliente</string>
 
-
+    <string name="defaultNotificationChannelId">advogo_notification_channel_id</string>
 </resources>

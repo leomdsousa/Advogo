@@ -33,7 +33,6 @@ abstract class ProcessosDialog(
         binding.tvTitle.text = titulo
 
         if (list.size > 0) {
-
             binding.rvList.layoutManager = LinearLayoutManager(context)
             adapter = ProcessosAdapter(context, list)
             binding.rvList.adapter = adapter

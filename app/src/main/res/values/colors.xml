@@ -17,7 +17,7 @@
     <color name="colorPrimary">#394a75</color>
     <color name="colorPrimaryDark">#081025</color>
     <color name="colorOnPrimary">@color/white</color>
-    <color name="colorSecondary">#225df2</color>
+    <color name="colorSecondary">#5873B6</color>
 
     <color name="dividerColor">#595959</color>
 </resources>

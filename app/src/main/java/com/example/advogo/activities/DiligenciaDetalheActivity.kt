@@ -257,7 +257,7 @@ class DiligenciaDetalheActivity : BaseActivity() {
 
     private fun processosDialog() {
         CoroutineScope(Dispatchers.Main).launch {
-            if(processos == null) {
+            if(processos.isEmpty()) {
                 val processosDeferred = async { processoRepository.ObterProcessos()!! }
                 processos = processosDeferred.await()
             }

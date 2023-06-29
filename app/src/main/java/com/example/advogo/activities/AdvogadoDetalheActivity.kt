@@ -129,7 +129,7 @@ class AdvogadoDetalheActivity : BaseActivity() {
         showProgressDialog(getString(R.string.aguardePorfavor))
 
         val advogado = Advogado(
-            id = getCurrentUserID(),
+            id = advogadoDetalhes.id,
             nome = (if (binding.etName.text.toString() != advogadoDetalhes.nome) binding.etName.text.toString() else advogadoDetalhes.nome),
             sobrenome = (if (binding.etSobrenome.text.toString() != advogadoDetalhes.sobrenome) binding.etSobrenome.text.toString() else advogadoDetalhes.sobrenome),
             email = (if (binding.etEmail.text.toString() != advogadoDetalhes.email) binding.etEmail.text.toString() else advogadoDetalhes.email),

@@ -177,7 +177,10 @@
                                 android:layout_height="wrap_content"
                                 android:background="@drawable/shape_button_rounded"
                                 android:contentDescription="Google Maps"
-                                android:padding="8dp"
+                                android:paddingLeft="8dp"
+                                android:paddingRight="8dp"
+                                android:paddingTop="16dp"
+                                android:paddingBottom="16dp"
                                 android:src="@drawable/ic_baseline_place_24" />
 
                         </LinearLayout>
@@ -194,7 +197,7 @@
                         android:gravity="center"
                         android:paddingTop="@dimen/btnPaddingTopBottom"
                         android:paddingBottom="@dimen/btnPaddingTopBottom"
-                        android:text="@string/cadastrar"
+                        android:text="@string/update"
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/btnTextSize" />
                 </LinearLayout>
