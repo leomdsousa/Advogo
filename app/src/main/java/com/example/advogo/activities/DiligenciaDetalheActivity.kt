@@ -24,6 +24,7 @@ import com.example.advogo.models.*
 import com.example.advogo.repositories.*
 import com.example.advogo.utils.Constants
 import com.example.advogo.utils.Constants.DILIGENCIA_MAP
+import com.example.advogo.utils.SendNotificationToUserAsyncTask
 import com.example.projmgr.dialogs.AdvogadosDialog
 import com.example.projmgr.dialogs.ProcessosDialog
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -64,6 +65,7 @@ class DiligenciaDetalheActivity : BaseActivity() {
     private var savedLongitude: Double = 0.0
     private var dataSelecionada: String? = null
     private var advSelecionado: String? = null
+    private var advSelecionadoToken: String? = null
     private var processoSelecionado: String? = null
     private var tipoDiligenciaSelecionada: String? = null
     private var statusDiligenciaSelecionada: String? = null
@@ -309,6 +311,7 @@ class DiligenciaDetalheActivity : BaseActivity() {
                         if (binding.etDiligenciaAdvogado.text.toString() != adv.id) {
                             binding.etDiligenciaAdvogado.setText("${adv.nome} (${adv.oab})")
                             advSelecionado = adv.id
+                            advSelecionadoToken = adv.fcmToken
                             advogados[advogados.indexOf(adv)].selecionado = true
                         } else {
                             Toast.makeText(
@@ -432,6 +435,18 @@ class DiligenciaDetalheActivity : BaseActivity() {
 
     private fun diligenciaEdicaoSuccess() {
         hideProgressDialog()
+
+        if(
+            advSelecionado != getCurrentUserID()
+            //TODO("Incluir validação para verificar se o advSelecionado é diferente do anterior. Só mandar notificação se for diferente")
+            //&& advSelecionado != advSelecionadoAnterior
+          ) {
+            SendNotificationToUserAsyncTask(
+                "Diligência",
+                "Uma diligência foi atualizada e atribuída a você! Clique para ver tuas diligências.",
+                advSelecionadoToken!!
+            ).execute()
+        }
 
         intent.putExtra(Constants.FROM_DILIGENCIA_ACTIVITY, Constants.FROM_DILIGENCIA_ACTIVITY)
         setResult(Activity.RESULT_OK, intent)

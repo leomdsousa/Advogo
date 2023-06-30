@@ -20,6 +20,7 @@ import com.example.advogo.databinding.ActivityDiligenciaCadastroBinding
 import com.example.advogo.models.*
 import com.example.advogo.repositories.*
 import com.example.advogo.utils.Constants
+import com.example.advogo.utils.SendNotificationToUserAsyncTask
 import com.example.projmgr.dialogs.AdvogadosDialog
 import com.example.projmgr.dialogs.ProcessosDialog
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -58,6 +59,7 @@ class DiligenciaCadastroActivity : BaseActivity() {
     private var tipoDiligenciaSelecionada: String? = null
     private var statusDiligenciaSelecionada: String? = null
     private var advogadoSelecionado: String? = null
+    private var advogadoSelecionadoToken: String? = null
 
     private var diligenciaStatus: List<DiligenciaStatus>? = ArrayList()
     private var diligenciaTipos: List<DiligenciaTipo>? = ArrayList()
@@ -170,6 +172,7 @@ class DiligenciaCadastroActivity : BaseActivity() {
                         if (binding.etDiligenciaAdvogado.text.toString() != adv.id) {
                             binding.etDiligenciaAdvogado.setText("${adv.nome} (${adv.oab})")
                             advogadoSelecionado = adv.id
+                            advogadoSelecionadoToken = adv.fcmToken
                             advogados[advogados.indexOf(adv)].selecionado = true
                         } else {
                             Toast.makeText(
@@ -320,6 +323,14 @@ class DiligenciaCadastroActivity : BaseActivity() {
 
     private fun diligenciaCadastroSuccess() {
         hideProgressDialog()
+
+        if(advogadoSelecionado != getCurrentUserID()) {
+            SendNotificationToUserAsyncTask(
+                "Diligência",
+                "Nova diligência cadastrada e desginada para você! Clique para ver tuas diligências.",
+                advogadoSelecionadoToken!!
+            ).execute()
+        }
 
         intent.putExtra(Constants.FROM_DILIGENCIA_ACTIVITY, Constants.FROM_DILIGENCIA_ACTIVITY)
         setResult(Activity.RESULT_OK, intent)

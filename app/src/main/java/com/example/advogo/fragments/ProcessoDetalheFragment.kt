@@ -22,6 +22,7 @@ import com.example.advogo.models.*
 import com.example.advogo.repositories.*
 import com.example.advogo.utils.Constants
 import com.example.advogo.utils.ProcessMaskTextWatcher
+import com.example.advogo.utils.SendNotificationToUserAsyncTask
 import com.example.advogo.utils.interfaces.OnProcessoEditListener
 import com.example.projmgr.dialogs.AdvogadosDialog
 import com.example.projmgr.dialogs.ClientesDialog
@@ -55,6 +56,7 @@ class ProcessoDetalheFragment : BaseFragment() {
     private var dataSelecionada: String? = null
     private var clienteSelecionado: String? = null
     private var advSelecionado: String? = null
+    private var advSelecionadoToken: String? = null
     private var tipoProcessoSelecionado: String? = null
     private var statusProcessoSelecionado: String? = null
 
@@ -257,6 +259,7 @@ class ProcessoDetalheFragment : BaseFragment() {
                         if (binding.etAdv.text.toString() != adv.id) {
                             binding.etAdv.setText("${adv.nome} (${adv.oab})")
                             advSelecionado = adv.id
+                            advSelecionadoToken = adv.fcmToken
                             advogados[advogados.indexOf(adv)].selecionado = true
                         } else {
                             Toast.makeText(
@@ -411,6 +414,18 @@ class ProcessoDetalheFragment : BaseFragment() {
 
     private fun atualizarProcessoSuccess() {
         hideProgressDialog()
+
+        if(
+            advSelecionado != getCurrentUserID()
+        //TODO("Incluir validação para verificar se o advSelecionado é diferente do anterior. Só mandar notificação se for diferente")
+        //&& advSelecionado != advSelecionadoAnterior
+        ) {
+            SendNotificationToUserAsyncTask(
+                "Processo",
+                "Um processo foi atualizado e atribuído a você! Clique para ver teus processos.",
+                advSelecionadoToken!!
+            ).execute()
+        }
 
         val activity = requireActivity()
         activity.intent.putExtra(Constants.FROM_PROCESSO_ACTIVITY, Constants.FROM_PROCESSO_ACTIVITY)

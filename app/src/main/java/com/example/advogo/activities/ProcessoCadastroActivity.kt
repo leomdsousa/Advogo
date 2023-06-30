@@ -57,6 +57,7 @@ class ProcessoCadastroActivity : BaseActivity() {
     private var dataSelecionada: String? = null
     private var clienteSelecionado: String? = null
     private var advSelecionado: String? = null
+    private var advSelecionadoToken: String? = null
     private var tipoProcessoSelecionado: String? = null
     private var statusProcessoSelecionado: String? = null
 
@@ -141,6 +142,7 @@ class ProcessoCadastroActivity : BaseActivity() {
                         if (binding.etAdv.text.toString() != adv.id) {
                             binding.etAdv.setText("${adv.nome} (${adv.oab})")
                             advSelecionado = adv.id
+                            advSelecionadoToken = adv.fcmToken
                             advogados[advogados.indexOf(adv)].selecionado = true
                         } else {
                             Toast.makeText(
@@ -368,8 +370,13 @@ class ProcessoCadastroActivity : BaseActivity() {
     private fun processoCadastroSuccess() {
         hideProgressDialog()
 
-//        SendNotificationToUserAsyncTask("","", user.fcmToken!!)
-//            .execute()
+        if(advSelecionado != getCurrentUserID()) {
+            SendNotificationToUserAsyncTask(
+                "Processo",
+                "Novo processo cadastrado e desginado para você! Clique para ver seus processos.",
+                advSelecionadoToken!!
+            ).execute()
+        }
 
         intent.putExtra(Constants.FROM_PROCESSO_ACTIVITY, Constants.FROM_PROCESSO_ACTIVITY)
         setResult(Activity.RESULT_OK, intent)
