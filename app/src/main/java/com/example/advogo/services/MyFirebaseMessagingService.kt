@@ -62,9 +62,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 or Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
         val pendingIntent = PendingIntent.getActivity(
-            this, 0, intent,
-            //PendingIntent.FLAG_ONE_SHOT,
-            PendingIntent.FLAG_IMMUTABLE
+            this,
+            0,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE //or PendingIntent.FLAG_ONE_SHOT
         )
 
         val channelId = this.resources.getString(R.string.defaultNotificationChannelId)
@@ -86,6 +87,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 "Channel AdvoGo title",
                 NotificationManager.IMPORTANCE_DEFAULT
             )
+
             notificationManager.createNotificationChannel(channel)
         }
 

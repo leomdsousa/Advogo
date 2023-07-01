@@ -3,12 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.advogo" >
 
+    <!--Necessário para acesso a rede do dispotivo-->
     <uses-permission android:name="android.permission.INTERNET" />
+    <!--Necessário para acesso ao armazenamento do dispositivo-->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!--Necessário para acesso a câmera do dispositivo-->
     <uses-permission android:name="android.permission.CAMERA" />
+    <!--Necessário para acesso a localização do dispositivo-->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!--Necessário para acesso ao calendário do dispositivo-->
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
 
     <application
         android:name=".dagger.MyApplication"

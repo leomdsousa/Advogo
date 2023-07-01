@@ -55,7 +55,7 @@ class ClienteCadastroActivity : BaseActivity() {
             telefone = binding.etTelefone.text.toString(),
         )
 
-        clienteRepository.AdicionarCliente(
+        clienteRepository.adicionarCliente(
             cliente,
             { clienteCadastroSuccess() },
             { clienteCadastroFailure() }

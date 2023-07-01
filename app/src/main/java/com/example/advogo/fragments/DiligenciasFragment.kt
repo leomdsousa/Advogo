@@ -81,7 +81,7 @@ class DiligenciasFragment : BaseFragment() {
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 if (result.data!!.hasExtra(Constants.FROM_DILIGENCIA_ACTIVITY)) {
-                    diligenciaRepository.ObterDiligencias(
+                    diligenciaRepository.obterDiligencias(
                         { lista ->
                             setDiligenciasToUI(lista as ArrayList<Diligencia>)
                             hideProgressDialog()
@@ -183,7 +183,7 @@ class DiligenciasFragment : BaseFragment() {
     }
 
     private fun obterDiligencias() {
-        diligenciaRepository.ObterDiligencias(
+        diligenciaRepository.obterDiligencias(
             { diligencias ->
                 setDiligenciasToUI(diligencias)
                 hideProgressDialog()
@@ -222,13 +222,13 @@ class DiligenciasFragment : BaseFragment() {
 
     private suspend fun obterDiligenciasPorData(data: String): List<Diligencia> {
         return withContext(Dispatchers.Main) {
-            diligenciaRepository.ObterDiligenciasPorData(data) ?: listOf()
+            diligenciaRepository.obterDiligenciasPorData(data) ?: listOf()
         }
     }
 
     private suspend fun obterDiligenciasPorData(dataInicial: String, dataFinal: String): List<Diligencia> {
         return withContext(Dispatchers.Main) {
-            diligenciaRepository.ObterDiligenciasPorData(dataInicial, dataFinal) ?: listOf()
+            diligenciaRepository.obterDiligenciasPorData(dataInicial, dataFinal) ?: listOf()
         }
     }
 

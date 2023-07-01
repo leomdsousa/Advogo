@@ -3,47 +3,27 @@ package com.example.advogo.activities
 import TabsAdapter
 import android.app.Activity
 import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.viewpager2.widget.ViewPager2
-import com.bumptech.glide.Glide
 import com.example.advogo.R
-import com.example.advogo.adapters.ProcessosStatusAdapter
-import com.example.advogo.adapters.ProcessosTiposAdapter
 import com.example.advogo.databinding.ActivityProcessoDetalheBinding
 import com.example.advogo.fragments.*
 import com.example.advogo.models.*
 import com.example.advogo.repositories.*
 import com.example.advogo.utils.Constants
-import com.example.advogo.utils.ProcessMaskTextWatcher
-import com.example.advogo.utils.interfaces.OnProcessoEditListener
-import com.example.projmgr.dialogs.AdvogadosDialog
-import com.example.projmgr.dialogs.ClientesDialog
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
-import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.*
 import javax.inject.Inject
-import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 class ProcessoDetalheActivity : BaseActivity()
@@ -61,15 +41,6 @@ class ProcessoDetalheActivity : BaseActivity()
     private lateinit var viewPager: ViewPager2
     private lateinit var tabLayout: TabLayout
 
-    private lateinit var resultLauncher: ActivityResultLauncher<Intent>
-
-//    val processoDetalheFragment = ProcessoDetalheFragment.newInstance(object : OnProcessoEditListener {
-//        override fun onProcessoEditCompleted() {
-//            //obterProcessos()
-//            //setProcessosToUI()
-//        }
-//    })
-
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,20 +50,6 @@ class ProcessoDetalheActivity : BaseActivity()
         obterIntentDados()
         setupActionBar("Detalhe Processo", binding.toolbarProcessoDetalheActivity)
         setupTabsLayout()
-
-        resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                if (result.data!!.hasExtra(Constants.FROM_PROCESSO_ACTIVITY)) {
-                    processoRepository.ObterProcessos(
-                        { lista ->
-//                           setProcessosToUI(lista!! as ArrayList<Processo>)
-//                           hideProgressDialog()
-                        },
-                        { hideProgressDialog() }
-                    )
-                }
-            }
-        }
     }
 
     private fun obterIntentDados() {
@@ -105,23 +62,8 @@ class ProcessoDetalheActivity : BaseActivity()
         viewPager = findViewById(R.id.viewPager)
         tabLayout = findViewById(R.id.tabLayout)
 
-//        val processoDetalheFragment = ProcessoDetalheFragment.newInstance(object: OnProcessoEditListener {
-//            override fun onProcessoEditCompleted() {
-//                val processoFragment3 = supportFragmentManager.findFragmentByTag("fragment_processos") as ProcessosFragment?
-//                val processoFragment2 = supportFragmentManager.findFragmentByTag("processo_fragment") as ProcessosFragment?
-//                val processoFragment = supportFragmentManager.findFragmentByTag("processos_fragment") as ProcessosFragment?
-//                val isInLayout = processoFragment?.isInLayout
-//                val isAdded = processoFragment?.isAdded
-//                val isVisible = processoFragment?.isVisible
-//                val isHidden = processoFragment?.isHidden
-//                val isStateSaved = processoFragment?.isStateSaved
-//                processoFragment?.obterProcessos()
-//            }
-//        })
-
         val adapter = TabsAdapter(this)
         adapter.addFragment(ProcessoDetalheFragment(), "Dados")
-        //adapter.addFragment(processoDetalheFragment, "Dados")
         adapter.addFragment(ProcessoAndamentoFragment(), "Andamentos")
         adapter.addFragment(ProcessoAnexoFragment(), "Anexos")
         viewPager.adapter = adapter
@@ -161,7 +103,7 @@ class ProcessoDetalheActivity : BaseActivity()
     }
 
     private fun deletarProcesso() {
-        processoRepository.DeletarProcesso(
+        processoRepository.deletarProcesso(
             processoDetalhes.id,
             { deletarProcessoSuccess() },
             { deletarProcessoFailure() }
@@ -213,13 +155,4 @@ class ProcessoDetalheActivity : BaseActivity()
             else -> 0
         }
     }
-
-//    override fun onProcessoEditCompleted() {
-//        val processoFragment3 = supportFragmentManager.findFragmentByTag("fragment_processos") as ProcessosFragment?
-//        val processoFragment2 = supportFragmentManager.findFragmentByTag("processo_fragment") as ProcessosFragment?
-//        val processoFragment = supportFragmentManager.findFragmentByTag("processos_fragment") as ProcessosFragment?
-//        processoFragment3?.obterProcessos()
-//        processoFragment2?.obterProcessos()
-//        processoFragment?.obterProcessos()
-//    }
 }

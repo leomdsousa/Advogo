@@ -1,7 +1,6 @@
 package com.example.advogo.fragments
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -23,15 +22,12 @@ import com.example.advogo.repositories.*
 import com.example.advogo.utils.Constants
 import com.example.advogo.utils.ProcessMaskTextWatcher
 import com.example.advogo.utils.SendNotificationToUserAsyncTask
-import com.example.advogo.utils.interfaces.OnProcessoEditListener
 import com.example.projmgr.dialogs.AdvogadosDialog
 import com.example.projmgr.dialogs.ClientesDialog
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
-import okhttp3.internal.notifyAll
-import okhttp3.internal.wait
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -90,11 +86,7 @@ class ProcessoDetalheFragment : BaseFragment() {
         }
 
         binding.btnProcessoCadastro.setOnClickListener {
-            if(imagemSelecionadaURI != null) {
-                salvarImagemProcesso()
-            } else {
-                saveProcesso()
-            }
+            saveProcesso()
         }
 
         binding.ivProcessoImage.setOnClickListener {
@@ -127,27 +119,28 @@ class ProcessoDetalheFragment : BaseFragment() {
         }
     }
 
-    private fun salvarImagemProcesso() {
-        val sRef: StorageReference = FirebaseStorage.getInstance().reference.child(
-            "PROCESSO_${processoDetalhes.numero}_IMAGEM" + System.currentTimeMillis() + "."
-                    + getFileExtension(imagemSelecionadaURI!!)
-        )
+    private suspend fun salvarImagemProcesso(): String {
+        return suspendCancellableCoroutine { continuation ->
+            val sRef: StorageReference = FirebaseStorage.getInstance().reference.child(
+                "PROCESSO_${id}_IMAGEM" + System.currentTimeMillis() + "."
+                        + getFileExtension(imagemSelecionadaURI!!)
+            )
 
-        sRef.putFile(imagemSelecionadaURI!!)
-            .addOnSuccessListener { taskSnapshot ->
-                taskSnapshot.metadata!!.reference!!.downloadUrl
-                    .addOnSuccessListener { uri ->
-                        imagemSelecionadaURL = uri.toString()
-                        saveProcesso()
-                    }
-            }
-            .addOnFailureListener { exception ->
-                Toast.makeText(
-                    requireContext(),
-                    "Erro ao inserir imagem",
-                    Toast.LENGTH_LONG
-                ).show()
-            }
+            sRef.putFile(imagemSelecionadaURI!!)
+                .addOnSuccessListener { taskSnapshot ->
+                    taskSnapshot.metadata!!.reference!!.downloadUrl
+                        .addOnSuccessListener { uri ->
+                            val imageUrl = uri.toString()
+                            continuation.resume(imageUrl, null)
+                        }
+                        .addOnFailureListener { exception ->
+                            continuation.cancel(exception)
+                        }
+                }
+                .addOnFailureListener { exception ->
+                    continuation.cancel(exception)
+                }
+        }
     }
 
     private fun saveProcesso() {
@@ -157,24 +150,35 @@ class ProcessoDetalheFragment : BaseFragment() {
 
         showProgressDialog(getString(R.string.aguardePorfavor))
 
-        val processo = Processo(
-            id = processoDetalhes.id,
-            titulo = (if (binding.etProcessoName.text.toString() != processoDetalhes.titulo) binding.etProcessoName.text.toString() else processoDetalhes.titulo),
-            descricao = (if (binding.etDescricao.text.toString() != processoDetalhes.descricao) binding.etDescricao.text.toString() else processoDetalhes.descricao),
-            numero = (if (binding.etNumeroProcesso.text.toString() != processoDetalhes.numero) binding.etNumeroProcesso.text.toString() else processoDetalhes.numero),
-            tipo = (if (tipoProcessoSelecionado != processoDetalhes.tipo) tipoProcessoSelecionado else processoDetalhes.tipo),
-            status = (if (statusProcessoSelecionado != processoDetalhes.status) statusProcessoSelecionado else processoDetalhes.status),
-            data = processoDetalhes.data,
-            imagem = (if (imagemSelecionadaURL != processoDetalhes.imagem) imagemSelecionadaURL else processoDetalhes.imagem),
-            cliente = (if (clienteSelecionado != processoDetalhes.cliente.toString()) clienteSelecionado else processoDetalhes.cliente.toString()),
-            advogado = (if (advSelecionado != processoDetalhes.advogado) advSelecionado else processoDetalhes.advogado),
-        )
+        CoroutineScope(Dispatchers.Main).launch {
+            val imageUrl = if (imagemSelecionadaURI != null) {
+                salvarImagemProcesso()
+            } else {
+                processoDetalhes.imagem
+            }
 
-        processoRepository.AtualizarProcesso(
-            processo,
-            { atualizarProcessoSuccess() },
-            { atualizarProcessoFailure() }
-        )
+            val processo = Processo(
+                id = processoDetalhes.id,
+                titulo = (if (binding.etProcessoName.text.toString() != processoDetalhes.titulo) binding.etProcessoName.text.toString() else processoDetalhes.titulo),
+                descricao = (if (binding.etDescricao.text.toString() != processoDetalhes.descricao) binding.etDescricao.text.toString() else processoDetalhes.descricao),
+                numero = (if (binding.etNumeroProcesso.text.toString() != processoDetalhes.numero) binding.etNumeroProcesso.text.toString() else processoDetalhes.numero),
+                tipo = (if (tipoProcessoSelecionado != processoDetalhes.tipo) tipoProcessoSelecionado else processoDetalhes.tipo),
+                status = (if (statusProcessoSelecionado != processoDetalhes.status) statusProcessoSelecionado else processoDetalhes.status),
+                data = processoDetalhes.data,
+                imagem = imageUrl,
+                cliente = (if (clienteSelecionado != processoDetalhes.cliente.toString()) clienteSelecionado else processoDetalhes.cliente.toString()),
+                advogado = (if (advSelecionado != processoDetalhes.advogado) advSelecionado else processoDetalhes.advogado),
+                diligencias = processoDetalhes.diligencias,
+                anexos = processoDetalhes.anexos,
+                andamentos = processoDetalhes.andamentos
+            )
+
+            processoRepository.atualizarProcesso(
+                processo,
+                { atualizarProcessoSuccess() },
+                { atualizarProcessoFailure() }
+            )
+        }
     }
 
     private fun setupSpinners() {
@@ -186,7 +190,7 @@ class ProcessoDetalheFragment : BaseFragment() {
         val spinnerStatus = binding.spinnerStatusProcesso
 
         CoroutineScope(Dispatchers.Main).launch {
-            val processosStatusDeferred = async { processoStatusRepository.ObterProcessoStatus() }
+            val processosStatusDeferred = async { processoStatusRepository.obterProcessoStatus() }
             processosStatus = processosStatusDeferred.await()!!
             (processosStatus as MutableList<ProcessoStatus>).add(0, ProcessoStatus(status = "Selecione"))
 
@@ -216,7 +220,7 @@ class ProcessoDetalheFragment : BaseFragment() {
         val spinnerTipos = binding.spinnerTipoProcesso
 
         CoroutineScope(Dispatchers.Main).launch {
-            val processosTiposDeferred = async { processoTipoRepository.ObterProcessosTipos() }
+            val processosTiposDeferred = async { processoTipoRepository.obterProcessosTipos() }
             processosTipos = processosTiposDeferred.await()!!
             (processosTipos as MutableList<ProcessoTipo>).add(0, ProcessoTipo(tipo = "Selecione"))
 
@@ -245,7 +249,7 @@ class ProcessoDetalheFragment : BaseFragment() {
     private fun advogadosDialog() {
         CoroutineScope(Dispatchers.Main).launch {
             if(advogados.isEmpty()) {
-                val advogadosDeferred = async { advogadoRepository.ObterAdvogados()!! }
+                val advogadosDeferred = async { advogadoRepository.obterAdvogados()!! }
                 advogados = advogadosDeferred.await()
             }
 
@@ -283,7 +287,7 @@ class ProcessoDetalheFragment : BaseFragment() {
     private fun clientesDialog() {
         CoroutineScope(Dispatchers.Main).launch {
             if(clientes.isEmpty()) {
-                val clientesDeferred = async { clienteRepository.ObterClientes()!! }
+                val clientesDeferred = async { clienteRepository.obterClientes()!! }
                 clientes = clientesDeferred.await()
             }
 

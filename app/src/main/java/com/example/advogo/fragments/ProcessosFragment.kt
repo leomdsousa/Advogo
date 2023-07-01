@@ -1,8 +1,6 @@
 package com.example.advogo.fragments
 
 import android.app.Activity
-import android.app.ProgressDialog
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -12,7 +10,6 @@ import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.advogo.R
 import com.example.advogo.activities.ProcessoCadastroActivity
 import com.example.advogo.activities.ProcessoDetalheActivity
 import com.example.advogo.adapters.ProcessosAdapter
@@ -20,7 +17,6 @@ import com.example.advogo.databinding.FragmentProcessosBinding
 import com.example.advogo.models.Processo
 import com.example.advogo.repositories.IProcessoRepository
 import com.example.advogo.utils.Constants
-import com.example.advogo.utils.interfaces.OnProcessoEditListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -60,7 +56,7 @@ class ProcessosFragment : BaseFragment() {
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 if (result.data!!.hasExtra(Constants.FROM_PROCESSO_ACTIVITY)) {
-                    processoRepository.ObterProcessos(
+                    processoRepository.obterProcessos(
                         { lista ->
                             setProcessosToUI(lista!! as ArrayList<Processo>)
                             hideProgressDialog()
@@ -84,7 +80,7 @@ class ProcessosFragment : BaseFragment() {
     }
 
     private fun obterProcessos() {
-        processoRepository.ObterProcessos(
+        processoRepository.obterProcessos(
             { processos ->
                 setProcessosToUI(processos as ArrayList<Processo>)
                 hideProgressDialog()

@@ -4,9 +4,7 @@ import android.content.Context
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.example.advogo.models.Diligencia
-import com.example.advogo.models.DiligenciaStatus
 import com.example.advogo.utils.Constants
-import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.CoroutineScope
@@ -30,7 +28,7 @@ class DiligenciaRepository @Inject constructor(
 ) : IDiligenciaRepository {
     private val coroutineScope: CoroutineScope = (context as? LifecycleOwner)?.lifecycleScope ?: GlobalScope
 
-    override fun ObterDiligencias(onSuccessListener: (lista: List<Diligencia>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun obterDiligencias(onSuccessListener: (lista: List<Diligencia>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.DILIGENCIAS_TABLE)
             .get()
@@ -41,10 +39,10 @@ class DiligenciaRepository @Inject constructor(
                     coroutineScope.launch {
                         if (diligencias.isNotEmpty()) {
                             for (item in diligencias) {
-                                val advogadoDeferred = async { advogadoRepository.get().ObterAdvogado(item.advogado!!) }
-                                val processoDeferred = async { processoRepository.get().ObterProcesso(item.processo!!) }
-                                val statusDeferred = async { statusDiligenciaRepository.ObterDiligenciaStatus(item.status!!) }
-                                val tipoDeferred = async { tipoDiligenciaRepository.ObterDiligenciaTipo(item.tipo!!) }
+                                val advogadoDeferred = async { advogadoRepository.get().obterAdvogado(item.advogado!!) }
+                                val processoDeferred = async { processoRepository.get().obterProcesso(item.processo!!) }
+                                val statusDeferred = async { statusDiligenciaRepository.obterDiligenciaStatus(item.status!!) }
+                                val tipoDeferred = async { tipoDiligenciaRepository.obterDiligenciaTipo(item.tipo!!) }
 
                                 item.advogadoObj = advogadoDeferred.await()
                                 item.processoObj = processoDeferred.await()
@@ -63,7 +61,7 @@ class DiligenciaRepository @Inject constructor(
                 onFailureListener(exception)
             }
     }
-    override fun ObterDiligencia(id: String, onSuccessListener: (diligencia: Diligencia) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun obterDiligencia(id: String, onSuccessListener: (diligencia: Diligencia) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.DILIGENCIAS_TABLE)
             .document(id)
@@ -73,10 +71,10 @@ class DiligenciaRepository @Inject constructor(
                     val diligencia = document.toObject(Diligencia::class.java)!!
 
                     coroutineScope.launch {
-                        val advogadoDeferred = async { advogadoRepository.get().ObterAdvogado(diligencia.advogado!!) }
-                        val processoDeferred = async { processoRepository.get().ObterProcesso(diligencia.processo!!) }
-                        val statusDeferred = async { statusDiligenciaRepository.ObterDiligenciaStatus(diligencia.status!!) }
-                        val tipoDeferred = async { tipoDiligenciaRepository.ObterDiligenciaTipo(diligencia.tipo!!) }
+                        val advogadoDeferred = async { advogadoRepository.get().obterAdvogado(diligencia.advogado!!) }
+                        val processoDeferred = async { processoRepository.get().obterProcesso(diligencia.processo!!) }
+                        val statusDeferred = async { statusDiligenciaRepository.obterDiligenciaStatus(diligencia.status!!) }
+                        val tipoDeferred = async { tipoDiligenciaRepository.obterDiligenciaTipo(diligencia.tipo!!) }
 
                         diligencia.advogadoObj = advogadoDeferred.await()
                         diligencia.processoObj = processoDeferred.await()
@@ -93,7 +91,7 @@ class DiligenciaRepository @Inject constructor(
                 onFailureListener(exception)
             }
     }
-    override fun ObterDiligenciasPorProcesso(numeroProcesso: String, onSuccessListener: (lista: List<Diligencia>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun obterDiligenciasPorProcesso(numeroProcesso: String, onSuccessListener: (lista: List<Diligencia>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.DILIGENCIAS_TABLE)
             .whereEqualTo(Constants.DILIGENCIAS_PROCESSO, numeroProcesso)
@@ -105,10 +103,10 @@ class DiligenciaRepository @Inject constructor(
                     coroutineScope.launch {
                         if (diligencias.isNotEmpty()) {
                             for (item in diligencias) {
-                                val advogadoDeferred = async { advogadoRepository.get().ObterAdvogado(item.advogado!!) }
-                                val processoDeferred = async { processoRepository.get().ObterProcesso(item.processo!!) }
-                                val statusDeferred = async { statusDiligenciaRepository.ObterDiligenciaStatus(item.status!!) }
-                                val tipoDeferred = async { tipoDiligenciaRepository.ObterDiligenciaTipo(item.tipo!!) }
+                                val advogadoDeferred = async { advogadoRepository.get().obterAdvogado(item.advogado!!) }
+                                val processoDeferred = async { processoRepository.get().obterProcesso(item.processo!!) }
+                                val statusDeferred = async { statusDiligenciaRepository.obterDiligenciaStatus(item.status!!) }
+                                val tipoDeferred = async { tipoDiligenciaRepository.obterDiligenciaTipo(item.tipo!!) }
 
                                 item.advogadoObj = advogadoDeferred.await()
                                 item.processoObj = processoDeferred.await()
@@ -127,7 +125,7 @@ class DiligenciaRepository @Inject constructor(
                 onFailureListener(exception)
             }
     }
-    override fun ObterDiligenciasPorAdvogado(emailAdvogado: String, onSuccessListener: (lista: List<Diligencia>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun obterDiligenciasPorAdvogado(emailAdvogado: String, onSuccessListener: (lista: List<Diligencia>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.DILIGENCIAS_TABLE)
             .whereEqualTo(Constants.DILIGENCIAS_ADVOGADO, emailAdvogado)
@@ -139,10 +137,10 @@ class DiligenciaRepository @Inject constructor(
                     coroutineScope.launch {
                         if (diligencias.isNotEmpty()) {
                             for (item in diligencias) {
-                                val advogadoDeferred = async { advogadoRepository.get().ObterAdvogado(item.advogado!!) }
-                                val processoDeferred = async { processoRepository.get().ObterProcesso(item.processo!!) }
-                                val statusDeferred = async { statusDiligenciaRepository.ObterDiligenciaStatus(item.status!!) }
-                                val tipoDeferred = async { tipoDiligenciaRepository.ObterDiligenciaTipo(item.tipo!!) }
+                                val advogadoDeferred = async { advogadoRepository.get().obterAdvogado(item.advogado!!) }
+                                val processoDeferred = async { processoRepository.get().obterProcesso(item.processo!!) }
+                                val statusDeferred = async { statusDiligenciaRepository.obterDiligenciaStatus(item.status!!) }
+                                val tipoDeferred = async { tipoDiligenciaRepository.obterDiligenciaTipo(item.tipo!!) }
 
                                 item.advogadoObj = advogadoDeferred.await()
                                 item.processoObj = processoDeferred.await()
@@ -161,7 +159,7 @@ class DiligenciaRepository @Inject constructor(
                 onFailureListener(exception)
             }
     }
-    override fun AdicionarDiligencia(model: Diligencia, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun adicionarDiligencia(model: Diligencia, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.DILIGENCIAS_TABLE)
             .add(model)
@@ -172,7 +170,7 @@ class DiligenciaRepository @Inject constructor(
                 onFailureListener(it)
             }
     }
-    override fun AtualizarDiligencia(model: Diligencia, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun atualizarDiligencia(model: Diligencia, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.DILIGENCIAS_TABLE)
             .document(model.id)
@@ -184,7 +182,7 @@ class DiligenciaRepository @Inject constructor(
                 onFailureListener(it)
             }
     }
-    override fun DeletarDiligencia(id: String, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun deletarDiligencia(id: String, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.DILIGENCIAS_TABLE)
             .document(id)
@@ -197,7 +195,7 @@ class DiligenciaRepository @Inject constructor(
             }
     }
 
-    override suspend fun ObterDiligenciasPorData(data: String): List<Diligencia>? = suspendCoroutine { continuation ->
+    override suspend fun obterDiligenciasPorData(data: String): List<Diligencia>? = suspendCoroutine { continuation ->
         firebaseStore
             .collection(Constants.DILIGENCIAS_TABLE)
             .whereGreaterThanOrEqualTo(Constants.DILIGENCIAS_DATA, data)
@@ -210,10 +208,10 @@ class DiligenciaRepository @Inject constructor(
 
                         if (resultado.isNotEmpty()) {
                             for (item in resultado) {
-                                val advogadoDeferred = async { advogadoRepository.get().ObterAdvogado(item.advogado!!) }
-                                val processoDeferred = async { processoRepository.get().ObterProcesso(item.processo!!) }
-                                val statusDeferred = async { statusDiligenciaRepository.ObterDiligenciaStatus(item.status!!) }
-                                val tipoDeferred = async { tipoDiligenciaRepository.ObterDiligenciaTipo(item.tipo!!) }
+                                val advogadoDeferred = async { advogadoRepository.get().obterAdvogado(item.advogado!!) }
+                                val processoDeferred = async { processoRepository.get().obterProcesso(item.processo!!) }
+                                val statusDeferred = async { statusDiligenciaRepository.obterDiligenciaStatus(item.status!!) }
+                                val tipoDeferred = async { tipoDiligenciaRepository.obterDiligenciaTipo(item.tipo!!) }
 
                                 item.advogadoObj = advogadoDeferred.await()
                                 item.processoObj = processoDeferred.await()
@@ -232,7 +230,7 @@ class DiligenciaRepository @Inject constructor(
                 continuation.resumeWithException(exception)
             }
     }
-    override suspend fun ObterDiligenciasPorData(dataInicio: String, dataFinal: String): List<Diligencia>? = suspendCoroutine { continuation ->
+    override suspend fun obterDiligenciasPorData(dataInicio: String, dataFinal: String): List<Diligencia>? = suspendCoroutine { continuation ->
         firebaseStore
             .collection(Constants.DILIGENCIAS_TABLE)
             .whereGreaterThanOrEqualTo(Constants.DILIGENCIAS_DATA, dataInicio)
@@ -245,10 +243,10 @@ class DiligenciaRepository @Inject constructor(
 
                         if (resultado.isNotEmpty()) {
                             for (item in resultado) {
-                                val advogadoDeferred = async { advogadoRepository.get().ObterAdvogado(item.advogado!!) }
-                                val processoDeferred = async { processoRepository.get().ObterProcesso(item.processo!!) }
-                                val statusDeferred = async { statusDiligenciaRepository.ObterDiligenciaStatus(item.status!!) }
-                                val tipoDeferred = async { tipoDiligenciaRepository.ObterDiligenciaTipo(item.tipo!!) }
+                                val advogadoDeferred = async { advogadoRepository.get().obterAdvogado(item.advogado!!) }
+                                val processoDeferred = async { processoRepository.get().obterProcesso(item.processo!!) }
+                                val statusDeferred = async { statusDiligenciaRepository.obterDiligenciaStatus(item.status!!) }
+                                val tipoDeferred = async { tipoDiligenciaRepository.obterDiligenciaTipo(item.tipo!!) }
 
                                 item.advogadoObj = advogadoDeferred.await()
                                 item.processoObj = processoDeferred.await()
@@ -271,16 +269,16 @@ class DiligenciaRepository @Inject constructor(
 }
 
 interface IDiligenciaRepository {
-    fun ObterDiligencias(onSuccessListener: (lista: List<Diligencia>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
-    fun ObterDiligencia(id: String, onSuccessListener: (diligencia: Diligencia) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
-    fun ObterDiligenciasPorProcesso(numeroProcesso: String, onSuccessListener: (lista: List<Diligencia>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
-    fun ObterDiligenciasPorAdvogado(emailAdvogado: String, onSuccessListener: (lista: List<Diligencia>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
-    fun AdicionarDiligencia(model: Diligencia, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
-    fun AtualizarDiligencia(model: Diligencia, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
-    fun DeletarDiligencia(id: String, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun obterDiligencias(onSuccessListener: (lista: List<Diligencia>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun obterDiligencia(id: String, onSuccessListener: (diligencia: Diligencia) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun obterDiligenciasPorProcesso(numeroProcesso: String, onSuccessListener: (lista: List<Diligencia>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun obterDiligenciasPorAdvogado(emailAdvogado: String, onSuccessListener: (lista: List<Diligencia>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun adicionarDiligencia(model: Diligencia, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun atualizarDiligencia(model: Diligencia, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun deletarDiligencia(id: String, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
 
-    suspend fun ObterDiligenciasPorData(data: String): List<Diligencia>?
-    suspend fun ObterDiligenciasPorData(dataInicio: String, dataFinal: String): List<Diligencia>?
+    suspend fun obterDiligenciasPorData(data: String): List<Diligencia>?
+    suspend fun obterDiligenciasPorData(dataInicio: String, dataFinal: String): List<Diligencia>?
 
 
 }

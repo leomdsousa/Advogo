@@ -3,7 +3,6 @@ package com.example.advogo.activities
 import android.app.Activity
 import android.content.Intent
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
@@ -12,15 +11,10 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.advogo.R
 import com.example.advogo.adapters.AdvogadosAdapter
-import com.example.advogo.adapters.ClientesAdapter
 import com.example.advogo.databinding.ActivityAdvogadoBinding
-import com.example.advogo.databinding.FragmentClienteBinding
 import com.example.advogo.models.Advogado
-import com.example.advogo.models.Cliente
 import com.example.advogo.repositories.IAdvogadoRepository
-import com.example.advogo.repositories.IClienteRepository
 import com.example.advogo.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -41,7 +35,7 @@ class AdvogadoActivity : BaseActivity() {
 
         setupActionBar("Advogados", binding.toolbarAdvogados)
 
-        advRepository.ObterAdvogados(
+        advRepository.obterAdvogados(
             { lista ->
                 setAdvogadosToUI(lista as ArrayList<Advogado>)
                 hideProgressDialog()
@@ -52,7 +46,7 @@ class AdvogadoActivity : BaseActivity() {
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 if (result.data!!.hasExtra(Constants.FROM_ADVOGADO_ACTIVITY)) {
-                    advRepository.ObterAdvogados(
+                    advRepository.obterAdvogados(
                         { lista ->
                             setAdvogadosToUI(lista as ArrayList<Advogado>)
                             hideProgressDialog()
@@ -82,10 +76,9 @@ class AdvogadoActivity : BaseActivity() {
                 override fun onClick(position: Int, advogado: Advogado, action: String?) {
                     val intent = Intent(binding.root.context, AdvogadoDetalheActivity::class.java)
                     intent.putExtra(Constants.ADV_PARAM, advogado)
-                    startActivity(intent)
+                    resultLauncher.launch(intent)
                 }
             })
-
         } else {
             binding.rvAdvList.visibility = View.GONE
             binding.tvNoAdvAvailable.visibility = View.VISIBLE

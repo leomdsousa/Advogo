@@ -1,29 +1,29 @@
 package com.example.advogo.activities
 
+import TabsAdapter
 import android.app.Activity
 import android.content.Intent
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.AdapterView
-import android.widget.Spinner
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
+import androidx.viewpager2.widget.ViewPager2
 import com.example.advogo.R
 import com.example.advogo.adapters.DiligenciasStatusAdapter
 import com.example.advogo.adapters.DiligenciasTiposAdapter
 import com.example.advogo.databinding.ActivityDiligenciaDetalheBinding
+import com.example.advogo.fragments.*
 import com.example.advogo.models.*
 import com.example.advogo.repositories.*
 import com.example.advogo.utils.Constants
-import com.example.advogo.utils.Constants.DILIGENCIA_MAP
 import com.example.advogo.utils.SendNotificationToUserAsyncTask
 import com.example.projmgr.dialogs.AdvogadosDialog
 import com.example.projmgr.dialogs.ProcessosDialog
@@ -32,6 +32,8 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -72,6 +74,9 @@ class DiligenciaDetalheActivity : BaseActivity() {
 
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
+    private lateinit var viewPager: ViewPager2
+    private lateinit var tabLayout: TabLayout
+
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityDiligenciaDetalheBinding.inflate(layoutInflater)
@@ -84,6 +89,7 @@ class DiligenciaDetalheActivity : BaseActivity() {
         setupActionBar("Detalhe Diligência", binding.toolbarDiligenciaDetalhe)
         configurarGoogleMapPlaces()
         setupSpinners()
+        setupTabsLayout()
 
         setDiligenciaToUI(diligenciaDetalhes)
 
@@ -110,10 +116,6 @@ class DiligenciaDetalheActivity : BaseActivity() {
         }
 
         binding.btnGoogleMaps.setOnClickListener {
-//            val intent = Intent(this, MapActivity::class.java)
-//            intent.putExtra(Constants.DILIGENCIA_MAP, diligenciaDetalhes)
-//            startActivity(intent)
-
             if(diligenciaDetalhes.enderecoLat != null && diligenciaDetalhes.enderecoLong != null) {
                 openGoogleMaps(diligenciaDetalhes.enderecoLat!!, diligenciaDetalhes.enderecoLong!!)
             } else if (!diligenciaDetalhes.endereco.isNullOrBlank()) {
@@ -140,6 +142,29 @@ class DiligenciaDetalheActivity : BaseActivity() {
         }
     }
 
+    private fun setupTabsLayout() {
+        viewPager = findViewById(R.id.viewPager)
+        tabLayout = findViewById(R.id.tabLayout)
+
+        val adapter = TabsAdapter(this)
+        adapter.addFragment(DiligenciaDetalheFragment(), "Dados")
+        adapter.addFragment(DiligenciaHistoricoFragment(), "Histórico")
+        viewPager.adapter = adapter
+
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            val customView = LayoutInflater.from(this@DiligenciaDetalheActivity)
+                .inflate(R.layout.item_tab_layout, tabLayout, false)
+
+            val tabIcon: ImageView = customView.findViewById(R.id.tab_icon)
+            val tabTitle: TextView = customView.findViewById(R.id.tab_title)
+
+            tabIcon.setImageResource(getTabIcon(position))
+            tabTitle.text = adapter.getTabTitle(position)
+
+            tab.customView = customView
+        }.attach()
+    }
+
     private fun setupSpinners() {
         setupSpinnerTipoDiligencia()
         setupSpinnerStatusDiligencia()
@@ -149,7 +174,7 @@ class DiligenciaDetalheActivity : BaseActivity() {
         val spinnerStatus = findViewById<Spinner>(R.id.spinnerStatusDiligencia)
 
         CoroutineScope(Dispatchers.Main).launch {
-            val diligenciaStatusDeferred = async { diligenciaStatusRepository.ObterDiligenciasStatus() }
+            val diligenciaStatusDeferred = async { diligenciaStatusRepository.obterDiligenciasStatus() }
             diligenciaStatus = diligenciaStatusDeferred.await()!!
             (diligenciaStatus as MutableList<DiligenciaStatus>).add(0, DiligenciaStatus(status = "Selecione"))
 
@@ -180,7 +205,7 @@ class DiligenciaDetalheActivity : BaseActivity() {
         val spinnerTipos = findViewById<Spinner>(R.id.spinnerTipoDiligencia)
 
         CoroutineScope(Dispatchers.Main).launch {
-            val diligenciaTiposDeferred = async { diligenciaTipoRepository.ObterDiligenciasTipos() }
+            val diligenciaTiposDeferred = async { diligenciaTipoRepository.obterDiligenciasTipos() }
             diligenciaTipos = diligenciaTiposDeferred.await()!!
             (diligenciaTipos as MutableList<DiligenciaTipo>).add(0, DiligenciaTipo(tipo = "Selecione"))
 
@@ -250,7 +275,7 @@ class DiligenciaDetalheActivity : BaseActivity() {
             advogado = if (processoSelecionado != diligenciaDetalhes.processo) processoSelecionado else diligenciaDetalhes.processo,
         )
 
-        diligenciaRepository.AtualizarDiligencia(
+        diligenciaRepository.atualizarDiligencia(
             diligencia,
             { diligenciaEdicaoSuccess() },
             { diligenciaEdicaoFailure() }
@@ -260,7 +285,7 @@ class DiligenciaDetalheActivity : BaseActivity() {
     private fun processosDialog() {
         CoroutineScope(Dispatchers.Main).launch {
             if(processos.isEmpty()) {
-                val processosDeferred = async { processoRepository.ObterProcessos()!! }
+                val processosDeferred = async { processoRepository.obterProcessos()!! }
                 processos = processosDeferred.await()
             }
 
@@ -297,7 +322,7 @@ class DiligenciaDetalheActivity : BaseActivity() {
     private fun advogadosDialog() {
         CoroutineScope(Dispatchers.Main).launch {
             if(advogados.isEmpty()) {
-                val advogadosDeferred = async { advogadoRepository.ObterAdvogados()!! }
+                val advogadosDeferred = async { advogadoRepository.obterAdvogados()!! }
                 advogados = advogadosDeferred.await()
             }
 
@@ -384,7 +409,7 @@ class DiligenciaDetalheActivity : BaseActivity() {
     }
 
     private fun deletarDiligencia() {
-        diligenciaRepository.DeletarDiligencia(
+        diligenciaRepository.deletarDiligencia(
             diligenciaDetalhes.id,
             { deletarDiligenciaSuccess() },
             { deletarDiligenciaFailure() }
@@ -488,5 +513,13 @@ class DiligenciaDetalheActivity : BaseActivity() {
 
         dataSelecionada = "$ano-$sMonthOfYear-$sDayOfMonth"
         binding.etDiligenciaData.setText("$sDayOfMonth/$sMonthOfYear/$ano")
+    }
+
+    private fun getTabIcon(position: Int): Int {
+        return when (position) {
+            0 -> R.drawable.ic_baseline_app_registration_24
+            1 -> R.drawable.ic_baseline_timeline_24
+            else -> 0
+        }
     }
 }

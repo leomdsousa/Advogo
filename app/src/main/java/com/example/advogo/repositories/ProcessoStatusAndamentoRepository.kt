@@ -11,7 +11,7 @@ import kotlin.coroutines.suspendCoroutine
 class ProcessoStatusAndamentoRepository @Inject constructor(
     private val firebaseStore: FirebaseFirestore
 ): IProcessoStatusAndamentoRepository {
-    override fun ObterProcessoStatusAndamentos(onSuccessListener: (List<ProcessoStatusAndamento>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun obterProcessoStatusAndamentos(onSuccessListener: (List<ProcessoStatusAndamento>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.PROCESSOS_STATUS_ANDAMENTOS_TABLE)
             .get()
@@ -27,7 +27,7 @@ class ProcessoStatusAndamentoRepository @Inject constructor(
                 onFailureListener(exception)
             }
     }
-    override fun ObterProcessoStatusAndamento(id: String, onSuccessListener: (processoStatusAndamentos: ProcessoStatusAndamento) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun obterProcessoStatusAndamento(id: String, onSuccessListener: (processoStatusAndamentos: ProcessoStatusAndamento) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.PROCESSOS_STATUS_ANDAMENTOS_TABLE)
             .document(id)
@@ -47,7 +47,7 @@ class ProcessoStatusAndamentoRepository @Inject constructor(
             }
     }
 
-    override suspend fun ObterProcessoStatusAndamentos(): List<ProcessoStatusAndamento>? = suspendCoroutine { continuation ->
+    override suspend fun obterProcessoStatusAndamentos(): List<ProcessoStatusAndamento>? = suspendCoroutine { continuation ->
         firebaseStore
             .collection(Constants.PROCESSOS_STATUS_ANDAMENTOS_TABLE)
             .get()
@@ -63,7 +63,7 @@ class ProcessoStatusAndamentoRepository @Inject constructor(
                 continuation.resumeWithException(exception)
             }
     }
-    override suspend fun ObterProcessoStatusAndamento(id: String): ProcessoStatusAndamento? = suspendCoroutine { continuation ->
+    override suspend fun obterProcessoStatusAndamento(id: String): ProcessoStatusAndamento? = suspendCoroutine { continuation ->
         firebaseStore
             .collection(Constants.PROCESSOS_STATUS_ANDAMENTOS_TABLE)
             .document(id)
@@ -83,9 +83,9 @@ class ProcessoStatusAndamentoRepository @Inject constructor(
 }
 
 interface IProcessoStatusAndamentoRepository {
-    fun ObterProcessoStatusAndamentos(onSuccessListener: (lista: List<ProcessoStatusAndamento>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
-    fun ObterProcessoStatusAndamento(id: String, onSuccessListener: (processoStatusAndamentos: ProcessoStatusAndamento) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun obterProcessoStatusAndamentos(onSuccessListener: (lista: List<ProcessoStatusAndamento>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun obterProcessoStatusAndamento(id: String, onSuccessListener: (processoStatusAndamentos: ProcessoStatusAndamento) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
 
-    suspend fun ObterProcessoStatusAndamentos(): List<ProcessoStatusAndamento>?
-    suspend fun ObterProcessoStatusAndamento(id: String): ProcessoStatusAndamento?
+    suspend fun obterProcessoStatusAndamentos(): List<ProcessoStatusAndamento>?
+    suspend fun obterProcessoStatusAndamento(id: String): ProcessoStatusAndamento?
 }

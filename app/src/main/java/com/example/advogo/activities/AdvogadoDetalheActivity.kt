@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.Menu
@@ -18,13 +17,16 @@ import com.bumptech.glide.Glide
 import com.example.advogo.R
 import com.example.advogo.databinding.ActivityAdvogadoDetalheBinding
 import com.example.advogo.models.Advogado
-import com.example.advogo.models.externals.CorreioResponse
 import com.example.advogo.repositories.AdvogadoRepository
 import com.example.advogo.services.CorreioApiService
 import com.example.advogo.utils.Constants
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import java.io.IOException
 import javax.inject.Inject
 
@@ -122,66 +124,75 @@ class AdvogadoDetalheActivity : BaseActivity() {
     }
 
     private fun saveAdvogado() {
-        if(!validarFormulario()) {
+        if (!validarFormulario()) {
             return
         }
 
         showProgressDialog(getString(R.string.aguardePorfavor))
 
-        val advogado = Advogado(
-            id = advogadoDetalhes.id,
-            nome = (if (binding.etName.text.toString() != advogadoDetalhes.nome) binding.etName.text.toString() else advogadoDetalhes.nome),
-            sobrenome = (if (binding.etSobrenome.text.toString() != advogadoDetalhes.sobrenome) binding.etSobrenome.text.toString() else advogadoDetalhes.sobrenome),
-            email = (if (binding.etEmail.text.toString() != advogadoDetalhes.email) binding.etEmail.text.toString() else advogadoDetalhes.email),
-            endereco = (if (binding.etEndereco.text.toString() != advogadoDetalhes.endereco) binding.etEndereco.text.toString() else advogadoDetalhes.endereco),
-            enderecoLat = 0,
-            enderecoLong = 0,
-            imagem = (if (imagemPerfilURL.isNotEmpty() && imagemPerfilURL != advogadoDetalhes.imagem) imagemPerfilURL else advogadoDetalhes.imagem),
-            oab = (if (binding.etOab.text.toString() != advogadoDetalhes.oab!!.toString()) binding.etOab.text.toString().toLong() else advogadoDetalhes.oab!!.toLong()),
-            telefone = (if (binding.etTelefone.text.toString() != advogadoDetalhes.telefone) binding.etTelefone.text.toString() else advogadoDetalhes.telefone),
-            fcmToken = advogadoDetalhes.fcmToken
-        )
+        CoroutineScope(Dispatchers.Main).launch {
+            val imageUrl = if (imagemSelecionadaURI != null) {
+                atualizarAdvogadoImagem()
+            } else {
+                advogadoDetalhes.imagem
+            }
 
-        advogadoRepository.AtualizarAdvogado(
-            advogado,
-            {
-                if(imagemSelecionadaURI != null) {
-                    atualizarAdvogadoImagem()
-                }
+            val advogado = Advogado(
+                id = advogadoDetalhes.id,
+                nome = (if (binding.etName.text.toString() != advogadoDetalhes.nome) binding.etName.text.toString() else advogadoDetalhes.nome),
+                sobrenome = (if (binding.etSobrenome.text.toString() != advogadoDetalhes.sobrenome) binding.etSobrenome.text.toString() else advogadoDetalhes.sobrenome),
+                email = (if (binding.etEmail.text.toString() != advogadoDetalhes.email) binding.etEmail.text.toString() else advogadoDetalhes.email),
+                endereco = (if (binding.etEndereco.text.toString() != advogadoDetalhes.endereco) binding.etEndereco.text.toString() else advogadoDetalhes.endereco),
+                enderecoLat = 0,
+                enderecoLong = 0,
+                imagem = imageUrl,
+                oab = (if (binding.etOab.text.toString() != advogadoDetalhes.oab!!.toString()) binding.etOab.text.toString().toLong() else advogadoDetalhes.oab!!.toLong()),
+                telefone = (if (binding.etTelefone.text.toString() != advogadoDetalhes.telefone) binding.etTelefone.text.toString() else advogadoDetalhes.telefone),
+                fcmToken = advogadoDetalhes.fcmToken
+            )
 
-                setAdvogadoToUI(advogado)
-                advogadoEdicaoSuccess()
-            },
-            { advogadoEdicaoFailure() }
-        )
+            try {
+                advogadoRepository.atualizarAdvogado(advogado,
+                    {
+                        setAdvogadoToUI(advogado)
+                        advogadoEdicaoSuccess()
+                    },
+                    { advogadoEdicaoFailure() }
+                )
+            } catch (e: Exception) {
+                advogadoEdicaoFailure()
+            }
+        }
     }
 
-    private fun atualizarAdvogadoImagem() {
-        val sRef: StorageReference = FirebaseStorage.getInstance().reference.child(
-            "ADVOGADO_${advogadoDetalhes.oab}_IMAGEM" + System.currentTimeMillis() + "." + getFileExtension(
-                imagemSelecionadaURI!!
-            )
-        )
 
-        sRef.putFile(imagemSelecionadaURI!!)
-            .addOnSuccessListener { taskSnapshot ->
-                taskSnapshot.metadata!!.reference!!.downloadUrl
-                    .addOnSuccessListener { uri ->
-                        imagemPerfilURL = uri.toString()
-                        advogadoDetalhes.imagem = imagemPerfilURL
-                    }
-            }
-            .addOnFailureListener { exception ->
-                Toast.makeText(
-                    this@AdvogadoDetalheActivity,
-                    "Erro au atualizar imagem",
-                    Toast.LENGTH_LONG
-                ).show()
-            }
+    private suspend fun atualizarAdvogadoImagem(): String {
+        return suspendCancellableCoroutine { continuation ->
+            val sRef: StorageReference = FirebaseStorage.getInstance().reference.child(
+                "ADVOGADO_${advogadoDetalhes.oab}_IMAGEM" + System.currentTimeMillis() + "." + getFileExtension(
+                    imagemSelecionadaURI!!
+                )
+            )
+
+            sRef.putFile(imagemSelecionadaURI!!)
+                .addOnSuccessListener { taskSnapshot ->
+                    taskSnapshot.metadata!!.reference!!.downloadUrl
+                        .addOnSuccessListener { uri ->
+                            val imageUrl = uri.toString()
+                            continuation.resume(imageUrl, null)
+                        }
+                        .addOnFailureListener { exception ->
+                            continuation.cancel(exception)
+                        }
+                }
+                .addOnFailureListener { exception ->
+                    continuation.cancel(exception)
+                }
+        }
     }
 
     private fun deletarAdvogado() {
-        advogadoRepository.DeletarAdvogado(
+        advogadoRepository.deletarAdvogado(
             advogadoDetalhes.id,
             { deletarAdvogadoSuccess() },
             { deletarAdvogadoFailure() }
@@ -258,7 +269,7 @@ class AdvogadoDetalheActivity : BaseActivity() {
     private fun advogadoEdicaoSuccess() {
         hideProgressDialog()
 
-        intent.putExtra(Constants.FROM_CLIENTE_ACTIVITY, Constants.FROM_CLIENTE_ACTIVITY)
+        intent.putExtra(Constants.FROM_ADVOGADO_ACTIVITY, Constants.FROM_ADVOGADO_ACTIVITY)
         setResult(Activity.RESULT_OK, intent)
         finish()
     }
@@ -276,7 +287,7 @@ class AdvogadoDetalheActivity : BaseActivity() {
     private fun deletarAdvogadoSuccess() {
         hideProgressDialog()
 
-        intent.putExtra(Constants.FROM_CLIENTE_ACTIVITY, Constants.FROM_CLIENTE_ACTIVITY)
+        intent.putExtra(Constants.FROM_ADVOGADO_ACTIVITY, Constants.FROM_ADVOGADO_ACTIVITY)
         setResult(Activity.RESULT_OK, intent)
         finish()
     }

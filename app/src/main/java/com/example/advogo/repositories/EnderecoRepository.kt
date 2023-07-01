@@ -13,7 +13,7 @@ class EnderecoRepository @Inject constructor(
     private val firebaseStore: FirebaseFirestore
 ): IEnderecoRepository {
 
-    override fun ObterEnderecos(onSuccessListener: (lista: List<Endereco>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun obterEnderecos(onSuccessListener: (lista: List<Endereco>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.ENDERECOS_TABLE)
             .get()
@@ -30,7 +30,7 @@ class EnderecoRepository @Inject constructor(
             }
     }
 
-    override fun ObterEndereco(id: String, onSuccessListener: (process: Endereco) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun obterEndereco(id: String, onSuccessListener: (process: Endereco) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.ENDERECOS_TABLE)
             .document(id)
@@ -48,7 +48,7 @@ class EnderecoRepository @Inject constructor(
             }
     }
 
-    override fun AdicionarEndereco(model: Endereco, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun adicionarEndereco(model: Endereco, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.ENDERECOS_TABLE)
             .add(model)
@@ -60,7 +60,7 @@ class EnderecoRepository @Inject constructor(
             }
     }
 
-    override fun AtualizarEndereco(model: Endereco, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun atualizarEndereco(model: Endereco, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.ENDERECOS_TABLE)
             .document(model.id)
@@ -73,7 +73,7 @@ class EnderecoRepository @Inject constructor(
             }
     }
 
-    override fun DeletarEndereco(id: String, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun deletarEndereco(id: String, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.ENDERECOS_TABLE)
             .document(id)
@@ -88,9 +88,9 @@ class EnderecoRepository @Inject constructor(
 }
 
 interface IEnderecoRepository {
-    fun ObterEnderecos(onSuccessListener: (lista: List<Endereco>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
-    fun ObterEndereco(id: String, onSuccessListener: (endereco: Endereco) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
-    fun AdicionarEndereco(model: Endereco, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
-    fun AtualizarEndereco(model: Endereco, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
-    fun DeletarEndereco(id: String, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun obterEnderecos(onSuccessListener: (lista: List<Endereco>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun obterEndereco(id: String, onSuccessListener: (endereco: Endereco) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun adicionarEndereco(model: Endereco, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun atualizarEndereco(model: Endereco, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun deletarEndereco(id: String, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
 }

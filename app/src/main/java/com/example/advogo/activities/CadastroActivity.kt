@@ -1,17 +1,14 @@
 package com.example.advogo.activities
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.text.Spannable
-import android.text.SpannableString
 import android.text.TextUtils
-import android.text.style.TypefaceSpan
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.core.content.res.ResourcesCompat
-import androidx.core.view.get
 import com.example.advogo.R
 import com.example.advogo.databinding.ActivityCadastroBinding
 import com.example.advogo.models.Advogado
@@ -19,6 +16,7 @@ import com.example.advogo.models.externals.CorreioResponse
 import com.example.advogo.repositories.IAdvogadoRepository
 import com.example.advogo.services.CorreioApiService
 import com.example.advogo.utils.Constants
+import com.example.advogo.utils.extensions.showPasswordVisibilityOnTouch
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
@@ -32,6 +30,7 @@ class CadastroActivity : BaseActivity() {
     @Inject lateinit var advRepository: IAdvogadoRepository
     @Inject lateinit var correioService: CorreioApiService
 
+    @SuppressLint("ClickableViewAccessibility")
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,6 +82,13 @@ class CadastroActivity : BaseActivity() {
                     }
                 }
             }
+        }
+
+        binding.etPassword.setOnTouchListener { v, event ->
+            if (event.action == MotionEvent.ACTION_UP) {
+                binding.etPassword.showPasswordVisibilityOnTouch(event)
+            }
+            false
         }
     }
 
@@ -168,7 +174,7 @@ class CadastroActivity : BaseActivity() {
                             fcmToken = null
                         )
 
-                        advRepository.AdicionarAdvogado(
+                        advRepository.adicionarAdvogado(
                             advogado,
                             { registrarSuccess() },
                             { registrarFailure() }

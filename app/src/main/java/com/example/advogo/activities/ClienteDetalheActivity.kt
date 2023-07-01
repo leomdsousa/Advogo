@@ -17,8 +17,6 @@ import com.example.advogo.repositories.ClienteRepository
 import com.example.advogo.services.CorreioApiService
 import com.example.advogo.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.regex.Matcher
-import java.util.regex.Pattern
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -100,7 +98,7 @@ class ClienteDetalheActivity : BaseActivity() {
             telefone = (if (binding.etTelefone.text.toString() != clienteDetalhes.telefone) binding.etTelefone.text.toString() else clienteDetalhes.telefone),
         )
 
-        clienteRepository.AtualizarCliente(
+        clienteRepository.atualizarCliente(
             cliente,
             { clienteEdicaoSuccess() },
             { clienteEdicaoFailure() }
@@ -108,7 +106,7 @@ class ClienteDetalheActivity : BaseActivity() {
     }
 
     private fun deletarCliente() {
-        clienteRepository.DeletarCliente(
+        clienteRepository.deletarCliente(
             clienteDetalhes.id,
             { deletarClienteSuccess() },
             { deletarClienteFailure() }

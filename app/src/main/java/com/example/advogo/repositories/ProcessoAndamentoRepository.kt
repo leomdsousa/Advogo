@@ -3,8 +3,6 @@ package com.example.advogo.repositories
 import android.content.Context
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import com.example.advogo.models.Anexo
-import com.example.advogo.models.Processo
 import com.example.advogo.models.ProcessoAndamento
 import com.example.advogo.utils.Constants
 import com.google.firebase.firestore.FieldPath
@@ -28,7 +26,7 @@ class ProcessoAndamentoRepository @Inject constructor(
 ): IProcessoAndamentoRepository {
     private val coroutineScope: CoroutineScope = (context as? LifecycleOwner)?.lifecycleScope ?: GlobalScope
 
-    override fun ObterProcessosAndamentos(onSuccessListener: (List<ProcessoAndamento>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun obterProcessosAndamentos(onSuccessListener: (List<ProcessoAndamento>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.PROCESSOS_ANDAMENTOS_TABLE)
             .get()
@@ -39,9 +37,9 @@ class ProcessoAndamentoRepository @Inject constructor(
                     coroutineScope.launch {
                         if (lista.isNotEmpty()) {
                             for (item in lista) {
-                                val advogadoDeferred = async { advogadoRepository.ObterAdvogado(item.advogado!!) }
-                                val statusDeferred = async { processoStatusAndamentoRepository.ObterProcessoStatusAndamento(item.status!!) }
-                                val tipoDeferred = async { processoTipoAndamentoRepository.ObterProcessoTipoAndamento(item.tipo!!) }
+                                val advogadoDeferred = async { advogadoRepository.obterAdvogado(item.advogado!!) }
+                                val statusDeferred = async { processoStatusAndamentoRepository.obterProcessoStatusAndamento(item.status!!) }
+                                val tipoDeferred = async { processoTipoAndamentoRepository.obterProcessoTipoAndamento(item.tipo!!) }
 
                                 item.advogadoObj = advogadoDeferred.await()
                                 item.statusObj = statusDeferred.await()
@@ -60,7 +58,7 @@ class ProcessoAndamentoRepository @Inject constructor(
                 onFailureListener(exception)
             }
     }
-    override fun ObterProcessoAndamento(id: String, onSuccessListener: (ProcessoAndamento: ProcessoAndamento) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun obterProcessoAndamento(id: String, onSuccessListener: (ProcessoAndamento: ProcessoAndamento) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.PROCESSOS_ANDAMENTOS_TABLE)
             .document(id)
@@ -72,9 +70,9 @@ class ProcessoAndamentoRepository @Inject constructor(
                     if (andamento != null) {
 
                         coroutineScope.launch {
-                            val advogadoDeferred = async { advogadoRepository.ObterAdvogado(andamento.advogado!!) }
-                            val statusDeferred = async { processoStatusAndamentoRepository.ObterProcessoStatusAndamento(andamento.status!!) }
-                            val tipoDeferred = async { processoTipoAndamentoRepository.ObterProcessoTipoAndamento(andamento.tipo!!) }
+                            val advogadoDeferred = async { advogadoRepository.obterAdvogado(andamento.advogado!!) }
+                            val statusDeferred = async { processoStatusAndamentoRepository.obterProcessoStatusAndamento(andamento.status!!) }
+                            val tipoDeferred = async { processoTipoAndamentoRepository.obterProcessoTipoAndamento(andamento.tipo!!) }
 
                             andamento.advogadoObj = advogadoDeferred.await()
                             andamento.statusObj = statusDeferred.await()
@@ -92,7 +90,7 @@ class ProcessoAndamentoRepository @Inject constructor(
             }
     }
 
-    override suspend fun ObterProcessosAndamentos(): List<ProcessoAndamento>? = suspendCoroutine { continuation ->
+    override suspend fun obterProcessosAndamentos(): List<ProcessoAndamento>? = suspendCoroutine { continuation ->
         firebaseStore
             .collection(Constants.PROCESSOS_ANDAMENTOS_TABLE)
             .get()
@@ -103,9 +101,9 @@ class ProcessoAndamentoRepository @Inject constructor(
                     coroutineScope.launch {
                         if (resultado.isNotEmpty()) {
                             for (item in resultado) {
-                                val advogadoDeferred = async { advogadoRepository.ObterAdvogado(item.advogado!!) }
-                                val statusDeferred = async { processoStatusAndamentoRepository.ObterProcessoStatusAndamento(item.status!!) }
-                                val tipoDeferred = async { processoTipoAndamentoRepository.ObterProcessoTipoAndamento(item.tipo!!) }
+                                val advogadoDeferred = async { advogadoRepository.obterAdvogado(item.advogado!!) }
+                                val statusDeferred = async { processoStatusAndamentoRepository.obterProcessoStatusAndamento(item.status!!) }
+                                val tipoDeferred = async { processoTipoAndamentoRepository.obterProcessoTipoAndamento(item.tipo!!) }
 
                                 item.advogadoObj = advogadoDeferred.await()
                                 item.statusObj = statusDeferred.await()
@@ -124,7 +122,7 @@ class ProcessoAndamentoRepository @Inject constructor(
                 continuation.resumeWithException(exception)
             }
     }
-    override suspend fun ObterProcessoAndamento(id: String): ProcessoAndamento? = suspendCoroutine { continuation ->
+    override suspend fun obterProcessoAndamento(id: String): ProcessoAndamento? = suspendCoroutine { continuation ->
         firebaseStore
             .collection(Constants.PROCESSOS_ANDAMENTOS_TABLE)
             .document(id)
@@ -134,9 +132,9 @@ class ProcessoAndamentoRepository @Inject constructor(
                     val resultado = document.toObject(ProcessoAndamento::class.java)!!
 
                     coroutineScope.launch {
-                        val advogadoDeferred = async { advogadoRepository.ObterAdvogado(resultado.advogado!!) }
-                        val statusDeferred = async { processoStatusAndamentoRepository.ObterProcessoStatusAndamento(resultado.status!!) }
-                        val tipoDeferred = async { processoTipoAndamentoRepository.ObterProcessoTipoAndamento(resultado.tipo!!) }
+                        val advogadoDeferred = async { advogadoRepository.obterAdvogado(resultado.advogado!!) }
+                        val statusDeferred = async { processoStatusAndamentoRepository.obterProcessoStatusAndamento(resultado.status!!) }
+                        val tipoDeferred = async { processoTipoAndamentoRepository.obterProcessoTipoAndamento(resultado.tipo!!) }
 
                         resultado.advogadoObj = advogadoDeferred.await()
                         resultado.statusObj = statusDeferred.await()
@@ -153,7 +151,7 @@ class ProcessoAndamentoRepository @Inject constructor(
             }
     }
 
-    override suspend fun ObterAndamentosPorLista(ids: List<String>): List<ProcessoAndamento>? = suspendCoroutine { continuation ->
+    override suspend fun obterAndamentosPorLista(ids: List<String>): List<ProcessoAndamento>? = suspendCoroutine { continuation ->
         firebaseStore
             .collection(Constants.PROCESSOS_ANDAMENTOS_TABLE)
             .whereIn(FieldPath.documentId(), ids)
@@ -165,9 +163,9 @@ class ProcessoAndamentoRepository @Inject constructor(
                     coroutineScope.launch {
                         if (resultado.isNotEmpty()) {
                             for (item in resultado) {
-                                val advogadoDeferred = async { advogadoRepository.ObterAdvogado(item.advogado!!) }
-                                val statusDeferred = async { processoStatusAndamentoRepository.ObterProcessoStatusAndamento(item.status!!) }
-                                val tipoDeferred = async { processoTipoAndamentoRepository.ObterProcessoTipoAndamento(item.tipo!!) }
+                                val advogadoDeferred = async { advogadoRepository.obterAdvogado(item.advogado!!) }
+                                val statusDeferred = async { processoStatusAndamentoRepository.obterProcessoStatusAndamento(item.status!!) }
+                                val tipoDeferred = async { processoTipoAndamentoRepository.obterProcessoTipoAndamento(item.tipo!!) }
 
                                 item.advogadoObj = advogadoDeferred.await()
                                 item.statusObj = statusDeferred.await()
@@ -187,7 +185,7 @@ class ProcessoAndamentoRepository @Inject constructor(
             }
     }
 
-    override fun AdicionarProcessoAndamento(model: ProcessoAndamento, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun adicionarProcessoAndamento(model: ProcessoAndamento, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.PROCESSOS_ANDAMENTOS_TABLE)
             .add(model)
@@ -198,7 +196,7 @@ class ProcessoAndamentoRepository @Inject constructor(
                 onFailureListener(it)
             }
     }
-    override fun AtualizarProcessoAndamento(model: ProcessoAndamento, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun atualizarProcessoAndamento(model: ProcessoAndamento, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.PROCESSOS_ANDAMENTOS_TABLE)
             .document(model.id)
@@ -210,7 +208,7 @@ class ProcessoAndamentoRepository @Inject constructor(
                 onFailureListener(it)
             }
     }
-    override fun DeletarProcessoAndamento(id: String, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun deletarProcessoAndamento(id: String, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.PROCESSOS_ANDAMENTOS_TABLE)
             .document(id)
@@ -225,14 +223,14 @@ class ProcessoAndamentoRepository @Inject constructor(
 }
 
 interface IProcessoAndamentoRepository {
-    fun ObterProcessosAndamentos(onSuccessListener: (lista: List<ProcessoAndamento>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
-    fun ObterProcessoAndamento(id: String, onSuccessListener: (ProcessoAndamento: ProcessoAndamento) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun obterProcessosAndamentos(onSuccessListener: (lista: List<ProcessoAndamento>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun obterProcessoAndamento(id: String, onSuccessListener: (ProcessoAndamento: ProcessoAndamento) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
 
-    suspend fun ObterProcessosAndamentos(): List<ProcessoAndamento>?
-    suspend fun ObterProcessoAndamento(id: String): ProcessoAndamento?
-    suspend fun ObterAndamentosPorLista(ids: List<String>): List<ProcessoAndamento>?
+    suspend fun obterProcessosAndamentos(): List<ProcessoAndamento>?
+    suspend fun obterProcessoAndamento(id: String): ProcessoAndamento?
+    suspend fun obterAndamentosPorLista(ids: List<String>): List<ProcessoAndamento>?
 
-    fun AdicionarProcessoAndamento(model: ProcessoAndamento, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
-    fun AtualizarProcessoAndamento(model: ProcessoAndamento, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
-    fun DeletarProcessoAndamento(id: String, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun adicionarProcessoAndamento(model: ProcessoAndamento, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun atualizarProcessoAndamento(model: ProcessoAndamento, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun deletarProcessoAndamento(id: String, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
 }

@@ -15,7 +15,7 @@ class TelefoneRepository @Inject constructor(
     private val firebaseStore: FirebaseFirestore,
     private val telefoneTipoRepository: TelefoneTipoRepository
 ): ITelefoneRepository {
-    override fun ObterTelefones(onSuccessListener: (List<Telefone>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun obterTelefones(onSuccessListener: (List<Telefone>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.TELEFONES_TABLE)
             .get()
@@ -32,7 +32,7 @@ class TelefoneRepository @Inject constructor(
             }
     }
 
-    override fun ObterTelefone(id: String, onSuccessListener: (telefone: Telefone) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun obterTelefone(id: String, onSuccessListener: (telefone: Telefone) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.TELEFONES_TABLE)
             .document(id)
@@ -52,7 +52,7 @@ class TelefoneRepository @Inject constructor(
             }
     }
 
-    override fun AdicionarTelefone(model: Telefone, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun adicionarTelefone(model: Telefone, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.TELEFONES_TABLE)
             .add(model)
@@ -64,7 +64,7 @@ class TelefoneRepository @Inject constructor(
             }
     }
 
-    override fun AtualizarTelefone(model: Telefone, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun atualizarTelefone(model: Telefone, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.TELEFONES_TABLE)
             .document(model.id)
@@ -77,7 +77,7 @@ class TelefoneRepository @Inject constructor(
             }
     }
 
-    override fun DeletarTelefone(id: String, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun deletarTelefone(id: String, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.TELEFONES_TABLE)
             .document(id)
@@ -92,9 +92,9 @@ class TelefoneRepository @Inject constructor(
 }
 
 interface ITelefoneRepository {
-    fun ObterTelefones(onSuccessListener: (List<Telefone>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
-    fun ObterTelefone(id: String, onSuccessListener: (telefone: Telefone) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
-    fun AdicionarTelefone(model: Telefone, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
-    fun AtualizarTelefone(model: Telefone, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
-    fun DeletarTelefone(id: String, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun obterTelefones(onSuccessListener: (List<Telefone>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun obterTelefone(id: String, onSuccessListener: (telefone: Telefone) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun adicionarTelefone(model: Telefone, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun atualizarTelefone(model: Telefone, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun deletarTelefone(id: String, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
 }

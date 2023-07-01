@@ -5,36 +5,27 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.advogo.R
-import com.example.advogo.activities.ClienteCadastroActivity
 import com.example.advogo.adapters.*
 import com.example.advogo.databinding.DialogProcessoAndamentoBinding
 import com.example.advogo.databinding.FragmentProcessoAndamentoBinding
-import com.example.advogo.databinding.FragmentProcessoAnexoBinding
 import com.example.advogo.models.*
-import com.example.advogo.repositories.IDiligenciaHistoricoRepository
 import com.example.advogo.repositories.IProcessoAndamentoRepository
 import com.example.advogo.repositories.IProcessoStatusAndamentoRepository
 import com.example.advogo.repositories.IProcessoTipoAndamentoRepository
 import com.example.advogo.utils.Constants
-import com.example.projmgr.dialogs.AdvogadosDialog
 import com.example.projmgr.dialogs.ProcessoAndamentoDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import okhttp3.internal.wait
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -59,12 +50,12 @@ class ProcessoAndamentoFragment : BaseFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentProcessoAndamentoBinding.inflate(inflater, container, false)
 
         CoroutineScope(Dispatchers.Main).launch {
-            tiposAndamentos = tipoAndamentoRepository.ObterProcessoTipoAndamentos() ?: emptyList()
-            statusAndamentos = statusAndamentoRepository.ObterProcessoStatusAndamentos() ?: emptyList()
+            tiposAndamentos = tipoAndamentoRepository.obterProcessoTipoAndamentos() ?: emptyList()
+            statusAndamentos = statusAndamentoRepository.obterProcessoStatusAndamentos() ?: emptyList()
         }
 
         return binding.root
@@ -84,7 +75,7 @@ class ProcessoAndamentoFragment : BaseFragment() {
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 if (result.data!!.hasExtra(Constants.FROM_ANDAMENTOS_ACTIVITY)) {
-                    processoAndamentoRepository.ObterProcessosAndamentos(
+                    processoAndamentoRepository.obterProcessosAndamentos(
                         { lista -> setProcessoAndamentosToUI(lista as ArrayList<ProcessoAndamento>) },
                         { ex -> null } //TODO("Imlementar OnFailure")
                     )
@@ -173,7 +164,7 @@ class ProcessoAndamentoFragment : BaseFragment() {
             input.data = selectedDate
         }
 
-        processoAndamentoRepository.AtualizarProcessoAndamento(
+        processoAndamentoRepository.atualizarProcessoAndamento(
             input,
             { saveAndamentoSuccess() },
             { saveAndamentoFailure() }
@@ -204,7 +195,7 @@ class ProcessoAndamentoFragment : BaseFragment() {
             input.data = selectedDate
         }
 
-        processoAndamentoRepository.AdicionarProcessoAndamento(
+        processoAndamentoRepository.adicionarProcessoAndamento(
             input,
             { saveAndamentoSuccess() },
             { saveAndamentoFailure() }
@@ -212,7 +203,7 @@ class ProcessoAndamentoFragment : BaseFragment() {
     }
 
     private fun saveAndamentoSuccess() {
-        processoAndamentoRepository.ObterProcessosAndamentos(
+        processoAndamentoRepository.obterProcessosAndamentos(
             {
                 setProcessoAndamentosToUI(it as ArrayList<ProcessoAndamento>)
                 hideProgressDialog()

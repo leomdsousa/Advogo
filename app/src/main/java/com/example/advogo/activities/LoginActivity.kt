@@ -1,17 +1,23 @@
 package com.example.advogo.activities
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
+import android.text.method.PasswordTransformationMethod
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.widget.AppCompatEditText
+import androidx.core.content.ContextCompat
 import com.example.advogo.R
 import com.example.advogo.databinding.ActivityLoginBinding
 import com.example.advogo.models.Advogado
 import com.example.advogo.repositories.IAdvogadoRepository
 import com.example.advogo.utils.Constants
+import com.example.advogo.utils.extensions.showPasswordVisibilityOnTouch
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -23,6 +29,7 @@ class LoginActivity : BaseActivity() {
     @Inject lateinit var advRepository: IAdvogadoRepository
     private val firebaseAuth = FirebaseAuth.getInstance()
 
+    @SuppressLint("ClickableViewAccessibility")
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +38,13 @@ class LoginActivity : BaseActivity() {
 
         setupActionBar("Login", binding.toolbarSignIn)
         binding.btnLogin.setOnClickListener { logar() }
+
+        binding.etPassword.setOnTouchListener { v, event ->
+            if (event.action == MotionEvent.ACTION_UP) {
+                binding.etPassword.showPasswordVisibilityOnTouch(event)
+            }
+            false
+        }
     }
 
     private fun logar() {
@@ -44,9 +58,9 @@ class LoginActivity : BaseActivity() {
                 .signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
                     if(task.isSuccessful) {
-                        advRepository.ObterAdvogado(
+                        advRepository.obterAdvogado(
                             getCurrentUserID(),
-                            { advogado -> loginSuccess(advogado) },
+                            { advogado -> loginSuccess() },
                             { loginFailure() }
                         )
                     } else {
@@ -80,7 +94,7 @@ class LoginActivity : BaseActivity() {
         return validado
     }
 
-    private fun loginSuccess(advogado: Advogado) {
+    private fun loginSuccess() {
         hideProgressDialog()
 
         val intent = Intent(this@LoginActivity, MainActivity::class.java)

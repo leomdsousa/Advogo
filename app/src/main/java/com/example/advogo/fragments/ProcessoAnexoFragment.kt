@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,19 +13,13 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.advogo.R
-import com.example.advogo.activities.ClienteDetalheActivity
 import com.example.advogo.adapters.AnexosAdapter
-import com.example.advogo.adapters.ClientesAdapter
-import com.example.advogo.databinding.DialogProcessoAndamentoBinding
 import com.example.advogo.databinding.DialogProcessoAnexoBinding
 import com.example.advogo.databinding.FragmentProcessoAnexoBinding
-import com.example.advogo.databinding.FragmentProcessoDetalheBinding
 import com.example.advogo.models.Anexo
 import com.example.advogo.models.Processo
-import com.example.advogo.models.ProcessoAndamento
 import com.example.advogo.repositories.IAnexoRepository
 import com.example.advogo.utils.Constants
-import com.example.projmgr.dialogs.ProcessoAndamentoDialog
 import com.example.projmgr.dialogs.ProcessoAnexoDialog
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -61,7 +54,7 @@ class ProcessoAnexoFragment : BaseFragment() {
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 if (result.data!!.hasExtra(Constants.FROM_ANEXOS_ACTIVITY)) {
-                    anexoRepository.ObterAnexos(
+                    anexoRepository.obterAnexos(
                         { lista -> setAnexosToUI(lista as ArrayList<Anexo>) },
                         { ex -> null } //TODO("Imlementar OnFailure")
                     )
@@ -152,7 +145,7 @@ class ProcessoAnexoFragment : BaseFragment() {
             //uri = uri,
         )
 
-        anexoRepository.AtualizarAnexo(
+        anexoRepository.atualizarAnexo(
             anexo,
             { saveAnexoSuccess() },
             { saveAnexoFailure() }
@@ -173,7 +166,7 @@ class ProcessoAnexoFragment : BaseFragment() {
             //uri = uri,
         )
 
-        anexoRepository.AdicionarAnexo(
+        anexoRepository.adicionarAnexo(
             anexo,
             { saveAnexoSuccess() },
             { saveAnexoFailure() }
@@ -181,7 +174,7 @@ class ProcessoAnexoFragment : BaseFragment() {
     }
 
     private fun saveAnexoSuccess() {
-        anexoRepository.ObterAnexos(
+        anexoRepository.obterAnexos(
             {
                 setAnexosToUI(it as ArrayList<Anexo>)
                 hideProgressDialog()
@@ -201,7 +194,7 @@ class ProcessoAnexoFragment : BaseFragment() {
     }
 
     private fun deleteAnexoSuccess() {
-        anexoRepository.ObterAnexos(
+        anexoRepository.obterAnexos(
             {
                 setAnexosToUI(it as ArrayList<Anexo>)
                 hideProgressDialog()

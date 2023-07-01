@@ -20,7 +20,7 @@ import kotlin.coroutines.suspendCoroutine
 class AnexoRepository @Inject constructor(
     private val firebaseStore: FirebaseFirestore,
 ) : IAnexoRepository {
-    override fun ObterAnexos(onSuccessListener: (lista: List<Anexo>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun obterAnexos(onSuccessListener: (lista: List<Anexo>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.ANEXOS_TABLE)
             .get()
@@ -36,7 +36,7 @@ class AnexoRepository @Inject constructor(
                 onFailureListener(exception)
             }
     }
-    override fun ObterAnexo(id: String, onSuccessListener: (Anexo: Anexo) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun obterAnexo(id: String, onSuccessListener: (Anexo: Anexo) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.ANEXOS_TABLE)
             .document(id)
@@ -53,7 +53,7 @@ class AnexoRepository @Inject constructor(
                 onFailureListener(exception)
             }
     }
-    override fun AdicionarAnexo(model: Anexo, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun adicionarAnexo(model: Anexo, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.ANEXOS_TABLE)
             .add(model)
@@ -64,7 +64,7 @@ class AnexoRepository @Inject constructor(
                 onFailureListener(it)
             }
     }
-    override fun AtualizarAnexo(model: Anexo, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun atualizarAnexo(model: Anexo, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.ANEXOS_TABLE)
             .document(model.id)
@@ -76,7 +76,7 @@ class AnexoRepository @Inject constructor(
                 onFailureListener(it)
             }
     }
-    override fun DeletarAnexo(id: String, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun deletarAnexo(id: String, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.ANEXOS_TABLE)
             .document(id)
@@ -89,7 +89,7 @@ class AnexoRepository @Inject constructor(
             }
     }
 
-    override suspend fun ObterAnexosPorLista(ids: List<String>): List<Anexo>? = suspendCoroutine { continuation ->
+    override suspend fun obterAnexosPorLista(ids: List<String>): List<Anexo>? = suspendCoroutine { continuation ->
         firebaseStore
             .collection(Constants.ANEXOS_TABLE)
             .whereIn(FieldPath.documentId(), ids)
@@ -111,11 +111,11 @@ class AnexoRepository @Inject constructor(
 }
 
 interface IAnexoRepository {
-    fun ObterAnexos(onSuccessListener: (lista: List<Anexo>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
-    fun ObterAnexo(id: String, onSuccessListener: (Anexo: Anexo) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
-    fun AdicionarAnexo(model: Anexo, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
-    fun AtualizarAnexo(model: Anexo, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
-    fun DeletarAnexo(id: String, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun obterAnexos(onSuccessListener: (lista: List<Anexo>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun obterAnexo(id: String, onSuccessListener: (Anexo: Anexo) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun adicionarAnexo(model: Anexo, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun atualizarAnexo(model: Anexo, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun deletarAnexo(id: String, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
 
-    suspend fun ObterAnexosPorLista(ids: List<String>): List<Anexo>?
+    suspend fun obterAnexosPorLista(ids: List<String>): List<Anexo>?
 }

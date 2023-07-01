@@ -11,7 +11,7 @@ import kotlin.coroutines.suspendCoroutine
 class ProcessoTipoRepository @Inject constructor(
     private val firebaseStore: FirebaseFirestore
 ): IProcessoTipoRepository {
-    override fun ObterProcessosTipos(onSuccessListener: (List<ProcessoTipo>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun obterProcessosTipos(onSuccessListener: (List<ProcessoTipo>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.PROCESSOS_TIPOS_TABLE)
             .get()
@@ -27,7 +27,7 @@ class ProcessoTipoRepository @Inject constructor(
                 onFailureListener(exception)
             }
     }
-    override fun ObterProcessoTipo(id: String, onSuccessListener: (processoTipo: ProcessoTipo) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun obterProcessoTipo(id: String, onSuccessListener: (processoTipo: ProcessoTipo) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.PROCESSOS_TIPOS_TABLE)
             .document(id)
@@ -47,7 +47,7 @@ class ProcessoTipoRepository @Inject constructor(
             }
     }
 
-    override suspend fun ObterProcessosTipos(): List<ProcessoTipo>? = suspendCoroutine { continuation ->
+    override suspend fun obterProcessosTipos(): List<ProcessoTipo>? = suspendCoroutine { continuation ->
         firebaseStore
             .collection(Constants.PROCESSOS_TIPOS_TABLE)
             .get()
@@ -63,7 +63,7 @@ class ProcessoTipoRepository @Inject constructor(
                 continuation.resumeWithException(exception)
             }
     }
-    override suspend fun ObterProcessoTipo(id: String): ProcessoTipo? = suspendCoroutine { continuation ->
+    override suspend fun obterProcessoTipo(id: String): ProcessoTipo? = suspendCoroutine { continuation ->
         firebaseStore
             .collection(Constants.PROCESSOS_TIPOS_TABLE)
             .document(id)
@@ -83,9 +83,9 @@ class ProcessoTipoRepository @Inject constructor(
 }
 
 interface IProcessoTipoRepository {
-    fun ObterProcessosTipos(onSuccessListener: (lista: List<ProcessoTipo>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
-    fun ObterProcessoTipo(id: String, onSuccessListener: (processoTipo: ProcessoTipo) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun obterProcessosTipos(onSuccessListener: (lista: List<ProcessoTipo>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun obterProcessoTipo(id: String, onSuccessListener: (processoTipo: ProcessoTipo) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
 
-    suspend fun ObterProcessosTipos(): List<ProcessoTipo>?
-    suspend fun ObterProcessoTipo(id: String): ProcessoTipo?
+    suspend fun obterProcessosTipos(): List<ProcessoTipo>?
+    suspend fun obterProcessoTipo(id: String): ProcessoTipo?
 }

@@ -29,10 +29,7 @@ import com.example.projmgr.dialogs.ClientesDialog
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.io.IOException
 import javax.inject.Inject
 import kotlin.collections.ArrayList
@@ -100,11 +97,7 @@ class ProcessoCadastroActivity : BaseActivity() {
         }
 
         binding.btnProcessoCadastro.setOnClickListener {
-            if(imagemSelecionadaURI != null) {
-                salvarImagemProcesso()
-            } else {
-                saveProcesso()
-            }
+            saveProcesso()
         }
 
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -128,7 +121,7 @@ class ProcessoCadastroActivity : BaseActivity() {
     private fun advogadosDialog() {
         CoroutineScope(Dispatchers.Main).launch {
             if(advogados.isEmpty()) {
-                val advogadosDeferred = async { advogadoRepository.ObterAdvogados()!! }
+                val advogadosDeferred = async { advogadoRepository.obterAdvogados()!! }
                 advogados = advogadosDeferred.await()
             }
 
@@ -166,7 +159,7 @@ class ProcessoCadastroActivity : BaseActivity() {
     private fun clientesDialog() {
         CoroutineScope(Dispatchers.Main).launch {
             if(clientes.isEmpty()) {
-                val clientesDeferred = async { clienteRepository.ObterClientes()!! }
+                val clientesDeferred = async { clienteRepository.obterClientes()!! }
                 clientes = clientesDeferred.await()
             }
 
@@ -210,7 +203,7 @@ class ProcessoCadastroActivity : BaseActivity() {
         val spinnerStatus = findViewById<Spinner>(R.id.spinnerStatusProcesso)
 
         CoroutineScope(Dispatchers.Main).launch {
-            val processosStatusDeferred = async { processoStatusRepository.ObterProcessoStatus() }
+            val processosStatusDeferred = async { processoStatusRepository.obterProcessoStatus() }
             processosStatus = processosStatusDeferred.await()!!
             (processosStatus as MutableList<ProcessoStatus>).add(0, ProcessoStatus(status = "Selecione"))
 
@@ -237,7 +230,7 @@ class ProcessoCadastroActivity : BaseActivity() {
         val spinnerTipos = findViewById<Spinner>(R.id.spinnerTipoProcesso)
 
         CoroutineScope(Dispatchers.Main).launch {
-            val processosTiposDeferred = async { processoTipoRepository.ObterProcessosTipos() }
+            val processosTiposDeferred = async { processoTipoRepository.obterProcessosTipos() }
             processosTipos = processosTiposDeferred.await()!!
             (processosTipos as MutableList<ProcessoTipo>).add(0, ProcessoTipo(tipo = "Selecione"))
 
@@ -260,27 +253,28 @@ class ProcessoCadastroActivity : BaseActivity() {
         }
     }
 
-    private fun salvarImagemProcesso() {
-        val sRef: StorageReference = FirebaseStorage.getInstance().reference.child(
-            "PROCESSO_${id}_IMAGEM" + System.currentTimeMillis() + "."
-                    + getFileExtension(imagemSelecionadaURI!!)
-        )
+    private suspend fun salvarImagemProcesso(): String {
+        return suspendCancellableCoroutine { continuation ->
+            val sRef: StorageReference = FirebaseStorage.getInstance().reference.child(
+                "PROCESSO_${id}_IMAGEM" + System.currentTimeMillis() + "."
+                        + getFileExtension(imagemSelecionadaURI!!)
+            )
 
-        sRef.putFile(imagemSelecionadaURI!!)
-            .addOnSuccessListener { taskSnapshot ->
-                taskSnapshot.metadata!!.reference!!.downloadUrl
-                    .addOnSuccessListener { uri ->
-                        imagemSelecionadaURL = uri.toString()
-                        saveProcesso()
-                    }
-            }
-            .addOnFailureListener { exception ->
-                Toast.makeText(
-                    this@ProcessoCadastroActivity,
-                    "Erro ao inserir imagem",
-                    Toast.LENGTH_LONG
-                ).show()
-            }
+            sRef.putFile(imagemSelecionadaURI!!)
+                .addOnSuccessListener { taskSnapshot ->
+                    taskSnapshot.metadata!!.reference!!.downloadUrl
+                        .addOnSuccessListener { uri ->
+                            val imageUrl = uri.toString()
+                            continuation.resume(imageUrl, null)
+                        }
+                        .addOnFailureListener { exception ->
+                            continuation.cancel(exception)
+                        }
+                }
+                .addOnFailureListener { exception ->
+                    continuation.cancel(exception)
+                }
+        }
     }
 
     private fun saveProcesso() {
@@ -290,24 +284,32 @@ class ProcessoCadastroActivity : BaseActivity() {
 
         showProgressDialog(getString(R.string.aguardePorfavor))
 
-        val processo = Processo(
-            id = "",
-            titulo = binding.etProcessoName.text.toString(),
-            descricao = binding.etDescricao.text.toString(),
-            numero = binding.etNumeroProcesso.text.toString(),
-            tipo = tipoProcessoSelecionado,
-            status = statusProcessoSelecionado,
-            data = dataSelecionada,
-            imagem = imagemSelecionadaURL,
-            cliente = clienteSelecionado,
-            advogado = advSelecionado
-        )
+        CoroutineScope(Dispatchers.Main).launch {
+            val imageUrl = if (imagemSelecionadaURI != null) {
+                salvarImagemProcesso()
+            } else {
+                null
+            }
 
-        processoRepository.AdicionarProcesso(
-            processo,
-            { processoCadastroSuccess() },
-            { processoCadastroFailure() }
-        )
+            val processo = Processo(
+                id = "",
+                titulo = binding.etProcessoName.text.toString(),
+                descricao = binding.etDescricao.text.toString(),
+                numero = binding.etNumeroProcesso.text.toString(),
+                tipo = tipoProcessoSelecionado,
+                status = statusProcessoSelecionado,
+                data = dataSelecionada,
+                imagem = imageUrl,
+                cliente = clienteSelecionado,
+                advogado = advSelecionado
+            )
+
+            processoRepository.adicionarProcesso(
+                processo,
+                { processoCadastroSuccess() },
+                { processoCadastroFailure() }
+            )
+        }
     }
 
     private fun onDatePickerResult(year: Int, month: Int, day: Int) {

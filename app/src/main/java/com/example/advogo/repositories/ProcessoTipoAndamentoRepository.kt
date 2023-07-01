@@ -11,7 +11,7 @@ import kotlin.coroutines.suspendCoroutine
 class ProcessoTipoAndamentoRepository @Inject constructor(
     private val firebaseStore: FirebaseFirestore
 ): IProcessoTipoAndamentoRepository {
-    override fun ObterProcessoTipoAndamentos(onSuccessListener: (List<ProcessoTipoAndamento>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun obterProcessoTipoAndamentos(onSuccessListener: (List<ProcessoTipoAndamento>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.PROCESSOS_TIPOS_ANDAMENTOS_TABLE)
             .get()
@@ -27,7 +27,7 @@ class ProcessoTipoAndamentoRepository @Inject constructor(
                 onFailureListener(exception)
             }
     }
-    override fun ObterProcessoTipoAndamento(id: String, onSuccessListener: (processoTipoAndamentos: ProcessoTipoAndamento) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun obterProcessoTipoAndamento(id: String, onSuccessListener: (processoTipoAndamentos: ProcessoTipoAndamento) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.PROCESSOS_TIPOS_ANDAMENTOS_TABLE)
             .document(id)
@@ -47,7 +47,7 @@ class ProcessoTipoAndamentoRepository @Inject constructor(
             }
     }
 
-    override suspend fun ObterProcessoTipoAndamentos(): List<ProcessoTipoAndamento>? = suspendCoroutine { continuation ->
+    override suspend fun obterProcessoTipoAndamentos(): List<ProcessoTipoAndamento>? = suspendCoroutine { continuation ->
         firebaseStore
             .collection(Constants.PROCESSOS_TIPOS_ANDAMENTOS_TABLE)
             .get()
@@ -63,7 +63,7 @@ class ProcessoTipoAndamentoRepository @Inject constructor(
                 continuation.resumeWithException(exception)
             }
     }
-    override suspend fun ObterProcessoTipoAndamento(id: String): ProcessoTipoAndamento? = suspendCoroutine { continuation ->
+    override suspend fun obterProcessoTipoAndamento(id: String): ProcessoTipoAndamento? = suspendCoroutine { continuation ->
         firebaseStore
             .collection(Constants.PROCESSOS_TIPOS_ANDAMENTOS_TABLE)
             .document(id)
@@ -83,9 +83,9 @@ class ProcessoTipoAndamentoRepository @Inject constructor(
 }
 
 interface IProcessoTipoAndamentoRepository {
-    fun ObterProcessoTipoAndamentos(onSuccessListener: (lista: List<ProcessoTipoAndamento>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
-    fun ObterProcessoTipoAndamento(id: String, onSuccessListener: (processoTipoAndamentos: ProcessoTipoAndamento) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun obterProcessoTipoAndamentos(onSuccessListener: (lista: List<ProcessoTipoAndamento>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun obterProcessoTipoAndamento(id: String, onSuccessListener: (processoTipoAndamentos: ProcessoTipoAndamento) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
 
-    suspend fun ObterProcessoTipoAndamentos(): List<ProcessoTipoAndamento>?
-    suspend fun ObterProcessoTipoAndamento(id: String): ProcessoTipoAndamento?
+    suspend fun obterProcessoTipoAndamentos(): List<ProcessoTipoAndamento>?
+    suspend fun obterProcessoTipoAndamento(id: String): ProcessoTipoAndamento?
 }

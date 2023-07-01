@@ -11,7 +11,7 @@ import kotlin.coroutines.suspendCoroutine
 class DiligenciaTipoRepository @Inject constructor(
     private val firebaseStore: FirebaseFirestore
 ): IDiligenciaTipoRepository {
-    override fun ObterDiligenciasTipos(onSuccessListener: (List<DiligenciaTipo>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun obterDiligenciasTipos(onSuccessListener: (List<DiligenciaTipo>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.DILIGENCIAS_TIPOS_TABLE)
             .get()
@@ -27,7 +27,7 @@ class DiligenciaTipoRepository @Inject constructor(
                 onFailureListener(exception)
             }
     }
-    override fun ObterDiligenciaTipo(id: String, onSuccessListener: (processoTipo: DiligenciaTipo) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun obterDiligenciaTipo(id: String, onSuccessListener: (processoTipo: DiligenciaTipo) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.DILIGENCIAS_TIPOS_TABLE)
             .document(id)
@@ -47,7 +47,7 @@ class DiligenciaTipoRepository @Inject constructor(
             }
     }
 
-    override suspend fun ObterDiligenciasTipos(): List<DiligenciaTipo>? = suspendCoroutine { continuation ->
+    override suspend fun obterDiligenciasTipos(): List<DiligenciaTipo>? = suspendCoroutine { continuation ->
         firebaseStore
             .collection(Constants.DILIGENCIAS_TIPOS_TABLE)
             .get()
@@ -63,7 +63,7 @@ class DiligenciaTipoRepository @Inject constructor(
                 continuation.resumeWithException(exception)
             }
     }
-    override suspend fun ObterDiligenciaTipo(id: String): DiligenciaTipo? = suspendCoroutine { continuation ->
+    override suspend fun obterDiligenciaTipo(id: String): DiligenciaTipo? = suspendCoroutine { continuation ->
         firebaseStore
             .collection(Constants.DILIGENCIAS_TIPOS_TABLE)
             .document(id)
@@ -83,9 +83,9 @@ class DiligenciaTipoRepository @Inject constructor(
 }
 
 interface IDiligenciaTipoRepository {
-    fun ObterDiligenciasTipos(onSuccessListener: (lista: List<DiligenciaTipo>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
-    fun ObterDiligenciaTipo(id: String, onSuccessListener: (processoTipo: DiligenciaTipo) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun obterDiligenciasTipos(onSuccessListener: (lista: List<DiligenciaTipo>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun obterDiligenciaTipo(id: String, onSuccessListener: (processoTipo: DiligenciaTipo) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
 
-    suspend fun ObterDiligenciasTipos(): List<DiligenciaTipo>?
-    suspend fun ObterDiligenciaTipo(id: String): DiligenciaTipo?
+    suspend fun obterDiligenciasTipos(): List<DiligenciaTipo>?
+    suspend fun obterDiligenciaTipo(id: String): DiligenciaTipo?
 }

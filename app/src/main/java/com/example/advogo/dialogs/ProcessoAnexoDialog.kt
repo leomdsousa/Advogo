@@ -48,10 +48,10 @@ abstract class ProcessoAnexoDialog(
 
     private fun setDados(anexo: Anexo) {
         if(anexo.id.isBlank()) {
-            binding.tvTitle.text = "Cadastro Andamento"
+            binding.tvTitle.text = "Cadastro Anexo"
             binding.btnSubmitProcessoAnexo.text = "Cadastrar"
         } else {
-            binding.tvTitle.text = "Detalhes Andamento"
+            binding.tvTitle.text = "Detalhes Anexo"
             binding.btnSubmitProcessoAnexo.text = "Atualizar"
 
             binding.etDescricaoAnexo.setText(anexo.descricao)

@@ -19,7 +19,7 @@ import kotlin.coroutines.suspendCoroutine
 class ClienteRepository @Inject constructor(
     private val firebaseStore: FirebaseFirestore
 ): IClienteRepository {
-    override fun ObterClientes(onSuccessListener: (lista: List<Cliente>) -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
+    override fun obterClientes(onSuccessListener: (lista: List<Cliente>) -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.CLIENTES_TABLE)
             .get()
@@ -35,7 +35,7 @@ class ClienteRepository @Inject constructor(
                 onFailureListener(exception)
             }
     }
-    override fun ObterCliente(id: String, onSuccessListener: (cliente: Cliente) -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
+    override fun obterCliente(id: String, onSuccessListener: (cliente: Cliente) -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.CLIENTES_TABLE)
             .document(id)
@@ -53,7 +53,7 @@ class ClienteRepository @Inject constructor(
             }
     }
 
-    override suspend fun ObterClientes(): List<Cliente>? = suspendCoroutine { continuation ->
+    override suspend fun obterClientes(): List<Cliente>? = suspendCoroutine { continuation ->
         firebaseStore
             .collection(Constants.CLIENTES_TABLE)
             .get()
@@ -69,7 +69,7 @@ class ClienteRepository @Inject constructor(
                 continuation.resumeWithException(exception)
             }
     }
-    override suspend fun ObterCliente(id: String): Cliente? = suspendCoroutine { continuation ->
+    override suspend fun obterCliente(id: String): Cliente? = suspendCoroutine { continuation ->
         firebaseStore
             .collection(Constants.CLIENTES_TABLE)
             .document(id)
@@ -87,7 +87,7 @@ class ClienteRepository @Inject constructor(
             }
     }
 
-    override fun ObterClientePorEmail(email: String, onSuccessListener: (cliente: Cliente) -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
+    override fun obterClientePorEmail(email: String, onSuccessListener: (cliente: Cliente) -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.CLIENTES_TABLE)
             .whereEqualTo(Constants.CLIENTES_EMAIL, email)
@@ -104,7 +104,7 @@ class ClienteRepository @Inject constructor(
                 onFailureListener(exception)
             }
     }
-    override fun AdicionarCliente(model: Cliente, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
+    override fun adicionarCliente(model: Cliente, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.CLIENTES_TABLE)
             .add(model)
@@ -115,7 +115,7 @@ class ClienteRepository @Inject constructor(
                 onFailureListener(it)
             }
     }
-    override fun AtualizarCliente(model: Cliente, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
+    override fun atualizarCliente(model: Cliente, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.CLIENTES_TABLE)
             .document(model.id)
@@ -127,7 +127,7 @@ class ClienteRepository @Inject constructor(
                 onFailureListener(it)
             }
     }
-    override fun DeletarCliente(id: String, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
+    override fun deletarCliente(id: String, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.CLIENTES_TABLE)
             .document(id)
@@ -152,13 +152,13 @@ class ClienteRepository @Inject constructor(
 }
 
 interface IClienteRepository {
-    fun ObterClientes(onSuccessListener: (lista: List<Cliente>) -> Unit, onFailureListener: (exception: Exception?) -> Unit)
-    fun ObterCliente(id: String, onSuccessListener: (cliente: Cliente) -> Unit, onFailureListener: (exception: Exception?) -> Unit)
-    fun ObterClientePorEmail(email: String, onSuccessListener: (cliente: Cliente) -> Unit, onFailureListener: (exception: Exception?) -> Unit)
-    fun AdicionarCliente(model: Cliente, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit)
-    fun AtualizarCliente(model: Cliente, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit)
-    fun DeletarCliente(id: String, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit)
+    fun obterClientes(onSuccessListener: (lista: List<Cliente>) -> Unit, onFailureListener: (exception: Exception?) -> Unit)
+    fun obterCliente(id: String, onSuccessListener: (cliente: Cliente) -> Unit, onFailureListener: (exception: Exception?) -> Unit)
+    fun obterClientePorEmail(email: String, onSuccessListener: (cliente: Cliente) -> Unit, onFailureListener: (exception: Exception?) -> Unit)
+    fun adicionarCliente(model: Cliente, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit)
+    fun atualizarCliente(model: Cliente, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit)
+    fun deletarCliente(id: String, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit)
 
-    suspend fun ObterClientes(): List<Cliente>?
-    suspend fun ObterCliente(id: String): Cliente?
+    suspend fun obterClientes(): List<Cliente>?
+    suspend fun obterCliente(id: String): Cliente?
 }

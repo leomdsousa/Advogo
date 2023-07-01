@@ -11,7 +11,7 @@ import kotlin.coroutines.suspendCoroutine
 class DiligenciaStatusRepository @Inject constructor(
     private val firebaseStore: FirebaseFirestore
 ): IDiligenciaStatusRepository {
-    override fun ObterDiligenciasStatus(onSuccessListener: (List<DiligenciaStatus>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun obterDiligenciasStatus(onSuccessListener: (List<DiligenciaStatus>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.DILIGENCIAS_STATUS_TABLE)
             .get()
@@ -27,7 +27,7 @@ class DiligenciaStatusRepository @Inject constructor(
                 onFailureListener(exception)
             }
     }
-    override fun ObterDiligenciaStatus(id: String, onSuccessListener: (processoStatus: DiligenciaStatus) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun obterDiligenciaStatus(id: String, onSuccessListener: (processoStatus: DiligenciaStatus) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.DILIGENCIAS_STATUS_TABLE)
             .document(id)
@@ -47,7 +47,7 @@ class DiligenciaStatusRepository @Inject constructor(
             }
     }
 
-    override suspend fun ObterDiligenciasStatus(): List<DiligenciaStatus>? = suspendCoroutine { continuation ->
+    override suspend fun obterDiligenciasStatus(): List<DiligenciaStatus>? = suspendCoroutine { continuation ->
         firebaseStore
             .collection(Constants.DILIGENCIAS_STATUS_TABLE)
             .get()
@@ -63,7 +63,7 @@ class DiligenciaStatusRepository @Inject constructor(
                 continuation.resumeWithException(exception)
             }
     }
-    override suspend fun ObterDiligenciaStatus(id: String): DiligenciaStatus? = suspendCoroutine { continuation ->
+    override suspend fun obterDiligenciaStatus(id: String): DiligenciaStatus? = suspendCoroutine { continuation ->
         firebaseStore
             .collection(Constants.DILIGENCIAS_STATUS_TABLE)
             .document(id)
@@ -83,9 +83,9 @@ class DiligenciaStatusRepository @Inject constructor(
 }
 
 interface IDiligenciaStatusRepository {
-    fun ObterDiligenciasStatus(onSuccessListener: (lista: List<DiligenciaStatus>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
-    fun ObterDiligenciaStatus(id: String, onSuccessListener: (processoStatus: DiligenciaStatus) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun obterDiligenciasStatus(onSuccessListener: (lista: List<DiligenciaStatus>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun obterDiligenciaStatus(id: String, onSuccessListener: (processoStatus: DiligenciaStatus) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
 
-    suspend fun ObterDiligenciasStatus(): List<DiligenciaStatus>?
-    suspend fun ObterDiligenciaStatus(id: String): DiligenciaStatus?
+    suspend fun obterDiligenciasStatus(): List<DiligenciaStatus>?
+    suspend fun obterDiligenciaStatus(id: String): DiligenciaStatus?
 }

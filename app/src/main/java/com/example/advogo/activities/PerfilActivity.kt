@@ -15,7 +15,6 @@ import com.example.advogo.databinding.ActivityPerfilBinding
 import com.example.advogo.models.Advogado
 import com.example.advogo.repositories.IAdvogadoRepository
 import com.example.advogo.utils.Constants
-import com.google.common.base.Converter
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,7 +40,7 @@ class PerfilActivity : BaseActivity() {
 
         setupActionBar()
 
-        advRepository.ObterAdvogado(
+        advRepository.obterAdvogado(
             getCurrentUserID(),
             { advogado -> setDadosPerfil(advogado) },
             { null }
@@ -105,7 +104,7 @@ class PerfilActivity : BaseActivity() {
             fcmToken = advogadoDetalhes.fcmToken
         )
 
-        advRepository.AtualizarAdvogado(
+        advRepository.atualizarAdvogado(
             advogado,
             {
                 if(imagemSelecionadaURI != null) {

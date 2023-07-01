@@ -10,7 +10,6 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.TypefaceSpan
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.widget.ImageView
@@ -26,15 +25,12 @@ import com.example.advogo.R
 import com.example.advogo.databinding.ActivityMainBinding
 import com.example.advogo.fragments.ClienteFragment
 import com.example.advogo.fragments.DiligenciasFragment
-import com.example.advogo.fragments.ProcessoDetalheFragment
 import com.example.advogo.fragments.ProcessosFragment
 import com.example.advogo.models.Advogado
-import com.example.advogo.models.Processo
 import com.example.advogo.repositories.IAdvogadoRepository
 import com.example.advogo.repositories.IDiligenciaRepository
 import com.example.advogo.repositories.IProcessoRepository
 import com.example.advogo.utils.Constants
-import com.example.advogo.utils.interfaces.OnProcessoEditListener
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -69,7 +65,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         setupActionBar()
         setupTabsLayout()
 
-        advRepository.ObterAdvogado(
+        advRepository.obterAdvogado(
             getCurrentUserID(),
             { adv ->
                 this@MainActivity.adv = adv
@@ -81,7 +77,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 val tokenUpdated = sharedPreferences.getBoolean(Constants.FCM_TOKEN_UPDATED, false)
 
                 if (tokenUpdated) {
-                    advRepository.ObterAdvogado(
+                    advRepository.obterAdvogado(
                         getCurrentUserID(),
                         { adv ->
                             this@MainActivity.adv = adv
@@ -105,7 +101,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 if (result.data!!.hasExtra(Constants.FROM_PERFIL_ACTIVITY)) {
-                    advRepository.ObterAdvogado(
+                    advRepository.obterAdvogado(
                         getCurrentUserID(),
                         { adv -> setNavigationAdvDetalhes(adv) },
                         { ex -> null } //TODO("Imlementar OnFailure")

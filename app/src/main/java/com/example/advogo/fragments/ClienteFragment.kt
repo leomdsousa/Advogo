@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.advogo.R
 import com.example.advogo.activities.ClienteCadastroActivity
 import com.example.advogo.activities.ClienteDetalheActivity
 import com.example.advogo.adapters.ClientesAdapter
@@ -53,7 +52,7 @@ class ClienteFragment : BaseFragment() {
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 if (result.data!!.hasExtra(Constants.FROM_CLIENTE_ACTIVITY)) {
-                    clienteRepository.ObterClientes(
+                    clienteRepository.obterClientes(
                         { lista ->
                             setClientesToUI(lista as ArrayList<Cliente>)
                             hideProgressDialog()
@@ -77,7 +76,7 @@ class ClienteFragment : BaseFragment() {
     }
 
     private fun obterClientes() {
-        clienteRepository.ObterClientes(
+        clienteRepository.obterClientes(
             { Clientes ->
                 setClientesToUI(Clientes as ArrayList<Cliente>)
                 hideProgressDialog()

@@ -5,6 +5,7 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
+import com.example.advogo.services.CalendarService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -32,5 +33,11 @@ object SingletonModule {
     @Singleton
     fun provideProgressBar(context: Context): ProgressBar {
         return ProgressBar(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCalendarService(): CalendarService {
+        return CalendarService()
     }
 }

@@ -23,7 +23,6 @@ import android.provider.Settings
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.TypefaceSpan
-import android.util.Log
 import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
@@ -37,13 +36,9 @@ import androidx.lifecycle.lifecycleScope
 import com.example.advogo.R
 import com.example.advogo.models.Advogado
 import com.example.advogo.repositories.AdvogadoRepository
-import com.example.advogo.repositories.IAdvogadoRepository
 import com.example.advogo.utils.Constants
 import com.example.advogo.utils.ObterEnderecoFromLatLng
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
@@ -56,7 +51,6 @@ import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
@@ -399,7 +393,7 @@ open class BaseActivity : AppCompatActivity() {
 
     fun updateFCMToken(usuario: Advogado, token: String) {
         usuario.fcmToken = token
-        baseAdvogadoRepository.AtualizarAdvogado(
+        baseAdvogadoRepository.atualizarAdvogado(
             usuario,
             { tokenUpdateSuccess() },
             { null }

@@ -11,7 +11,7 @@ import kotlin.coroutines.suspendCoroutine
 class DiligenciaHistoricoRepository @Inject constructor(
     private val firebaseStore: FirebaseFirestore
 ): IDiligenciaHistoricoRepository {
-    override fun ObterDiligenciasHistoricos(onSuccessListener: (List<DiligenciaHistorico>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun obterDiligenciasHistoricos(onSuccessListener: (List<DiligenciaHistorico>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.DILIGENCIAS_HISTORICOS_TABLE)
             .get()
@@ -27,7 +27,7 @@ class DiligenciaHistoricoRepository @Inject constructor(
                 onFailureListener(exception)
             }
     }
-    override fun ObterDiligenciaHistorico(id: String, onSuccessListener: (processoHistorico: DiligenciaHistorico) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun obterDiligenciaHistorico(id: String, onSuccessListener: (processoHistorico: DiligenciaHistorico) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.DILIGENCIAS_HISTORICOS_TABLE)
             .document(id)
@@ -47,7 +47,7 @@ class DiligenciaHistoricoRepository @Inject constructor(
             }
     }
 
-    override suspend fun ObterDiligenciasHistoricos(): List<DiligenciaHistorico>? = suspendCoroutine { continuation ->
+    override suspend fun obterDiligenciasHistoricos(): List<DiligenciaHistorico>? = suspendCoroutine { continuation ->
         firebaseStore
             .collection(Constants.DILIGENCIAS_HISTORICOS_TABLE)
             .get()
@@ -63,7 +63,7 @@ class DiligenciaHistoricoRepository @Inject constructor(
                 continuation.resumeWithException(exception)
             }
     }
-    override suspend fun ObterDiligenciaHistorico(id: String): DiligenciaHistorico? = suspendCoroutine { continuation ->
+    override suspend fun obterDiligenciaHistorico(id: String): DiligenciaHistorico? = suspendCoroutine { continuation ->
         firebaseStore
             .collection(Constants.DILIGENCIAS_HISTORICOS_TABLE)
             .document(id)
@@ -83,9 +83,9 @@ class DiligenciaHistoricoRepository @Inject constructor(
 }
 
 interface IDiligenciaHistoricoRepository {
-    fun ObterDiligenciasHistoricos(onSuccessListener: (lista: List<DiligenciaHistorico>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
-    fun ObterDiligenciaHistorico(id: String, onSuccessListener: (processoHistorico: DiligenciaHistorico) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun obterDiligenciasHistoricos(onSuccessListener: (lista: List<DiligenciaHistorico>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun obterDiligenciaHistorico(id: String, onSuccessListener: (processoHistorico: DiligenciaHistorico) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
 
-    suspend fun ObterDiligenciasHistoricos(): List<DiligenciaHistorico>?
-    suspend fun ObterDiligenciaHistorico(id: String): DiligenciaHistorico?
+    suspend fun obterDiligenciasHistoricos(): List<DiligenciaHistorico>?
+    suspend fun obterDiligenciaHistorico(id: String): DiligenciaHistorico?
 }

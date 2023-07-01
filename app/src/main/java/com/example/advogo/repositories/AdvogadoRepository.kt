@@ -19,7 +19,7 @@ import kotlin.coroutines.suspendCoroutine
 class AdvogadoRepository @Inject constructor(
     private val firebaseStore: FirebaseFirestore
 ): IAdvogadoRepository {
-    override fun ObterAdvogados(onSuccessListener: (lista: List<Advogado>) -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
+    override fun obterAdvogados(onSuccessListener: (lista: List<Advogado>) -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.ADVOGADOS_TABLE)
             .get()
@@ -35,7 +35,7 @@ class AdvogadoRepository @Inject constructor(
                 onFailureListener(exception)
             }
     }
-    override fun ObterAdvogado(id: String, onSuccessListener: (advogado: Advogado) -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
+    override fun obterAdvogado(id: String, onSuccessListener: (advogado: Advogado) -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.ADVOGADOS_TABLE)
             .document(id)
@@ -53,7 +53,7 @@ class AdvogadoRepository @Inject constructor(
             }
     }
 
-    override suspend fun ObterAdvogados(): List<Advogado>? = suspendCoroutine { continuation ->
+    override suspend fun obterAdvogados(): List<Advogado>? = suspendCoroutine { continuation ->
         firebaseStore
             .collection(Constants.ADVOGADOS_TABLE)
             .get()
@@ -69,7 +69,7 @@ class AdvogadoRepository @Inject constructor(
                 continuation.resumeWithException(exception)
             }
     }
-    override suspend fun ObterAdvogado(id: String): Advogado? = suspendCoroutine { continuation ->
+    override suspend fun obterAdvogado(id: String): Advogado? = suspendCoroutine { continuation ->
         firebaseStore
             .collection(Constants.ADVOGADOS_TABLE)
             .document(id)
@@ -87,7 +87,7 @@ class AdvogadoRepository @Inject constructor(
             }
     }
 
-    override fun ObterAdvogadoPorEmail(email: String, onSuccessListener: (advogado: Advogado) -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
+    override fun obterAdvogadoPorEmail(email: String, onSuccessListener: (advogado: Advogado) -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.ADVOGADOS_TABLE)
             .whereEqualTo(Constants.ADVOGADOS_EMAIL, email)
@@ -104,7 +104,7 @@ class AdvogadoRepository @Inject constructor(
                 onFailureListener(exception)
             }
     }
-    override fun AdicionarAdvogado(model: Advogado, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
+    override fun adicionarAdvogado(model: Advogado, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.ADVOGADOS_TABLE)
             .add(model)
@@ -115,7 +115,7 @@ class AdvogadoRepository @Inject constructor(
                 onFailureListener(it)
             }
     }
-    override fun AtualizarAdvogado(model: Advogado, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
+    override fun atualizarAdvogado(model: Advogado, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.ADVOGADOS_TABLE)
             .document(getCurrentUserId())
@@ -127,7 +127,7 @@ class AdvogadoRepository @Inject constructor(
                 onFailureListener(it)
             }
     }
-    override fun DeletarAdvogado(id: String, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
+    override fun deletarAdvogado(id: String, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.ADVOGADOS_TABLE)
             .document(id)
@@ -152,13 +152,13 @@ class AdvogadoRepository @Inject constructor(
 }
 
 interface IAdvogadoRepository {
-    fun ObterAdvogados(onSuccessListener: (lista: List<Advogado>) -> Unit, onFailureListener: (exception: Exception?) -> Unit)
-    fun ObterAdvogado(id: String, onSuccessListener: (advogado: Advogado) -> Unit, onFailureListener: (exception: Exception?) -> Unit)
-    fun ObterAdvogadoPorEmail(email: String, onSuccessListener: (advogado: Advogado) -> Unit, onFailureListener: (exception: Exception?) -> Unit)
-    fun AdicionarAdvogado(model: Advogado, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit)
-    fun AtualizarAdvogado(model: Advogado, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit)
-    fun DeletarAdvogado(id: String, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit)
+    fun obterAdvogados(onSuccessListener: (lista: List<Advogado>) -> Unit, onFailureListener: (exception: Exception?) -> Unit)
+    fun obterAdvogado(id: String, onSuccessListener: (advogado: Advogado) -> Unit, onFailureListener: (exception: Exception?) -> Unit)
+    fun obterAdvogadoPorEmail(email: String, onSuccessListener: (advogado: Advogado) -> Unit, onFailureListener: (exception: Exception?) -> Unit)
+    fun adicionarAdvogado(model: Advogado, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit)
+    fun atualizarAdvogado(model: Advogado, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit)
+    fun deletarAdvogado(id: String, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit)
 
-    suspend fun ObterAdvogados(): List<Advogado>?
-    suspend fun ObterAdvogado(id: String): Advogado?
+    suspend fun obterAdvogados(): List<Advogado>?
+    suspend fun obterAdvogado(id: String): Advogado?
 }

@@ -4,26 +4,17 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.advogo.R
-import com.example.advogo.activities.ProcessoDetalheActivity
 import com.example.advogo.adapters.DiligenciasHistoricosAdapter
-import com.example.advogo.adapters.ProcessosAdapter
 import com.example.advogo.databinding.FragmentDiligenciaHistoricoBinding
-import com.example.advogo.databinding.FragmentProcessoAnexoBinding
-import com.example.advogo.models.Anexo
 import com.example.advogo.models.Diligencia
 import com.example.advogo.models.DiligenciaHistorico
-import com.example.advogo.models.Processo
-import com.example.advogo.repositories.IAnexoRepository
 import com.example.advogo.repositories.IDiligenciaHistoricoRepository
-import com.example.advogo.repositories.ProcessoAndamentoRepository
 import com.example.advogo.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -58,7 +49,7 @@ class DiligenciaHistoricoFragment : BaseFragment() {
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 if (result.data!!.hasExtra(Constants.FROM_ANEXOS_ACTIVITY)) {
-                    diligenciaHistoricoRepository.ObterDiligenciasHistoricos(
+                    diligenciaHistoricoRepository.obterDiligenciasHistoricos(
                         { lista -> setDiligenciaHistoricoToUI(lista as ArrayList<DiligenciaHistorico>) },
                         { ex -> null } //TODO("Imlementar OnFailure")
                     )

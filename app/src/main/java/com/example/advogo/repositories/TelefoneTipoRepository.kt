@@ -13,7 +13,7 @@ import javax.inject.Inject
 class TelefoneTipoRepository @Inject constructor(
     private val firebaseStore: FirebaseFirestore
 ): ITelefoneTipoRepository {
-    override fun ObterTelefonesTipos(onSuccessListener: (List<TelefoneTipo>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun obterTelefonesTipos(onSuccessListener: (List<TelefoneTipo>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.TELEFONES_TIPOS_TABLE)
             .get()
@@ -30,7 +30,7 @@ class TelefoneTipoRepository @Inject constructor(
             }
     }
 
-    override fun ObterTelefoneTipo(id: String, onSuccessListener: (telefoneTipo: TelefoneTipo) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun obterTelefoneTipo(id: String, onSuccessListener: (telefoneTipo: TelefoneTipo) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.TELEFONES_TIPOS_TABLE)
             .whereEqualTo(Constants.TELEFONES_TIPOS_ID, id)
@@ -50,6 +50,6 @@ class TelefoneTipoRepository @Inject constructor(
 }
 
 interface ITelefoneTipoRepository {
-    fun ObterTelefonesTipos(onSuccessListener: (lista: List<TelefoneTipo>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
-    fun ObterTelefoneTipo(id: String, onSuccessListener: (telefoneTipo: TelefoneTipo) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun obterTelefonesTipos(onSuccessListener: (lista: List<TelefoneTipo>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun obterTelefoneTipo(id: String, onSuccessListener: (telefoneTipo: TelefoneTipo) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
 }

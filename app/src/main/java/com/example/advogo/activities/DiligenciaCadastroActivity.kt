@@ -34,11 +34,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
-import kotlin.coroutines.suspendCoroutine
 
 @AndroidEntryPoint
 class DiligenciaCadastroActivity : BaseActivity() {
@@ -121,7 +118,7 @@ class DiligenciaCadastroActivity : BaseActivity() {
     private fun processosDialog() {
         CoroutineScope(Dispatchers.Main).launch {
             if(processos.isEmpty()) {
-                val processosDeferred = async { processoRepository.ObterProcessos()!! }
+                val processosDeferred = async { processoRepository.obterProcessos()!! }
                 processos = processosDeferred.await()
             }
 
@@ -158,7 +155,7 @@ class DiligenciaCadastroActivity : BaseActivity() {
     private fun advogadosDialog() {
         CoroutineScope(Dispatchers.Main).launch {
             if(advogados.isEmpty()) {
-                val advogadosDeferred = async { advogadoRepository.ObterAdvogados()!! }
+                val advogadosDeferred = async { advogadoRepository.obterAdvogados()!! }
                 advogados = advogadosDeferred.await()
             }
 
@@ -202,7 +199,7 @@ class DiligenciaCadastroActivity : BaseActivity() {
         val spinnerStatus = findViewById<Spinner>(R.id.spinnerStatusDiligencia)
 
         CoroutineScope(Dispatchers.Main).launch {
-            val diligenciaStatusDeferred = async { diligenciaStatusRepository.ObterDiligenciasStatus() }
+            val diligenciaStatusDeferred = async { diligenciaStatusRepository.obterDiligenciasStatus() }
             diligenciaStatus = diligenciaStatusDeferred.await()!!
             (diligenciaStatus as MutableList<DiligenciaStatus>).add(0, DiligenciaStatus(status = "Selecione"))
 
@@ -229,7 +226,7 @@ class DiligenciaCadastroActivity : BaseActivity() {
         val spinnerTipos = findViewById<Spinner>(R.id.spinnerTipoDiligencia)
 
         CoroutineScope(Dispatchers.Main).launch {
-            val diligenciaTiposDeferred = async { diligenciaTipoRepository.ObterDiligenciasTipos() }
+            val diligenciaTiposDeferred = async { diligenciaTipoRepository.obterDiligenciasTipos() }
             diligenciaTipos = diligenciaTiposDeferred.await()!!
             (diligenciaTipos as MutableList<DiligenciaTipo>).add(0, DiligenciaTipo(tipo = "Selecione"))
 
@@ -272,7 +269,7 @@ class DiligenciaCadastroActivity : BaseActivity() {
             advogado = advogadoSelecionado
         )
 
-        diligenciaRepository.AdicionarDiligencia(
+        diligenciaRepository.adicionarDiligencia(
             diligencia,
             { diligenciaCadastroSuccess() },
             { diligenciaCadastroFailure() }

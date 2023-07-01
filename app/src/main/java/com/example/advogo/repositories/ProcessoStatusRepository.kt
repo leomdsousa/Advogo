@@ -11,7 +11,7 @@ import kotlin.coroutines.suspendCoroutine
 class ProcessoStatusRepository @Inject constructor(
     private val firebaseStore: FirebaseFirestore
 ): IProcessoStatusRepository {
-    override fun ObterProcessosStatus(onSuccessListener: (List<ProcessoStatus>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun obterProcessosStatus(onSuccessListener: (List<ProcessoStatus>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.PROCESSOS_STATUS_TABLE)
             .get()
@@ -27,7 +27,7 @@ class ProcessoStatusRepository @Inject constructor(
                 onFailureListener(exception)
             }
     }
-    override fun ObterProcessoStatus(id: String, onSuccessListener: (processoStatus: ProcessoStatus) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun obterProcessoStatus(id: String, onSuccessListener: (processoStatus: ProcessoStatus) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.PROCESSOS_STATUS_TABLE)
             .document(id)
@@ -47,7 +47,7 @@ class ProcessoStatusRepository @Inject constructor(
             }
     }
 
-    override suspend fun ObterProcessoStatus(): List<ProcessoStatus>? = suspendCoroutine { continuation ->
+    override suspend fun obterProcessoStatus(): List<ProcessoStatus>? = suspendCoroutine { continuation ->
         firebaseStore
             .collection(Constants.PROCESSOS_STATUS_TABLE)
             .get()
@@ -63,7 +63,7 @@ class ProcessoStatusRepository @Inject constructor(
                 continuation.resumeWithException(exception)
             }
     }
-    override suspend fun ObterProcessoStatus(id: String): ProcessoStatus? = suspendCoroutine { continuation ->
+    override suspend fun obterProcessoStatus(id: String): ProcessoStatus? = suspendCoroutine { continuation ->
         firebaseStore
             .collection(Constants.PROCESSOS_STATUS_TABLE)
             .document(id)
@@ -83,9 +83,9 @@ class ProcessoStatusRepository @Inject constructor(
 }
 
 interface IProcessoStatusRepository {
-    fun ObterProcessosStatus(onSuccessListener: (lista: List<ProcessoStatus>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
-    fun ObterProcessoStatus(id: String, onSuccessListener: (processoStatus: ProcessoStatus) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun obterProcessosStatus(onSuccessListener: (lista: List<ProcessoStatus>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun obterProcessoStatus(id: String, onSuccessListener: (processoStatus: ProcessoStatus) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
 
-    suspend fun ObterProcessoStatus(): List<ProcessoStatus>?
-    suspend fun ObterProcessoStatus(id: String): ProcessoStatus?
+    suspend fun obterProcessoStatus(): List<ProcessoStatus>?
+    suspend fun obterProcessoStatus(id: String): ProcessoStatus?
 }
