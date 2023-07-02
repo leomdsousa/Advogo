@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.advogo.adapters.ProcessosAdapter
 import com.example.advogo.adapters.ProcessosStatusAndamentosAdapter
 import com.example.advogo.adapters.ProcessosTiposAndamentosAdapter
+import com.example.advogo.databinding.DialogDiligenciaHistoricoBinding
 import com.example.advogo.databinding.DialogListBinding
 import com.example.advogo.databinding.DialogProcessoAndamentoBinding
 import com.example.advogo.databinding.DialogProcessoAnexoBinding
@@ -24,44 +25,39 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-abstract class ProcessoAnexoDialog(
+abstract class DiligenciaHistoricoDialog(
     context: Context,
-    private var anexo: Anexo
+    private var historico: DiligenciaHistorico
 ): Dialog(context) {
-    private lateinit var binding: DialogProcessoAnexoBinding
+    private lateinit var binding: DialogDiligenciaHistoricoBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState ?: Bundle())
 
-        binding = DialogProcessoAnexoBinding.inflate(layoutInflater)
+        binding = DialogDiligenciaHistoricoBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
         setCanceledOnTouchOutside(true)
         setCancelable(true)
-        setDados(anexo)
+        setDados(historico)
 
-        binding.btnSelecionarArquivo.setOnClickListener {
-            onChooseFile()
-        }
-
-        binding.btnSubmitProcessoAnexo.setOnClickListener {
+        binding.btnSubmitDiligenciaHistorico.setOnClickListener {
             dismiss()
-            onSubmit(anexo)
+            onSubmit(historico)
         }
     }
 
-    private fun setDados(anexo: Anexo) {
-        if(anexo.id.isBlank()) {
-            binding.tvTitle.text = "Cadastro Anexo"
-            binding.btnSubmitProcessoAnexo.text = "Cadastrar"
+    private fun setDados(historico: DiligenciaHistorico) {
+        if(historico.id.isBlank()) {
+            binding.tvTitle.text = "Cadastro Histórico"
+            binding.btnSubmitDiligenciaHistorico.text = "Cadastrar"
         } else {
-            binding.tvTitle.text = "Detalhes Anexo"
-            binding.btnSubmitProcessoAnexo.text = "Atualizar"
+            binding.tvTitle.text = "Detalhes Histórico"
+            binding.btnSubmitDiligenciaHistorico.text = "Atualizar"
 
-            binding.etDescricaoAnexo.setText(anexo.descricao)
+            binding.btnSubmitDiligenciaHistorico.setText(historico.obs)
         }
     }
 
-    protected abstract fun onChooseFile()
-    protected abstract fun onSubmit(anexo: Anexo)
+    protected abstract fun onSubmit(historico: DiligenciaHistorico)
 }

@@ -68,7 +68,12 @@ class AdvogadoActivity : BaseActivity() {
             binding.rvAdvList.layoutManager = LinearLayoutManager(binding.root.context)
             binding.rvAdvList.setHasFixedSize(true)
 
-            val adapter = AdvogadosAdapter(this, lista)
+            val adapter = AdvogadosAdapter(
+                this,
+                true,
+                exibirIconeEmail = true,
+                list = lista
+            )
             binding.rvAdvList.adapter = adapter
 
             adapter.setOnItemClickListener(object :

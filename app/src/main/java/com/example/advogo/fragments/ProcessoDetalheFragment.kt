@@ -22,8 +22,8 @@ import com.example.advogo.repositories.*
 import com.example.advogo.utils.Constants
 import com.example.advogo.utils.ProcessMaskTextWatcher
 import com.example.advogo.utils.SendNotificationToUserAsyncTask
-import com.example.projmgr.dialogs.AdvogadosDialog
-import com.example.projmgr.dialogs.ClientesDialog
+import com.example.advogo.dialogs.AdvogadosDialog
+import com.example.advogo.dialogs.ClientesDialog
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import dagger.hilt.android.AndroidEntryPoint
@@ -57,7 +57,6 @@ class ProcessoDetalheFragment : BaseFragment() {
     private var statusProcessoSelecionado: String? = null
 
     private var imagemSelecionadaURI: Uri? = null
-    private var imagemSelecionadaURL: String? = null
 
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
@@ -73,7 +72,6 @@ class ProcessoDetalheFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         obterIntentDados()
-
         setupSpinners()
         setProcessoToUI(processoDetalhes)
 

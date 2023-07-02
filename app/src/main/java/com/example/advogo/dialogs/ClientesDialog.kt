@@ -1,4 +1,4 @@
-package com.example.projmgr.dialogs
+package com.example.advogo.dialogs
 
 import android.app.Dialog
 import android.content.Context

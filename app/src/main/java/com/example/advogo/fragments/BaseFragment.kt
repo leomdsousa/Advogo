@@ -4,12 +4,16 @@ import android.Manifest
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.ProgressDialog
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.database.Cursor
 import android.net.Uri
+import android.os.Bundle
 import android.provider.MediaStore
+import android.provider.OpenableColumns
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -22,7 +26,11 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.example.advogo.activities.BaseActivity
+import com.example.advogo.utils.Constants
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.widget.Autocomplete
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
@@ -193,5 +201,91 @@ open class BaseFragment : Fragment() {
         } else {
             ""
         }
+    }
+
+    fun showGoogleMapPlaces(context: Context, result: ActivityResultLauncher<Intent>) {
+        try {
+            val fields = listOf(
+                Place.Field.ID,
+                Place.Field.NAME,
+                Place.Field.LAT_LNG,
+                Place.Field.ADDRESS
+            )
+
+            val intent = Autocomplete.IntentBuilder(
+                AutocompleteActivityMode.FULLSCREEN,
+                fields
+            ).build(context)
+            intent.putExtra(Constants.FROM_GOOGLE_PLACES, Constants.FROM_GOOGLE_PLACES)
+
+            val extraBundle = Bundle().apply {
+                putBoolean(Constants.FROM_GOOGLE_PLACES, true)
+            }
+
+            val intentWithExtra = Intent(intent).apply {
+                putExtras(extraBundle)
+            }
+
+            result.launch(intentWithExtra)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    fun openGoogleMaps(endereco: String) {
+        val uri = Uri.parse("geo:0,0?q=${Uri.encode(endereco)}")
+
+        val mapIntent = Intent(Intent.ACTION_VIEW, uri)
+        mapIntent.setPackage("com.google.android.apps.maps")
+
+        if (mapIntent.resolveActivity(requireContext().packageManager) != null) {
+            startActivity(mapIntent)
+        }
+    }
+
+    fun openGoogleMaps(latitude: Double, longitude: Double) {
+        val uri = Uri.parse("geo:$latitude,$longitude")
+
+        val mapIntent = Intent(Intent.ACTION_VIEW, uri)
+        mapIntent.setPackage("com.google.android.apps.maps")
+
+        if (mapIntent.resolveActivity(requireContext().packageManager) != null) {
+            startActivity(mapIntent)
+        }
+    }
+
+    fun getFileNameFromUri(uri: Uri): String {
+        var fileName = ""
+        val contentResolver: ContentResolver = requireContext().contentResolver
+        val cursor: Cursor? = contentResolver.query(uri, null, null, null, null)
+        cursor?.use {
+            if (it.moveToFirst()) {
+                val nameIndex = it.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                if (nameIndex != -1) {
+                    fileName = it.getString(nameIndex)
+                }
+            }
+        }
+        return fileName
+    }
+
+    fun showFileChooser(result: ActivityResultLauncher<Intent>) {
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = "*/*"
+
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf(
+            "image/jpeg",
+            "image/png",
+            "application/pdf",
+            "application/msword",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "application/vnd.ms-powerpoint",
+            "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+            "application/vnd.ms-excel",
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        ))
+        intent.putExtra(Constants.FROM_FILE_CHOOSE, Constants.FROM_FILE_CHOOSE)
+
+        result.launch(Intent.createChooser(intent, "Escolha um arquivo"))
     }
 }

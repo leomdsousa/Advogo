@@ -21,7 +21,7 @@ import com.example.advogo.repositories.IProcessoAndamentoRepository
 import com.example.advogo.repositories.IProcessoStatusAndamentoRepository
 import com.example.advogo.repositories.IProcessoTipoAndamentoRepository
 import com.example.advogo.utils.Constants
-import com.example.projmgr.dialogs.ProcessoAndamentoDialog
+import com.example.advogo.dialogs.ProcessoAndamentoDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

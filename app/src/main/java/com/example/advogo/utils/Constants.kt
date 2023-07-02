@@ -96,6 +96,7 @@ object Constants {
     const val FROM_REGISTRAR_ACTIVITY = "FROM_REGISTRAR_ACTIVITY"
     const val FROM_ANEXOS_ACTIVITY = "FROM_ANEXOS_ACTIVITY"
     const val FROM_ANDAMENTOS_ACTIVITY = "FROM_ANDAMENTOS_ACTIVITY"
+    const val FROM_FILE_CHOOSE = "FROM_FILE_CHOOSE"
 
     //Indica para Map Activity qual objeto obter
     const val PROCESSO_MAP = "PROCESSO_MAP"

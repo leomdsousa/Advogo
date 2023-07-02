@@ -21,8 +21,8 @@ import com.example.advogo.models.*
 import com.example.advogo.repositories.*
 import com.example.advogo.utils.Constants
 import com.example.advogo.utils.SendNotificationToUserAsyncTask
-import com.example.projmgr.dialogs.AdvogadosDialog
-import com.example.projmgr.dialogs.ProcessosDialog
+import com.example.advogo.dialogs.AdvogadosDialog
+import com.example.advogo.dialogs.ProcessosDialog
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.libraries.places.api.Places

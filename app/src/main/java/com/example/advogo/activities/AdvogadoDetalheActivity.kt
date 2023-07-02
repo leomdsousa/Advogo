@@ -91,7 +91,7 @@ class AdvogadoDetalheActivity : BaseActivity() {
                 return true
             }
             R.id.action_deletar_advogado -> {
-                alertDialogDeletarAdvogado(advogadoDetalhes.nome!!)
+                alertDialogDeletarAdvogado("${advogadoDetalhes.nome!!} (${advogadoDetalhes.oab!!})")
                 return true
             }
         }

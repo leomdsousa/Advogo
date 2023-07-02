@@ -2,6 +2,7 @@ package com.example.advogo.fragments
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -20,8 +21,14 @@ import com.example.advogo.models.Anexo
 import com.example.advogo.models.Processo
 import com.example.advogo.repositories.IAnexoRepository
 import com.example.advogo.utils.Constants
-import com.example.projmgr.dialogs.ProcessoAnexoDialog
+import com.example.advogo.dialogs.ProcessoAnexoDialog
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -30,6 +37,10 @@ class ProcessoAnexoFragment : BaseFragment() {
     private lateinit var bindingDialog: DialogProcessoAnexoBinding
     @Inject lateinit var anexoRepository: IAnexoRepository
     private lateinit var processoDetalhes: Processo
+
+    private var selectedFile: Uri? = null
+    private var selectedFileName: String? = null
+
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreateView(
@@ -58,6 +69,14 @@ class ProcessoAnexoFragment : BaseFragment() {
                         { lista -> setAnexosToUI(lista as ArrayList<Anexo>) },
                         { ex -> null } //TODO("Imlementar OnFailure")
                     )
+                }
+                else if(result.data != null && result.data!!.data != null) {
+                    result.data?.data?.let { uri ->
+                        selectedFile = uri
+
+                        selectedFileName = getFileNameFromUri(uri)
+                        bindingDialog.tvNomeArquivoSelecionado.text = selectedFileName
+                    }
                 }
             } else {
                 Log.e("Cancelado", "Cancelado")
@@ -92,7 +111,6 @@ class ProcessoAnexoFragment : BaseFragment() {
                         if(!TextUtils.isEmpty(anexo.uri)) {
                             abrirArquivo(anexo.uri!!)
                         }
-
                     }
                     override fun onDelete(anexo: Anexo, position: Int) {
                         if(!TextUtils.isEmpty(anexo.uri)) {
@@ -117,6 +135,9 @@ class ProcessoAnexoFragment : BaseFragment() {
             requireContext(),
             anexo ?: Anexo()
         ) {
+            override fun onChooseFile() {
+                showFileChooser(resultLauncher)
+            }
             override fun onSubmit(anexo: Anexo) {
                 if(anexo.id.isBlank()) {
                     adicionarAnexo(anexo)
@@ -138,18 +159,26 @@ class ProcessoAnexoFragment : BaseFragment() {
 
         showProgressDialog(getString(R.string.aguardePorfavor))
 
-        val anexo = Anexo(
-            id = processoDetalhes.id,
-            descricao = bindingDialog.etDescricaoAnexo.text.toString(),
-            nome = bindingDialog.tvTitle.text.toString(),
-            //uri = uri,
-        )
+        CoroutineScope(Dispatchers.Main).launch {
+            val uri = if (selectedFile != null) {
+                salvarAnexoProcesso()
+            } else {
+                null
+            }
 
-        anexoRepository.atualizarAnexo(
-            anexo,
-            { saveAnexoSuccess() },
-            { saveAnexoFailure() }
-        )
+            val anexo = Anexo(
+                id = processoDetalhes.id,
+                descricao = bindingDialog.etDescricaoAnexo.text.toString(),
+                nome = selectedFile?.let { getFileNameFromUri(it) },
+                uri = uri,
+            )
+
+            anexoRepository.atualizarAnexo(
+                anexo,
+                { saveAnexoSuccess() },
+                { saveAnexoFailure() }
+            )
+        }
     }
 
     private fun adicionarAnexo(anexo: Anexo) {
@@ -159,18 +188,26 @@ class ProcessoAnexoFragment : BaseFragment() {
 
         showProgressDialog(getString(R.string.aguardePorfavor))
 
-        val anexo = Anexo(
-            id = processoDetalhes.id,
-            descricao = bindingDialog.etDescricaoAnexo.text.toString(),
-            nome = bindingDialog.tvTitle.text.toString(),
-            //uri = uri,
-        )
+        CoroutineScope(Dispatchers.Main).launch {
+            val uri = if (selectedFile != null) {
+                salvarAnexoProcesso()
+            } else {
+                null
+            }
 
-        anexoRepository.adicionarAnexo(
-            anexo,
-            { saveAnexoSuccess() },
-            { saveAnexoFailure() }
-        )
+            val anexo = Anexo(
+                id = processoDetalhes.id,
+                descricao = bindingDialog.etDescricaoAnexo.text.toString(),
+                nome = selectedFile?.let { getFileNameFromUri(it) },
+                uri = uri,
+            )
+
+            anexoRepository.adicionarAnexo(
+                anexo,
+                { saveAnexoSuccess() },
+                { saveAnexoFailure() }
+            )
+        }
     }
 
     private fun saveAnexoSuccess() {
@@ -219,5 +256,29 @@ class ProcessoAnexoFragment : BaseFragment() {
 //        }
 
          return validado
+    }
+
+    private suspend fun salvarAnexoProcesso(): String {
+        return suspendCancellableCoroutine { continuation ->
+            val sRef: StorageReference = FirebaseStorage.getInstance().reference.child(
+                "PROCESSO_${id}_ANEXO" + System.currentTimeMillis() + "."
+                        + getFileExtension(selectedFile!!)
+            )
+
+            sRef.putFile(selectedFile!!)
+                .addOnSuccessListener { taskSnapshot ->
+                    taskSnapshot.metadata!!.reference!!.downloadUrl
+                        .addOnSuccessListener { uri ->
+                            val url = uri.toString()
+                            continuation.resume(url, null)
+                        }
+                        .addOnFailureListener { exception ->
+                            continuation.cancel(exception)
+                        }
+                }
+                .addOnFailureListener { exception ->
+                    continuation.cancel(exception)
+                }
+        }
     }
 }

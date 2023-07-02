@@ -26,17 +26,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ProcessoDetalheActivity : BaseActivity()
-    //, OnProcessoEditListener
-{
+class ProcessoDetalheActivity : BaseActivity() {
     private lateinit var binding: ActivityProcessoDetalheBinding
     private lateinit var processoDetalhes: Processo
 
     @Inject lateinit var processoRepository: ProcessoRepository
-    @Inject lateinit var advogadoRepository: AdvogadoRepository
-    @Inject lateinit var clienteRepository: ClienteRepository
-    @Inject lateinit var processoTipoRepository: IProcessoTipoRepository
-    @Inject lateinit var processoStatusRepository: IProcessoStatusRepository
 
     private lateinit var viewPager: ViewPager2
     private lateinit var tabLayout: TabLayout

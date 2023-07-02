@@ -1,4 +1,4 @@
-package com.example.projmgr.dialogs
+package com.example.advogo.dialogs
 
 import android.app.Dialog
 import android.content.Context
@@ -35,7 +35,12 @@ abstract class AdvogadosDialog(
         if (list.size > 0) {
 
             binding.rvList.layoutManager = LinearLayoutManager(context)
-            adapter = AdvogadosAdapter(context, list)
+            adapter = AdvogadosAdapter(
+                context,
+                false,
+                exibirIconeEmail = false,
+                list = list
+            )
             binding.rvList.adapter = adapter
 
             adapter!!.setOnItemClickListener(object :

@@ -50,7 +50,36 @@
                 android:textSize="@dimen/itemAdvEmailTextSize"
                 app:fontFamily="@font/lato"
                 tools:text="Email" />
+
+            <TextView
+                android:id="@+id/tv_telefone_adv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/secondaryTextColor"
+                android:textSize="@dimen/itemAdvEmailTextSize"
+                app:fontFamily="@font/lato"
+                tools:text="(11) 98701-5859" />
         </LinearLayout>
+
+        <ImageView
+            android:id="@+id/image_telefone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_phone_24"
+            android:clickable="true"
+            android:padding="8dp"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/image_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_email_24"
+            android:clickable="true"
+            android:padding="8dp"
+            android:visibility="gone"
+            tools:visibility="visible" />
 
         <ImageView
             android:id="@+id/iv_selected_adv"

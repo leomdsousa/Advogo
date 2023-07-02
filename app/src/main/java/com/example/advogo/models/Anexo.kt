@@ -1,5 +1,6 @@
 package com.example.advogo.models
 
+import android.net.Uri
 import android.os.Parcelable
 import com.google.firebase.firestore.DocumentId
 import kotlinx.parcelize.Parcelize

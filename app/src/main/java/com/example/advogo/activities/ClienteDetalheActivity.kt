@@ -54,7 +54,7 @@ class ClienteDetalheActivity : BaseActivity() {
                 return true
             }
             R.id.action_deletar_cliente -> {
-                alertDialogDeletarCliente(clienteDetalhes.nome!!)
+                alertDialogDeletarCliente("${clienteDetalhes.nome!!} (${clienteDetalhes.cpf!!})")
                 return true
             }
         }

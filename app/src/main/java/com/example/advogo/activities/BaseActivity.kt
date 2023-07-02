@@ -424,6 +424,7 @@ open class BaseActivity : AppCompatActivity() {
             "application/vnd.ms-excel",
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         ))
+        intent.putExtra(Constants.FROM_FILE_CHOOSE, Constants.FROM_FILE_CHOOSE)
 
         result.launch(Intent.createChooser(intent, "Escolha um arquivo"))
     }
