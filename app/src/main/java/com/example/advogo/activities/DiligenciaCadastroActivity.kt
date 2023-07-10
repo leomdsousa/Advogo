@@ -130,7 +130,7 @@ class DiligenciaCadastroActivity : BaseActivity() {
                 override fun onItemSelected(processo: Processo, action: String) {
                     if (action == Constants.SELECIONAR) {
                         if (binding.etDiligenciaProcesso.text.toString() != processo.id) {
-                            binding.etDiligenciaProcesso.setText(processo.id)
+                            binding.etDiligenciaProcesso.setText("${processo.numero}")
                             processoSelecionado = processo.id
                             processos[processos.indexOf(processo)].selecionado = true
                         } else {
@@ -355,7 +355,7 @@ class DiligenciaCadastroActivity : BaseActivity() {
         val sDayOfMonth = if (dia < 10) "0$dia" else "$dia"
         val sMonthOfYear = if ((mes + 1) < 10) "0${mes + 1}" else "${mes + 1}"
 
-        dataSelecionada = "$ano-$sMonthOfYear/$sDayOfMonth"
+        dataSelecionada = "$ano-$sMonthOfYear-$sDayOfMonth"
         binding.etDiligenciaData.setText("$sDayOfMonth/$sMonthOfYear/$ano")
     }
 

@@ -264,7 +264,7 @@ class DiligenciaDetalheFragment : BaseFragment() {
                 override fun onItemSelected(processo: Processo, action: String) {
                     if (action == Constants.SELECIONAR) {
                         if (binding.etDiligenciaProcesso.text.toString() != processo.id) {
-                            binding.etDiligenciaProcesso.setText(processo.id)
+                            binding.etDiligenciaProcesso.setText("${processo.numero}")
                             processoSelecionado = processo.id
                             processos!![processos!!.indexOf(processo)].selecionado = true
                         } else {

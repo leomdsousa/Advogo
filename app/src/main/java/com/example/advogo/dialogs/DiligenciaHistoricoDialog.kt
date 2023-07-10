@@ -50,12 +50,14 @@ abstract class DiligenciaHistoricoDialog(
     private fun setDados(historico: DiligenciaHistorico) {
         if(historico.id.isBlank()) {
             binding.tvTitle.text = "Cadastro Histórico"
+            binding.etDescricaoHistorico.text = null
+
             binding.btnSubmitDiligenciaHistorico.text = "Cadastrar"
         } else {
             binding.tvTitle.text = "Detalhes Histórico"
+            binding.etDescricaoHistorico.setText(historico.obs)
+            
             binding.btnSubmitDiligenciaHistorico.text = "Atualizar"
-
-            binding.btnSubmitDiligenciaHistorico.setText(historico.obs)
         }
     }
 

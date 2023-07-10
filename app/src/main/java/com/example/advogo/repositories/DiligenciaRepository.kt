@@ -24,7 +24,8 @@ class DiligenciaRepository @Inject constructor(
     private val processoRepository: Provider<ProcessoRepository>,
     private val advogadoRepository: Provider<AdvogadoRepository>,
     private val tipoDiligenciaRepository: DiligenciaTipoRepository,
-    private val statusDiligenciaRepository: DiligenciaStatusRepository
+    private val statusDiligenciaRepository: DiligenciaStatusRepository,
+    private val diligenciaHistoricoRepository: IDiligenciaHistoricoRepository
 ) : IDiligenciaRepository {
     private val coroutineScope: CoroutineScope = (context as? LifecycleOwner)?.lifecycleScope ?: GlobalScope
 
@@ -48,6 +49,13 @@ class DiligenciaRepository @Inject constructor(
                                 item.processoObj = processoDeferred.await()
                                 item.statusObj = statusDeferred.await()
                                 item.tipoObj = tipoDeferred.await()
+
+                                if(item.historico?.isNotEmpty() == true) {
+                                    val historicoDeferred = async { diligenciaHistoricoRepository.obterDiligenciasHistoricoPorLista(item.historico!!) }
+                                    item.historicoLista = historicoDeferred.await()
+                                } else {
+                                    item.historicoLista = emptyList()
+                                }
                             }
 
                             onSuccessListener(diligencias)
@@ -81,6 +89,13 @@ class DiligenciaRepository @Inject constructor(
                         diligencia.statusObj = statusDeferred.await()
                         diligencia.tipoObj = tipoDeferred.await()
 
+                        if(diligencia.historico?.isNotEmpty() == true) {
+                            val historicoDeferred = async { diligenciaHistoricoRepository.obterDiligenciasHistoricoPorLista(diligencia.historico!!) }
+                            diligencia.historicoLista = historicoDeferred.await()
+                        } else {
+                            diligencia.historicoLista = emptyList()
+                        }
+
                         onSuccessListener(diligencia)
                     }
                 } else {
@@ -112,6 +127,13 @@ class DiligenciaRepository @Inject constructor(
                                 item.processoObj = processoDeferred.await()
                                 item.statusObj = statusDeferred.await()
                                 item.tipoObj = tipoDeferred.await()
+
+                                if(item.historico?.isNotEmpty() == true) {
+                                    val historicoDeferred = async { diligenciaHistoricoRepository.obterDiligenciasHistoricoPorLista(item.historico!!) }
+                                    item.historicoLista = historicoDeferred.await()
+                                } else {
+                                    item.historicoLista = emptyList()
+                                }
                             }
 
                             onSuccessListener(diligencias)
@@ -146,6 +168,13 @@ class DiligenciaRepository @Inject constructor(
                                 item.processoObj = processoDeferred.await()
                                 item.statusObj = statusDeferred.await()
                                 item.tipoObj = tipoDeferred.await()
+
+                                if(item.historico?.isNotEmpty() == true) {
+                                    val historicoDeferred = async { diligenciaHistoricoRepository.obterDiligenciasHistoricoPorLista(item.historico!!) }
+                                    item.historicoLista = historicoDeferred.await()
+                                } else {
+                                    item.historicoLista = emptyList()
+                                }
                             }
 
                             onSuccessListener(diligencias)
@@ -217,6 +246,13 @@ class DiligenciaRepository @Inject constructor(
                                 item.processoObj = processoDeferred.await()
                                 item.statusObj = statusDeferred.await()
                                 item.tipoObj = tipoDeferred.await()
+
+                                if(item.historico?.isNotEmpty() == true) {
+                                    val historicoDeferred = async { diligenciaHistoricoRepository.obterDiligenciasHistoricoPorLista(item.historico!!) }
+                                    item.historicoLista = historicoDeferred.await()
+                                } else {
+                                    item.historicoLista = emptyList()
+                                }
                             }
 
                             continuation.resume(resultado)
@@ -252,6 +288,13 @@ class DiligenciaRepository @Inject constructor(
                                 item.processoObj = processoDeferred.await()
                                 item.statusObj = statusDeferred.await()
                                 item.tipoObj = tipoDeferred.await()
+
+                                if(item.historico?.isNotEmpty() == true) {
+                                    val historicoDeferred = async { diligenciaHistoricoRepository.obterDiligenciasHistoricoPorLista(item.historico!!) }
+                                    item.historicoLista = historicoDeferred.await()
+                                } else {
+                                    item.historicoLista = emptyList()
+                                }
                             }
 
                             continuation.resume(resultado)
@@ -265,7 +308,6 @@ class DiligenciaRepository @Inject constructor(
                 continuation.resumeWithException(exception)
             }
     }
-
 }
 
 interface IDiligenciaRepository {

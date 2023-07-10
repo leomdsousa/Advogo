@@ -45,7 +45,8 @@ object MyApplicationModule {
         processoRepository: Provider<ProcessoRepository>,
         advogadoRepository: Provider<AdvogadoRepository>,
         tipoDiligenciaRepository: DiligenciaTipoRepository,
-        statusDiligenciaRepository: DiligenciaStatusRepository
+        statusDiligenciaRepository: DiligenciaStatusRepository,
+        diligenciaHistoricoRepository: DiligenciaHistoricoRepository
     ): IDiligenciaRepository {
         return DiligenciaRepository(
             context,
@@ -53,16 +54,27 @@ object MyApplicationModule {
             processoRepository,
             advogadoRepository,
             tipoDiligenciaRepository,
-            statusDiligenciaRepository
+            statusDiligenciaRepository,
+            diligenciaHistoricoRepository
         )
     }
 
     @Provides
     @Singleton
     fun provideDiligenciaHistoricoRepository(
-        firestore: FirebaseFirestore
+        context: Context,
+        firestore: FirebaseFirestore,
+        advogadoRepository: AdvogadoRepository,
+        tipoDiligenciaRepository: DiligenciaTipoRepository,
+        statusDiligenciaRepository: DiligenciaStatusRepository
     ): IDiligenciaHistoricoRepository {
-        return DiligenciaHistoricoRepository(firestore)
+        return DiligenciaHistoricoRepository(
+            context,
+            firestore,
+            advogadoRepository,
+            tipoDiligenciaRepository,
+            statusDiligenciaRepository
+        )
     }
 
     @Provides

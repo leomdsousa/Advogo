@@ -18,7 +18,7 @@ data class Diligencia(
     var enderecoLong: Double? = null,
     var processo: String? = null,
     var advogado: String? = null,
-    var historico: String? = null,
+    var historico: List<String>? = null,
     @Transient var processoObj: Processo? = null,
     @Transient var advogadoObj: Advogado? = null,
     @Transient var tipoObj: DiligenciaTipo? = null,

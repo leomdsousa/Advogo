@@ -49,6 +49,10 @@ class DiligenciaHistoricoFragment : BaseFragment() {
 
         obterIntentDados()
 
+        binding.fabDiligenciaHistoricoCadastro.setOnClickListener {
+            diligenciaHistoricoDialog(null)
+        }
+
         if(diligenciaDetalhes.historico?.isNotEmpty() == true) {
             setDiligenciaHistoricoToUI(diligenciaDetalhes.historicoLista as ArrayList<DiligenciaHistorico>)
         }
@@ -84,7 +88,7 @@ class DiligenciaHistoricoFragment : BaseFragment() {
                 adapter.setOnItemClickListener(object :
                     DiligenciasHistoricosAdapter.OnItemClickListener {
                     override fun onClick(historico: DiligenciaHistorico, position: Int) {
-                        anexoDiligenciaHistoricoDialog(historico)
+                        diligenciaHistoricoDialog(historico)
                     }
                 })
 
@@ -101,7 +105,7 @@ class DiligenciaHistoricoFragment : BaseFragment() {
         }
     }
 
-    private fun anexoDiligenciaHistoricoDialog(historico: DiligenciaHistorico? = null) {
+    private fun diligenciaHistoricoDialog(historico: DiligenciaHistorico? = null) {
         val dialog = object : DiligenciaHistoricoDialog(
             requireContext(),
             historico ?: DiligenciaHistorico()
