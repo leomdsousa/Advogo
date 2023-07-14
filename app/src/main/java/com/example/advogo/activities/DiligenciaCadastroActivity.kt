@@ -34,13 +34,19 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 class DiligenciaCadastroActivity : BaseActivity() {
     private lateinit var binding: ActivityDiligenciaCadastroBinding
+
     @Inject lateinit var diligenciaRepository: DiligenciaRepository
+    @Inject lateinit var diligenciaHistoricoRepository: DiligenciaHistoricoRepository
     @Inject lateinit var diligenciaTipoRepository: DiligenciaTipoRepository
     @Inject lateinit var diligenciaStatusRepository: DiligenciaStatusRepository
     @Inject lateinit var advogadoRepository: AdvogadoRepository
@@ -249,6 +255,7 @@ class DiligenciaCadastroActivity : BaseActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun saveDiligencia() {
         if(!validarFormulario()) {
             return
@@ -271,7 +278,23 @@ class DiligenciaCadastroActivity : BaseActivity() {
 
         diligenciaRepository.adicionarDiligencia(
             diligencia,
-            { diligenciaCadastroSuccess() },
+            {
+                val historico = DiligenciaHistorico(
+                    obs = "Diligência cadastrada",
+                    advogado = advogadoSelecionado,
+                    status = statusDiligenciaSelecionada,
+                    tipo = tipoDiligenciaSelecionada,
+                    data = SimpleDateFormat("yyyy-MM-dd").format(LocalDateTime.now())
+                )
+
+                diligenciaHistoricoRepository.adicionarDiligenciaHistorico(
+                    historico,
+                    { null },
+                    { null }
+                )
+
+                diligenciaCadastroSuccess()
+            },
             { diligenciaCadastroFailure() }
         )
     }

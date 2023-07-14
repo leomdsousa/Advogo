@@ -52,6 +52,7 @@ class ProcessoDetalheFragment : BaseFragment() {
     private var dataSelecionada: String? = null
     private var clienteSelecionado: String? = null
     private var advSelecionado: String? = null
+    private var advSelecionadoAnterior: String? = null
     private var advSelecionadoToken: String? = null
     private var tipoProcessoSelecionado: String? = null
     private var statusProcessoSelecionado: String? = null
@@ -77,7 +78,7 @@ class ProcessoDetalheFragment : BaseFragment() {
 
         binding.etNumeroProcesso.addTextChangedListener(ProcessMaskTextWatcher(binding.etNumeroProcesso))
 
-        binding.tvSelectData.setOnClickListener {
+        binding.etData.setOnClickListener {
             showDataPicker(requireContext()) { ano, mes, dia ->
                 onDatePickerResult(ano, mes, dia)
             }
@@ -329,6 +330,7 @@ class ProcessoDetalheFragment : BaseFragment() {
         binding.etCliente.setText(processo.clienteObj?.nome)
 
         advSelecionado = processoDetalhes.advogado
+        advSelecionadoAnterior = processoDetalhes.advogado
         clienteSelecionado = processoDetalhes.cliente
         tipoProcessoSelecionado = processoDetalhes.tipo
         statusProcessoSelecionado = processoDetalhes.status
@@ -411,7 +413,7 @@ class ProcessoDetalheFragment : BaseFragment() {
         val sMonthOfYear = if ((month + 1) < 10) "0${month + 1}" else "${month + 1}"
 
         dataSelecionada = "$year-$sMonthOfYear-$sDayOfMonth"
-        binding.tvSelectData.text = "$sDayOfMonth/$sMonthOfYear/$year"
+        binding.etData.setText("$sDayOfMonth/$sMonthOfYear/$year")
     }
 
     private fun atualizarProcessoSuccess() {
@@ -419,8 +421,7 @@ class ProcessoDetalheFragment : BaseFragment() {
 
         if(
             advSelecionado != getCurrentUserID()
-        //TODO("Incluir validação para verificar se o advSelecionado é diferente do anterior. Só mandar notificação se for diferente")
-        //&& advSelecionado != advSelecionadoAnterior
+            && advSelecionado != advSelecionadoAnterior
         ) {
             SendNotificationToUserAsyncTask(
                 "Processo",

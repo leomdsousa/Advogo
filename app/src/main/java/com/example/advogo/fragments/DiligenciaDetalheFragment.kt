@@ -2,6 +2,7 @@ package com.example.advogo.fragments
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import androidx.fragment.app.Fragment
@@ -13,6 +14,7 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import com.example.advogo.R
 import com.example.advogo.adapters.DiligenciasStatusAdapter
 import com.example.advogo.adapters.DiligenciasTiposAdapter
@@ -37,6 +39,8 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.io.IOException
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
@@ -47,6 +51,7 @@ class DiligenciaDetalheFragment : BaseFragment() {
     private lateinit var diligenciaDetalhes: Diligencia
 
     @Inject lateinit var diligenciaRepository: DiligenciaRepository
+    @Inject lateinit var diligenciaHistoricoRepository: DiligenciaHistoricoRepository
     @Inject lateinit var advogadoRepository: AdvogadoRepository
     @Inject lateinit var clienteRepository: ClienteRepository
     @Inject lateinit var processoRepository: ProcessoRepository
@@ -63,6 +68,7 @@ class DiligenciaDetalheFragment : BaseFragment() {
     private var savedLongitude: Double = 0.0
     private var dataSelecionada: String? = null
     private var advSelecionado: String? = null
+    private var advSelecionadoAnterior: String? = null
     private var advSelecionadoToken: String? = null
     private var processoSelecionado: String? = null
     private var tipoDiligenciaSelecionada: String? = null
@@ -78,6 +84,7 @@ class DiligenciaDetalheFragment : BaseFragment() {
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext())
 
@@ -210,6 +217,7 @@ class DiligenciaDetalheFragment : BaseFragment() {
         dataSelecionada = diligencia.data
         processoSelecionado = diligencia.processo
         advSelecionado = diligencia.advogado
+        advSelecionadoAnterior = diligencia.advogado
         tipoDiligenciaSelecionada = diligencia.tipo
         statusDiligenciaSelecionada = diligencia.status
 
@@ -222,6 +230,7 @@ class DiligenciaDetalheFragment : BaseFragment() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun saveDiligencia() {
         if(!validarFormulario()) {
             return
@@ -236,15 +245,33 @@ class DiligenciaDetalheFragment : BaseFragment() {
             status = if (statusDiligenciaSelecionada != diligenciaDetalhes.status) statusDiligenciaSelecionada else diligenciaDetalhes.status,
             tipo = if (tipoDiligenciaSelecionada != diligenciaDetalhes.tipo) tipoDiligenciaSelecionada else diligenciaDetalhes.tipo,
             endereco = if (binding.etDiligenciaEndereco.text.toString() != diligenciaDetalhes.endereco) binding.etDiligenciaEndereco.text.toString() else diligenciaDetalhes.endereco,
-            enderecoLat = 0.0,
-            enderecoLong = 0.0,
-            processo = if (binding.etDiligenciaProcesso.text.toString() != diligenciaDetalhes.processo) binding.etDiligenciaProcesso.text.toString() else diligenciaDetalhes.processo,
-            advogado = if (processoSelecionado != diligenciaDetalhes.processo) processoSelecionado else diligenciaDetalhes.processo,
+            enderecoLat = savedLatitude,
+            enderecoLong = savedLongitude,
+            processo = if (processoSelecionado != diligenciaDetalhes.processo) processoSelecionado else diligenciaDetalhes.processo,
+            advogado = if (advSelecionado != diligenciaDetalhes.advogado) advSelecionado else diligenciaDetalhes.advogado,
+            historico = diligenciaDetalhes.historico
         )
 
         diligenciaRepository.atualizarDiligencia(
             diligencia,
-            { diligenciaEdicaoSuccess() },
+            {
+                val historico = DiligenciaHistorico(
+                    obs = "Diligência atualizada",
+                    advogado = advSelecionado,
+                    status = statusDiligenciaSelecionada,
+                    tipo = tipoDiligenciaSelecionada,
+                    data = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date.from(LocalDateTime.now().atZone(
+                        ZoneId.systemDefault()).toInstant()))
+                )
+
+                diligenciaHistoricoRepository.adicionarDiligenciaHistorico(
+                    historico,
+                    { null },
+                    { null }
+                )
+
+                diligenciaEdicaoSuccess()
+            },
             { diligenciaEdicaoFailure() }
         )
     }
@@ -377,8 +404,7 @@ class DiligenciaDetalheFragment : BaseFragment() {
 
         if(
             advSelecionado != getCurrentUserID()
-        //TODO("Incluir validação para verificar se o advSelecionado é diferente do anterior. Só mandar notificação se for diferente")
-        //&& advSelecionado != advSelecionadoAnterior
+            && advSelecionado != advSelecionadoAnterior
         ) {
             SendNotificationToUserAsyncTask(
                 "Diligência",

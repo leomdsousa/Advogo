@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.get
@@ -12,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.advogo.adapters.ProcessosAdapter
 import com.example.advogo.adapters.ProcessosStatusAndamentosAdapter
 import com.example.advogo.adapters.ProcessosTiposAndamentosAdapter
+import com.example.advogo.databinding.DialogDiligenciaHistoricoBinding
 import com.example.advogo.databinding.DialogListBinding
 import com.example.advogo.databinding.DialogProcessoAndamentoBinding
 import com.example.advogo.databinding.DialogProcessoAnexoBinding
@@ -25,57 +25,41 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-abstract class ProcessoAnexoDialog(
+abstract class ProcessoHistoricoDialog(
     context: Context,
-    private var anexo: Anexo,
-    private val binding: DialogProcessoAnexoBinding
+    private var historico: DiligenciaHistorico
 ): Dialog(context) {
-    //private lateinit var binding: DialogProcessoAnexoBinding
+    private lateinit var binding: DialogDiligenciaHistoricoBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState ?: Bundle())
 
-        //binding = DialogProcessoAnexoBinding.inflate(layoutInflater)
+        binding = DialogDiligenciaHistoricoBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
         setCanceledOnTouchOutside(true)
         setCancelable(true)
-        setDados(anexo)
+        setDados(historico)
 
-//        binding = DialogProcessoAnexoBinding
-//                        .bind(findViewById<ViewGroup>(android.R.id.content)
-//                        .getChildAt(0))
-
-        binding.btnSelecionarArquivo.setOnClickListener {
-            onChooseFile()
-        }
-
-        binding.btnSubmitProcessoAnexo.setOnClickListener {
+        binding.btnSubmitDiligenciaHistorico.setOnClickListener {
             dismiss()
-
-            var anexo = Anexo(
-                id = anexo.id,
-                nome = anexo.nome,
-                uri = anexo.uri,
-                descricao = binding.etDescricaoAnexo.text.toString()
-            )
-
-            onSubmit(anexo)
+            onSubmit(historico)
         }
     }
 
-    private fun setDados(anexo: Anexo) {
-        if(anexo.id.isBlank()) {
-            binding.tvTitle.text = "Cadastro Anexo"
-            binding.btnSubmitProcessoAnexo.text = "Cadastrar"
+    private fun setDados(historico: DiligenciaHistorico) {
+        if(historico.id.isBlank()) {
+            binding.tvTitle.text = "Cadastro Histórico"
+            binding.etDescricaoHistorico.text = null
+
+            binding.btnSubmitDiligenciaHistorico.text = "Cadastrar"
         } else {
-            binding.tvTitle.text = "Detalhes Anexo"
-            binding.btnSubmitProcessoAnexo.text = "Atualizar"
-
-            binding.etDescricaoAnexo.setText(anexo.descricao)
+            binding.tvTitle.text = "Detalhes Histórico"
+            binding.etDescricaoHistorico.setText(historico.obs)
+            
+            binding.btnSubmitDiligenciaHistorico.text = "Atualizar"
         }
     }
 
-    protected abstract fun onChooseFile()
-    protected abstract fun onSubmit(anexo: Anexo)
+    protected abstract fun onSubmit(historico: DiligenciaHistorico)
 }

@@ -114,10 +114,13 @@ class ProcessoAnexoFragment : BaseFragment() {
                     }
                     override fun onDelete(anexo: Anexo, position: Int) {
                         if(!TextUtils.isEmpty(anexo.uri)) {
+                            showProgressDialog(getString(R.string.aguardePorfavor))
+                            
                             deletarArquivo(
                                 anexo.uri!!
                             ) {
                                 deleteAnexoSuccess()
+                                hideProgressDialog()
                             }
                         }
                     }
@@ -131,9 +134,12 @@ class ProcessoAnexoFragment : BaseFragment() {
     }
 
     private fun anexoProcessoDialog(anexo: Anexo? = null) {
+        bindingDialog = DialogProcessoAnexoBinding.inflate(layoutInflater)
+
         val dialog = object : ProcessoAnexoDialog(
             requireContext(),
-            anexo ?: Anexo()
+            anexo ?: Anexo(),
+            bindingDialog
         ) {
             override fun onChooseFile() {
                 showFileChooser(resultLauncher)
@@ -149,7 +155,7 @@ class ProcessoAnexoFragment : BaseFragment() {
 
         dialog.show()
 
-        bindingDialog = DialogProcessoAnexoBinding.inflate(dialog.layoutInflater)
+        //bindingDialog = DialogProcessoAnexoBinding.inflate(dialog.layoutInflater)
     }
 
     private fun atualizarAnexo(anexo: Anexo) {

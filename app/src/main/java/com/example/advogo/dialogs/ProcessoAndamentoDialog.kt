@@ -29,10 +29,11 @@ import javax.inject.Inject
 abstract class ProcessoAndamentoDialog(
     context: Context,
     private var andamento: ProcessoAndamento,
+    private val binding: DialogProcessoAndamentoBinding,
     private var tiposAndamentos: List<ProcessoTipoAndamento>,
     private var statusAndamentos: List<ProcessoStatusAndamento>
 ): Dialog(context) {
-    private lateinit var binding: DialogProcessoAndamentoBinding
+    //private lateinit var binding: DialogProcessoAndamentoBinding
 
     private var tipoAndamentoSelecionado: String? = null
     private var statusAndamentoSelecionado: String? = null
@@ -40,13 +41,17 @@ abstract class ProcessoAndamentoDialog(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState ?: Bundle())
 
-        binding = DialogProcessoAndamentoBinding.inflate(layoutInflater)
+        //binding = DialogProcessoAndamentoBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
         setCanceledOnTouchOutside(true)
         setCancelable(true)
         setupSpinners()
         setDados(andamento)
+
+        binding.etDataAndamento.setOnClickListener {
+            onChooseDate()
+        }
 
         binding.btnSubmitProcessoAndamento.setOnClickListener {
             dismiss()
@@ -135,4 +140,5 @@ abstract class ProcessoAndamentoDialog(
     }
 
     protected abstract fun onSubmit(andamento: ProcessoAndamento)
+    protected abstract fun onChooseDate()
 }

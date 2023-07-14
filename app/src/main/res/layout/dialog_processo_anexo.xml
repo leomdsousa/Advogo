@@ -76,11 +76,12 @@
                     android:layout_marginTop="8dp"
                     android:text="" />
 
-                <Button
+                <ImageButton
                     android:id="@+id/btnSelecionarArquivo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Selecionar" />
+                    android:backgroundTint="@color/colorPrimary"
+                    app:srcCompat="@drawable/ic_baseline_file_upload_24" />
 
             </LinearLayout>
 

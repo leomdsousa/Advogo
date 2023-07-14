@@ -33,6 +33,7 @@
     <string name="hintTipoAndamentoDescription">Tipo do andamento</string>
     <string name="hintStatusAndamentoDescription">Status do andamento</string>
     <string name="hintDataDescription">Data do processo</string>
+    <string name="hintDataDiligenciaDescription">Data da diligência</string>
     <string name="hintDataAndamentoDescription">Data do andamento</string>
     <string name="hintClienteDescription">Selecione o cliente</string>
     <string name="hintAdvDescription">Selecione o advogado</string>

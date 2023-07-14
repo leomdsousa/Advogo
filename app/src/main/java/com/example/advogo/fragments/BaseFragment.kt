@@ -176,16 +176,34 @@ open class BaseFragment : Fragment() {
     }
 
     fun deletarArquivo(caminhoArquivo: String, onSuccess: () -> Unit) {
+        val storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(caminhoArquivo)
         val db = FirebaseFirestore.getInstance()
 
-        db.document(caminhoArquivo)
+        storageReference
             .delete()
             .addOnSuccessListener {
-                onSuccess()
+                db.collection(Constants.ANEXOS_TABLE)
+                    .whereEqualTo(Constants.ANEXOS_URI, caminhoArquivo)
+                    .get().addOnSuccessListener { querySnapshot ->
+                        val documento = querySnapshot.documents[0]
+                        documento.reference
+                            .delete()
+                            .addOnSuccessListener {
+                                onSuccess()
+                            }
+                            .addOnFailureListener { e ->
+                                Toast.makeText(requireContext(), "Erro ao excluir o documento", Toast.LENGTH_LONG).show()
+                            }
+                    }
+                    .addOnFailureListener { e ->
+                        Toast.makeText(requireContext(), "Erro ao excluir o documento", Toast.LENGTH_LONG).show()
+                    }
             }
             .addOnFailureListener { e ->
-                Toast.makeText(requireContext(), "Erro ao excluir o documento", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), "Erro ao excluir o arquivo no Firebase Storage", Toast.LENGTH_LONG).show()
             }
+
+
     }
 
     private fun consegueAbrirArquivo(intent: Intent): Boolean {

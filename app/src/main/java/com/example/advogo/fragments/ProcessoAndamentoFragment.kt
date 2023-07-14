@@ -35,6 +35,7 @@ import kotlin.collections.ArrayList
 class ProcessoAndamentoFragment : BaseFragment() {
     private lateinit var binding: FragmentProcessoAndamentoBinding
     private lateinit var bindingDialog: DialogProcessoAndamentoBinding
+
     @Inject lateinit var processoAndamentoRepository: IProcessoAndamentoRepository
     @Inject lateinit var tipoAndamentoRepository: IProcessoTipoAndamentoRepository
     @Inject lateinit var statusAndamentoRepository: IProcessoStatusAndamentoRepository
@@ -44,6 +45,7 @@ class ProcessoAndamentoFragment : BaseFragment() {
     private var tiposAndamentos: List<ProcessoTipoAndamento> = emptyList()
     private var statusAndamentos: List<ProcessoStatusAndamento> = emptyList()
 
+    private var dataSelecionada: String? = null
     private var tipoAndamentoSelecionado: String? = null
     private var statusAndamentoSelecionado: String? = null
 
@@ -67,6 +69,12 @@ class ProcessoAndamentoFragment : BaseFragment() {
         obterIntentDados()
 
         setProcessoAndamentosToUI(processoDetalhes.andamentosLista as ArrayList<ProcessoAndamento>?)
+
+//        bindingDialog.etDataAndamento.setOnClickListener {
+//            showDataPicker() { ano, mes, dia ->
+//                onDatePickerResult(ano, mes, dia)
+//            }
+//        }
 
         binding.fabAddAndamento.setOnClickListener {
             andamentoProcessoDialog(null)
@@ -94,34 +102,38 @@ class ProcessoAndamentoFragment : BaseFragment() {
 
     private fun setProcessoAndamentosToUI(lista: ArrayList<ProcessoAndamento>?) {
         if (lista != null) {
-            if(lista.size > 0) {
-                binding.rvAndamentosLista.visibility = View.VISIBLE
-                binding.tvNenhumAndamentoDisponivel.visibility = View.GONE
+            CoroutineScope(Dispatchers.Main).launch {
+                if(lista.size > 0) {
+                    binding.rvAndamentosLista.visibility = View.VISIBLE
+                    binding.tvNenhumAndamentoDisponivel.visibility = View.GONE
 
-                binding.rvAndamentosLista.layoutManager = LinearLayoutManager(binding.root.context)
-                binding.rvAndamentosLista.setHasFixedSize(true)
+                    binding.rvAndamentosLista.layoutManager = LinearLayoutManager(binding.root.context)
+                    binding.rvAndamentosLista.setHasFixedSize(true)
 
-                val adapter = ProcessosAndamentosAdapter(binding.root.context, lista)
-                binding.rvAndamentosLista.adapter = adapter
+                    val adapter = ProcessosAndamentosAdapter(binding.root.context, lista)
+                    binding.rvAndamentosLista.adapter = adapter
 
-                adapter.setOnItemClickListener(object :
-                    ProcessosAndamentosAdapter.OnItemClickListener {
-                    override fun onClick(andamento: ProcessoAndamento, position: Int) {
-                        andamentoProcessoDialog(andamento)
-                    }
-                })
-
-            } else {
-                binding.rvAndamentosLista.visibility = View.GONE
-                binding.tvNenhumAndamentoDisponivel.visibility = View.VISIBLE
+                    adapter.setOnItemClickListener(object :
+                        ProcessosAndamentosAdapter.OnItemClickListener {
+                        override fun onClick(andamento: ProcessoAndamento, position: Int) {
+                            andamentoProcessoDialog(andamento)
+                        }
+                    })
+                } else {
+                    binding.rvAndamentosLista.visibility = View.GONE
+                    binding.tvNenhumAndamentoDisponivel.visibility = View.VISIBLE
+                }
             }
         }
     }
 
     private fun andamentoProcessoDialog(andamento: ProcessoAndamento? = null) {
+        bindingDialog = DialogProcessoAndamentoBinding.inflate(layoutInflater)
+
         val dialog = object : ProcessoAndamentoDialog(
             requireContext(),
             andamento ?: ProcessoAndamento(),
+            bindingDialog,
             tiposAndamentos,
             statusAndamentos
         ) {
@@ -132,12 +144,17 @@ class ProcessoAndamentoFragment : BaseFragment() {
                     atualizarAndamento(andamento)
                 }
             }
+            override fun onChooseDate() {
+                showDataPicker(requireContext()) { ano, mes, dia ->
+                    onDatePickerResult(ano, mes, dia)
+                }
+            }
         }
 
         dialog.show()
 
-        val inflater = LayoutInflater.from(requireContext())
-        bindingDialog = DialogProcessoAndamentoBinding.inflate(inflater)
+        //val inflater = LayoutInflater.from(requireContext())
+        //bindingDialog = DialogProcessoAndamentoBinding.inflate(inflater)
     }
 
     private fun atualizarAndamento(andamento: ProcessoAndamento) {
@@ -154,15 +171,16 @@ class ProcessoAndamentoFragment : BaseFragment() {
             processo = processoDetalhes.numero,
             tipo = (bindingDialog.spinnerTipoAndamentoProcesso.selectedItem as ProcessoTipoAndamento)?.id,
             status = (bindingDialog.spinnerStatusProcessoAndamento .selectedItem as ProcessoStatusAndamento)?.id,
+            data = dataSelecionada
         )
 
-        if(bindingDialog.etDataAndamento.text.toString().isNotEmpty()) {
-            val fromFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
-            val toFormat = SimpleDateFormat("dd/MM/yyyy", Locale("pt", "BR"))
-            val fromDate = fromFormat.parse(bindingDialog.etDataAndamento.text.toString())
-            val selectedDate = toFormat.format(fromDate)
-            input.data = selectedDate
-        }
+//        if(bindingDialog.etDataAndamento.text.toString().isNotEmpty()) {
+//            val fromFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+//            val toFormat = SimpleDateFormat("dd/MM/yyyy", Locale("pt", "BR"))
+//            val fromDate = fromFormat.parse(bindingDialog.etDataAndamento.text.toString())
+//            val selectedDate = toFormat.format(fromDate)
+//            input.data = selectedDate
+//        }
 
         processoAndamentoRepository.atualizarProcessoAndamento(
             input,
@@ -185,15 +203,16 @@ class ProcessoAndamentoFragment : BaseFragment() {
             processo = processoDetalhes.numero,
             tipo = (bindingDialog.spinnerTipoAndamentoProcesso.selectedItem as ProcessoTipoAndamento)?.id,
             status = (bindingDialog.spinnerStatusProcessoAndamento .selectedItem as ProcessoStatusAndamento)?.id,
+            data = dataSelecionada
         )
 
-        if(bindingDialog.etDataAndamento.text.toString().isNotEmpty()) {
-            val fromFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
-            val toFormat = SimpleDateFormat("dd/MM/yyyy", Locale("pt", "BR"))
-            val fromDate = fromFormat.parse(bindingDialog.etDataAndamento.text.toString())
-            val selectedDate = toFormat.format(fromDate)
-            input.data = selectedDate
-        }
+//        if(bindingDialog.etDataAndamento.text.toString().isNotEmpty()) {
+//            val fromFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+//            val toFormat = SimpleDateFormat("dd/MM/yyyy", Locale("pt", "BR"))
+//            val fromDate = fromFormat.parse(bindingDialog.etDataAndamento.text.toString())
+//            val selectedDate = toFormat.format(fromDate)
+//            input.data = selectedDate
+//        }
 
         processoAndamentoRepository.adicionarProcessoAndamento(
             input,
@@ -246,5 +265,13 @@ class ProcessoAndamentoFragment : BaseFragment() {
         }
 
         return validado
+    }
+
+    private fun onDatePickerResult(year: Int, month: Int, day: Int) {
+        val sDayOfMonth = if (day < 10) "0$day" else "$day"
+        val sMonthOfYear = if ((month + 1) < 10) "0${month + 1}" else "${month + 1}"
+
+        dataSelecionada = "$year-$sMonthOfYear-$sDayOfMonth"
+        bindingDialog.etDataAndamento.setText("$sDayOfMonth/$sMonthOfYear/$year")
     }
 }
