@@ -35,6 +35,8 @@ object Constants {
 
     const val PROCESSOS_TIPOS_ANDAMENTOS_TABLE = "processosTiposAndamentos"
 
+    const val PROCESSOS_HISTORICOS_TABLE = "processosHistoricos"
+
     const val DILIGENCIAS_TABLE = "diligencias"
     const val DILIGENCIAS_ID = "_id"
     const val DILIGENCIAS_PROCESSO = "processo"

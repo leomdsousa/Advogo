@@ -60,6 +60,7 @@ class ProcessoDetalheActivity : BaseActivity() {
         adapter.addFragment(ProcessoDetalheFragment(), "Dados")
         adapter.addFragment(ProcessoAndamentoFragment(), "Andamentos")
         adapter.addFragment(ProcessoAnexoFragment(), "Anexos")
+        adapter.addFragment(ProcessoHistoricoFragment(), "Histórico")
         viewPager.adapter = adapter
 
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
@@ -146,6 +147,7 @@ class ProcessoDetalheActivity : BaseActivity() {
             0 -> R.drawable.ic_baseline_app_registration_24
             1 -> R.drawable.ic_baseline_timeline_24
             2 -> R.drawable.ic_baseline_attachment_24
+            3 -> R.drawable.ic_baseline_history_24
             else -> 0
         }
     }

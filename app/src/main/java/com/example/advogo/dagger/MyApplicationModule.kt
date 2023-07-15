@@ -94,7 +94,8 @@ object MyApplicationModule {
         tipoProcessoRepository: ProcessoTipoRepository,
         statusProcessoRepository: ProcessoStatusRepository,
         anexoRepository: AnexoRepository,
-        andamentoRepository: IProcessoAndamentoRepository
+        andamentoRepository: IProcessoAndamentoRepository,
+        historicoRepository: IProcessoHistoricoRepository
     ): IProcessoRepository {
         return ProcessoRepository(
             context,
@@ -105,7 +106,8 @@ object MyApplicationModule {
             tipoProcessoRepository,
             statusProcessoRepository,
             anexoRepository,
-            andamentoRepository
+            andamentoRepository,
+            historicoRepository
         )
     }
 
@@ -136,6 +138,24 @@ object MyApplicationModule {
             advogadoRepository,
             processoTipoAndamentoRepository,
             processoStatusAndamentoRepository
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideProcessoHistoricoRepository(
+        context: Context,
+        firestore: FirebaseFirestore,
+        advogadoRepository: AdvogadoRepository,
+        tipoProcessoRepository: ProcessoTipoRepository,
+        statusProcessoRepository: ProcessoStatusRepository
+    ): IProcessoHistoricoRepository {
+        return ProcessoHistoricoRepository(
+            context,
+            firestore,
+            advogadoRepository,
+            tipoProcessoRepository,
+            statusProcessoRepository
         )
     }
 

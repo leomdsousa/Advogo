@@ -156,6 +156,9 @@ class ProcessoDetalheFragment : BaseFragment() {
                 processoDetalhes.imagem
             }
 
+            val processoDetalhesDeferred = async { processoRepository.obterProcesso(processoDetalhes.id!!) }
+            processoDetalhes = processoDetalhesDeferred.await()!!
+
             val processo = Processo(
                 id = processoDetalhes.id,
                 titulo = (if (binding.etProcessoName.text.toString() != processoDetalhes.titulo) binding.etProcessoName.text.toString() else processoDetalhes.titulo),
@@ -169,7 +172,8 @@ class ProcessoDetalheFragment : BaseFragment() {
                 advogado = (if (advSelecionado != processoDetalhes.advogado) advSelecionado else processoDetalhes.advogado),
                 diligencias = processoDetalhes.diligencias,
                 anexos = processoDetalhes.anexos,
-                andamentos = processoDetalhes.andamentos
+                andamentos = processoDetalhes.andamentos,
+                historico = processoDetalhes.historico
             )
 
             processoRepository.atualizarProcesso(

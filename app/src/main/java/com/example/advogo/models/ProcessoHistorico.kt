@@ -14,7 +14,7 @@ data class ProcessoHistorico(
     var tipo: String? = null,
     var data: String? = null,
     @Transient var advogadoObj: Advogado? = null,
-    @Transient var tipoObj: DiligenciaTipo? = null,
-    @Transient var statusObj: DiligenciaStatus? = null
+    @Transient var tipoObj: ProcessoTipo? = null,
+    @Transient var statusObj: ProcessoStatus? = null
 ): Parcelable {
 }

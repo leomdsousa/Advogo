@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/itemDiligenciaContentMarginBottom"
+    android:background="?attr/selectableItemBackground"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/itemDiligenciaContentPadding">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/itemDiligenciaDescricaoLayoutMarginStart"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_tipo_processo_hist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/secondaryTextColor"
+                android:textSize="@dimen/itemProcessoNumeroTextSize"
+                app:fontFamily="@font/lato"
+                tools:text="Tipo: Audiência" />
+
+            <TextView
+                android:id="@+id/tv_adv_processo_hist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/secondaryTextColor"
+                android:textSize="@dimen/itemProcessoNumeroTextSize"
+                app:fontFamily="@font/lato"
+                tools:text="Advogado: Leonardo Monteiro de Sousa (Nº OAB)" />
+
+            <TextView
+                android:id="@+id/tv_data_processo_hist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/secondaryTextColor"
+                android:textSize="@dimen/itemProcessoNumeroTextSize"
+                app:fontFamily="@font/lato"
+                tools:text="Data: 12/12/2023" />
+
+            <TextView
+                android:id="@+id/tv_status_processo_hist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/secondaryTextColor"
+                android:textSize="@dimen/itemProcessoNumeroTextSize"
+                app:fontFamily="@font/lato"
+                tools:text="Status: Em Andamento" />
+
+            <TextView
+                android:id="@+id/tv_obs_processo_hist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/secondaryTextColor"
+                android:textSize="@dimen/itemProcessoNumeroTextSize"
+                app:fontFamily="@font/lato"
+                android:layout_marginTop="8dp"
+                tools:text="Observação: Em Andamento"
+                android:maxLines="4"
+                android:ellipsize="end" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/itemDiligenciaDividerHeight"
+        android:layout_marginTop="@dimen/itemDiligenciaDividerMarginTop"
+        android:background="@color/dividerColor" />
+</LinearLayout>

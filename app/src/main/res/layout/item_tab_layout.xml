@@ -20,7 +20,7 @@
         android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
         android:textColor="@android:color/black"
-        android:textSize="12sp"
+        android:textSize="11sp"
         app:fontFamily="@font/montserrat_medium"
         tool:text="Processos"/>
 

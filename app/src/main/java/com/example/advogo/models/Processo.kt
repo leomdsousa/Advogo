@@ -21,6 +21,7 @@ data class Processo(
     var diligencias: List<String>? = null,
     var anexos: List<String>? = null,
     var andamentos: List<String>? = null,
+    var historico: List<String>? = null,
     @Transient var tipoObj: ProcessoTipo? = null,
     @Transient var statusObj: ProcessoStatus? = null,
     @Transient var clienteObj: Cliente? = null,
@@ -28,6 +29,7 @@ data class Processo(
     @Transient var diligenciasLista: List<Diligencia>? = null,
     @Transient var anexosLista: List<Anexo>? = null,
     @Transient var andamentosLista: List<ProcessoAndamento>? = null,
+    @Transient var historicoLista: List<ProcessoHistorico>? = null,
     @Transient var selecionado: Boolean = false,
 ): Parcelable {
 }

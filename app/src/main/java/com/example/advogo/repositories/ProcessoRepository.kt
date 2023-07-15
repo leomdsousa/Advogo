@@ -23,7 +23,8 @@ class ProcessoRepository @Inject constructor(
     private val tipoProcessoRepository: ProcessoTipoRepository,
     private val statusProcessoRepository: ProcessoStatusRepository,
     private val anexoRepository: AnexoRepository,
-    private val andamentoRepository: IProcessoAndamentoRepository
+    private val andamentoRepository: IProcessoAndamentoRepository,
+    private val historicoRepository: IProcessoHistoricoRepository
 ): IProcessoRepository {
     private val coroutineScope: CoroutineScope = (context as? LifecycleOwner)?.lifecycleScope ?: GlobalScope
 
@@ -60,6 +61,13 @@ class ProcessoRepository @Inject constructor(
                                     item.andamentosLista = andamentosDeferred.await()
                                 } else {
                                     item.andamentosLista = emptyList()
+                                }
+
+                                if(item.historico?.isNotEmpty() == true) {
+                                    val historicoDeferred = async { historicoRepository.obterProcessosHistoricoPorLista(item.historico!!) }
+                                    item.historicoLista = historicoDeferred.await()
+                                } else {
+                                    item.historicoLista = emptyList()
                                 }
                             }
 
@@ -108,6 +116,13 @@ class ProcessoRepository @Inject constructor(
                             processo.andamentosLista = emptyList()
                         }
 
+                        if(processo.historico?.isNotEmpty() == true) {
+                            val historicoDeferred = async { historicoRepository.obterProcessosHistoricoPorLista(processo.historico!!) }
+                            processo.historicoLista = historicoDeferred.await()
+                        } else {
+                            processo.historicoLista = emptyList()
+                        }
+
                         onSuccessListener(processo)
                     }
                 } else {
@@ -150,6 +165,13 @@ class ProcessoRepository @Inject constructor(
                             processo.andamentosLista = andamentosDeferred.await()
                         } else {
                             processo.andamentosLista = emptyList()
+                        }
+
+                        if(processo.historico?.isNotEmpty() == true) {
+                            val historicoDeferred = async { historicoRepository.obterProcessosHistoricoPorLista(processo.historico!!) }
+                            processo.historicoLista = historicoDeferred.await()
+                        } else {
+                            processo.historicoLista = emptyList()
                         }
 
                         onSuccessListener(processo)
@@ -233,6 +255,13 @@ class ProcessoRepository @Inject constructor(
                                 } else {
                                     item.andamentosLista = emptyList()
                                 }
+
+                                if(item.historico?.isNotEmpty() == true) {
+                                    val historicoDeferred = async { historicoRepository.obterProcessosHistoricoPorLista(item.historico!!) }
+                                    item.historicoLista = historicoDeferred.await()
+                                } else {
+                                    item.historicoLista = emptyList()
+                                }
                             }
 
                             continuation.resume(resultado)
@@ -278,6 +307,13 @@ class ProcessoRepository @Inject constructor(
                             resultado.andamentosLista = andamentosDeferred.await()
                         } else {
                             resultado.andamentosLista = emptyList()
+                        }
+
+                        if(resultado.historico?.isNotEmpty() == true) {
+                            val historicoDeferred = async { historicoRepository.obterProcessosHistoricoPorLista(resultado.historico!!) }
+                            resultado.historicoLista = historicoDeferred.await()
+                        } else {
+                            resultado.historicoLista = emptyList()
                         }
 
                         continuation.resume(resultado)

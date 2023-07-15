@@ -224,6 +224,43 @@ class DiligenciaRepository @Inject constructor(
             }
     }
 
+    override suspend fun obterDiligencia(id: String): Diligencia? = suspendCoroutine { continuation ->
+        firebaseStore
+            .collection(Constants.DILIGENCIAS_TABLE)
+            .document(id)
+            .get()
+            .addOnSuccessListener { document ->
+                if (!document.exists()) {
+                    coroutineScope.launch {
+                        val resultado = document.toObject(Diligencia::class.java)!!
+
+                        val advogadoDeferred = async { advogadoRepository.get().obterAdvogado(resultado.advogado!!) }
+                        val processoDeferred = async { processoRepository.get().obterProcesso(resultado.processo!!) }
+                        val statusDeferred = async { statusDiligenciaRepository.obterDiligenciaStatus(resultado.status!!) }
+                        val tipoDeferred = async { tipoDiligenciaRepository.obterDiligenciaTipo(resultado.tipo!!) }
+
+                        resultado.advogadoObj = advogadoDeferred.await()
+                        resultado.processoObj = processoDeferred.await()
+                        resultado.statusObj = statusDeferred.await()
+                        resultado.tipoObj = tipoDeferred.await()
+
+                        if(resultado.historico?.isNotEmpty() == true) {
+                            val historicoDeferred = async { diligenciaHistoricoRepository.obterDiligenciasHistoricoPorLista(resultado.historico!!) }
+                            resultado.historicoLista = historicoDeferred.await()
+                        } else {
+                            resultado.historicoLista = emptyList()
+                        }
+
+                        continuation.resume(resultado)
+                    }
+                } else {
+                    continuation.resume(null)
+                }
+            }
+            .addOnFailureListener { exception ->
+                continuation.resumeWithException(exception)
+            }
+    }
     override suspend fun obterDiligenciasPorData(data: String): List<Diligencia>? = suspendCoroutine { continuation ->
         firebaseStore
             .collection(Constants.DILIGENCIAS_TABLE)
@@ -319,6 +356,7 @@ interface IDiligenciaRepository {
     fun atualizarDiligencia(model: Diligencia, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
     fun deletarDiligencia(id: String, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
 
+    suspend fun obterDiligencia(id: String): Diligencia?
     suspend fun obterDiligenciasPorData(data: String): List<Diligencia>?
     suspend fun obterDiligenciasPorData(dataInicio: String, dataFinal: String): List<Diligencia>?
 

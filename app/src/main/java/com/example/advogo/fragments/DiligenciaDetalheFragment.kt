@@ -236,44 +236,49 @@ class DiligenciaDetalheFragment : BaseFragment() {
             return
         }
 
-        showProgressDialog(getString(R.string.aguardePorfavor))
+        CoroutineScope(Dispatchers.Main).launch {
+            showProgressDialog(getString(R.string.aguardePorfavor))
 
-        val diligencia = Diligencia(
-            id = diligenciaDetalhes.id,
-            descricao = if (binding.etDiligenciaDescricao.text.toString() != diligenciaDetalhes.descricao) binding.etDiligenciaDescricao.text.toString() else diligenciaDetalhes.descricao,
-            data = if (dataSelecionada != diligenciaDetalhes.data) dataSelecionada else diligenciaDetalhes.data,
-            status = if (statusDiligenciaSelecionada != diligenciaDetalhes.status) statusDiligenciaSelecionada else diligenciaDetalhes.status,
-            tipo = if (tipoDiligenciaSelecionada != diligenciaDetalhes.tipo) tipoDiligenciaSelecionada else diligenciaDetalhes.tipo,
-            endereco = if (binding.etDiligenciaEndereco.text.toString() != diligenciaDetalhes.endereco) binding.etDiligenciaEndereco.text.toString() else diligenciaDetalhes.endereco,
-            enderecoLat = savedLatitude,
-            enderecoLong = savedLongitude,
-            processo = if (processoSelecionado != diligenciaDetalhes.processo) processoSelecionado else diligenciaDetalhes.processo,
-            advogado = if (advSelecionado != diligenciaDetalhes.advogado) advSelecionado else diligenciaDetalhes.advogado,
-            historico = diligenciaDetalhes.historico
-        )
+            val diligenciaDetalhesDeferred = async { diligenciaRepository.obterDiligencia(diligenciaDetalhes.id!!) }
+            diligenciaDetalhes = diligenciaDetalhesDeferred.await()!!
 
-        diligenciaRepository.atualizarDiligencia(
-            diligencia,
-            {
-                val historico = DiligenciaHistorico(
-                    obs = "Diligência atualizada",
-                    advogado = advSelecionado,
-                    status = statusDiligenciaSelecionada,
-                    tipo = tipoDiligenciaSelecionada,
-                    data = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date.from(LocalDateTime.now().atZone(
-                        ZoneId.systemDefault()).toInstant()))
-                )
+            val diligencia = Diligencia(
+                id = diligenciaDetalhes.id,
+                descricao = if (binding.etDiligenciaDescricao.text.toString() != diligenciaDetalhes.descricao) binding.etDiligenciaDescricao.text.toString() else diligenciaDetalhes.descricao,
+                data = if (dataSelecionada != diligenciaDetalhes.data) dataSelecionada else diligenciaDetalhes.data,
+                status = if (statusDiligenciaSelecionada != diligenciaDetalhes.status) statusDiligenciaSelecionada else diligenciaDetalhes.status,
+                tipo = if (tipoDiligenciaSelecionada != diligenciaDetalhes.tipo) tipoDiligenciaSelecionada else diligenciaDetalhes.tipo,
+                endereco = if (binding.etDiligenciaEndereco.text.toString() != diligenciaDetalhes.endereco) binding.etDiligenciaEndereco.text.toString() else diligenciaDetalhes.endereco,
+                enderecoLat = savedLatitude,
+                enderecoLong = savedLongitude,
+                processo = if (processoSelecionado != diligenciaDetalhes.processo) processoSelecionado else diligenciaDetalhes.processo,
+                advogado = if (advSelecionado != diligenciaDetalhes.advogado) advSelecionado else diligenciaDetalhes.advogado,
+                historico = diligenciaDetalhes.historico
+            )
 
-                diligenciaHistoricoRepository.adicionarDiligenciaHistorico(
-                    historico,
-                    { null },
-                    { null }
-                )
+            diligenciaRepository.atualizarDiligencia(
+                diligencia,
+                {
+                    val historico = DiligenciaHistorico(
+                        obs = "Diligência atualizada",
+                        advogado = advSelecionado,
+                        status = statusDiligenciaSelecionada,
+                        tipo = tipoDiligenciaSelecionada,
+                        data = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date.from(LocalDateTime.now().atZone(
+                            ZoneId.systemDefault()).toInstant()))
+                    )
 
-                diligenciaEdicaoSuccess()
-            },
-            { diligenciaEdicaoFailure() }
-        )
+                    diligenciaHistoricoRepository.adicionarDiligenciaHistorico(
+                        historico,
+                        { null },
+                        { null }
+                    )
+
+                    diligenciaEdicaoSuccess()
+                },
+                { diligenciaEdicaoFailure() }
+            )
+        }
     }
 
     private fun processosDialog() {
