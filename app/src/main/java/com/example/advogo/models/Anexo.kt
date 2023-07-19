@@ -11,6 +11,9 @@ data class Anexo(
     var id: String = "",
     var nome: String? = null,
     var uri: String? = null,
-    var descricao: String? = null
+    var descricao: String? = null,
+    var data: String? = null,
+    var advogado: String? = null,
+    @Transient var advogadoObj: Advogado? = null
 ): Parcelable {
 }

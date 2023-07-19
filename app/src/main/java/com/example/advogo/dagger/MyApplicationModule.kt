@@ -200,7 +200,11 @@ object MyApplicationModule {
 
     @Provides
     @Singleton
-    fun provideAnexoRepository(firestore: FirebaseFirestore): IAnexoRepository {
-        return AnexoRepository(firestore)
+    fun provideAnexoRepository(
+        context: Context,
+        firestore: FirebaseFirestore,
+        advogadoRepository: AdvogadoRepository
+    ): IAnexoRepository {
+        return AnexoRepository(context, firestore, advogadoRepository)
     }
 }

@@ -21,6 +21,29 @@
         app:fontFamily="@font/lato"
         tools:text="Emenda do Processo Teste.pdf" />
 
+    <TextView
+        android:id="@+id/tvDataAnexo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvNomeAnexo"
+        android:layout_alignStart="@id/tvNomeAnexo"
+        android:layout_marginTop="16dp"
+        android:textColor="@android:color/black"
+        android:textSize="12sp"
+        tools:text="19/07/2023" />
+
+    <TextView
+        android:id="@+id/tvUsuarioAnexo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvNomeAnexo"
+        android:layout_alignStart="@id/tvNomeAnexo"
+        android:layout_marginTop="16dp"
+        android:paddingStart="210dp"
+        android:textColor="@android:color/black"
+        android:textSize="12sp"
+        tools:text="Usuário" />
+
     <ImageButton
         android:id="@+id/btnAbrirAnexo"
         android:layout_width="wrap_content"

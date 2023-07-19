@@ -172,6 +172,10 @@ class DiligenciaCadastroActivity : BaseActivity() {
             ) {
                 override fun onItemSelected(adv: Advogado, action: String?) {
                     if (action == Constants.SELECIONAR) {
+                        advogados.forEach {
+                            it.selecionado = false
+                        }
+
                         if (binding.etDiligenciaAdvogado.text.toString() != adv.id) {
                             binding.etDiligenciaAdvogado.setText("${adv.nome} (${adv.oab})")
                             advogadoSelecionado = adv.id

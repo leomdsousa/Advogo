@@ -132,6 +132,10 @@ class ProcessoCadastroActivity : BaseActivity() {
             ) {
                 override fun onItemSelected(adv: Advogado, action: String?) {
                     if (action == Constants.SELECIONAR) {
+                        advogados.forEach {
+                            it.selecionado = false
+                        }
+
                         if (binding.etAdv.text.toString() != adv.id) {
                             binding.etAdv.setText("${adv.nome} (${adv.oab})")
                             advSelecionado = adv.id
@@ -170,6 +174,10 @@ class ProcessoCadastroActivity : BaseActivity() {
             ) {
                 override fun onItemSelected(cliente: Cliente, action: String) {
                     if (action == Constants.SELECIONAR) {
+                        clientes.forEach {
+                            it.selecionado = false
+                        }
+
                         if (binding.etCliente.text.toString() != cliente.id) {
                             binding.etCliente.setText("${cliente.nome} (${cliente.cpf})")
                             clienteSelecionado = cliente.id

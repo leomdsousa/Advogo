@@ -75,7 +75,7 @@ open class ClientesAdapter(
                     binding.imageEmail.visibility = View.GONE
                 }
 
-                if(exibirIconeWhatsapp
+                if( (exibirIconeWhatsapp && item.whatsapp == true)
                     && (item.telefone != null && regexTelefone.matches(item.telefone!!))
                 ) {
                     binding.imageWpp.visibility = View.VISIBLE

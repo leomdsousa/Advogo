@@ -256,6 +256,8 @@ class ProcessoDetalheFragment : BaseFragment() {
                 advogados = advogadosDeferred.await()
             }
 
+            advogados.find { it.id == advSelecionado }?.selecionado = true
+
             val listDialog = object : AdvogadosDialog(
                 requireContext(),
                 advogados as ArrayList<Advogado>,
@@ -263,6 +265,10 @@ class ProcessoDetalheFragment : BaseFragment() {
             ) {
                 override fun onItemSelected(adv: Advogado, action: String?) {
                     if (action == Constants.SELECIONAR) {
+                        advogados.forEach {
+                            it.selecionado = false
+                        }
+
                         if (binding.etAdv.text.toString() != adv.id) {
                             binding.etAdv.setText("${adv.nome} (${adv.oab})")
                             advSelecionado = adv.id
@@ -294,6 +300,8 @@ class ProcessoDetalheFragment : BaseFragment() {
                 clientes = clientesDeferred.await()
             }
 
+            clientes.find { it.id == clienteSelecionado }?.selecionado = true
+
             val listDialog = object : ClientesDialog(
                 requireContext(),
                 clientes as ArrayList<Cliente>,
@@ -301,6 +309,10 @@ class ProcessoDetalheFragment : BaseFragment() {
             ) {
                 override fun onItemSelected(cliente: Cliente, action: String) {
                     if (action == Constants.SELECIONAR) {
+                        clientes.forEach {
+                            it.selecionado = false
+                        }
+
                         if (binding.etCliente.text.toString() != cliente.id) {
                             binding.etCliente.setText("${cliente.nome} (${cliente.cpf})")
                             clienteSelecionado = cliente.id
@@ -330,8 +342,8 @@ class ProcessoDetalheFragment : BaseFragment() {
         binding.spinnerTipoProcesso.setSelection(processosTipos.indexOf(processo.tipoObj))
         binding.spinnerStatusProcesso.setSelection(processosStatus.indexOf(processo.statusObj))
         binding.etNumeroProcesso.setText(processo.numero)
-        binding.etAdv.setText(processo.advogadoObj?.nome)
-        binding.etCliente.setText(processo.clienteObj?.nome)
+        binding.etAdv.setText("${processo.advogadoObj?.nome} (${processo.advogadoObj?.oab})")
+        binding.etCliente.setText("${processo.clienteObj?.nome} (${processo.clienteObj?.cpf})")
 
         advSelecionado = processoDetalhes.advogado
         advSelecionadoAnterior = processoDetalhes.advogado

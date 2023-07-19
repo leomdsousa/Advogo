@@ -22,13 +22,13 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tv_tipo_processo_hist"
+                android:id="@+id/tv_data_processo_hist"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/secondaryTextColor"
                 android:textSize="@dimen/itemProcessoNumeroTextSize"
                 app:fontFamily="@font/lato"
-                tools:text="Tipo: Audiência" />
+                tools:text="Data: 12/12/2023" />
 
             <TextView
                 android:id="@+id/tv_adv_processo_hist"
@@ -40,34 +40,17 @@
                 tools:text="Advogado: Leonardo Monteiro de Sousa (Nº OAB)" />
 
             <TextView
-                android:id="@+id/tv_data_processo_hist"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/secondaryTextColor"
-                android:textSize="@dimen/itemProcessoNumeroTextSize"
-                app:fontFamily="@font/lato"
-                tools:text="Data: 12/12/2023" />
-
-            <TextView
-                android:id="@+id/tv_status_processo_hist"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/secondaryTextColor"
-                android:textSize="@dimen/itemProcessoNumeroTextSize"
-                app:fontFamily="@font/lato"
-                tools:text="Status: Em Andamento" />
-
-            <TextView
                 android:id="@+id/tv_obs_processo_hist"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/secondaryTextColor"
                 android:textSize="@dimen/itemProcessoNumeroTextSize"
                 app:fontFamily="@font/lato"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="@dimen/itemDiligenciaDescricaoLayoutMarginStart"
                 tools:text="Observação: Em Andamento"
                 android:maxLines="4"
                 android:ellipsize="end" />
+
         </LinearLayout>
     </LinearLayout>
 

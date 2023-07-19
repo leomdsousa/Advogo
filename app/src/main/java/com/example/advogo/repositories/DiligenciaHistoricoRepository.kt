@@ -117,7 +117,6 @@ class DiligenciaHistoricoRepository @Inject constructor(
                                 item.advogadoObj = advogadoDeferred.await()
                                 item.statusObj = statusDeferred.await()
                                 item.tipoObj = tipoDeferred.await()
-
                             }
 
                             continuation.resume(resultado)

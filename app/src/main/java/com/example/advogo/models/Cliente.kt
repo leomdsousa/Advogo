@@ -9,7 +9,9 @@ data class Cliente(
     @DocumentId
     var id: String = "",
     var nome: String? = null,
+    var rg: String? = null,
     var cpf: String? = null,
+    var estadoCivil: String? = null,
     var email: String? = null,
     var endereco: String? = null,
     var enderecoNumero: String? = null,

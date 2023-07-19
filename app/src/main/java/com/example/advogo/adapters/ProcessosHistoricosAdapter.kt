@@ -31,8 +31,8 @@ open class ProcessosHistoricosAdapter(
                     binding.tvDataProcessoHist.text = "Data: $data"
                 }
 
-                binding.tvTipoProcessoHist.text = "Tipo: ${item.tipoObj?.tipo}"
-                binding.tvStatusProcessoHist.text = "Status: ${item.statusObj?.status}"
+//                binding.tvTipoProcessoHist.text = "Tipo: ${item.tipoObj?.tipo}"
+//                binding.tvStatusProcessoHist.text = "Status: ${item.statusObj?.status}"
                 binding.tvObsProcessoHist.text = "Observação: ${item.obs}"
 
                 binding.root.setOnClickListener {

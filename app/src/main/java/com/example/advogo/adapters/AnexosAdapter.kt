@@ -8,6 +8,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.advogo.databinding.ItemAnexoBinding
 import com.example.advogo.models.Anexo
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 open class AnexosAdapter(
     private val context: Context,
@@ -21,6 +24,15 @@ open class AnexosAdapter(
         fun bind(item: Anexo, position: Int) {
             binding.apply {
                 binding.tvNomeAnexo.text = item.nome
+                binding.tvUsuarioAnexo.text = item.advogadoObj?.nome
+
+                if(!item.data.isNullOrEmpty()) {
+                    val fromFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+                    val toFormat = SimpleDateFormat("dd/MM/yyyy", Locale("pt", "BR"))
+                    val fromDate = fromFormat.parse(item.data)
+                    val data = toFormat.format(fromDate)
+                    binding.tvDataAnexo.text = "$data"
+                }
 
                 binding.btnAbrirAnexo.setOnClickListener {
                     if(!TextUtils.isEmpty(item.nome)) {

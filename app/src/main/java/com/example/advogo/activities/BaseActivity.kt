@@ -1,4 +1,5 @@
 package com.example.advogo.activities
+
 import android.Manifest
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.annotation.SuppressLint
@@ -13,6 +14,7 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
+import android.location.LocationRequest
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -23,6 +25,7 @@ import android.provider.Settings
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.TypefaceSpan
+import android.util.Log
 import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
@@ -39,6 +42,8 @@ import com.example.advogo.repositories.AdvogadoRepository
 import com.example.advogo.utils.Constants
 import com.example.advogo.utils.ObterEnderecoFromLatLng
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationResult
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
@@ -299,28 +304,26 @@ open class BaseActivity : AppCompatActivity() {
         }
     }
 
-//    private val locationCallback = object: LocationCallback() {
-//        override fun onLocationResult(locationResult: LocationResult) {
-//            val lastLocation: Location? = locationResult!!.lastLocation
-//            savedLatitude = lastLocation!!.latitude
-//            savedLongitude = lastLocation!!.longitude
-//
-//            val addressTask = ObterEnderecoFromLatLng(this@AddLugarFavoritoActivity, savedLatitude, savedLongitude)
-//            addressTask.setCustomAddressListener(object: ObterEnderecoFromLatLng.AddressListener {
-//                override fun onAddressFound(address: String) {
-//                    binding.etLocation.setText(address)
-//                }
-//
-//                override fun onError() {
-//                    Log.e("Address:: ", "onError: Um erro ocorreu ao traduzir as coordenadas para o endereço")
-//                }
-//            })
-//
-//            lifecycleScope.launch(Dispatchers.IO) {
-//                addressTask.launchBackgroundProcessForRequest()
-//            }
-//        }
-//    }
+    private val locationCallback = object: LocationCallback() {
+        override fun onLocationResult(locationResult: LocationResult) {
+            val lastLocation: Location? = locationResult!!.lastLocation
+
+            val addressTask = ObterEnderecoFromLatLng(baseContext, lastLocation!!.latitude, lastLocation!!.longitude)
+            addressTask.setCustomAddressListener(object: ObterEnderecoFromLatLng.AddressListener {
+                override fun onAddressFound(address: String) {
+                    //binding.etLocation.setText(address)
+                }
+
+                override fun onError() {
+                    Log.e("Address:: ", "onError: Um erro ocorreu ao traduzir as coordenadas para o endereço")
+                }
+            })
+
+            lifecycleScope.launch(Dispatchers.IO) {
+                addressTask.launchBackgroundProcessForRequest()
+            }
+        }
+    }
 
     private fun showRationalDialogForPermissions(context: Context) {
         AlertDialog

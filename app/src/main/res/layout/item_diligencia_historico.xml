@@ -22,24 +22,6 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tv_tipo_diligencia_hist"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/secondaryTextColor"
-                android:textSize="@dimen/itemProcessoNumeroTextSize"
-                app:fontFamily="@font/lato"
-                tools:text="Tipo: Audiência" />
-
-            <TextView
-                android:id="@+id/tv_adv_diligencia_hist"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/secondaryTextColor"
-                android:textSize="@dimen/itemProcessoNumeroTextSize"
-                app:fontFamily="@font/lato"
-                tools:text="Advogado: Leonardo Monteiro de Sousa (Nº OAB)" />
-
-            <TextView
                 android:id="@+id/tv_data_diligencia_hist"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -49,13 +31,13 @@
                 tools:text="Data: 12/12/2023" />
 
             <TextView
-                android:id="@+id/tv_status_diligencia_hist"
+                android:id="@+id/tv_adv_diligencia_hist"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/secondaryTextColor"
                 android:textSize="@dimen/itemProcessoNumeroTextSize"
                 app:fontFamily="@font/lato"
-                tools:text="Status: Em Andamento" />
+                tools:text="Advogado: Leonardo Monteiro de Sousa (Nº OAB)" />
 
             <TextView
                 android:id="@+id/tv_obs_diligencia_hist"

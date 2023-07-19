@@ -288,6 +288,8 @@ class DiligenciaDetalheFragment : BaseFragment() {
                 processos = processosDeferred.await()
             }
 
+            processos.find { it.id == processoSelecionado }?.selecionado = true
+
             val listDialog = object : ProcessosDialog(
                 requireContext(),
                 processos as ArrayList<Processo>,
@@ -295,6 +297,10 @@ class DiligenciaDetalheFragment : BaseFragment() {
             ) {
                 override fun onItemSelected(processo: Processo, action: String) {
                     if (action == Constants.SELECIONAR) {
+                        processos.forEach {
+                            it.selecionado = false
+                        }
+
                         if (binding.etDiligenciaProcesso.text.toString() != processo.id) {
                             binding.etDiligenciaProcesso.setText("${processo.numero}")
                             processoSelecionado = processo.id
@@ -325,6 +331,8 @@ class DiligenciaDetalheFragment : BaseFragment() {
                 advogados = advogadosDeferred.await()
             }
 
+            advogados.find { it.id == advSelecionado }?.selecionado = true
+
             val listDialog = object : AdvogadosDialog(
                 requireContext(),
                 advogados as ArrayList<Advogado>,
@@ -332,6 +340,10 @@ class DiligenciaDetalheFragment : BaseFragment() {
             ) {
                 override fun onItemSelected(adv: Advogado, action: String?) {
                     if (action == Constants.SELECIONAR) {
+                        advogados.forEach {
+                            it.selecionado = false
+                        }
+
                         if (binding.etDiligenciaAdvogado.text.toString() != adv.id) {
                             binding.etDiligenciaAdvogado.setText("${adv.nome} (${adv.oab})")
                             advSelecionado = adv.id

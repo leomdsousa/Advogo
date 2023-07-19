@@ -34,8 +34,8 @@ open class DiligenciasHistoricosAdapter(
                     binding.tvDataDiligenciaHist.text = "Data: $data"
                 }
 
-                binding.tvTipoDiligenciaHist.text = "Tipo: ${item.tipoObj?.tipo}"
-                binding.tvStatusDiligenciaHist.text = "Status: ${item.statusObj?.status}"
+//                binding.tvTipoDiligenciaHist.text = "Tipo: ${item.tipoObj?.tipo}"
+//                binding.tvStatusDiligenciaHist.text = "Status: ${item.statusObj?.status}"
                 binding.tvObsDiligenciaHist.text = "Observação: ${item.obs}"
 
                 binding.root.setOnClickListener {

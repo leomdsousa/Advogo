@@ -2,6 +2,7 @@ package com.example.advogo.fragments
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -29,6 +30,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.util.*
@@ -45,14 +47,16 @@ class DiligenciasFragment : BaseFragment() {
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
     private var onCreateCarregouLista = false
 
+    private var diligencias: List<Diligencia> = arrayListOf()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentDiligenciasBinding.inflate(layoutInflater, container, false)
 
-        configurarCalendarView()
-        configurarSpinnerFiltros()
+        obterDiligencias()
+        onCreateCarregouLista = true
 
         return binding.root
     }
@@ -66,14 +70,14 @@ class DiligenciasFragment : BaseFragment() {
             resultLauncher.launch(intent)
         }
 
-        obterDiligencias()
-        onCreateCarregouLista = true
+        configurarSpinnerFiltros()
 
         binding.calendarView.setOnDateChangedListener { widget, date, selected ->
             val data = "${date.year}-${date.month}-${date.day}"
 
             CoroutineScope(Dispatchers.Main).launch {
                 val diligencias = obterDiligenciasPorData(data)
+                this@DiligenciasFragment.diligencias = diligencias
                 setDiligenciasToUI(diligencias)
             }
         }
@@ -130,7 +134,9 @@ class DiligenciasFragment : BaseFragment() {
 
                             CoroutineScope(Dispatchers.Main).launch {
                                 val diligencias = obterDiligenciasPorData(dataInicialStr, dataFinalStr)
+                                this@DiligenciasFragment.diligencias = diligencias
                                 setDiligenciasToUI(diligencias)
+                                configurarCalendarViewDatas(diligencias)
                             }
                         }
                         "Quinzenal" -> {
@@ -142,7 +148,9 @@ class DiligenciasFragment : BaseFragment() {
 
                             CoroutineScope(Dispatchers.Main).launch {
                                 val diligencias = obterDiligenciasPorData(dataInicialStr, dataFinalStr)
+                                this@DiligenciasFragment.diligencias = diligencias
                                 setDiligenciasToUI(diligencias)
+                                configurarCalendarViewDatas(diligencias)
                             }
                         }
                         "Semanal" -> {
@@ -154,7 +162,9 @@ class DiligenciasFragment : BaseFragment() {
 
                             CoroutineScope(Dispatchers.Main).launch {
                                 val diligencias = obterDiligenciasPorData(dataInicialStr, dataFinalStr)
+                                this@DiligenciasFragment.diligencias = diligencias
                                 setDiligenciasToUI(diligencias)
+                                configurarCalendarViewDatas(diligencias)
                             }
                         } else -> {
                             //Validar o que implementar
@@ -170,10 +180,7 @@ class DiligenciasFragment : BaseFragment() {
     }
 
     private fun configurarCalendarView() {
-        val dataSelecionadaMap = HashMap<CalendarDay, Int>()
-
-        val decorator = DataSelecionadaDecorator(dataSelecionadaMap)
-        binding.calendarView.addDecorator(decorator)
+        configurarCalendarViewDatas(diligencias)
 
         binding.calendarView
             .state().edit()
@@ -182,10 +189,36 @@ class DiligenciasFragment : BaseFragment() {
             .commit()
     }
 
+    private fun configurarCalendarViewDatas(diligencias: List<Diligencia>) {
+        val dataSelecionadaMap = HashMap<CalendarDay, Int>()
+
+        for (diligencia in diligencias) {
+            var data =
+                SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                    .parse(diligencia.data)
+
+            val calendario = Calendar.getInstance()
+            calendario.time = data
+
+            val dataDiligencia = CalendarDay.from(
+                calendario.get(Calendar.YEAR),
+                calendario.get(Calendar.MONTH) + 1,
+                calendario.get(Calendar.DAY_OF_MONTH)
+            )
+
+            dataSelecionadaMap[dataDiligencia] = Color.RED
+        }
+
+        val decorator = DataSelecionadaDecorator(dataSelecionadaMap)
+        binding.calendarView.addDecorator(decorator)
+    }
+
     private fun obterDiligencias() {
         diligenciaRepository.obterDiligencias(
             { diligencias ->
+                this.diligencias = diligencias
                 setDiligenciasToUI(diligencias)
+                configurarCalendarView()
                 hideProgressDialog()
             },
             { hideProgressDialog() }
@@ -212,7 +245,6 @@ class DiligenciasFragment : BaseFragment() {
                         startActivity(intent)
                     }
                 })
-
             } else {
                 binding.rvDiligenciasList.visibility = View.GONE
                 binding.tvNoDiligenciasEncontrado.visibility = View.VISIBLE

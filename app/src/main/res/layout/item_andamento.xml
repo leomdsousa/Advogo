@@ -25,8 +25,8 @@
                 android:id="@+id/tv_tipo_andamento"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/secondaryTextColor"
-                android:textSize="@dimen/itemProcessoNumeroTextSize"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="@dimen/itemProcessoAndamentoTextSize"
                 app:fontFamily="@font/lato"
                 tools:text="Tipo: Certidão Instrução Julgamento" />
 
@@ -34,8 +34,8 @@
                 android:id="@+id/tv_adv_andamento"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/secondaryTextColor"
-                android:textSize="@dimen/itemProcessoNumeroTextSize"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="@dimen/itemProcessoAndamentoTextSize"
                 app:fontFamily="@font/lato"
                 tools:text="Advogado: Leonardo Monteiro de Sousa (Nº OAB)" />
 
@@ -43,8 +43,8 @@
                 android:id="@+id/tv_data_andamento"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/secondaryTextColor"
-                android:textSize="@dimen/itemProcessoNumeroTextSize"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="@dimen/itemProcessoAndamentoTextSize"
                 app:fontFamily="@font/lato"
                 tools:text="Data: 12/12/2023" />
 
@@ -52,8 +52,8 @@
                 android:id="@+id/tv_descricao_andamento"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/secondaryTextColor"
-                android:textSize="@dimen/itemProcessoNumeroTextSize"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="@dimen/itemProcessoAndamentoTextSize"
                 app:fontFamily="@font/lato"
                 tools:text="Descrição: Descrição do Andamento"
                 android:maxLines="4"
