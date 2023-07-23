@@ -22,7 +22,7 @@
             android:contentDescription="@string/imageContentDescription"
             android:padding="1dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_processo_place_holder"
+            android:src="@drawable/image_placeholder"
             app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
             app:strokeColor="@color/primaryTextColor"
             app:strokeWidth="1dp"  />

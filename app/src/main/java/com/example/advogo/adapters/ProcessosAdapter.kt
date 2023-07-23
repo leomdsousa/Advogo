@@ -27,7 +27,7 @@ open class ProcessosAdapter(
                     .with(context)
                     .load(item.imagem)
                     .centerCrop()
-                    .placeholder(R.drawable.ic_processo_place_holder)
+                    .placeholder(R.drawable.image_placeholder)
                     .into(binding.ivProcessoImage)
 
                 binding.tvDescricaoProcesso.text = item.titulo ?: "Sem Título"

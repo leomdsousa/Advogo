@@ -37,7 +37,10 @@
     <style name="MyTextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 <!--        <item name="boxStrokeColor">@android:color/transparent</item>-->
 <!--        <item name="boxStrokeWidth">0dp</item>-->
-        <item name="android:padding">4dp</item>
+        <item name="android:paddingLeft">4dp</item>
+        <item name="android:paddingRight">4dp</item>
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:paddingBottom">0dp</item>
 <!--        <item name="boxBackgroundColor">@drawable/til_background</item>-->
     </style>
 

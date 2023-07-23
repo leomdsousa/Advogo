@@ -364,7 +364,7 @@ class ProcessoDetalheFragment : BaseFragment() {
             .with(requireContext())
             .load(processoDetalhes.imagem)
             .centerCrop()
-            .placeholder(R.drawable.ic_processo_place_holder)
+            .placeholder(R.drawable.image_placeholder)
             .into(binding.ivProcessoImage)
     }
 

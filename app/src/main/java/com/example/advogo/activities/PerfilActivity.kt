@@ -30,6 +30,8 @@ class PerfilActivity : BaseActivity() {
 
     private var imagemSelecionadaURI: Uri? = null
     private var imagemPerfilURL: String = ""
+    private var latitude: Double? = null
+    private var longitude: Double? = null
 
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
@@ -48,6 +50,17 @@ class PerfilActivity : BaseActivity() {
 
         binding.ivUserImage.setOnClickListener {
             chooseImage(this@PerfilActivity, resultLauncher)
+        }
+
+        binding.ivObterLocalizacaoAtual.setOnClickListener {
+            obterLocalizacaoAtual(
+                this@PerfilActivity,
+                { lat, long ->
+                    latitude = lat
+                    longitude = long
+                },
+                { null }
+            )
         }
 
         binding.btnUpdate.setOnClickListener {
@@ -96,8 +109,8 @@ class PerfilActivity : BaseActivity() {
             sobrenome = (if (binding.etSobrenome.text.toString() != advogadoDetalhes.sobrenome) binding.etSobrenome.text.toString() else advogadoDetalhes.sobrenome),
             email = (if (binding.etEmail.text.toString() != advogadoDetalhes.email) binding.etEmail.text.toString() else advogadoDetalhes.email),
             endereco = (if (binding.etEndereco.text.toString() != advogadoDetalhes.endereco) binding.etEndereco.text.toString() else advogadoDetalhes.endereco),
-            enderecoLat = 0,
-            enderecoLong = 0,
+            enderecoLat = latitude,
+            enderecoLong = latitude,
             imagem = (if (imagemPerfilURL.isNotEmpty() && imagemPerfilURL != advogadoDetalhes.imagem) imagemPerfilURL else advogadoDetalhes.imagem),
             oab = (if (binding.etOab.text.toString() != advogadoDetalhes.oab!!.toString()) binding.etOab.text.toString().toLong() else advogadoDetalhes.oab!!.toLong()),
             telefone = (if (binding.etTelefone.text.toString() != advogadoDetalhes.telefone) binding.etTelefone.text.toString() else advogadoDetalhes.telefone),
@@ -158,6 +171,9 @@ class PerfilActivity : BaseActivity() {
         binding.etOab.setText(advogadoDetalhes.oab.toString())
         binding.etEndereco.setText(advogadoDetalhes.endereco)
         binding.etTelefone.setText(advogadoDetalhes.telefone)
+
+        latitude = advogadoDetalhes.enderecoLat
+        longitude = advogadoDetalhes.enderecoLong
     }
 
     private fun validarFormulario(): Boolean {

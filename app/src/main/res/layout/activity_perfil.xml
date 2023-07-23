@@ -58,6 +58,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    style="@style/MyTextInputLayoutStyle"
                     android:layout_marginTop="@dimen/profileNameTilMarginTop">
 
                     <androidx.appcompat.widget.AppCompatEditText
@@ -74,6 +75,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    style="@style/MyTextInputLayoutStyle"
                     android:layout_marginTop="@dimen/profileEtEmailMarginTop">
 
                     <androidx.appcompat.widget.AppCompatEditText
@@ -90,6 +92,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    style="@style/MyTextInputLayoutStyle"
                     android:layout_marginTop="@dimen/profileEtEmailMarginTop">
 
                     <androidx.appcompat.widget.AppCompatEditText
@@ -107,6 +110,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    style="@style/MyTextInputLayoutStyle"
                     android:layout_marginTop="@dimen/profileEtMobileMarginTop">
 
                     <com.santalu.maskara.widget.MaskEditText
@@ -125,6 +129,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    style="@style/MyTextInputLayoutStyle"
                     android:layout_marginTop="@dimen/profileEtMobileMarginTop">
 
                     <androidx.appcompat.widget.AppCompatEditText
@@ -138,21 +143,59 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
+<!--                <com.google.android.material.textfield.TextInputLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    style="@style/MyTextInputLayoutStyle"-->
+<!--                    android:layout_marginTop="@dimen/profileEtMobileMarginTop">-->
+
+<!--                    <androidx.appcompat.widget.AppCompatEditText-->
+<!--                        android:id="@+id/etEndereco"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:hint="@string/endereco"-->
+<!--                        android:inputType="text"-->
+<!--                        android:maxLength="100"-->
+<!--                        android:textSize="@dimen/etTextSize" />-->
+
+<!--                </com.google.android.material.textfield.TextInputLayout>-->
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/profileEtMobileMarginTop">
+                    android:orientation="horizontal">
 
-                    <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/etEndereco"
-                        android:layout_width="match_parent"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:hint="@string/endereco"
-                        android:inputType="text"
-                        android:maxLength="100"
-                        android:textSize="@dimen/etTextSize" />
+                        android:layout_weight="1"
+                        style="@style/MyTextInputLayoutStyle"
+                        android:layout_marginTop="@dimen/profileEtMobileMarginTop">
 
-                </com.google.android.material.textfield.TextInputLayout>
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/etEndereco"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/endereco"
+                            android:inputType="text"
+                            android:textSize="@dimen/etTextSize" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+<!--                    <Button-->
+<!--                        android:id="@+id/btnObterLocalizacaoAtual"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                         />-->
+
+                    <ImageView
+                        android:id="@+id/ivObterLocalizacaoAtual"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:src="@drawable/ic_baseline_my_location_24"
+                        android:layout_marginTop="20dp"/>
+
+                </LinearLayout>
 
                 <Button
                     android:id="@+id/btn_update"

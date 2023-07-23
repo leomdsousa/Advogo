@@ -44,6 +44,7 @@ import com.example.advogo.utils.ObterEnderecoFromLatLng
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
@@ -71,6 +72,7 @@ open class BaseActivity : AppCompatActivity() {
     private var _doubleBackToExitPressureOnce = false
 
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+
 
     fun showProgressDialog(texto: String? = null) {
         if (!::progressDialog.isInitialized || !progressDialog.isShowing) {
@@ -260,6 +262,8 @@ open class BaseActivity : AppCompatActivity() {
                     @SuppressLint("MissingPermission")
                     override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
                         if(report!!.areAllPermissionsGranted()) {
+                            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this@BaseActivity)
+
                             fusedLocationProviderClient.lastLocation
                                 .addOnSuccessListener { location : Location? ->
                                     if(location != null) {

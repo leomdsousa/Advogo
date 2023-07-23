@@ -47,6 +47,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        style="@style/MyTextInputLayoutStyle"
                         android:layout_marginStart="@dimen/detalheClienteScreenTilMarginStartEnd"
                         android:layout_marginEnd="@dimen/detalheClienteScreenTilMarginStartEnd">
 
@@ -63,6 +64,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        style="@style/MyTextInputLayoutStyle"
                         android:layout_marginStart="@dimen/detalheClienteScreenTilMarginStartEnd"
                         android:layout_marginTop="@dimen/detalheClienteScreenTilMarginTop"
                         android:layout_marginEnd="@dimen/detalheClienteScreenTilMarginStartEnd">
@@ -83,6 +85,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        style="@style/MyTextInputLayoutStyle"
                         android:layout_marginStart="@dimen/detalheClienteScreenTilMarginStartEnd"
                         android:layout_marginTop="@dimen/detalheClienteScreenTilMarginTop"
                         android:layout_marginEnd="@dimen/detalheClienteScreenTilMarginStartEnd">
@@ -97,9 +100,39 @@
                             android:textSize="@dimen/etTextSize" />
                     </com.google.android.material.textfield.TextInputLayout>
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="@dimen/authenticationScreenTilMarginTop"
+                        android:paddingLeft="@dimen/cardViewLayoutContentPadding"
+                        android:paddingRight="@dimen/cardViewLayoutContentPadding">
+
+                        <com.santalu.maskara.widget.MaskEditText
+                            android:id="@+id/etCep"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:hint="@string/hintCep"
+                            android:inputType="number"
+                            android:maxLength="9"
+                            android:digits="0123456789"
+                            android:maxLines="1"
+                            app:mask="_____-___"
+                            app:maskCharacter="_"
+                            app:maskStyle="normal" />
+
+                        <Button
+                            android:id="@+id/btnCep"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Confirmar" />
+                    </LinearLayout>
+
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        style="@style/MyTextInputLayoutStyle"
                         android:layout_marginStart="@dimen/cadastroClienteScreenTilMarginStartEnd"
                         android:layout_marginTop="@dimen/cadastroClienteScreenTilMarginTop"
                         android:layout_marginEnd="@dimen/cadastroClienteScreenTilMarginStartEnd">
@@ -117,6 +150,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        style="@style/MyTextInputLayoutStyle"
                         android:layout_marginStart="@dimen/cadastroClienteScreenTilMarginStartEnd"
                         android:layout_marginTop="@dimen/cadastroClienteScreenTilMarginTop"
                         android:layout_marginEnd="@dimen/cadastroClienteScreenTilMarginStartEnd">
@@ -133,6 +167,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        style="@style/MyTextInputLayoutStyle"
                         android:layout_marginStart="@dimen/cadastroClienteScreenTilMarginStartEnd"
                         android:layout_marginTop="@dimen/cadastroClienteScreenTilMarginTop"
                         android:layout_marginEnd="@dimen/cadastroClienteScreenTilMarginStartEnd">
@@ -150,6 +185,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        style="@style/MyTextInputLayoutStyle"
                         android:layout_marginStart="@dimen/cadastroClienteScreenTilMarginStartEnd"
                         android:layout_marginTop="@dimen/cadastroClienteScreenTilMarginTop"
                         android:layout_marginEnd="@dimen/cadastroClienteScreenTilMarginStartEnd">
@@ -167,6 +203,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        style="@style/MyTextInputLayoutStyle"
                         android:layout_marginStart="@dimen/detalheClienteScreenTilMarginStartEnd"
                         android:layout_marginTop="@dimen/detalheClienteScreenTilMarginTop"
                         android:layout_marginEnd="@dimen/detalheClienteScreenTilMarginStartEnd">

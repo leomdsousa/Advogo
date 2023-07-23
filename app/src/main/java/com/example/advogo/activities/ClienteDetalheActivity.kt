@@ -17,6 +17,11 @@ import com.example.advogo.repositories.ClienteRepository
 import com.example.advogo.services.CorreioApiService
 import com.example.advogo.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -39,6 +44,49 @@ class ClienteDetalheActivity : BaseActivity() {
 
         binding.btnAtualizarCliente.setOnClickListener {
             saveCliente()
+        }
+
+        binding.btnCep.setOnClickListener {
+            binding.etEndereco.isEnabled = false
+            binding.etEnderecoCidade.isEnabled = false
+            binding.etBairro.isEnabled = false
+            binding.etEnderecoNumero.isEnabled = false
+
+            var valor: String = binding.etCep.text.toString()
+
+            if (valor.isNullOrEmpty()) {
+                binding.etCep.error = "O campo não pode estar vazio"
+                binding.etCep.requestFocus()
+                return@setOnClickListener
+            }
+
+            val rgxCep: Pattern = Pattern.compile("(^\\d{5}-\\d{3}|^\\d{2}.\\d{3}-\\d{3}|\\d{8})")
+            val matcher: Matcher = rgxCep.matcher(valor)
+
+            if (!matcher.matches()) {
+                binding.etCep.error = "Informe um CEP válido"
+                binding.etCep.requestFocus()
+            } else {
+                valor = valor.replace("-", "")
+
+                CoroutineScope(Dispatchers.Main).launch {
+                    val endereco = buscarEnderecoCorreio(valor)
+
+                    if(endereco != null) {
+                        binding.etEndereco.setText(endereco.logradouro)
+                        binding.etEnderecoCidade.setText(endereco.localidade)
+                        binding.etBairro.setText(endereco.bairro)
+
+                        binding.etEndereco.isEnabled = true
+                        binding.etEnderecoCidade.isEnabled = true
+                        binding.etBairro.isEnabled = true
+                        binding.etEnderecoNumero.isEnabled = true
+                    } else {
+                        binding.etCep.error = "CEP não encontrado"
+                        binding.etCep.requestFocus()
+                    }
+                }
+            }
         }
     }
 

@@ -50,7 +50,7 @@
                         android:layout_height="@dimen/processoImageSize"
                         android:contentDescription="Processo imagem"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/ic_baseline_anchor_24"
+                        android:src="@drawable/image_placeholder"
                         app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
                         app:strokeColor="@color/colorAccent"
                         app:strokeWidth="1dp"
@@ -59,6 +59,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        style="@style/MyTextInputLayoutStyle"
                         android:layout_marginTop="@dimen/processoCadastroTilMarginTop">
 
                         <androidx.appcompat.widget.AppCompatEditText
@@ -75,6 +76,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        style="@style/MyTextInputLayoutStyle"
                         android:layout_marginTop="@dimen/processoCadastroTilMarginTop">
 
                         <com.santalu.maskara.widget.MaskEditText
@@ -94,6 +96,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        style="@style/MyTextInputLayoutStyle"
                         android:layout_marginTop="@dimen/processoCadastroTilMarginTop">
 
                         <androidx.appcompat.widget.AppCompatEditText
@@ -154,6 +157,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        style="@style/MyTextInputLayoutStyle"
                         android:layout_marginTop="@dimen/processoCadastroTilMarginTop">
 
                         <androidx.appcompat.widget.AppCompatEditText
@@ -172,6 +176,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        style="@style/MyTextInputLayoutStyle"
                         android:layout_marginTop="@dimen/processoCadastroTilMarginTop">
 
                         <androidx.appcompat.widget.AppCompatEditText
@@ -191,6 +196,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        style="@style/MyTextInputLayoutStyle"
                         android:layout_marginTop="@dimen/processoCadastroTilMarginTop">
 
                         <androidx.appcompat.widget.AppCompatEditText

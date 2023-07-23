@@ -73,7 +73,7 @@ class DiligenciasFragment : BaseFragment() {
         configurarSpinnerFiltros()
 
         binding.calendarView.setOnDateChangedListener { widget, date, selected ->
-            val data = "${date.year}-${date.month}-${date.day}"
+            val data = "${date.year}-${date.month.toString().padStart(2, '0')}-${date.day.toString().padStart(2, '0')}"
 
             CoroutineScope(Dispatchers.Main).launch {
                 val diligencias = obterDiligenciasPorData(data)
@@ -129,8 +129,8 @@ class DiligenciasFragment : BaseFragment() {
                             val dataInicial = LocalDate.now()
                             val dataFinal = obterProximosDiasUteis(dataInicial, 7).last()
 
-                            val dataInicialStr = "${dataInicial.year}-${dataInicial.month}-${dataInicial.dayOfMonth}"
-                            val dataFinalStr = "${dataFinal.year}-${dataFinal.month}-${dataFinal.dayOfMonth}"
+                            val dataInicialStr = "${dataInicial.year}-${dataInicial.monthValue.toString().padStart(2,'0')}-${dataInicial.dayOfMonth.toString().padStart(2,'0')}"
+                            val dataFinalStr = "${dataFinal.year}-${dataFinal.monthValue.toString().padStart(2,'0')}-${dataFinal.dayOfMonth.toString().padStart(2,'0')}"
 
                             CoroutineScope(Dispatchers.Main).launch {
                                 val diligencias = obterDiligenciasPorData(dataInicialStr, dataFinalStr)
@@ -143,8 +143,8 @@ class DiligenciasFragment : BaseFragment() {
                             val dataInicial = LocalDate.now()
                             val dataFinal = obterProximosDiasUteis(dataInicial, 15).last()
 
-                            val dataInicialStr = "${dataInicial.year}-${dataInicial.month}-${dataInicial.dayOfMonth}"
-                            val dataFinalStr = "${dataFinal.year}-${dataFinal.month}-${dataFinal.dayOfMonth}"
+                            val dataInicialStr = "${dataInicial.year}-${dataInicial.monthValue.toString().padStart(2,'0')}-${dataInicial.dayOfMonth.toString().padStart(2,'0')}"
+                            val dataFinalStr = "${dataFinal.year}-${dataFinal.monthValue.toString().padStart(2,'0')}-${dataFinal.dayOfMonth.toString().padStart(2,'0')}"
 
                             CoroutineScope(Dispatchers.Main).launch {
                                 val diligencias = obterDiligenciasPorData(dataInicialStr, dataFinalStr)
@@ -157,8 +157,8 @@ class DiligenciasFragment : BaseFragment() {
                             val dataInicial = LocalDate.now()
                             val dataFinal = obterProximosDiasUteis(dataInicial, 30).last()
 
-                            val dataInicialStr = "${dataInicial.year}-${dataInicial.month}-${dataInicial.dayOfMonth}"
-                            val dataFinalStr = "${dataFinal.year}-${dataFinal.month}-${dataFinal.dayOfMonth}"
+                            val dataInicialStr = "${dataInicial.year}-${dataInicial.monthValue.toString().padStart(2,'0')}-${dataInicial.dayOfMonth.toString().padStart(2,'0')}"
+                            val dataFinalStr = "${dataFinal.year}-${dataFinal.monthValue.toString().padStart(2,'0')}-${dataFinal.dayOfMonth.toString().padStart(2,'0')}"
 
                             CoroutineScope(Dispatchers.Main).launch {
                                 val diligencias = obterDiligenciasPorData(dataInicialStr, dataFinalStr)
@@ -180,37 +180,41 @@ class DiligenciasFragment : BaseFragment() {
     }
 
     private fun configurarCalendarView() {
-        configurarCalendarViewDatas(diligencias)
+        CoroutineScope(Dispatchers.Main).launch {
+            configurarCalendarViewDatas(diligencias)
 
-        binding.calendarView
-            .state().edit()
-            .setMinimumDate(CalendarDay.from(2023, Calendar.JANUARY + 1, 1))
-            .setMaximumDate(CalendarDay.from(2023, Calendar.DECEMBER + 1, 31))
-            .commit()
+            binding.calendarView
+                .state().edit()
+                .setMinimumDate(CalendarDay.from(2023, Calendar.JANUARY + 1, 1))
+                .setMaximumDate(CalendarDay.from(2023, Calendar.DECEMBER + 1, 31))
+                .commit()
+        }
     }
 
     private fun configurarCalendarViewDatas(diligencias: List<Diligencia>) {
-        val dataSelecionadaMap = HashMap<CalendarDay, Int>()
+        CoroutineScope(Dispatchers.Main).launch {
+            val dataSelecionadaMap = HashMap<CalendarDay, Int>()
 
-        for (diligencia in diligencias) {
-            var data =
-                SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                    .parse(diligencia.data)
+            for (diligencia in diligencias) {
+                var data =
+                    SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                        .parse(diligencia.data)
 
-            val calendario = Calendar.getInstance()
-            calendario.time = data
+                val calendario = Calendar.getInstance()
+                calendario.time = data
 
-            val dataDiligencia = CalendarDay.from(
-                calendario.get(Calendar.YEAR),
-                calendario.get(Calendar.MONTH) + 1,
-                calendario.get(Calendar.DAY_OF_MONTH)
-            )
+                val dataDiligencia = CalendarDay.from(
+                    calendario.get(Calendar.YEAR),
+                    calendario.get(Calendar.MONTH) + 1,
+                    calendario.get(Calendar.DAY_OF_MONTH)
+                )
 
-            dataSelecionadaMap[dataDiligencia] = Color.RED
+                dataSelecionadaMap[dataDiligencia] = Color.RED
+            }
+
+            val decorator = DataSelecionadaDecorator(dataSelecionadaMap)
+            binding.calendarView.addDecorator(decorator)
         }
-
-        val decorator = DataSelecionadaDecorator(dataSelecionadaMap)
-        binding.calendarView.addDecorator(decorator)
     }
 
     private fun obterDiligencias() {

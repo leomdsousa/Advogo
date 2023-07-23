@@ -47,6 +47,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        style="@style/MyTextInputLayoutStyle"
                         android:layout_marginStart="@dimen/authenticationScreenTilMarginStartEnd"
                         android:layout_marginEnd="@dimen/authenticationScreenTilMarginStartEnd">
 
@@ -63,6 +64,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        style="@style/MyTextInputLayoutStyle"
                         android:layout_marginStart="@dimen/authenticationScreenTilMarginStartEnd"
                         android:layout_marginTop="@dimen/authenticationScreenTilMarginTop"
                         android:layout_marginEnd="@dimen/authenticationScreenTilMarginStartEnd">
@@ -80,6 +82,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        style="@style/MyTextInputLayoutStyle"
                         android:layout_marginStart="@dimen/authenticationScreenTilMarginStartEnd"
                         android:layout_marginTop="@dimen/authenticationScreenTilMarginTop"
                         android:layout_marginEnd="@dimen/authenticationScreenTilMarginStartEnd">
@@ -97,6 +100,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        style="@style/MyTextInputLayoutStyle"
                         android:layout_marginStart="@dimen/authenticationScreenTilMarginStartEnd"
                         android:layout_marginTop="@dimen/authenticationScreenTilMarginTop"
                         android:layout_marginEnd="@dimen/authenticationScreenTilMarginStartEnd">
@@ -138,12 +142,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Confirmar" />
-
                     </LinearLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        style="@style/MyTextInputLayoutStyle"
                         android:layout_marginStart="@dimen/cadastroClienteScreenTilMarginStartEnd"
                         android:layout_marginTop="@dimen/cadastroClienteScreenTilMarginTop"
                         android:layout_marginEnd="@dimen/cadastroClienteScreenTilMarginStartEnd">
@@ -162,6 +166,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        style="@style/MyTextInputLayoutStyle"
                         android:layout_marginStart="@dimen/cadastroClienteScreenTilMarginStartEnd"
                         android:layout_marginTop="@dimen/cadastroClienteScreenTilMarginTop"
                         android:layout_marginEnd="@dimen/cadastroClienteScreenTilMarginStartEnd">
@@ -180,6 +185,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        style="@style/MyTextInputLayoutStyle"
                         android:layout_marginStart="@dimen/cadastroClienteScreenTilMarginStartEnd"
                         android:layout_marginTop="@dimen/cadastroClienteScreenTilMarginTop"
                         android:layout_marginEnd="@dimen/cadastroClienteScreenTilMarginStartEnd">
@@ -198,6 +204,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        style="@style/MyTextInputLayoutStyle"
                         android:layout_marginStart="@dimen/cadastroClienteScreenTilMarginStartEnd"
                         android:layout_marginTop="@dimen/cadastroClienteScreenTilMarginTop"
                         android:layout_marginEnd="@dimen/cadastroClienteScreenTilMarginStartEnd">
@@ -216,6 +223,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        style="@style/MyTextInputLayoutStyle"
                         android:layout_marginStart="@dimen/authenticationScreenTilMarginStartEnd"
                         android:layout_marginTop="@dimen/authenticationScreenTilMarginTop"
                         android:layout_marginEnd="@dimen/authenticationScreenTilMarginStartEnd">
@@ -235,6 +243,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        style="@style/MyTextInputLayoutStyle"
                         android:layout_marginStart="@dimen/authenticationScreenTilMarginStartEnd"
                         android:layout_marginTop="@dimen/authenticationScreenTilMarginTop"
                         android:layout_marginEnd="@dimen/authenticationScreenTilMarginStartEnd">
