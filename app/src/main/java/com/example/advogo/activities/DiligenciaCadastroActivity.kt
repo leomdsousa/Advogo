@@ -284,11 +284,11 @@ class DiligenciaCadastroActivity : BaseActivity() {
             diligencia,
             {
                 val historico = DiligenciaHistorico(
-                    obs = "Diligência cadastrada",
+                    obs = "DILIGÊNCIA CADASTRADA",
                     advogado = advogadoSelecionado,
                     status = statusDiligenciaSelecionada,
                     tipo = tipoDiligenciaSelecionada,
-                    data = SimpleDateFormat("yyyy-MM-dd").format(LocalDateTime.now())
+                    data = SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(LocalDateTime.now())
                 )
 
                 diligenciaHistoricoRepository.adicionarDiligenciaHistorico(

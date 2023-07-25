@@ -242,6 +242,8 @@ class DiligenciaDetalheFragment : BaseFragment() {
             val diligenciaDetalhesDeferred = async { diligenciaRepository.obterDiligencia(diligenciaDetalhes.id!!) }
             diligenciaDetalhes = diligenciaDetalhesDeferred.await()!!
 
+            val alteracoes = formatarAlteracoes(diligenciaDetalhes)
+
             val diligencia = Diligencia(
                 id = diligenciaDetalhes.id,
                 descricao = if (binding.etDiligenciaDescricao.text.toString() != diligenciaDetalhes.descricao) binding.etDiligenciaDescricao.text.toString() else diligenciaDetalhes.descricao,
@@ -260,7 +262,7 @@ class DiligenciaDetalheFragment : BaseFragment() {
                 diligencia,
                 {
                     val historico = DiligenciaHistorico(
-                        obs = "Diligência atualizada",
+                        obs = alteracoes,
                         advogado = advSelecionado,
                         status = statusDiligenciaSelecionada,
                         tipo = tipoDiligenciaSelecionada,
@@ -458,5 +460,29 @@ class DiligenciaDetalheFragment : BaseFragment() {
 
         dataSelecionada = "$ano-$sMonthOfYear-$sDayOfMonth"
         binding.etDiligenciaData.setText("$sDayOfMonth/$sMonthOfYear/$ano")
+    }
+
+    private fun formatarAlteracoes(diligencia: Diligencia): String {
+        var retorno = "DILIGÊNCIA ATUALIZADA"
+
+        if(diligencia.status != statusDiligenciaSelecionada)
+            retorno += "\nStatus: DE ${diligencia.statusObj!!.status} para ${(binding.spinnerStatusDiligencia.selectedItem as DiligenciaStatus).status}"
+
+        if(diligencia.tipo != tipoDiligenciaSelecionada)
+            retorno += "\nTipo: DE ${diligencia.tipoObj!!.tipo} para ${(binding.spinnerTipoDiligencia.selectedItem as DiligenciaTipo).tipo}"
+
+        if(diligencia.processo != processoSelecionado)
+            retorno += "\n Processo: para ${binding.etDiligenciaProcesso.text.toString()}"
+
+        if(diligencia.advogado != advSelecionado)
+            retorno += "\nAdvogado: para ${binding.etDiligenciaAdvogado.text.toString()}"
+
+        if(diligencia.endereco != binding.etDiligenciaEndereco.text.toString())
+            retorno += "\nEndereço para: ${binding.etDiligenciaEndereco.text.toString()}"
+
+        if(diligencia.descricao != binding.etDiligenciaDescricao.text.toString())
+            retorno += "\nDescrição atualizada"
+
+        return retorno
     }
 }

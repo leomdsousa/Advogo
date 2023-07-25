@@ -31,6 +31,8 @@ import com.google.firebase.storage.StorageReference
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
@@ -41,6 +43,7 @@ class ProcessoCadastroActivity : BaseActivity() {
     private lateinit var id: String
 
     @Inject lateinit var processoRepository: IProcessoRepository
+    @Inject lateinit var processoHistoricoRepository: IProcessoHistoricoRepository
     @Inject lateinit var processoTipoRepository: IProcessoTipoRepository
     @Inject lateinit var processoStatusRepository: IProcessoStatusRepository
     @Inject lateinit var advogadoRepository: AdvogadoRepository
@@ -285,6 +288,7 @@ class ProcessoCadastroActivity : BaseActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun saveProcesso() {
         if(!validarFormulario()) {
             return
@@ -314,7 +318,23 @@ class ProcessoCadastroActivity : BaseActivity() {
 
             processoRepository.adicionarProcesso(
                 processo,
-                { processoCadastroSuccess() },
+                {
+                    val historico = ProcessoHistorico(
+                        obs = "PROCESSO CADASTRADO",
+                        advogado = advSelecionado,
+                        status = statusProcessoSelecionado,
+                        tipo = tipoProcessoSelecionado,
+                        data = SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(LocalDateTime.now())
+                    )
+
+                    processoHistoricoRepository.adicionarProcessoHistorico(
+                        historico,
+                        { null },
+                        { null }
+                    )
+
+                    processoCadastroSuccess()
+                },
                 { processoCadastroFailure() }
             )
         }

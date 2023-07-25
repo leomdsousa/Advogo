@@ -3,6 +3,7 @@ package com.example.advogo.fragments
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import android.widget.AdapterView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import com.bumptech.glide.Glide
 import com.example.advogo.R
 import com.example.advogo.adapters.ProcessosStatusAdapter
@@ -30,6 +32,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import java.io.IOException
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
 import java.util.*
 import javax.inject.Inject
 
@@ -39,6 +42,7 @@ class ProcessoDetalheFragment : BaseFragment() {
     private lateinit var processoDetalhes: Processo
 
     @Inject lateinit var processoRepository: ProcessoRepository
+    @Inject lateinit var processoHistoricoRepository: ProcessoHistoricoRepository
     @Inject lateinit var advogadoRepository: AdvogadoRepository
     @Inject lateinit var clienteRepository: ClienteRepository
     @Inject lateinit var processoTipoRepository: IProcessoTipoRepository
@@ -69,6 +73,7 @@ class ProcessoDetalheFragment : BaseFragment() {
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -142,6 +147,7 @@ class ProcessoDetalheFragment : BaseFragment() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun saveProcesso() {
         if(!validarFormulario()) {
             return
@@ -158,6 +164,8 @@ class ProcessoDetalheFragment : BaseFragment() {
 
             val processoDetalhesDeferred = async { processoRepository.obterProcesso(processoDetalhes.id!!) }
             processoDetalhes = processoDetalhesDeferred.await()!!
+
+            val alteracoes = formatarAlteracoes(processoDetalhes)
 
             val processo = Processo(
                 id = processoDetalhes.id,
@@ -178,7 +186,23 @@ class ProcessoDetalheFragment : BaseFragment() {
 
             processoRepository.atualizarProcesso(
                 processo,
-                { atualizarProcessoSuccess() },
+                {
+                    val historico = ProcessoHistorico(
+                        obs = alteracoes,
+                        advogado = advSelecionado,
+                        status = statusProcessoSelecionado,
+                        tipo = tipoProcessoSelecionado,
+                        data = SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(LocalDateTime.now())
+                    )
+
+                    processoHistoricoRepository.adicionarProcessoHistorico(
+                        historico,
+                        { null },
+                        { null }
+                    )
+
+                    atualizarProcessoSuccess()
+                },
                 { atualizarProcessoFailure() }
             )
         }
@@ -454,5 +478,35 @@ class ProcessoDetalheFragment : BaseFragment() {
 
     private fun atualizarProcessoFailure() {
         hideProgressDialog()
+    }
+
+    private fun formatarAlteracoes(processo: Processo): String {
+        var retorno = "PROCESSO ATUALIZADO"
+
+        if(processo.status != statusProcessoSelecionado)
+            retorno += "\nStatus: DE ${processo.statusObj!!.status} para ${(binding.spinnerStatusProcesso.selectedItem as ProcessoStatus).status}"
+
+        if(processo.tipo != tipoProcessoSelecionado)
+            retorno += "\nTipo: DE ${processo.tipoObj!!.tipo} para ${(binding.spinnerTipoProcesso.selectedItem as ProcessoTipo).tipo}"
+
+        if(processo.advogado != advSelecionado)
+            retorno += "\nAdvogado: para ${binding.etAdv.text.toString()}"
+
+        if(processo.cliente != clienteSelecionado)
+            retorno += "\nCliente: para ${binding.etCliente.text.toString()}"
+
+        if(processo.numero != binding.etNumeroProcesso .text.toString())
+            retorno += "\nNº Processo atualizado"
+
+        if(processo.titulo != binding.etProcessoName.text.toString())
+            retorno += "\nTítulo atualizado"
+
+        if(processo.descricao != binding.etDescricao.text.toString())
+            retorno += "\nDescrição atualizada"
+
+        if(imagemSelecionadaURI != null)
+            retorno += "\nImagem atualizada"
+
+        return retorno
     }
 }
