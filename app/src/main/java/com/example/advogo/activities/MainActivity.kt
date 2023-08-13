@@ -11,6 +11,7 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.TypefaceSpan
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
@@ -37,6 +38,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
+import io.grpc.InternalChannelz.id
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -110,6 +112,16 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             }
         }
     }
+
+//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+//        val currentFragment = getCurrentFragment()
+//        return currentFragment?.onCreateOptionsMenu(menu, menuInflater) ?: false
+//    }
+//
+//    private fun getCurrentFragment(): Fragment? {
+//        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
+//        return navHostFragment?.childFragmentManager?.fragments?.get(0)
+//    }
 
     private fun setupTabsLayout() {
         viewPager = findViewById(R.id.viewPager)

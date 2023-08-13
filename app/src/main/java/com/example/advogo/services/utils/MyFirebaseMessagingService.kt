@@ -1,4 +1,4 @@
-package com.example.advogo.services
+package com.example.advogo.services.utils
 
 import android.app.NotificationChannel
 import android.app.NotificationManager

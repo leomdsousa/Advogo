@@ -4,12 +4,11 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.advogo.R
 import com.example.advogo.activities.ProcessoCadastroActivity
 import com.example.advogo.activities.ProcessoDetalheActivity
 import com.example.advogo.adapters.ProcessosAdapter
@@ -31,6 +30,11 @@ class ProcessosFragment : BaseFragment() {
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
     private var onCreateCarregouLista = false
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -77,6 +81,30 @@ class ProcessosFragment : BaseFragment() {
 
         onCreateCarregouLista = false
         super.onResume()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_processos_acoes, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_ordernar_processos -> {
+                //alertDialogDeletarCliente("${clienteDetalhes.nome!!} (${clienteDetalhes.cpf!!})")
+                return true
+            }
+            R.id.action_filtrar_processos -> {
+                //alertDialogDeletarCliente("${clienteDetalhes.nome!!} (${clienteDetalhes.cpf!!})")
+                return true
+            }
+            R.id.action_buscar_processos -> {
+                //alertDialogDeletarCliente("${clienteDetalhes.nome!!} (${clienteDetalhes.cpf!!})")
+                return true
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     private fun obterProcessos() {

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_ordernar_processos"
+        android:icon="@drawable/ic_baseline_sort_24"
+        android:orderInCategory="100"
+        android:title="@string/ordenarProcessos"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_filtrar_processos"
+        android:icon="@drawable/ic_baseline_filter_list_24"
+        android:orderInCategory="100"
+        android:title="@string/filtrarProcessos"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_buscar_processos"
+        android:icon="@drawable/ic_baseline_search_24"
+        android:orderInCategory="100"
+        android:title="@string/buscarProcessos"
+        app:showAsAction="always" />
+</menu>

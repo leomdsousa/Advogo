@@ -4,13 +4,10 @@ import android.app.Application
 import android.app.ProgressDialog
 import android.content.Context
 import android.widget.ProgressBar
-import androidx.fragment.app.Fragment
-import com.example.advogo.services.CalendarService
+import com.example.advogo.services.utils.CalendarService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityComponent
-import dagger.hilt.android.components.FragmentComponent
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 

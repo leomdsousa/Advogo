@@ -122,6 +122,15 @@
     <string name="deletarAdvogado">Deletar Advogado</string>
     <string name="addAdvogado">Add Advogado</string>
     <string name="selecionarCliente">Selecione um cliente</string>
+    <string name="filtrarDiligencias">Filtrar Diligências</string>
+    <string name="ordenarDiligencias">Ordenar Diligências</string>
+    <string name="buscarDiligencias">Buscar Diligências</string>
+    <string name="filtrarProcessos">Filtrar Processos</string>
+    <string name="ordenarProcessos">Ordenar Processos</string>
+    <string name="buscarProcessos">Buscar Processos</string>
+    <string name="filtrarClientes">Filtrar Clientes</string>
+    <string name="ordenarClientes">Ordenar Clientes</string>
+    <string name="buscarClientes">Buscar Clientes</string>
 
     <string name="defaultNotificationChannelId">advogo_notification_channel_id</string>
     <!-- TODO: Remove or change this placeholder text -->

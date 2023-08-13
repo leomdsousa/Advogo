@@ -6,14 +6,11 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
+import android.view.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.core.view.setPadding
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.advogo.R
 import com.example.advogo.activities.DiligenciaCadastroActivity
@@ -35,8 +32,6 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import java.util.*
 import javax.inject.Inject
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 
 @AndroidEntryPoint
@@ -48,6 +43,11 @@ class DiligenciasFragment : BaseFragment() {
     private var onCreateCarregouLista = false
 
     private var diligencias: List<Diligencia> = arrayListOf()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -70,7 +70,7 @@ class DiligenciasFragment : BaseFragment() {
             resultLauncher.launch(intent)
         }
 
-        configurarSpinnerFiltros()
+        //configurarSpinnerFiltros()
 
         binding.calendarView.setOnDateChangedListener { widget, date, selected ->
             val data = "${date.year}-${date.month.toString().padStart(2, '0')}-${date.day.toString().padStart(2, '0')}"
@@ -108,80 +108,107 @@ class DiligenciasFragment : BaseFragment() {
         super.onResume()
     }
 
-    private fun configurarSpinnerFiltros() {
-        val adapter = ArrayAdapter.createFromResource(
-            requireContext(),
-            R.array.spinner_filtros_opcoes,
-            android.R.layout.simple_spinner_item
-        )
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_diligencia_acoes, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
 
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        binding.spinnerFiltros.adapter = adapter
-
-        binding.spinnerFiltros.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            @RequiresApi(Build.VERSION_CODES.O)
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                val selectedItem = parent.getItemAtPosition(position).toString()
-
-                selectedItem.let { item ->
-                    when(item) {
-                        "Mensal" -> {
-                            val dataInicial = LocalDate.now()
-                            val dataFinal = obterProximosDiasUteis(dataInicial, 7).last()
-
-                            val dataInicialStr = "${dataInicial.year}-${dataInicial.monthValue.toString().padStart(2,'0')}-${dataInicial.dayOfMonth.toString().padStart(2,'0')}"
-                            val dataFinalStr = "${dataFinal.year}-${dataFinal.monthValue.toString().padStart(2,'0')}-${dataFinal.dayOfMonth.toString().padStart(2,'0')}"
-
-                            CoroutineScope(Dispatchers.Main).launch {
-                                val diligencias = obterDiligenciasPorData(dataInicialStr, dataFinalStr)
-                                this@DiligenciasFragment.diligencias = diligencias
-                                setDiligenciasToUI(diligencias)
-                                configurarCalendarViewDatas(diligencias)
-                            }
-                        }
-                        "Quinzenal" -> {
-                            val dataInicial = LocalDate.now()
-                            val dataFinal = obterProximosDiasUteis(dataInicial, 15).last()
-
-                            val dataInicialStr = "${dataInicial.year}-${dataInicial.monthValue.toString().padStart(2,'0')}-${dataInicial.dayOfMonth.toString().padStart(2,'0')}"
-                            val dataFinalStr = "${dataFinal.year}-${dataFinal.monthValue.toString().padStart(2,'0')}-${dataFinal.dayOfMonth.toString().padStart(2,'0')}"
-
-                            CoroutineScope(Dispatchers.Main).launch {
-                                val diligencias = obterDiligenciasPorData(dataInicialStr, dataFinalStr)
-                                this@DiligenciasFragment.diligencias = diligencias
-                                setDiligenciasToUI(diligencias)
-                                configurarCalendarViewDatas(diligencias)
-                            }
-                        }
-                        "Semanal" -> {
-                            val dataInicial = LocalDate.now()
-                            val dataFinal = obterProximosDiasUteis(dataInicial, 30).last()
-
-                            val dataInicialStr = "${dataInicial.year}-${dataInicial.monthValue.toString().padStart(2,'0')}-${dataInicial.dayOfMonth.toString().padStart(2,'0')}"
-                            val dataFinalStr = "${dataFinal.year}-${dataFinal.monthValue.toString().padStart(2,'0')}-${dataFinal.dayOfMonth.toString().padStart(2,'0')}"
-
-                            CoroutineScope(Dispatchers.Main).launch {
-                                val diligencias = obterDiligenciasPorData(dataInicialStr, dataFinalStr)
-                                this@DiligenciasFragment.diligencias = diligencias
-                                setDiligenciasToUI(diligencias)
-                                configurarCalendarViewDatas(diligencias)
-                            }
-                        } else -> {
-                            //Validar o que implementar
-                        }
-                    }
-                }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_ordernar_diligencias -> {
+                //alertDialogDeletarCliente("${clienteDetalhes.nome!!} (${clienteDetalhes.cpf!!})")
+                return true
             }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {
-
+            R.id.action_filtrar_diligencias -> {
+                //alertDialogDeletarCliente("${clienteDetalhes.nome!!} (${clienteDetalhes.cpf!!})")
+                return true
+            }
+            R.id.action_buscar_diligencias -> {
+                //alertDialogDeletarCliente("${clienteDetalhes.nome!!} (${clienteDetalhes.cpf!!})")
+                return true
             }
         }
+
+        return super.onOptionsItemSelected(item)
     }
+
+//    private fun configurarSpinnerFiltros() {
+//        val adapter = ArrayAdapter.createFromResource(
+//            requireContext(),
+//            R.array.spinner_filtros_opcoes,
+//            android.R.layout.simple_spinner_item
+//        )
+//
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+//        binding.spinnerFiltros.adapter = adapter
+//
+//        binding.spinnerFiltros.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+//            @RequiresApi(Build.VERSION_CODES.O)
+//            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+//                val selectedItem = parent.getItemAtPosition(position).toString()
+//
+//                selectedItem.let { item ->
+//                    when(item) {
+//                        "Mensal" -> {
+//                            val dataInicial = LocalDate.now()
+//                            val dataFinal = obterProximosDiasUteis(dataInicial, 7).last()
+//
+//                            val dataInicialStr = "${dataInicial.year}-${dataInicial.monthValue.toString().padStart(2,'0')}-${dataInicial.dayOfMonth.toString().padStart(2,'0')}"
+//                            val dataFinalStr = "${dataFinal.year}-${dataFinal.monthValue.toString().padStart(2,'0')}-${dataFinal.dayOfMonth.toString().padStart(2,'0')}"
+//
+//                            CoroutineScope(Dispatchers.Main).launch {
+//                                val diligencias = obterDiligenciasPorData(dataInicialStr, dataFinalStr)
+//                                this@DiligenciasFragment.diligencias = diligencias
+//                                setDiligenciasToUI(diligencias)
+//                                configurarCalendarViewDatas(diligencias)
+//                            }
+//                        }
+//                        "Quinzenal" -> {
+//                            val dataInicial = LocalDate.now()
+//                            val dataFinal = obterProximosDiasUteis(dataInicial, 15).last()
+//
+//                            val dataInicialStr = "${dataInicial.year}-${dataInicial.monthValue.toString().padStart(2,'0')}-${dataInicial.dayOfMonth.toString().padStart(2,'0')}"
+//                            val dataFinalStr = "${dataFinal.year}-${dataFinal.monthValue.toString().padStart(2,'0')}-${dataFinal.dayOfMonth.toString().padStart(2,'0')}"
+//
+//                            CoroutineScope(Dispatchers.Main).launch {
+//                                val diligencias = obterDiligenciasPorData(dataInicialStr, dataFinalStr)
+//                                this@DiligenciasFragment.diligencias = diligencias
+//                                setDiligenciasToUI(diligencias)
+//                                configurarCalendarViewDatas(diligencias)
+//                            }
+//                        }
+//                        "Semanal" -> {
+//                            val dataInicial = LocalDate.now()
+//                            val dataFinal = obterProximosDiasUteis(dataInicial, 30).last()
+//
+//                            val dataInicialStr = "${dataInicial.year}-${dataInicial.monthValue.toString().padStart(2,'0')}-${dataInicial.dayOfMonth.toString().padStart(2,'0')}"
+//                            val dataFinalStr = "${dataFinal.year}-${dataFinal.monthValue.toString().padStart(2,'0')}-${dataFinal.dayOfMonth.toString().padStart(2,'0')}"
+//
+//                            CoroutineScope(Dispatchers.Main).launch {
+//                                val diligencias = obterDiligenciasPorData(dataInicialStr, dataFinalStr)
+//                                this@DiligenciasFragment.diligencias = diligencias
+//                                setDiligenciasToUI(diligencias)
+//                                configurarCalendarViewDatas(diligencias)
+//                            }
+//                        } else -> {
+//                            //Validar o que implementar
+//                        }
+//                    }
+//                }
+//            }
+//
+//            override fun onNothingSelected(parent: AdapterView<*>) {
+//
+//            }
+//        }
+//    }
 
     private fun configurarCalendarView() {
         CoroutineScope(Dispatchers.Main).launch {
             configurarCalendarViewDatas(diligencias)
+
+            binding.calendarView.tileWidth = 150
+            binding.calendarView.setPadding(0)
 
             binding.calendarView
                 .state().edit()
@@ -282,4 +309,6 @@ class DiligenciasFragment : BaseFragment() {
 
         return diasUteis
     }
+
+
 }

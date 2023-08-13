@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_ordernar_diligencias"
+        android:icon="@drawable/ic_baseline_sort_24"
+        android:orderInCategory="100"
+        android:title="@string/ordenarDiligencias"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_filtrar_diligencias"
+        android:icon="@drawable/ic_baseline_filter_list_24"
+        android:orderInCategory="100"
+        android:title="@string/filtrarDiligencias"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_buscar_diligencias"
+        android:icon="@drawable/ic_baseline_search_24"
+        android:orderInCategory="100"
+        android:title="@string/buscarDiligencias"
+        app:showAsAction="always" />
+</menu>

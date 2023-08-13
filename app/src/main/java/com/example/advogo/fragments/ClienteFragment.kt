@@ -4,12 +4,11 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.advogo.R
 import com.example.advogo.activities.ClienteCadastroActivity
 import com.example.advogo.activities.ClienteDetalheActivity
 import com.example.advogo.adapters.ClientesAdapter
@@ -27,7 +26,12 @@ class ClienteFragment : BaseFragment() {
 
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
     private var onCreateCarregouLista = false
-    
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -73,6 +77,30 @@ class ClienteFragment : BaseFragment() {
 
         onCreateCarregouLista = false
         super.onResume()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_clientes_acoes, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_ordernar_clientes -> {
+                //alertDialogDeletarCliente("${clienteDetalhes.nome!!} (${clienteDetalhes.cpf!!})")
+                return true
+            }
+            R.id.action_filtrar_clientes -> {
+                //alertDialogDeletarCliente("${clienteDetalhes.nome!!} (${clienteDetalhes.cpf!!})")
+                return true
+            }
+            R.id.action_buscar_clientes -> {
+                //alertDialogDeletarCliente("${clienteDetalhes.nome!!} (${clienteDetalhes.cpf!!})")
+                return true
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     private fun obterClientes() {

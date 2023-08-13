@@ -27,30 +27,30 @@
             style="@style/CalendarViewStyle"
             android:background="@color/white" />
 
-        <ImageView
-            android:id="@+id/ivFiltrosDiligencias"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_date_range_24"
-            android:layout_margin="8dp"/>
+<!--        <ImageView-->
+<!--            android:id="@+id/ivFiltrosDiligencias"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:src="@drawable/ic_baseline_date_range_24"-->
+<!--            android:layout_margin="0dp"/>-->
 
-        <Spinner
-            android:id="@+id/spinnerFiltros"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
-            android:entries="@array/spinner_filtros_opcoes"
-            app:layout_constraintEnd_toEndOf="@id/calendarCardView"
-            app:layout_constraintTop_toTopOf="@id/calendarCardView"
-            android:visibility="gone" />
+<!--        <Spinner-->
+<!--            android:id="@+id/spinnerFiltros"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginEnd="8dp"-->
+<!--            android:layout_marginTop="8dp"-->
+<!--            android:entries="@array/spinner_filtros_opcoes"-->
+<!--            app:layout_constraintEnd_toEndOf="@id/calendarCardView"-->
+<!--            app:layout_constraintTop_toTopOf="@id/calendarCardView"-->
+<!--            android:visibility="gone" />-->
 
     </com.google.android.material.card.MaterialCardView>
 
     <View
         android:id="@+id/divider"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/itemProcessoDividerHeight"
+        android:layout_height="0.1dp"
         android:background="@color/colorOnPrimary"
         app:layout_constraintTop_toBottomOf="@id/calendarCardView"
         app:layout_constraintBottom_toTopOf="@id/recyclerViewCardView" />
@@ -61,7 +61,7 @@
         android:layout_height="0dp"
         android:background="@android:color/white"
         app:layout_constraintTop_toBottomOf="@id/divider"
-        app:layout_constraintBottom_toTopOf="@id/fab_diligencia_cadastro">
+        app:layout_constraintBottom_toTopOf="@id/guideline">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvDiligenciasList"
@@ -82,6 +82,13 @@
 
     </androidx.cardview.widget.CardView>
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="1" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_diligencia_cadastro"
         android:layout_width="wrap_content"
@@ -91,7 +98,7 @@
         app:tint="@android:color/white"
         android:backgroundTint="@color/colorPrimary"
         app:srcCompat="@drawable/ic_vector_add_24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/guideline"
         app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,8 +1,7 @@
-package com.example.advogo.services
+package com.example.advogo.services.utils
 
 import android.content.ContentResolver
 import android.content.ContentValues
-import android.content.Context
 import android.net.Uri
 import android.provider.CalendarContract
 
