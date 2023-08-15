@@ -165,7 +165,6 @@ class AdvogadoDetalheActivity : BaseActivity() {
         }
     }
 
-
     private suspend fun atualizarAdvogadoImagem(): String {
         return suspendCancellableCoroutine { continuation ->
             val sRef: StorageReference = FirebaseStorage.getInstance().reference.child(

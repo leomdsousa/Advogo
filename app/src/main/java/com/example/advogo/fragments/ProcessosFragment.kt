@@ -13,6 +13,7 @@ import com.example.advogo.activities.ProcessoCadastroActivity
 import com.example.advogo.activities.ProcessoDetalheActivity
 import com.example.advogo.adapters.ProcessosAdapter
 import com.example.advogo.databinding.FragmentProcessosBinding
+import com.example.advogo.dialogs.SearchDialog
 import com.example.advogo.models.Processo
 import com.example.advogo.repositories.IProcessoRepository
 import com.example.advogo.utils.Constants
@@ -21,6 +22,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 class ProcessosFragment : BaseFragment() {
@@ -29,6 +31,9 @@ class ProcessosFragment : BaseFragment() {
 
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
+    private lateinit var processosLista: List<Processo>
+    private var isListaOrdenadaAsc = false
+    private var isListaOrdenadaDesc = false
     private var onCreateCarregouLista = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,15 +96,31 @@ class ProcessosFragment : BaseFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_ordernar_processos -> {
-                //alertDialogDeletarCliente("${clienteDetalhes.nome!!} (${clienteDetalhes.cpf!!})")
+                var listaOrdenada: ArrayList<Processo>
+
+                if(!isListaOrdenadaAsc && !isListaOrdenadaDesc) {
+                    listaOrdenada = ArrayList(processosLista.sortedBy { it.titulo })
+                    isListaOrdenadaAsc = true
+                    isListaOrdenadaDesc = false
+                } else if(!isListaOrdenadaDesc) {
+                    listaOrdenada = ArrayList(processosLista.sortedByDescending { it.titulo })
+                    isListaOrdenadaAsc = false
+                    isListaOrdenadaDesc = true
+                } else {
+                    listaOrdenada = ArrayList(processosLista.sortedByDescending { it.data })
+                    isListaOrdenadaAsc = false
+                    isListaOrdenadaDesc = false
+                }
+
+                (binding.rvBoardsList.adapter as ProcessosAdapter).updateList(listaOrdenada)
                 return true
             }
-            R.id.action_filtrar_processos -> {
-                //alertDialogDeletarCliente("${clienteDetalhes.nome!!} (${clienteDetalhes.cpf!!})")
-                return true
-            }
+//            R.id.action_filtrar_processos -> {
+//                //alertDialogDeletarCliente("${clienteDetalhes.nome!!} (${clienteDetalhes.cpf!!})")
+//                return true
+//            }
             R.id.action_buscar_processos -> {
-                //alertDialogDeletarCliente("${clienteDetalhes.nome!!} (${clienteDetalhes.cpf!!})")
+                showDialogBuscarProcesso("Buscar Processos", "Título")
                 return true
             }
         }
@@ -117,7 +138,22 @@ class ProcessosFragment : BaseFragment() {
         )
     }
 
-    private fun setProcessosToUI(lista: ArrayList<Processo>) {
+    private fun obterProcesso(value: String) {
+        showProgressDialog("Buscando")
+
+        processoRepository.obterProcessosByTituloContains(
+            value,
+            { processos ->
+                setProcessosToUI(processos)
+                hideProgressDialog()
+            },
+            { hideProgressDialog() }
+        )
+    }
+
+    private fun setProcessosToUI(lista: List<Processo>) {
+        processosLista = lista
+
         CoroutineScope(Dispatchers.Main).launch {
             if(lista.size > 0) {
                 binding.rvBoardsList.visibility = View.VISIBLE
@@ -145,5 +181,18 @@ class ProcessosFragment : BaseFragment() {
                 binding.tvNoBoardsAvailable.visibility = View.VISIBLE
             }
         }
+    }
+
+    private fun showDialogBuscarProcesso(titulo: String, placeholder: String) {
+        val searchDialog = object : SearchDialog(
+            requireContext(),
+            titulo,
+            placeholder) {
+            override fun onItemSelected(value: String) {
+                obterProcesso(value)
+            }
+        }
+
+        searchDialog.show()
     }
 }

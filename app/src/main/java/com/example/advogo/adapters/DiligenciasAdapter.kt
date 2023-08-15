@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.advogo.R
 import com.example.advogo.databinding.ItemDiligenciaBinding
+import com.example.advogo.models.Cliente
 import com.example.advogo.models.Diligencia
 import java.text.SimpleDateFormat
 import java.util.*
@@ -71,5 +72,10 @@ open class DiligenciasAdapter(
 
     fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
         this.onItemClickListener = onItemClickListener
+    }
+
+    fun updateList(newList: ArrayList<Diligencia>) {
+        list = newList
+        notifyDataSetChanged()
     }
 }

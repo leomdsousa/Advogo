@@ -184,6 +184,62 @@ class ProcessoRepository @Inject constructor(
                 onFailureListener(exception)
             }
     }
+    override fun obterProcessosByTituloContains(text: String, onSuccessListener: (lista: List<Processo>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+        firebaseStore
+            .collection(Constants.PROCESSOS_TABLE)
+            .whereGreaterThanOrEqualTo(Constants.PROCESSOS_TITULO, text)
+            .whereLessThanOrEqualTo(Constants.PROCESSOS_TITULO, "${text}\uF7FF")
+            .get()
+            .addOnSuccessListener { documents ->
+                if (!documents.isEmpty) {
+                    val processos = documents.toObjects(Processo::class.java)
+
+                    coroutineScope.launch {
+                        if (processos.isNotEmpty()) {
+                            for (item in processos) {
+                                val clienteDeferred = async { clienteRepository.obterCliente(item.cliente!!) }
+                                val advogadoDeferred = async { advogadoRepository.obterAdvogado(item.advogado!!) }
+                                val statusDeferred = async { statusProcessoRepository.obterProcessoStatus(item.status!!) }
+                                val tipoDeferred = async { tipoProcessoRepository.obterProcessoTipo(item.tipo!!) }
+
+                                item.clienteObj = clienteDeferred.await()
+                                item.advogadoObj = advogadoDeferred.await()
+                                item.statusObj = statusDeferred.await()
+                                item.tipoObj = tipoDeferred.await()
+
+                                if(item.anexos?.isNotEmpty() == true) {
+                                    val anexosDeferred = async { anexoRepository.obterAnexosPorLista(item.anexos!!) }
+                                    item.anexosLista = anexosDeferred.await()
+                                } else {
+                                    item.anexosLista = emptyList()
+                                }
+
+                                if(item.andamentos?.isNotEmpty() == true) {
+                                    val andamentosDeferred = async { andamentoRepository.obterAndamentosPorLista(item.andamentos!!) }
+                                    item.andamentosLista = andamentosDeferred.await()
+                                } else {
+                                    item.andamentosLista = emptyList()
+                                }
+
+                                if(item.historico?.isNotEmpty() == true) {
+                                    val historicoDeferred = async { historicoRepository.obterProcessosHistoricoPorLista(item.historico!!) }
+                                    item.historicoLista = historicoDeferred.await()
+                                } else {
+                                    item.historicoLista = emptyList()
+                                }
+                            }
+
+                            onSuccessListener(processos)
+                        }
+                    }
+                } else {
+                    onSuccessListener(emptyList())
+                }
+            }
+            .addOnFailureListener { exception ->
+                onFailureListener(exception)
+            }
+    }
 
     override fun adicionarProcesso(model: Processo, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
@@ -331,6 +387,7 @@ class ProcessoRepository @Inject constructor(
 interface IProcessoRepository {
     fun obterProcessos(onSuccessListener: (lista: List<Processo>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
     fun obterProcesso(id: String, onSuccessListener: (processo: Processo) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun obterProcessosByTituloContains(text: String, onSuccessListener: (lista: List<Processo>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
     fun obterProcessoPorNumero(numero: String, onSuccessListener: (processo: Processo) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
     fun adicionarProcesso(model: Processo, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
     fun atualizarProcesso(model: Processo, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)

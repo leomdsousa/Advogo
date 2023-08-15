@@ -14,7 +14,7 @@ import com.example.advogo.utils.Constants
 
 open class ProcessosAdapter(
     private val context: Context,
-    private var list: ArrayList<Processo>
+    private var list: List<Processo>
 ): RecyclerView.Adapter<ProcessosAdapter.MyViewHolder>() {
     private var onItemClickListener: OnItemClickListener? = null
 
@@ -76,5 +76,10 @@ open class ProcessosAdapter(
 
     fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
         this.onItemClickListener = onItemClickListener
+    }
+
+    fun updateList(newList: ArrayList<Processo>) {
+        list = newList
+        notifyDataSetChanged()
     }
 }

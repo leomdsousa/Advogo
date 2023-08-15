@@ -52,6 +52,24 @@ class ClienteRepository @Inject constructor(
                 onFailureListener(exception)
             }
     }
+    override fun obterClientesByNomeContains(text: String, onSuccessListener: (lista: List<Cliente>) -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
+        firebaseStore
+            .collection(Constants.CLIENTES_TABLE)
+            .whereGreaterThanOrEqualTo(Constants.CLIENTES_NOME, text)
+            .whereLessThanOrEqualTo(Constants.CLIENTES_NOME, "${text}\uF7FF")
+            .get()
+            .addOnSuccessListener { documents ->
+                if (!documents.isEmpty) {
+                    val clientes = documents.toObjects(Cliente::class.java)!!
+                    onSuccessListener(clientes)
+                } else {
+                    onSuccessListener(emptyList())
+                }
+            }
+            .addOnFailureListener { exception ->
+                onFailureListener(exception)
+            }
+    }
 
     override suspend fun obterClientes(): List<Cliente>? = suspendCoroutine { continuation ->
         firebaseStore
@@ -154,6 +172,7 @@ class ClienteRepository @Inject constructor(
 interface IClienteRepository {
     fun obterClientes(onSuccessListener: (lista: List<Cliente>) -> Unit, onFailureListener: (exception: Exception?) -> Unit)
     fun obterCliente(id: String, onSuccessListener: (cliente: Cliente) -> Unit, onFailureListener: (exception: Exception?) -> Unit)
+    fun obterClientesByNomeContains(text: String, onSuccessListener: (lista: List<Cliente>) -> Unit, onFailureListener: (exception: Exception?) -> Unit)
     fun obterClientePorEmail(email: String, onSuccessListener: (cliente: Cliente) -> Unit, onFailureListener: (exception: Exception?) -> Unit)
     fun adicionarCliente(model: Cliente, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit)
     fun atualizarCliente(model: Cliente, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit)

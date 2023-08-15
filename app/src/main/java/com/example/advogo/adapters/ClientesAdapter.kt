@@ -13,12 +13,13 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.advogo.databinding.ItemClienteBinding
 import com.example.advogo.models.Cliente
+import com.example.advogo.models.Processo
 import com.example.advogo.utils.Constants
 
 
 open class ClientesAdapter(
     private val context: Context,
-    private var list: ArrayList<Cliente>,
+    private var list: List<Cliente>,
     private val exibirIconeTelefone: Boolean = false,
     private val exibirIconeEmail: Boolean = false,
     private val exibirIconeWhatsapp: Boolean = false
@@ -127,5 +128,10 @@ open class ClientesAdapter(
 
     fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
         this.onItemClickListener = onItemClickListener
+    }
+
+    fun updateList(newList: ArrayList<Cliente>) {
+        list = newList
+        notifyDataSetChanged()
     }
 }

@@ -106,6 +106,51 @@ class DiligenciaRepository @Inject constructor(
                 onFailureListener(exception)
             }
     }
+    override fun obterDiligenciasByDescricaoContains(text: String, onSuccessListener: (lista: List<Diligencia>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+        firebaseStore
+            .collection(Constants.DILIGENCIAS_TABLE)
+            .orderBy(Constants.DILIGENCIAS_DESCRICAO)
+            .startAt(text)
+            .endAt(text + "\uf8ff")
+            //.whereGreaterThanOrEqualTo(Constants.DILIGENCIAS_DESCRICAO, text)
+            //.whereLessThanOrEqualTo(Constants.DILIGENCIAS_DESCRICAO, "${text}\uF7FF")
+            .get()
+            .addOnSuccessListener { documents ->
+                if (!documents.isEmpty) {
+                    val diligencias = documents.toObjects(Diligencia::class.java)!!
+
+                    coroutineScope.launch {
+                        if (diligencias.isNotEmpty()) {
+                            for (item in diligencias) {
+                                val advogadoDeferred = async { advogadoRepository.get().obterAdvogado(item.advogado!!) }
+                                val processoDeferred = async { processoRepository.get().obterProcesso(item.processo!!) }
+                                val statusDeferred = async { statusDiligenciaRepository.obterDiligenciaStatus(item.status!!) }
+                                val tipoDeferred = async { tipoDiligenciaRepository.obterDiligenciaTipo(item.tipo!!) }
+
+                                item.advogadoObj = advogadoDeferred.await()
+                                item.processoObj = processoDeferred.await()
+                                item.statusObj = statusDeferred.await()
+                                item.tipoObj = tipoDeferred.await()
+
+                                if(item.historico?.isNotEmpty() == true) {
+                                    val historicoDeferred = async { diligenciaHistoricoRepository.obterDiligenciasHistoricoPorLista(item.historico!!) }
+                                    item.historicoLista = historicoDeferred.await()
+                                } else {
+                                    item.historicoLista = emptyList()
+                                }
+                            }
+
+                            onSuccessListener(diligencias)
+                        }
+                    }
+                } else {
+                    onSuccessListener(emptyList())
+                }
+            }
+            .addOnFailureListener { exception ->
+                onFailureListener(exception)
+            }
+    }
     override fun obterDiligenciasPorProcesso(numeroProcesso: String, onSuccessListener: (lista: List<Diligencia>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.DILIGENCIAS_TABLE)
@@ -350,6 +395,7 @@ class DiligenciaRepository @Inject constructor(
 interface IDiligenciaRepository {
     fun obterDiligencias(onSuccessListener: (lista: List<Diligencia>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
     fun obterDiligencia(id: String, onSuccessListener: (diligencia: Diligencia) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun obterDiligenciasByDescricaoContains(text: String, onSuccessListener: (lista: List<Diligencia>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
     fun obterDiligenciasPorProcesso(numeroProcesso: String, onSuccessListener: (lista: List<Diligencia>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
     fun obterDiligenciasPorAdvogado(emailAdvogado: String, onSuccessListener: (lista: List<Diligencia>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
     fun adicionarDiligencia(model: Diligencia, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)

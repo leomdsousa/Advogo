@@ -13,6 +13,7 @@ import com.example.advogo.databinding.ItemAdvogadoBinding
 import com.example.advogo.models.Advogado
 import com.example.advogo.utils.Constants
 import com.example.advogo.dialogs.AdvogadosDialog
+import com.example.advogo.models.Cliente
 import dagger.hilt.android.AndroidEntryPoint
 
 open class AdvogadosAdapter(
@@ -111,5 +112,10 @@ open class AdvogadosAdapter(
 
     fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
         this.onItemClickListener = onItemClickListener
+    }
+
+    fun updateList(newList: ArrayList<Advogado>) {
+        list = newList
+        notifyDataSetChanged()
     }
 }

@@ -11,6 +11,7 @@ data class Cliente(
     var nome: String? = null,
     var rg: String? = null,
     var cpf: String? = null,
+    var data: String? = null,
     var estadoCivil: String? = null,
     var email: String? = null,
     var endereco: String? = null,

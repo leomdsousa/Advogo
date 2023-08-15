@@ -13,6 +13,7 @@ import com.example.advogo.activities.ClienteCadastroActivity
 import com.example.advogo.activities.ClienteDetalheActivity
 import com.example.advogo.adapters.ClientesAdapter
 import com.example.advogo.databinding.FragmentClienteBinding
+import com.example.advogo.dialogs.SearchDialog
 import com.example.advogo.models.Cliente
 import com.example.advogo.repositories.IClienteRepository
 import com.example.advogo.utils.Constants
@@ -25,6 +26,10 @@ class ClienteFragment : BaseFragment() {
     @Inject lateinit var clienteRepository: IClienteRepository
 
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
+
+    private lateinit var clientesLista: List<Cliente>
+    private var isListaOrdenadaAsc = false
+    private var isListaOrdenadaDesc = false
     private var onCreateCarregouLista = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,20 +92,49 @@ class ClienteFragment : BaseFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_ordernar_clientes -> {
-                //alertDialogDeletarCliente("${clienteDetalhes.nome!!} (${clienteDetalhes.cpf!!})")
+                var listaOrdenada: ArrayList<Cliente>
+
+                if(!isListaOrdenadaAsc && !isListaOrdenadaDesc) {
+                    listaOrdenada = ArrayList(clientesLista.sortedBy { it.nome })
+                    isListaOrdenadaAsc = true
+                    isListaOrdenadaDesc = false
+                } else if(!isListaOrdenadaDesc) {
+                    listaOrdenada = ArrayList(clientesLista.sortedByDescending { it.nome })
+                    isListaOrdenadaAsc = false
+                    isListaOrdenadaDesc = true
+                } else {
+                    listaOrdenada = ArrayList(clientesLista.sortedByDescending { it.data })
+                    isListaOrdenadaAsc = false
+                    isListaOrdenadaDesc = false
+                }
+
+                (binding.rvClientsList.adapter as ClientesAdapter).updateList(listaOrdenada)
                 return true
             }
-            R.id.action_filtrar_clientes -> {
-                //alertDialogDeletarCliente("${clienteDetalhes.nome!!} (${clienteDetalhes.cpf!!})")
-                return true
-            }
+//            R.id.action_filtrar_clientes -> {
+//                //alertDialogDeletarCliente("${clienteDetalhes.nome!!} (${clienteDetalhes.cpf!!})")
+//                return true
+//            }
             R.id.action_buscar_clientes -> {
-                //alertDialogDeletarCliente("${clienteDetalhes.nome!!} (${clienteDetalhes.cpf!!})")
+                showDialogBuscarCliente("Buscar Clientes", "Nome")
                 return true
             }
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun showDialogBuscarCliente(titulo: String, placeholder: String) {
+        val searchDialog = object : SearchDialog(
+            requireContext(),
+            titulo,
+            placeholder) {
+            override fun onItemSelected(value: String) {
+                obterCliente(value)
+            }
+        }
+
+        searchDialog.show()
     }
 
     private fun obterClientes() {
@@ -113,7 +147,22 @@ class ClienteFragment : BaseFragment() {
         )
     }
 
-    private fun setClientesToUI(lista: ArrayList<Cliente>) {
+    private fun obterCliente(valor: String) {
+        showProgressDialog("Buscando")
+
+        clienteRepository.obterClientesByNomeContains(
+            valor,
+            { clientes ->
+                setClientesToUI(clientes)
+                hideProgressDialog()
+            },
+            { hideProgressDialog() }
+        )
+    }
+
+    private fun setClientesToUI(lista: List<Cliente>) {
+        clientesLista = lista
+
         if(lista.size > 0) {
             binding.rvClientsList.visibility = View.VISIBLE
             binding.tvNoClientsAvailable.visibility = View.GONE

@@ -14,11 +14,13 @@ object Constants {
 
     const val CLIENTES_TABLE = "clientes"
     const val CLIENTES_ID = "_id"
+    const val CLIENTES_NOME = "nome"
     const val CLIENTES_TELEFONE = "telefone"
     const val CLIENTES_EMAIL = "email"
 
     const val PROCESSOS_TABLE = "processos"
     const val PROCESSOS_ID = "_id"
+    const val PROCESSOS_TITULO = "titulo"
     const val PROCESSOS_NUMERO = "numero"
 
     const val PROCESSOS_TIPOS_TABLE = "processosTipos"
@@ -39,6 +41,7 @@ object Constants {
 
     const val DILIGENCIAS_TABLE = "diligencias"
     const val DILIGENCIAS_ID = "_id"
+    const val DILIGENCIAS_DESCRICAO = "descricao"
     const val DILIGENCIAS_PROCESSO = "processo"
     const val DILIGENCIAS_ADVOGADO = "advogado"
     const val DILIGENCIAS_DATA = "data"
