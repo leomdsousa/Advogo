@@ -24,7 +24,7 @@ abstract class SearchDialog(
 
         binding.btnSearch.setOnClickListener {
             dismiss()
-            onItemSelected(binding.btnSearch.text.toString())
+            onItemSelected(binding.tvSearchText.text.toString())
         }
 
         setContentView(binding.root)

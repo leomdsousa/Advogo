@@ -187,6 +187,7 @@ class ProcessoRepository @Inject constructor(
     override fun obterProcessosByTituloContains(text: String, onSuccessListener: (lista: List<Processo>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.PROCESSOS_TABLE)
+            .orderBy(Constants.PROCESSOS_TITULO)
             .whereGreaterThanOrEqualTo(Constants.PROCESSOS_TITULO, text)
             .whereLessThanOrEqualTo(Constants.PROCESSOS_TITULO, "${text}\uF7FF")
             .get()

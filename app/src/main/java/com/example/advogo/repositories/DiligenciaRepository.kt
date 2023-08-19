@@ -110,10 +110,8 @@ class DiligenciaRepository @Inject constructor(
         firebaseStore
             .collection(Constants.DILIGENCIAS_TABLE)
             .orderBy(Constants.DILIGENCIAS_DESCRICAO)
-            .startAt(text)
-            .endAt(text + "\uf8ff")
-            //.whereGreaterThanOrEqualTo(Constants.DILIGENCIAS_DESCRICAO, text)
-            //.whereLessThanOrEqualTo(Constants.DILIGENCIAS_DESCRICAO, "${text}\uF7FF")
+            .whereGreaterThanOrEqualTo(Constants.DILIGENCIAS_DESCRICAO, text)
+            .whereLessThanOrEqualTo(Constants.DILIGENCIAS_DESCRICAO, "${text}\uF7FF")
             .get()
             .addOnSuccessListener { documents ->
                 if (!documents.isEmpty) {

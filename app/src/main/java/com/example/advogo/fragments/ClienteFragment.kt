@@ -1,6 +1,7 @@
 package com.example.advogo.fragments
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -8,13 +9,17 @@ import android.view.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.advogo.R
 import com.example.advogo.activities.ClienteCadastroActivity
 import com.example.advogo.activities.ClienteDetalheActivity
 import com.example.advogo.adapters.ClientesAdapter
+import com.example.advogo.adapters.DiligenciasAdapter
+import com.example.advogo.adapters.OptionsAdapter
 import com.example.advogo.databinding.FragmentClienteBinding
 import com.example.advogo.dialogs.SearchDialog
 import com.example.advogo.models.Cliente
+import com.example.advogo.models.Diligencia
 import com.example.advogo.repositories.IClienteRepository
 import com.example.advogo.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,6 +36,8 @@ class ClienteFragment : BaseFragment() {
     private var isListaOrdenadaAsc = false
     private var isListaOrdenadaDesc = false
     private var onCreateCarregouLista = false
+
+    private lateinit var dialogOrdenacao: AlertDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,29 +99,9 @@ class ClienteFragment : BaseFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_ordernar_clientes -> {
-                var listaOrdenada: ArrayList<Cliente>
-
-                if(!isListaOrdenadaAsc && !isListaOrdenadaDesc) {
-                    listaOrdenada = ArrayList(clientesLista.sortedBy { it.nome })
-                    isListaOrdenadaAsc = true
-                    isListaOrdenadaDesc = false
-                } else if(!isListaOrdenadaDesc) {
-                    listaOrdenada = ArrayList(clientesLista.sortedByDescending { it.nome })
-                    isListaOrdenadaAsc = false
-                    isListaOrdenadaDesc = true
-                } else {
-                    listaOrdenada = ArrayList(clientesLista.sortedByDescending { it.data })
-                    isListaOrdenadaAsc = false
-                    isListaOrdenadaDesc = false
-                }
-
-                (binding.rvClientsList.adapter as ClientesAdapter).updateList(listaOrdenada)
+                showDialogOrdenarClientes()
                 return true
             }
-//            R.id.action_filtrar_clientes -> {
-//                //alertDialogDeletarCliente("${clienteDetalhes.nome!!} (${clienteDetalhes.cpf!!})")
-//                return true
-//            }
             R.id.action_buscar_clientes -> {
                 showDialogBuscarCliente("Buscar Clientes", "Nome")
                 return true
@@ -190,5 +177,51 @@ class ClienteFragment : BaseFragment() {
             binding.rvClientsList.visibility = View.GONE
             binding.tvNoClientsAvailable.visibility = View.VISIBLE
         }
+    }
+
+    private fun obterClientesPorOrdenacao(selectedOption: String) {
+        dialogOrdenacao.dismiss()
+
+        var listaOrdenada: ArrayList<Cliente> = ArrayList()
+
+        when(selectedOption) {
+            "Crescente (A-Z)" -> {
+                //showProgressDialog("Aguarde por favor")
+                listaOrdenada = ArrayList(clientesLista.sortedBy { it.nome })
+            }
+            "Decrescente (Z-A)" -> {
+                //showProgressDialog("Aguarde por favor")
+                listaOrdenada = ArrayList(clientesLista.sortedByDescending { it.nome })
+            }
+            "Limpar" -> {
+                //showProgressDialog("Aguarde por favor")
+                listaOrdenada = ArrayList(clientesLista.sortedByDescending { it.data })
+            } else -> {
+            //Validar o que implementar
+        }
+        }
+
+        (binding.rvClientsList.adapter as ClientesAdapter).updateList(listaOrdenada)
+    }
+
+    private fun showDialogOrdenarClientes() {
+        val options = resources.getStringArray(R.array.spinner_ordenar_opcoes)
+
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Selecione uma opção de ordenação")
+        dialogOrdenacao = builder.create()
+
+        val inflater = LayoutInflater.from(requireContext())
+        val dialogView = inflater.inflate(R.layout.dialog_list, null)
+
+        val recyclerView = dialogView.findViewById<RecyclerView>(R.id.rvList)
+        val layoutManager = LinearLayoutManager(requireContext())
+        recyclerView.layoutManager = layoutManager
+
+        val adapter = OptionsAdapter(options, ::obterClientesPorOrdenacao)
+        recyclerView.adapter = adapter
+
+        dialogOrdenacao.setView(dialogView)
+        dialogOrdenacao.show()
     }
 }

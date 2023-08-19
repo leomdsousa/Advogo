@@ -55,6 +55,7 @@ class ClienteRepository @Inject constructor(
     override fun obterClientesByNomeContains(text: String, onSuccessListener: (lista: List<Cliente>) -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.CLIENTES_TABLE)
+            .orderBy(Constants.CLIENTES_NOME)
             .whereGreaterThanOrEqualTo(Constants.CLIENTES_NOME, text)
             .whereLessThanOrEqualTo(Constants.CLIENTES_NOME, "${text}\uF7FF")
             .get()

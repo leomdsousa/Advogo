@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="spinner_ordenar_opcoes">
+        <item></item>
+        <item>Crescente (A-Z)</item>
+        <item>Decrescente (Z-A)</item>
+        <item>Limpar</item>
+    </string-array>
+</resources>

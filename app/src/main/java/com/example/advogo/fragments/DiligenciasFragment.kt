@@ -41,6 +41,7 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 class DiligenciasFragment : BaseFragment() {
@@ -55,6 +56,7 @@ class DiligenciasFragment : BaseFragment() {
 
     private var diligencias: List<Diligencia> = arrayListOf()
     private lateinit var dialogFiltros: AlertDialog
+    private lateinit var dialogOrdenacao: AlertDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -127,24 +129,7 @@ class DiligenciasFragment : BaseFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_ordernar_diligencias -> {
-                var listaOrdenada: ArrayList<Diligencia>
-
-                if(!isListaOrdenadaAsc && !isListaOrdenadaDesc) {
-                    listaOrdenada = ArrayList(diligencias.sortedBy { it.descricao })
-                    isListaOrdenadaAsc = true
-                    isListaOrdenadaDesc = false
-                } else if(!isListaOrdenadaDesc) {
-                    listaOrdenada = ArrayList(diligencias.sortedByDescending { it.descricao })
-                    isListaOrdenadaAsc = false
-                    isListaOrdenadaDesc = true
-                } else {
-                    listaOrdenada = ArrayList(diligencias.sortedByDescending { it.descricao })
-                    isListaOrdenadaAsc = false
-                    isListaOrdenadaDesc = false
-                }
-
-                (binding.rvDiligenciasList.adapter as DiligenciasAdapter).updateList(listaOrdenada)
-
+                showDialogOrdenarDiligencias()
                 return true
             }
             R.id.action_filtrar_diligencias -> {
@@ -311,6 +296,28 @@ class DiligenciasFragment : BaseFragment() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
+    private fun showDialogOrdenarDiligencias() {
+        val options = resources.getStringArray(R.array.spinner_ordenar_opcoes)
+
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Selecione uma opção de ordenação")
+        dialogOrdenacao = builder.create()
+
+        val inflater = LayoutInflater.from(requireContext())
+        val dialogView = inflater.inflate(R.layout.dialog_list, null)
+
+        val recyclerView = dialogView.findViewById<RecyclerView>(R.id.rvList)
+        val layoutManager = LinearLayoutManager(requireContext())
+        recyclerView.layoutManager = layoutManager
+
+        val adapter = OptionsAdapter(options, ::obterDiligenciasPorOrdenacao)
+        recyclerView.adapter = adapter
+
+        dialogOrdenacao.setView(dialogView)
+        dialogOrdenacao.show()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun showDialogFiltrosDiligencias() {
         val options = resources.getStringArray(R.array.spinner_filtros_opcoes)
 
@@ -408,4 +415,46 @@ class DiligenciasFragment : BaseFragment() {
             }
         }
     }
+
+    private fun obterDiligenciasPorOrdenacao(selectedOption: String) {
+        dialogOrdenacao.dismiss()
+
+        var listaOrdenada: ArrayList<Diligencia> = ArrayList()
+
+        when(selectedOption) {
+            "Crescente (A-Z)" -> {
+                //showProgressDialog("Aguarde por favor")
+                listaOrdenada = ArrayList(diligencias.sortedBy { it.descricao })
+            }
+            "Decrescente (Z-A)" -> {
+                //showProgressDialog("Aguarde por favor")
+                listaOrdenada = ArrayList(diligencias.sortedByDescending { it.descricao })
+            }
+            "Limpar" -> {
+                //showProgressDialog("Aguarde por favor")
+                listaOrdenada = ArrayList(diligencias.sortedByDescending { it.data })
+            } else -> {
+            //Validar o que implementar
+            }
+        }
+
+        (binding.rvDiligenciasList.adapter as DiligenciasAdapter).updateList(listaOrdenada)
+    }
 }
+
+//        var listaOrdenada: ArrayList<Diligencia>
+//        if(!isListaOrdenadaAsc && !isListaOrdenadaDesc) {
+//            listaOrdenada = ArrayList(diligencias.sortedBy { it.descricao })
+//            isListaOrdenadaAsc = true
+//            isListaOrdenadaDesc = false
+//        } else if(!isListaOrdenadaDesc) {
+//            listaOrdenada = ArrayList(diligencias.sortedByDescending { it.descricao })
+//            isListaOrdenadaAsc = false
+//            isListaOrdenadaDesc = true
+//        } else {
+//            listaOrdenada = ArrayList(diligencias.sortedByDescending { it.descricao })
+//            isListaOrdenadaAsc = false
+//            isListaOrdenadaDesc = false
+//        }
+//
+//        (binding.rvDiligenciasList.adapter as DiligenciasAdapter).updateList(listaOrdenada)
