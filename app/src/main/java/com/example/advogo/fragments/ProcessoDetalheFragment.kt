@@ -26,10 +26,12 @@ import com.example.advogo.utils.ProcessMaskTextWatcher
 import com.example.advogo.utils.SendNotificationToUserAsyncTask
 import com.example.advogo.dialogs.AdvogadosDialog
 import com.example.advogo.dialogs.ClientesDialog
+import com.google.firebase.Timestamp
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
+import okhttp3.internal.format
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
@@ -175,6 +177,7 @@ class ProcessoDetalheFragment : BaseFragment() {
                 tipo = (if (tipoProcessoSelecionado != processoDetalhes.tipo) tipoProcessoSelecionado else processoDetalhes.tipo),
                 status = (if (statusProcessoSelecionado != processoDetalhes.status) statusProcessoSelecionado else processoDetalhes.status),
                 data = processoDetalhes.data,
+                dataTimestamp = Timestamp.now(),
                 imagem = imageUrl,
                 cliente = (if (clienteSelecionado != processoDetalhes.cliente.toString()) clienteSelecionado else processoDetalhes.cliente.toString()),
                 advogado = (if (advSelecionado != processoDetalhes.advogado) advSelecionado else processoDetalhes.advogado),
@@ -192,7 +195,8 @@ class ProcessoDetalheFragment : BaseFragment() {
                         advogado = advSelecionado,
                         status = statusProcessoSelecionado,
                         tipo = tipoProcessoSelecionado,
-                        data = SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(LocalDateTime.now())
+                        data = SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(LocalDateTime.now()),
+                        dataTimestamp = Timestamp.now()
                     )
 
                     processoHistoricoRepository.adicionarProcessoHistorico(
@@ -375,6 +379,7 @@ class ProcessoDetalheFragment : BaseFragment() {
         tipoProcessoSelecionado = processoDetalhes.tipo
         statusProcessoSelecionado = processoDetalhes.status
         dataSelecionada = processoDetalhes.data
+
 
         if(!dataSelecionada.isNullOrEmpty()) {
             val fromFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)

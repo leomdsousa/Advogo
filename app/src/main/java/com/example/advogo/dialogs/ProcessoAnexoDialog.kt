@@ -28,23 +28,20 @@ import javax.inject.Inject
 abstract class ProcessoAnexoDialog(
     context: Context,
     private var anexo: Anexo,
-    private val binding: DialogProcessoAnexoBinding
+    private val binding: DialogProcessoAnexoBinding,
+    private val readOnly: Boolean = false
 ): Dialog(context) {
-    //private lateinit var binding: DialogProcessoAnexoBinding
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState ?: Bundle())
-
-        //binding = DialogProcessoAnexoBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
         setCanceledOnTouchOutside(true)
         setCancelable(true)
         setDados(anexo)
 
-//        binding = DialogProcessoAnexoBinding
-//                        .bind(findViewById<ViewGroup>(android.R.id.content)
-//                        .getChildAt(0))
+        if(readOnly) {
+            binding.btnSubmitProcessoAnexo.visibility = View.GONE
+        }
 
         binding.btnSelecionarArquivo.setOnClickListener {
             onChooseFile()

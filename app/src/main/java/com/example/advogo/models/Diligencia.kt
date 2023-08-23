@@ -1,6 +1,7 @@
 package com.example.advogo.models
 
 import android.os.Parcelable
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
 import kotlinx.parcelize.Parcelize
 import java.util.*
@@ -11,6 +12,7 @@ data class Diligencia(
     var id: String = "",
     var descricao: String? = null,
     var data: String? = null,
+    var dataTimestamp: Timestamp? = null,
     var status: String? = null,
     var tipo: String? = null,
     var endereco: String? = null,

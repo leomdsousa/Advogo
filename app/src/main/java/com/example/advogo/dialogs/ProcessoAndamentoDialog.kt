@@ -31,23 +31,24 @@ abstract class ProcessoAndamentoDialog(
     private var andamento: ProcessoAndamento,
     private val binding: DialogProcessoAndamentoBinding,
     private var tiposAndamentos: List<ProcessoTipoAndamento>,
-    private var statusAndamentos: List<ProcessoStatusAndamento>
+    private var statusAndamentos: List<ProcessoStatusAndamento>,
+    private val readOnly: Boolean = false
 ): Dialog(context) {
-    //private lateinit var binding: DialogProcessoAndamentoBinding
-
     private var tipoAndamentoSelecionado: String? = null
     private var statusAndamentoSelecionado: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState ?: Bundle())
 
-        //binding = DialogProcessoAndamentoBinding.inflate(layoutInflater)
-
         setContentView(binding.root)
         setCanceledOnTouchOutside(true)
         setCancelable(true)
         setupSpinners()
         setDados(andamento)
+
+        if(readOnly) {
+            binding.btnSubmitProcessoAndamento.visibility = View.GONE
+        }
 
         binding.etDataAndamento.setOnClickListener {
             onChooseDate()

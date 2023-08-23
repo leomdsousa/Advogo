@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="spinner_filtros_opcoes">
-        <item></item>
         <item>Mensal</item>
         <item>Semanal</item>
         <item>Quinzenal</item>
+        <item>Limpar</item>
     </string-array>
 </resources>

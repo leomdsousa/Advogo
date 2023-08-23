@@ -15,7 +15,7 @@ import java.util.*
 
 open class DiligenciasHistoricosAdapter(
     private val context: Context,
-    private var list: List<DiligenciaHistorico>
+    private var list: List<DiligenciaHistorico>?
 ): RecyclerView.Adapter<DiligenciasHistoricosAdapter.MyViewHolder>() {
     private var onItemClickListener: OnItemClickListener? = null
 
@@ -34,8 +34,6 @@ open class DiligenciasHistoricosAdapter(
                     binding.tvDataDiligenciaHist.text = "Data: $data"
                 }
 
-//                binding.tvTipoDiligenciaHist.text = "Tipo: ${item.tipoObj?.tipo}"
-//                binding.tvStatusDiligenciaHist.text = "Status: ${item.statusObj?.status}"
                 binding.tvObsDiligenciaHist.text = "Observação: ${item.obs}"
 
                 binding.root.setOnClickListener {
@@ -59,11 +57,13 @@ open class DiligenciasHistoricosAdapter(
     }
 
     override fun onBindViewHolder(holder: DiligenciasHistoricosAdapter.MyViewHolder, position: Int) {
-        val item = list[position]
-        holder.bind(item, position)
+        val item = list?.get(position)
+        if (item != null) {
+            holder.bind(item, position)
+        }
     }
 
-    override fun getItemCount(): Int = list.size
+    override fun getItemCount(): Int = list?.size ?: 0
 
     interface OnItemClickListener {
         fun onClick(diligencia: DiligenciaHistorico, position: Int)

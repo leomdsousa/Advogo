@@ -28,6 +28,7 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
+import com.google.firebase.Timestamp
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -271,6 +272,7 @@ class DiligenciaCadastroActivity : BaseActivity() {
             id = "",
             descricao = binding.etDiligenciaDescricao.text.toString(),
             data = dataSelecionada,
+            dataTimestamp = Timestamp.now(),
             tipo = tipoDiligenciaSelecionada,
             status = statusDiligenciaSelecionada,
             endereco = binding.etDiligenciaEndereco.text.toString(),
@@ -288,7 +290,8 @@ class DiligenciaCadastroActivity : BaseActivity() {
                     advogado = advogadoSelecionado,
                     status = statusDiligenciaSelecionada,
                     tipo = tipoDiligenciaSelecionada,
-                    data = SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(LocalDateTime.now())
+                    data = SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(LocalDateTime.now()),
+                    dataTimestamp = Timestamp.now()
                 )
 
                 diligenciaHistoricoRepository.adicionarDiligenciaHistorico(

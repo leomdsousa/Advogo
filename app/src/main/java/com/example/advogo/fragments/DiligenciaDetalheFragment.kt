@@ -32,6 +32,7 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
+import com.google.firebase.Timestamp
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -248,6 +249,7 @@ class DiligenciaDetalheFragment : BaseFragment() {
                 id = diligenciaDetalhes.id,
                 descricao = if (binding.etDiligenciaDescricao.text.toString() != diligenciaDetalhes.descricao) binding.etDiligenciaDescricao.text.toString() else diligenciaDetalhes.descricao,
                 data = if (dataSelecionada != diligenciaDetalhes.data) dataSelecionada else diligenciaDetalhes.data,
+                dataTimestamp = Timestamp.now(),
                 status = if (statusDiligenciaSelecionada != diligenciaDetalhes.status) statusDiligenciaSelecionada else diligenciaDetalhes.status,
                 tipo = if (tipoDiligenciaSelecionada != diligenciaDetalhes.tipo) tipoDiligenciaSelecionada else diligenciaDetalhes.tipo,
                 endereco = if (binding.etDiligenciaEndereco.text.toString() != diligenciaDetalhes.endereco) binding.etDiligenciaEndereco.text.toString() else diligenciaDetalhes.endereco,
@@ -267,7 +269,8 @@ class DiligenciaDetalheFragment : BaseFragment() {
                         status = statusDiligenciaSelecionada,
                         tipo = tipoDiligenciaSelecionada,
                         data = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date.from(LocalDateTime.now().atZone(
-                            ZoneId.systemDefault()).toInstant()))
+                            ZoneId.systemDefault()).toInstant())),
+                        dataTimestamp = Timestamp.now()
                     )
 
                     diligenciaHistoricoRepository.adicionarDiligenciaHistorico(

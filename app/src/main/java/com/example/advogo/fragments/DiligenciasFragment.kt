@@ -24,6 +24,7 @@ import com.example.advogo.activities.DiligenciaDetalheActivity
 import com.example.advogo.adapters.ClientesAdapter
 import com.example.advogo.adapters.DiligenciasAdapter
 import com.example.advogo.adapters.OptionsAdapter
+import com.example.advogo.databinding.DialogSearchBinding
 import com.example.advogo.databinding.FragmentDiligenciasBinding
 import com.example.advogo.dialogs.ProcessosDialog
 import com.example.advogo.dialogs.SearchDialog
@@ -46,6 +47,7 @@ import kotlin.collections.ArrayList
 @AndroidEntryPoint
 class DiligenciasFragment : BaseFragment() {
     private lateinit var binding: FragmentDiligenciasBinding
+    private lateinit var bindingSearch: DialogSearchBinding
     @Inject lateinit var diligenciaRepository: IDiligenciaRepository
 
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
@@ -57,6 +59,10 @@ class DiligenciasFragment : BaseFragment() {
     private var diligencias: List<Diligencia> = arrayListOf()
     private lateinit var dialogFiltros: AlertDialog
     private lateinit var dialogOrdenacao: AlertDialog
+
+    private var selectedDialogOrdenacao: Int? = null
+    private var selectedDialogFiltro: Int? = null
+    private var selectedSearchText: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -332,7 +338,7 @@ class DiligenciasFragment : BaseFragment() {
         val layoutManager = LinearLayoutManager(requireContext())
         recyclerView.layoutManager = layoutManager
 
-        val adapter = OptionsAdapter(options, ::obterDiligenciasPorFiltro)
+        val adapter = OptionsAdapter(options, ::obterDiligenciasPorFiltro, selectedDialogFiltro)
         recyclerView.adapter = adapter
 
         dialogFiltros.setView(dialogView)
@@ -340,11 +346,17 @@ class DiligenciasFragment : BaseFragment() {
     }
 
     private fun showDialogBuscarDiligencia(titulo: String, placeholder: String) {
+        bindingSearch = DialogSearchBinding.inflate(layoutInflater)
+
         val searchDialog = object : SearchDialog(
             requireContext(),
             titulo,
-            placeholder) {
+            placeholder,
+            bindingSearch,
+            selectedSearchText
+        ) {
             override fun onItemSelected(value: String) {
+                selectedSearchText = value
                 obterDiligencia(value)
             }
         }
@@ -355,6 +367,9 @@ class DiligenciasFragment : BaseFragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun obterDiligenciasPorFiltro(selectedOption: String) {
         dialogFiltros.dismiss()
+
+        selectedDialogFiltro =
+            resources.getStringArray(R.array.spinner_filtros_opcoes).indexOfFirst { it == selectedOption }
 
         when(selectedOption) {
             "Mensal" -> {
@@ -419,6 +434,9 @@ class DiligenciasFragment : BaseFragment() {
     private fun obterDiligenciasPorOrdenacao(selectedOption: String) {
         dialogOrdenacao.dismiss()
 
+        selectedDialogOrdenacao =
+            resources.getStringArray(R.array.spinner_ordenar_opcoes).indexOfFirst { it == selectedOption }
+
         var listaOrdenada: ArrayList<Diligencia> = ArrayList()
 
         when(selectedOption) {
@@ -432,7 +450,7 @@ class DiligenciasFragment : BaseFragment() {
             }
             "Limpar" -> {
                 //showProgressDialog("Aguarde por favor")
-                listaOrdenada = ArrayList(diligencias.sortedByDescending { it.data })
+                listaOrdenada = ArrayList(diligencias.sortedByDescending { it.dataTimestamp })
             } else -> {
             //Validar o que implementar
             }

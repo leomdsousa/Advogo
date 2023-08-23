@@ -104,6 +104,7 @@ class AdvogadoRepository @Inject constructor(
                 onFailureListener(exception)
             }
     }
+
     override fun adicionarAdvogado(model: Advogado, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.ADVOGADOS_TABLE)

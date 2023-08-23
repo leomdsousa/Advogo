@@ -27,19 +27,21 @@ import javax.inject.Inject
 
 abstract class ProcessoHistoricoDialog(
     context: Context,
-    private var historico: ProcessoHistorico
+    private var historico: ProcessoHistorico,
+    private val binding: DialogProcessoHistoricoBinding,
+    private val readOnly: Boolean = false
 ): Dialog(context) {
-    private lateinit var binding: DialogProcessoHistoricoBinding
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState ?: Bundle())
-
-        binding = DialogProcessoHistoricoBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
         setCanceledOnTouchOutside(true)
         setCancelable(true)
         setDados(historico)
+
+        if(readOnly) {
+            binding.btnSubmitProcessoHistorico.visibility = View.GONE
+        }
 
         binding.btnSubmitProcessoHistorico.setOnClickListener {
             dismiss()

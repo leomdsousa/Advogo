@@ -7,6 +7,7 @@ import com.example.advogo.models.DiligenciaHistorico
 import com.example.advogo.utils.Constants
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
@@ -30,6 +31,25 @@ class DiligenciaHistoricoRepository @Inject constructor(
     override fun obterDiligenciasHistoricos(onSuccessListener: (List<DiligenciaHistorico>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.DILIGENCIAS_HISTORICOS_TABLE)
+            .orderBy(Constants.DILIGENCIAS_HISTORICOS_DATA_TIMESTAMP, Query.Direction.DESCENDING)
+            .get()
+            .addOnSuccessListener { document ->
+                if (!document.isEmpty) {
+                    val lista = document.toObjects(DiligenciaHistorico::class.java)
+                    onSuccessListener(lista)
+                } else {
+                    onFailureListener(null)
+                }
+            }
+            .addOnFailureListener { exception ->
+                onFailureListener(exception)
+            }
+    }
+    override fun obterDiligenciasHistoricosPorDiligencia(id:String, onSuccessListener: (List<DiligenciaHistorico>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+        firebaseStore
+            .collection(Constants.DILIGENCIAS_HISTORICOS_TABLE)
+            .whereEqualTo(Constants.DILIGENCIAS_HISTORICOS_DILIGENCIA, id)
+            .orderBy(Constants.DILIGENCIAS_HISTORICOS_DATA_TIMESTAMP, Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { document ->
                 if (!document.isEmpty) {
@@ -102,6 +122,40 @@ class DiligenciaHistoricoRepository @Inject constructor(
         firebaseStore
             .collection(Constants.DILIGENCIAS_HISTORICOS_TABLE)
             .whereIn(FieldPath.documentId(), ids)
+            .orderBy(Constants.DILIGENCIAS_HISTORICOS_DATA_TIMESTAMP, Query.Direction.DESCENDING)
+            .get()
+            .addOnSuccessListener { document ->
+                if (!document.isEmpty) {
+                    val resultado = document.toObjects(DiligenciaHistorico::class.java)
+
+                    coroutineScope.launch {
+                        if (resultado.isNotEmpty()) {
+                            for (item in resultado) {
+                                val advogadoDeferred = async { advogadoRepository.obterAdvogado(item.advogado!!) }
+                                val statusDeferred = async { statusDiligenciaRepository.obterDiligenciaStatus(item.status!!) }
+                                val tipoDeferred = async { tipoDiligenciaRepository.obterDiligenciaTipo(item.tipo!!) }
+
+                                item.advogadoObj = advogadoDeferred.await()
+                                item.statusObj = statusDeferred.await()
+                                item.tipoObj = tipoDeferred.await()
+                            }
+
+                            continuation.resume(resultado)
+                        }
+                    }
+                } else {
+                    continuation.resume(null)
+                }
+            }
+            .addOnFailureListener { exception ->
+                continuation.resumeWithException(exception)
+            }
+    }
+    override suspend fun obterDiligenciasHistoricoPorDiligencia(id: String): List<DiligenciaHistorico>? = suspendCoroutine { continuation ->
+        firebaseStore
+            .collection(Constants.DILIGENCIAS_HISTORICOS_TABLE)
+            .whereEqualTo(Constants.DILIGENCIAS_HISTORICOS_DILIGENCIA, id)
+            .orderBy(Constants.DILIGENCIAS_HISTORICOS_DATA_TIMESTAMP, Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { document ->
                 if (!document.isEmpty) {
@@ -133,6 +187,7 @@ class DiligenciaHistoricoRepository @Inject constructor(
     override suspend fun obterDiligenciasHistoricos(): List<DiligenciaHistorico>? = suspendCoroutine { continuation ->
         firebaseStore
             .collection(Constants.DILIGENCIAS_HISTORICOS_TABLE)
+            .orderBy(Constants.DILIGENCIAS_HISTORICOS_DATA_TIMESTAMP, Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { document ->
                 if (!document.isEmpty) {
@@ -196,12 +251,14 @@ class DiligenciaHistoricoRepository @Inject constructor(
 
 interface IDiligenciaHistoricoRepository {
     fun obterDiligenciasHistoricos(onSuccessListener: (lista: List<DiligenciaHistorico>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun obterDiligenciasHistoricosPorDiligencia(id:String, onSuccessListener: (List<DiligenciaHistorico>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
     fun obterDiligenciaHistorico(id: String, onSuccessListener: (processoHistorico: DiligenciaHistorico) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
     fun adicionarDiligenciaHistorico(model: DiligenciaHistorico, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
     fun atualizarDiligenciaHistorico(model: DiligenciaHistorico, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
     fun deletarDiligenciaHistorico(id: String, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
 
     suspend fun obterDiligenciasHistoricoPorLista(ids: List<String>): List<DiligenciaHistorico>?
+    suspend fun obterDiligenciasHistoricoPorDiligencia(id: String): List<DiligenciaHistorico>?
     suspend fun obterDiligenciasHistoricos(): List<DiligenciaHistorico>?
     suspend fun obterDiligenciaHistorico(id: String): DiligenciaHistorico?
 }

@@ -99,7 +99,7 @@
                     android:layout_marginTop="@dimen/processoCadastroTilMarginTop"
                     android:gravity="start"
                     android:text="@string/hintTipoDescription"
-                    android:textColor="@color/primaryTextColor"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/etTextSize"
                     android:textStyle="bold" />
 
@@ -109,8 +109,16 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
                     android:background="@drawable/spinner_background"
-                    android:popupBackground="@color/spinnerBackground"
                     android:spinnerMode="dropdown" />
+
+<!--                <Spinner-->
+<!--                    android:id="@+id/spinnerTipoProcesso"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="3dp"-->
+<!--                    android:background="@drawable/spinner_background"-->
+<!--                    android:popupBackground="@color/spinnerBackground"-->
+<!--                    android:spinnerMode="dropdown" />-->
 
                 <TextView
                     android:id="@+id/labelStatusProcesso"
@@ -119,7 +127,7 @@
                     android:layout_marginTop="@dimen/processoCadastroTilMarginTop"
                     android:gravity="start"
                     android:text="@string/hintStatusDescription"
-                    android:textColor="@color/primaryTextColor"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/etTextSize"
                     android:textStyle="bold" />
 

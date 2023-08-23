@@ -1,6 +1,7 @@
 package com.example.advogo.models
 
 import android.os.Parcelable
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
 import kotlinx.parcelize.Parcelize
 
@@ -12,6 +13,7 @@ data class Cliente(
     var rg: String? = null,
     var cpf: String? = null,
     var data: String? = null,
+    var dataTimestamp: Timestamp? = null,
     var estadoCivil: String? = null,
     var email: String? = null,
     var endereco: String? = null,

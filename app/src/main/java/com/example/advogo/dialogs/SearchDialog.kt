@@ -10,17 +10,19 @@ import com.example.advogo.models.Advogado
 abstract class SearchDialog(
     context: Context,
     private val titulo: String,
-    private val placeholder: String
+    private val placeholder: String,
+    private val binding: DialogSearchBinding,
+    private val defaultSearchText: String? = null
 ): Dialog(context) {
-    private lateinit var binding: DialogSearchBinding
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState ?: Bundle())
 
-        binding = DialogSearchBinding.inflate(layoutInflater)
-
         binding.tvTitle.text = titulo
         binding.tvSearchText.hint = placeholder
+
+        if(defaultSearchText != null && defaultSearchText.isNotEmpty()) {
+            binding.btnSearch.text = defaultSearchText
+        }
 
         binding.btnSearch.setOnClickListener {
             dismiss()

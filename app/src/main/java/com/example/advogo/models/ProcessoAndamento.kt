@@ -1,6 +1,7 @@
 package com.example.advogo.models
 
 import android.os.Parcelable
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
 import kotlinx.parcelize.Parcelize
 
@@ -14,6 +15,7 @@ data class ProcessoAndamento(
     var tipo: String? = null,
     var status: String? = null,
     var data: String? = null,
+    var dataTimestamp: Timestamp? = null,
     @Transient var advogadoObj: Advogado? = null,
     @Transient var tipoObj: ProcessoTipoAndamento? = null,
     @Transient var statusObj: ProcessoStatusAndamento? = null,

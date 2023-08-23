@@ -7,6 +7,7 @@ import com.example.advogo.models.ProcessoAndamento
 import com.example.advogo.utils.Constants
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
@@ -29,6 +30,7 @@ class ProcessoAndamentoRepository @Inject constructor(
     override fun obterProcessosAndamentos(onSuccessListener: (List<ProcessoAndamento>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.PROCESSOS_ANDAMENTOS_TABLE)
+            .orderBy(Constants.PROCESSOS_ANDAMENTOS_DATA_TIMESTAMP, Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { document ->
                 if (!document.isEmpty) {
@@ -45,6 +47,39 @@ class ProcessoAndamentoRepository @Inject constructor(
                                 item.statusObj = statusDeferred.await()
                                 item.tipoObj = tipoDeferred.await()
 
+                            }
+
+                            onSuccessListener(lista)
+                        }
+                    }
+                } else {
+                    onFailureListener(null)
+                }
+            }
+            .addOnFailureListener { exception ->
+                onFailureListener(exception)
+            }
+    }
+    override fun obterProcessosAndamentosPorProcesso(numeroProcesso: String, onSuccessListener: (List<ProcessoAndamento>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+        firebaseStore
+            .collection(Constants.PROCESSOS_ANDAMENTOS_TABLE)
+            .whereEqualTo(Constants.PROCESSOS_ANDAMENTOS_PROCESSO, numeroProcesso)
+            .orderBy(Constants.PROCESSOS_ANDAMENTOS_DATA_TIMESTAMP, Query.Direction.DESCENDING)
+            .get()
+            .addOnSuccessListener { document ->
+                if (!document.isEmpty) {
+                    val lista = document.toObjects(ProcessoAndamento::class.java)
+
+                    coroutineScope.launch {
+                        if (lista.isNotEmpty()) {
+                            for (item in lista) {
+                                val advogadoDeferred = async { advogadoRepository.obterAdvogado(item.advogado!!) }
+                                val statusDeferred = async { processoStatusAndamentoRepository.obterProcessoStatusAndamento(item.status!!) }
+                                val tipoDeferred = async { processoTipoAndamentoRepository.obterProcessoTipoAndamento(item.tipo!!) }
+
+                                item.advogadoObj = advogadoDeferred.await()
+                                item.statusObj = statusDeferred.await()
+                                item.tipoObj = tipoDeferred.await()
                             }
 
                             onSuccessListener(lista)
@@ -93,6 +128,7 @@ class ProcessoAndamentoRepository @Inject constructor(
     override suspend fun obterProcessosAndamentos(): List<ProcessoAndamento>? = suspendCoroutine { continuation ->
         firebaseStore
             .collection(Constants.PROCESSOS_ANDAMENTOS_TABLE)
+            .orderBy(Constants.PROCESSOS_ANDAMENTOS_DATA_TIMESTAMP, Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { document ->
                 if (!document.isEmpty) {
@@ -155,6 +191,41 @@ class ProcessoAndamentoRepository @Inject constructor(
         firebaseStore
             .collection(Constants.PROCESSOS_ANDAMENTOS_TABLE)
             .whereIn(FieldPath.documentId(), ids)
+            .orderBy(Constants.PROCESSOS_ANDAMENTOS_DATA_TIMESTAMP, Query.Direction.DESCENDING)
+            .get()
+            .addOnSuccessListener { document ->
+                if (!document.isEmpty) {
+                    val resultado = document.toObjects(ProcessoAndamento::class.java)
+
+                    coroutineScope.launch {
+                        if (resultado.isNotEmpty()) {
+                            for (item in resultado) {
+                                val advogadoDeferred = async { advogadoRepository.obterAdvogado(item.advogado!!) }
+                                val statusDeferred = async { processoStatusAndamentoRepository.obterProcessoStatusAndamento(item.status!!) }
+                                val tipoDeferred = async { processoTipoAndamentoRepository.obterProcessoTipoAndamento(item.tipo!!) }
+
+                                item.advogadoObj = advogadoDeferred.await()
+                                item.statusObj = statusDeferred.await()
+                                item.tipoObj = tipoDeferred.await()
+
+                            }
+
+                            continuation.resume(resultado)
+                        }
+                    }
+                } else {
+                    continuation.resume(null)
+                }
+            }
+            .addOnFailureListener { exception ->
+                continuation.resumeWithException(exception)
+            }
+    }
+    override suspend fun obterAndamentosPorProcesso(numeroProcesso: String): List<ProcessoAndamento>? = suspendCoroutine { continuation ->
+        firebaseStore
+            .collection(Constants.PROCESSOS_ANDAMENTOS_TABLE)
+            .whereEqualTo(Constants.PROCESSOS_ANDAMENTOS_PROCESSO, numeroProcesso)
+            .orderBy(Constants.PROCESSOS_ANDAMENTOS_DATA_TIMESTAMP, Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { document ->
                 if (!document.isEmpty) {
@@ -224,11 +295,13 @@ class ProcessoAndamentoRepository @Inject constructor(
 
 interface IProcessoAndamentoRepository {
     fun obterProcessosAndamentos(onSuccessListener: (lista: List<ProcessoAndamento>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun obterProcessosAndamentosPorProcesso(numeroProcesso: String, onSuccessListener: (List<ProcessoAndamento>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
     fun obterProcessoAndamento(id: String, onSuccessListener: (ProcessoAndamento: ProcessoAndamento) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
 
     suspend fun obterProcessosAndamentos(): List<ProcessoAndamento>?
     suspend fun obterProcessoAndamento(id: String): ProcessoAndamento?
     suspend fun obterAndamentosPorLista(ids: List<String>): List<ProcessoAndamento>?
+    suspend fun obterAndamentosPorProcesso(numeroProcesso: String): List<ProcessoAndamento>?
 
     fun adicionarProcessoAndamento(model: ProcessoAndamento, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
     fun atualizarProcessoAndamento(model: ProcessoAndamento, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)

@@ -26,6 +26,7 @@ import com.example.advogo.utils.ProcessMaskTextWatcher
 import com.example.advogo.utils.SendNotificationToUserAsyncTask
 import com.example.advogo.dialogs.AdvogadosDialog
 import com.example.advogo.dialogs.ClientesDialog
+import com.google.firebase.Timestamp
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import dagger.hilt.android.AndroidEntryPoint
@@ -311,6 +312,7 @@ class ProcessoCadastroActivity : BaseActivity() {
                 tipo = tipoProcessoSelecionado,
                 status = statusProcessoSelecionado,
                 data = dataSelecionada,
+                dataTimestamp = Timestamp.now(),
                 imagem = imageUrl,
                 cliente = clienteSelecionado,
                 advogado = advSelecionado
@@ -324,7 +326,8 @@ class ProcessoCadastroActivity : BaseActivity() {
                         advogado = advSelecionado,
                         status = statusProcessoSelecionado,
                         tipo = tipoProcessoSelecionado,
-                        data = SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(LocalDateTime.now())
+                        data = SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(LocalDateTime.now()),
+                        dataTimestamp = Timestamp.now()
                     )
 
                     processoHistoricoRepository.adicionarProcessoHistorico(

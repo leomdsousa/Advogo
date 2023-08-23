@@ -50,12 +50,8 @@ class DiligenciaRepository @Inject constructor(
                                 item.statusObj = statusDeferred.await()
                                 item.tipoObj = tipoDeferred.await()
 
-                                if(item.historico?.isNotEmpty() == true) {
-                                    val historicoDeferred = async { diligenciaHistoricoRepository.obterDiligenciasHistoricoPorLista(item.historico!!) }
-                                    item.historicoLista = historicoDeferred.await()
-                                } else {
-                                    item.historicoLista = emptyList()
-                                }
+                                val historicoDeferred = async { diligenciaHistoricoRepository.obterDiligenciasHistoricoPorDiligencia(item.id!!) }
+                                item.historicoLista = historicoDeferred.await()
                             }
 
                             onSuccessListener(diligencias)
@@ -89,12 +85,8 @@ class DiligenciaRepository @Inject constructor(
                         diligencia.statusObj = statusDeferred.await()
                         diligencia.tipoObj = tipoDeferred.await()
 
-                        if(diligencia.historico?.isNotEmpty() == true) {
-                            val historicoDeferred = async { diligenciaHistoricoRepository.obterDiligenciasHistoricoPorLista(diligencia.historico!!) }
-                            diligencia.historicoLista = historicoDeferred.await()
-                        } else {
-                            diligencia.historicoLista = emptyList()
-                        }
+                        val historicoDeferred = async { diligenciaHistoricoRepository.obterDiligenciasHistoricoPorDiligencia(diligencia.id!!) }
+                        diligencia.historicoLista = historicoDeferred.await()
 
                         onSuccessListener(diligencia)
                     }
@@ -130,12 +122,8 @@ class DiligenciaRepository @Inject constructor(
                                 item.statusObj = statusDeferred.await()
                                 item.tipoObj = tipoDeferred.await()
 
-                                if(item.historico?.isNotEmpty() == true) {
-                                    val historicoDeferred = async { diligenciaHistoricoRepository.obterDiligenciasHistoricoPorLista(item.historico!!) }
-                                    item.historicoLista = historicoDeferred.await()
-                                } else {
-                                    item.historicoLista = emptyList()
-                                }
+                                val historicoDeferred = async { diligenciaHistoricoRepository.obterDiligenciasHistoricoPorDiligencia(item.id!!) }
+                                item.historicoLista = historicoDeferred.await()
                             }
 
                             onSuccessListener(diligencias)
@@ -171,12 +159,8 @@ class DiligenciaRepository @Inject constructor(
                                 item.statusObj = statusDeferred.await()
                                 item.tipoObj = tipoDeferred.await()
 
-                                if(item.historico?.isNotEmpty() == true) {
-                                    val historicoDeferred = async { diligenciaHistoricoRepository.obterDiligenciasHistoricoPorLista(item.historico!!) }
-                                    item.historicoLista = historicoDeferred.await()
-                                } else {
-                                    item.historicoLista = emptyList()
-                                }
+                                val historicoDeferred = async { diligenciaHistoricoRepository.obterDiligenciasHistoricoPorDiligencia(item.id!!) }
+                                item.historicoLista = historicoDeferred.await()
                             }
 
                             onSuccessListener(diligencias)
@@ -212,12 +196,8 @@ class DiligenciaRepository @Inject constructor(
                                 item.statusObj = statusDeferred.await()
                                 item.tipoObj = tipoDeferred.await()
 
-                                if(item.historico?.isNotEmpty() == true) {
-                                    val historicoDeferred = async { diligenciaHistoricoRepository.obterDiligenciasHistoricoPorLista(item.historico!!) }
-                                    item.historicoLista = historicoDeferred.await()
-                                } else {
-                                    item.historicoLista = emptyList()
-                                }
+                                val historicoDeferred = async { diligenciaHistoricoRepository.obterDiligenciasHistoricoPorDiligencia(item.id!!) }
+                                item.historicoLista = historicoDeferred.await()
                             }
 
                             onSuccessListener(diligencias)
@@ -287,12 +267,8 @@ class DiligenciaRepository @Inject constructor(
                         resultado.statusObj = statusDeferred.await()
                         resultado.tipoObj = tipoDeferred.await()
 
-                        if(resultado.historico?.isNotEmpty() == true) {
-                            val historicoDeferred = async { diligenciaHistoricoRepository.obterDiligenciasHistoricoPorLista(resultado.historico!!) }
-                            resultado.historicoLista = historicoDeferred.await()
-                        } else {
-                            resultado.historicoLista = emptyList()
-                        }
+                        val historicoDeferred = async { diligenciaHistoricoRepository.obterDiligenciasHistoricoPorDiligencia(resultado.id!!) }
+                        resultado.historicoLista = historicoDeferred.await()
 
                         continuation.resume(resultado)
                     }
@@ -307,8 +283,8 @@ class DiligenciaRepository @Inject constructor(
     override suspend fun obterDiligenciasPorData(data: String): List<Diligencia>? = suspendCoroutine { continuation ->
         firebaseStore
             .collection(Constants.DILIGENCIAS_TABLE)
-            .whereGreaterThanOrEqualTo(Constants.DILIGENCIAS_DATA, data)
-            .whereLessThanOrEqualTo(Constants.DILIGENCIAS_DATA, data)
+            .whereGreaterThanOrEqualTo(Constants.DILIGENCIAS_DATA_TIMESTAMP, data)
+            .whereLessThanOrEqualTo(Constants.DILIGENCIAS_DATA_TIMESTAMP, data)
             .get()
             .addOnSuccessListener { document ->
                 if (!document.isEmpty) {
@@ -327,12 +303,8 @@ class DiligenciaRepository @Inject constructor(
                                 item.statusObj = statusDeferred.await()
                                 item.tipoObj = tipoDeferred.await()
 
-                                if(item.historico?.isNotEmpty() == true) {
-                                    val historicoDeferred = async { diligenciaHistoricoRepository.obterDiligenciasHistoricoPorLista(item.historico!!) }
-                                    item.historicoLista = historicoDeferred.await()
-                                } else {
-                                    item.historicoLista = emptyList()
-                                }
+                                val historicoDeferred = async { diligenciaHistoricoRepository.obterDiligenciasHistoricoPorDiligencia(item.id!!) }
+                                item.historicoLista = historicoDeferred.await()
                             }
 
                             continuation.resume(resultado)
@@ -349,8 +321,8 @@ class DiligenciaRepository @Inject constructor(
     override suspend fun obterDiligenciasPorData(dataInicio: String, dataFinal: String): List<Diligencia>? = suspendCoroutine { continuation ->
         firebaseStore
             .collection(Constants.DILIGENCIAS_TABLE)
-            .whereGreaterThanOrEqualTo(Constants.DILIGENCIAS_DATA, dataInicio)
-            .whereLessThanOrEqualTo(Constants.DILIGENCIAS_DATA, dataFinal)
+            .whereGreaterThanOrEqualTo(Constants.DILIGENCIAS_DATA_TIMESTAMP, dataInicio)
+            .whereLessThanOrEqualTo(Constants.DILIGENCIAS_DATA_TIMESTAMP, dataFinal)
             .get()
             .addOnSuccessListener { document ->
                 if (!document.isEmpty) {
@@ -369,12 +341,8 @@ class DiligenciaRepository @Inject constructor(
                                 item.statusObj = statusDeferred.await()
                                 item.tipoObj = tipoDeferred.await()
 
-                                if(item.historico?.isNotEmpty() == true) {
-                                    val historicoDeferred = async { diligenciaHistoricoRepository.obterDiligenciasHistoricoPorLista(item.historico!!) }
-                                    item.historicoLista = historicoDeferred.await()
-                                } else {
-                                    item.historicoLista = emptyList()
-                                }
+                                val historicoDeferred = async { diligenciaHistoricoRepository.obterDiligenciasHistoricoPorDiligencia(item.id!!) }
+                                item.historicoLista = historicoDeferred.await()
                             }
 
                             continuation.resume(resultado)

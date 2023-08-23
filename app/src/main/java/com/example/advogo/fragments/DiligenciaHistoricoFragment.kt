@@ -2,6 +2,7 @@ package com.example.advogo.fragments
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -11,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.advogo.R
 import com.example.advogo.adapters.DiligenciasHistoricosAdapter
@@ -21,17 +23,20 @@ import com.example.advogo.models.Diligencia
 import com.example.advogo.models.DiligenciaHistorico
 import com.example.advogo.repositories.IDiligenciaHistoricoRepository
 import com.example.advogo.utils.Constants
+import com.google.firebase.Timestamp
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class DiligenciaHistoricoFragment : BaseFragment() {
     private lateinit var binding: FragmentDiligenciaHistoricoBinding
     private lateinit var bindingDialog: DialogDiligenciaHistoricoBinding
+    private lateinit var bindingHistorico: DialogDiligenciaHistoricoBinding
     @Inject lateinit var diligenciaHistoricoRepository: IDiligenciaHistoricoRepository
     private lateinit var diligenciaDetalhes: Diligencia
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
@@ -53,9 +58,9 @@ class DiligenciaHistoricoFragment : BaseFragment() {
             diligenciaHistoricoDialog(null)
         }
 
-        if(diligenciaDetalhes.historico?.isNotEmpty() == true) {
-            setDiligenciaHistoricoToUI(diligenciaDetalhes.historicoLista as ArrayList<DiligenciaHistorico>)
-        }
+        //if(diligenciaDetalhes.historicoLista?.isNotEmpty() == true) {
+            setDiligenciaHistoricoToUI(diligenciaDetalhes.historicoLista)
+        //}
 
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -71,9 +76,9 @@ class DiligenciaHistoricoFragment : BaseFragment() {
         }
     }
 
-    private fun setDiligenciaHistoricoToUI(lista: ArrayList<DiligenciaHistorico>) {
+    private fun setDiligenciaHistoricoToUI(lista: List<DiligenciaHistorico>?) {
         CoroutineScope(Dispatchers.Main).launch {
-            if(lista.size > 0) {
+            if(lista != null && lista.isNotEmpty()) {
                 binding.rvDiligenciaHistoricoList .visibility = View.VISIBLE
                 binding.tvNoDiligenciaHistoricoAvailable.visibility = View.GONE
 
@@ -105,11 +110,16 @@ class DiligenciaHistoricoFragment : BaseFragment() {
         }
     }
 
-    private fun diligenciaHistoricoDialog(historico: DiligenciaHistorico? = null) {
+    private fun diligenciaHistoricoDialog(historico: DiligenciaHistorico? = null) {bindingHistorico
+        bindingHistorico = DialogDiligenciaHistoricoBinding.inflate(layoutInflater)
+
         val dialog = object : DiligenciaHistoricoDialog(
             requireContext(),
-            historico ?: DiligenciaHistorico()
+            historico ?: DiligenciaHistorico(),
+            bindingHistorico,
+            historico != null
         ) {
+            @RequiresApi(Build.VERSION_CODES.O)
             override fun onSubmit(historico: DiligenciaHistorico) {
                 if(historico.id.isBlank()) {
                     adicionarHistorico(historico)
@@ -121,9 +131,10 @@ class DiligenciaHistoricoFragment : BaseFragment() {
 
         dialog.show()
 
-        bindingDialog = DialogDiligenciaHistoricoBinding.inflate(dialog.layoutInflater)
+        //bindingDialog = DialogDiligenciaHistoricoBinding.inflate(dialog.layoutInflater)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun atualizarHistorico(historico: DiligenciaHistorico) {
         if(!validarFormulario()) {
             return
@@ -137,7 +148,9 @@ class DiligenciaHistoricoFragment : BaseFragment() {
             advogado = diligenciaDetalhes.advogado,
             status = diligenciaDetalhes.status,
             tipo = diligenciaDetalhes.tipo,
-            data = null
+            data = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+            dataTimestamp = Timestamp.now(),
+            diligencia = diligenciaDetalhes.id
         )
 
         diligenciaHistoricoRepository.atualizarDiligenciaHistorico(
@@ -147,6 +160,7 @@ class DiligenciaHistoricoFragment : BaseFragment() {
         )
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun adicionarHistorico(historico: DiligenciaHistorico) {
         if(!validarFormulario()) {
             return
@@ -160,7 +174,9 @@ class DiligenciaHistoricoFragment : BaseFragment() {
             advogado = diligenciaDetalhes.advogado,
             status = diligenciaDetalhes.status,
             tipo = diligenciaDetalhes.tipo,
-            data = null
+            data = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+            dataTimestamp = Timestamp.now(),
+            diligencia = diligenciaDetalhes.id
         )
 
         diligenciaHistoricoRepository.adicionarDiligenciaHistorico(
@@ -171,7 +187,8 @@ class DiligenciaHistoricoFragment : BaseFragment() {
     }
 
     private fun saveHistoricoSuccess() {
-        diligenciaHistoricoRepository.obterDiligenciasHistoricos(
+        diligenciaHistoricoRepository.obterDiligenciasHistoricosPorDiligencia(
+            diligenciaDetalhes.id!!,
             {
                 setDiligenciaHistoricoToUI(it as ArrayList<DiligenciaHistorico>)
                 hideProgressDialog()

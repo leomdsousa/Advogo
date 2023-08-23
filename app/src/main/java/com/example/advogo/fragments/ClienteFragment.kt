@@ -16,6 +16,8 @@ import com.example.advogo.activities.ClienteDetalheActivity
 import com.example.advogo.adapters.ClientesAdapter
 import com.example.advogo.adapters.DiligenciasAdapter
 import com.example.advogo.adapters.OptionsAdapter
+import com.example.advogo.databinding.DialogProcessoAnexoBinding
+import com.example.advogo.databinding.DialogSearchBinding
 import com.example.advogo.databinding.FragmentClienteBinding
 import com.example.advogo.dialogs.SearchDialog
 import com.example.advogo.models.Cliente
@@ -28,6 +30,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class ClienteFragment : BaseFragment() {
     private lateinit var binding: FragmentClienteBinding
+    private lateinit var bindingSearch: DialogSearchBinding
     @Inject lateinit var clienteRepository: IClienteRepository
 
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
@@ -38,6 +41,9 @@ class ClienteFragment : BaseFragment() {
     private var onCreateCarregouLista = false
 
     private lateinit var dialogOrdenacao: AlertDialog
+
+    private var selectedDialogOrdenacao: Int? = null
+    private var selectedSearchText: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -112,11 +118,17 @@ class ClienteFragment : BaseFragment() {
     }
 
     private fun showDialogBuscarCliente(titulo: String, placeholder: String) {
+        bindingSearch = DialogSearchBinding.inflate(layoutInflater)
+
         val searchDialog = object : SearchDialog(
             requireContext(),
             titulo,
-            placeholder) {
+            placeholder,
+            bindingSearch,
+            selectedSearchText
+        ) {
             override fun onItemSelected(value: String) {
+                selectedSearchText = value
                 obterCliente(value)
             }
         }
@@ -182,6 +194,9 @@ class ClienteFragment : BaseFragment() {
     private fun obterClientesPorOrdenacao(selectedOption: String) {
         dialogOrdenacao.dismiss()
 
+        selectedDialogOrdenacao =
+            resources.getStringArray(R.array.spinner_ordenar_opcoes).indexOfFirst { it == selectedOption }
+
         var listaOrdenada: ArrayList<Cliente> = ArrayList()
 
         when(selectedOption) {
@@ -195,7 +210,7 @@ class ClienteFragment : BaseFragment() {
             }
             "Limpar" -> {
                 //showProgressDialog("Aguarde por favor")
-                listaOrdenada = ArrayList(clientesLista.sortedByDescending { it.data })
+                listaOrdenada = ArrayList(clientesLista.sortedByDescending { it.dataTimestamp })
             } else -> {
             //Validar o que implementar
         }
@@ -218,7 +233,7 @@ class ClienteFragment : BaseFragment() {
         val layoutManager = LinearLayoutManager(requireContext())
         recyclerView.layoutManager = layoutManager
 
-        val adapter = OptionsAdapter(options, ::obterClientesPorOrdenacao)
+        val adapter = OptionsAdapter(options, ::obterClientesPorOrdenacao, selectedDialogOrdenacao)
         recyclerView.adapter = adapter
 
         dialogOrdenacao.setView(dialogView)

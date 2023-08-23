@@ -24,14 +24,15 @@ open class AnexosAdapter(
         fun bind(item: Anexo, position: Int) {
             binding.apply {
                 binding.tvNomeAnexo.text = item.nome
-                binding.tvUsuarioAnexo.text = item.advogadoObj?.nome
+                //binding.tvUsuarioAnexo.text = item.advogadoObj?.nome
 
                 if(!item.data.isNullOrEmpty()) {
                     val fromFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
                     val toFormat = SimpleDateFormat("dd/MM/yyyy", Locale("pt", "BR"))
                     val fromDate = fromFormat.parse(item.data)
                     val data = toFormat.format(fromDate)
-                    binding.tvDataAnexo.text = "$data"
+                    binding.tvDataUsuarioAnexo.text =
+                        "$data - ${item.advogadoObj?.nome} (${item.advogadoObj?.oab})"
                 }
 
                 binding.btnAbrirAnexo.setOnClickListener {

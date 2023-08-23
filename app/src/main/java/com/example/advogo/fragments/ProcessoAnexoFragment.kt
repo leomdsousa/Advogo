@@ -3,6 +3,7 @@ package com.example.advogo.fragments
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -12,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.advogo.R
 import com.example.advogo.adapters.AnexosAdapter
@@ -22,6 +24,7 @@ import com.example.advogo.models.Processo
 import com.example.advogo.repositories.IAnexoRepository
 import com.example.advogo.utils.Constants
 import com.example.advogo.dialogs.ProcessoAnexoDialog
+import com.google.firebase.Timestamp
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,7 +32,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 class ProcessoAnexoFragment : BaseFragment() {
@@ -144,6 +152,7 @@ class ProcessoAnexoFragment : BaseFragment() {
             override fun onChooseFile() {
                 showFileChooser(resultLauncher)
             }
+            @RequiresApi(Build.VERSION_CODES.O)
             override fun onSubmit(anexo: Anexo) {
                 if(anexo.id.isBlank()) {
                     adicionarAnexo(anexo)
@@ -158,6 +167,7 @@ class ProcessoAnexoFragment : BaseFragment() {
         //bindingDialog = DialogProcessoAnexoBinding.inflate(dialog.layoutInflater)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun atualizarAnexo(anexo: Anexo) {
         if(!validarFormulario()) {
             return
@@ -177,6 +187,10 @@ class ProcessoAnexoFragment : BaseFragment() {
                 descricao = bindingDialog.etDescricaoAnexo.text.toString(),
                 nome = selectedFile?.let { getFileNameFromUri(it) },
                 uri = uri,
+                advogado = getCurrentUserID(),
+                data = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                dataTimestamp = Timestamp.now(),
+                processo = processoDetalhes.numero!!
             )
 
             anexoRepository.atualizarAnexo(
@@ -187,6 +201,7 @@ class ProcessoAnexoFragment : BaseFragment() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun adicionarAnexo(anexo: Anexo) {
         if(!validarFormulario()) {
             return
@@ -206,6 +221,10 @@ class ProcessoAnexoFragment : BaseFragment() {
                 descricao = bindingDialog.etDescricaoAnexo.text.toString(),
                 nome = selectedFile?.let { getFileNameFromUri(it) },
                 uri = uri,
+                advogado = getCurrentUserID(),
+                data = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                dataTimestamp = Timestamp.now(),
+                processo = processoDetalhes.numero!!
             )
 
             anexoRepository.adicionarAnexo(
@@ -217,7 +236,8 @@ class ProcessoAnexoFragment : BaseFragment() {
     }
 
     private fun saveAnexoSuccess() {
-        anexoRepository.obterAnexos(
+        anexoRepository.obterAnexosPorProcesso(
+            processoDetalhes.numero!!,
             {
                 setAnexosToUI(it as ArrayList<Anexo>)
                 hideProgressDialog()

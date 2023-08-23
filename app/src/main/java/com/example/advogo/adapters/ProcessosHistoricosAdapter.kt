@@ -2,6 +2,7 @@ package com.example.advogo.adapters
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.text.Editable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -31,8 +32,6 @@ open class ProcessosHistoricosAdapter(
                     binding.tvDataProcessoHist.text = "Data: $data"
                 }
 
-//                binding.tvTipoProcessoHist.text = "Tipo: ${item.tipoObj?.tipo}"
-//                binding.tvStatusProcessoHist.text = "Status: ${item.statusObj?.status}"
                 binding.tvObsProcessoHist.text = "Observação: ${item.obs}"
 
                 binding.root.setOnClickListener {

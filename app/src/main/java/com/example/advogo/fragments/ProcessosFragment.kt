@@ -16,6 +16,7 @@ import com.example.advogo.activities.ProcessoDetalheActivity
 import com.example.advogo.adapters.ClientesAdapter
 import com.example.advogo.adapters.OptionsAdapter
 import com.example.advogo.adapters.ProcessosAdapter
+import com.example.advogo.databinding.DialogSearchBinding
 import com.example.advogo.databinding.FragmentProcessosBinding
 import com.example.advogo.dialogs.SearchDialog
 import com.example.advogo.models.Cliente
@@ -32,6 +33,7 @@ import kotlin.collections.ArrayList
 @AndroidEntryPoint
 class ProcessosFragment : BaseFragment() {
     private lateinit var binding: FragmentProcessosBinding
+    private lateinit var bindingSearch: DialogSearchBinding
     @Inject lateinit var processoRepository: IProcessoRepository
 
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
@@ -42,6 +44,9 @@ class ProcessosFragment : BaseFragment() {
     private var onCreateCarregouLista = false
 
     private lateinit var dialogOrdenacao: AlertDialog
+
+    private var selectedDialogOrdenacao: Int? = null
+    private var selectedSearchText: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -171,11 +176,17 @@ class ProcessosFragment : BaseFragment() {
     }
 
     private fun showDialogBuscarProcesso(titulo: String, placeholder: String) {
+        bindingSearch = DialogSearchBinding.inflate(layoutInflater)
+
         val searchDialog = object : SearchDialog(
             requireContext(),
             titulo,
-            placeholder) {
+            placeholder,
+            bindingSearch,
+            selectedSearchText
+        ) {
             override fun onItemSelected(value: String) {
+                selectedSearchText = value
                 obterProcesso(value)
             }
         }
@@ -185,6 +196,9 @@ class ProcessosFragment : BaseFragment() {
 
     private fun obterProcessosPorOrdenacao(selectedOption: String) {
         dialogOrdenacao.dismiss()
+
+        selectedDialogOrdenacao =
+            resources.getStringArray(R.array.spinner_ordenar_opcoes).indexOfFirst { it == selectedOption }
 
         var listaOrdenada: ArrayList<Processo> = ArrayList()
 
@@ -199,7 +213,7 @@ class ProcessosFragment : BaseFragment() {
             }
             "Limpar" -> {
                 //showProgressDialog("Aguarde por favor")
-                listaOrdenada = ArrayList(processosLista.sortedByDescending { it.data })
+                listaOrdenada = ArrayList(processosLista.sortedByDescending { it.dataTimestamp })
             } else -> {
             //Validar o que implementar
         }
@@ -222,7 +236,7 @@ class ProcessosFragment : BaseFragment() {
         val layoutManager = LinearLayoutManager(requireContext())
         recyclerView.layoutManager = layoutManager
 
-        val adapter = OptionsAdapter(options, ::obterProcessosPorOrdenacao)
+        val adapter = OptionsAdapter(options, ::obterProcessosPorOrdenacao,  selectedDialogOrdenacao)
         recyclerView.adapter = adapter
 
         dialogOrdenacao.setView(dialogView)

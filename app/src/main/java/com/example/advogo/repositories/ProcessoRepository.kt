@@ -49,26 +49,14 @@ class ProcessoRepository @Inject constructor(
                                 item.statusObj = statusDeferred.await()
                                 item.tipoObj = tipoDeferred.await()
 
-                                if(item.anexos?.isNotEmpty() == true) {
-                                    val anexosDeferred = async { anexoRepository.obterAnexosPorLista(item.anexos!!) }
-                                    item.anexosLista = anexosDeferred.await()
-                                } else {
-                                    item.anexosLista = emptyList()
-                                }
+                                val anexosDeferred = async { anexoRepository.obterAnexosPorProcesso(item.numero!!) }
+                                item.anexosLista = anexosDeferred.await()
 
-                                if(item.andamentos?.isNotEmpty() == true) {
-                                    val andamentosDeferred = async { andamentoRepository.obterAndamentosPorLista(item.andamentos!!) }
-                                    item.andamentosLista = andamentosDeferred.await()
-                                } else {
-                                    item.andamentosLista = emptyList()
-                                }
+                                val andamentosDeferred = async { andamentoRepository.obterAndamentosPorProcesso(item.numero!!) }
+                                item.andamentosLista = andamentosDeferred.await()
 
-                                if(item.historico?.isNotEmpty() == true) {
-                                    val historicoDeferred = async { historicoRepository.obterProcessosHistoricoPorLista(item.historico!!) }
-                                    item.historicoLista = historicoDeferred.await()
-                                } else {
-                                    item.historicoLista = emptyList()
-                                }
+                                val historicoDeferred = async { historicoRepository.obterProcessosHistoricosPorProcesso(item.numero!!) }
+                                item.historicoLista = historicoDeferred.await()
                             }
 
                             onSuccessListener(processos)
@@ -102,26 +90,14 @@ class ProcessoRepository @Inject constructor(
                         processo.statusObj = statusDeferred.await()
                         processo.tipoObj = tipoDeferred.await()
 
-                        if(processo.anexos?.isNotEmpty() == true) {
-                            val anexosDeferred = async { anexoRepository.obterAnexosPorLista(processo.anexos!!) }
-                            processo.anexosLista = anexosDeferred.await()
-                        } else {
-                            processo.anexosLista = emptyList()
-                        }
+                        val anexosDeferred = async { anexoRepository.obterAnexosPorProcesso(processo.numero!!) }
+                        processo.anexosLista = anexosDeferred.await()
 
-                        if(processo.andamentos?.isNotEmpty() == true) {
-                            val andamentosDeferred = async { andamentoRepository.obterAndamentosPorLista(processo.andamentos!!) }
-                            processo.andamentosLista = andamentosDeferred.await()
-                        } else {
-                            processo.andamentosLista = emptyList()
-                        }
+                        val andamentosDeferred = async { andamentoRepository.obterAndamentosPorProcesso(processo.numero!!) }
+                        processo.andamentosLista = andamentosDeferred.await()
 
-                        if(processo.historico?.isNotEmpty() == true) {
-                            val historicoDeferred = async { historicoRepository.obterProcessosHistoricoPorLista(processo.historico!!) }
-                            processo.historicoLista = historicoDeferred.await()
-                        } else {
-                            processo.historicoLista = emptyList()
-                        }
+                        val historicoDeferred = async { historicoRepository.obterProcessosHistoricosPorProcesso(processo.numero!!) }
+                        processo.historicoLista = historicoDeferred.await()
 
                         onSuccessListener(processo)
                     }
@@ -153,26 +129,14 @@ class ProcessoRepository @Inject constructor(
                         processo.statusObj = statusDeferred.await()
                         processo.tipoObj = tipoDeferred.await()
 
-                        if(processo.anexos?.isNotEmpty() == true) {
-                            val anexosDeferred = async { anexoRepository.obterAnexosPorLista(processo.anexos!!) }
-                            processo.anexosLista = anexosDeferred.await()
-                        } else {
-                            processo.anexosLista = emptyList()
-                        }
+                        val anexosDeferred = async { anexoRepository.obterAnexosPorProcesso(processo.numero!!) }
+                        processo.anexosLista = anexosDeferred.await()
 
-                        if(processo.andamentos?.isNotEmpty() == true) {
-                            val andamentosDeferred = async { andamentoRepository.obterAndamentosPorLista(processo.andamentos!!) }
-                            processo.andamentosLista = andamentosDeferred.await()
-                        } else {
-                            processo.andamentosLista = emptyList()
-                        }
+                        val andamentosDeferred = async { andamentoRepository.obterAndamentosPorProcesso(processo.numero!!) }
+                        processo.andamentosLista = andamentosDeferred.await()
 
-                        if(processo.historico?.isNotEmpty() == true) {
-                            val historicoDeferred = async { historicoRepository.obterProcessosHistoricoPorLista(processo.historico!!) }
-                            processo.historicoLista = historicoDeferred.await()
-                        } else {
-                            processo.historicoLista = emptyList()
-                        }
+                        val historicoDeferred = async { historicoRepository.obterProcessosHistoricosPorProcesso(processo.numero!!) }
+                        processo.historicoLista = historicoDeferred.await()
 
                         onSuccessListener(processo)
                     }
@@ -208,26 +172,14 @@ class ProcessoRepository @Inject constructor(
                                 item.statusObj = statusDeferred.await()
                                 item.tipoObj = tipoDeferred.await()
 
-                                if(item.anexos?.isNotEmpty() == true) {
-                                    val anexosDeferred = async { anexoRepository.obterAnexosPorLista(item.anexos!!) }
-                                    item.anexosLista = anexosDeferred.await()
-                                } else {
-                                    item.anexosLista = emptyList()
-                                }
+                                val anexosDeferred = async { anexoRepository.obterAnexosPorProcesso(item.numero!!) }
+                                item.anexosLista = anexosDeferred.await()
 
-                                if(item.andamentos?.isNotEmpty() == true) {
-                                    val andamentosDeferred = async { andamentoRepository.obterAndamentosPorLista(item.andamentos!!) }
-                                    item.andamentosLista = andamentosDeferred.await()
-                                } else {
-                                    item.andamentosLista = emptyList()
-                                }
+                                val andamentosDeferred = async { andamentoRepository.obterAndamentosPorProcesso(item.numero!!) }
+                                item.andamentosLista = andamentosDeferred.await()
 
-                                if(item.historico?.isNotEmpty() == true) {
-                                    val historicoDeferred = async { historicoRepository.obterProcessosHistoricoPorLista(item.historico!!) }
-                                    item.historicoLista = historicoDeferred.await()
-                                } else {
-                                    item.historicoLista = emptyList()
-                                }
+                                val historicoDeferred = async { historicoRepository.obterProcessosHistoricosPorProcesso(item.numero!!) }
+                                item.historicoLista = historicoDeferred.await()
                             }
 
                             onSuccessListener(processos)
@@ -299,26 +251,14 @@ class ProcessoRepository @Inject constructor(
                                 item.statusObj = statusDeferred.await()
                                 item.tipoObj = tipoDeferred.await()
 
-                                if(item.anexos?.isNotEmpty() == true) {
-                                    val anexosDeferred = async { anexoRepository.obterAnexosPorLista(item.anexos!!) }
-                                    item.anexosLista = anexosDeferred.await()
-                                } else {
-                                    item.anexosLista = emptyList()
-                                }
+                                val anexosDeferred = async { anexoRepository.obterAnexosPorProcesso(item.numero!!) }
+                                item.anexosLista = anexosDeferred.await()
 
-                                if(item.andamentos?.isNotEmpty() == true) {
-                                    val andamentosDeferred = async { andamentoRepository.obterAndamentosPorLista(item.andamentos!!) }
-                                    item.andamentosLista = andamentosDeferred.await()
-                                } else {
-                                    item.andamentosLista = emptyList()
-                                }
+                                val andamentosDeferred = async { andamentoRepository.obterAndamentosPorProcesso(item.numero!!) }
+                                item.andamentosLista = andamentosDeferred.await()
 
-                                if(item.historico?.isNotEmpty() == true) {
-                                    val historicoDeferred = async { historicoRepository.obterProcessosHistoricoPorLista(item.historico!!) }
-                                    item.historicoLista = historicoDeferred.await()
-                                } else {
-                                    item.historicoLista = emptyList()
-                                }
+                                val historicoDeferred = async { historicoRepository.obterProcessosHistoricosPorProcesso(item.numero!!) }
+                                item.historicoLista = historicoDeferred.await()
                             }
 
                             continuation.resume(resultado)
@@ -352,26 +292,14 @@ class ProcessoRepository @Inject constructor(
                         resultado.statusObj = statusDeferred.await()
                         resultado.tipoObj = tipoDeferred.await()
 
-                        if(resultado.anexos?.isNotEmpty() == true) {
-                            val anexosDeferred = async { anexoRepository.obterAnexosPorLista(resultado.anexos!!) }
-                            resultado.anexosLista = anexosDeferred.await()
-                        } else {
-                            resultado.anexosLista = emptyList()
-                        }
+                        val anexosDeferred = async { anexoRepository.obterAnexosPorProcesso(resultado.numero!!) }
+                        resultado.anexosLista = anexosDeferred.await()
 
-                        if(resultado.andamentos?.isNotEmpty() == true) {
-                            val andamentosDeferred = async { andamentoRepository.obterAndamentosPorLista(resultado.andamentos!!) }
-                            resultado.andamentosLista = andamentosDeferred.await()
-                        } else {
-                            resultado.andamentosLista = emptyList()
-                        }
+                        val andamentosDeferred = async { andamentoRepository.obterAndamentosPorProcesso(resultado.numero!!) }
+                        resultado.andamentosLista = andamentosDeferred.await()
 
-                        if(resultado.historico?.isNotEmpty() == true) {
-                            val historicoDeferred = async { historicoRepository.obterProcessosHistoricoPorLista(resultado.historico!!) }
-                            resultado.historicoLista = historicoDeferred.await()
-                        } else {
-                            resultado.historicoLista = emptyList()
-                        }
+                        val historicoDeferred = async { historicoRepository.obterProcessosHistoricosPorProcesso(resultado.numero!!) }
+                        resultado.historicoLista = historicoDeferred.await()
 
                         continuation.resume(resultado)
                     }

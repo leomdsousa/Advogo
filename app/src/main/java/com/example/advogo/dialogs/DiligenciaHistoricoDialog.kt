@@ -27,19 +27,21 @@ import javax.inject.Inject
 
 abstract class DiligenciaHistoricoDialog(
     context: Context,
-    private var historico: DiligenciaHistorico
+    private var historico: DiligenciaHistorico,
+    private var binding: DialogDiligenciaHistoricoBinding,
+    private val readOnly: Boolean = false
 ): Dialog(context) {
-    private lateinit var binding: DialogDiligenciaHistoricoBinding
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState ?: Bundle())
-
-        binding = DialogDiligenciaHistoricoBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
         setCanceledOnTouchOutside(true)
         setCancelable(true)
         setDados(historico)
+
+        if(readOnly) {
+            binding.btnSubmitDiligenciaHistorico.visibility = View.GONE
+        }
 
         binding.btnSubmitDiligenciaHistorico.setOnClickListener {
             dismiss()

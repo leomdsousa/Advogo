@@ -2,6 +2,7 @@ package com.example.advogo.fragments
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -12,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.advogo.R
 import com.example.advogo.adapters.ProcessosHistoricosAdapter
@@ -22,10 +24,15 @@ import com.example.advogo.models.Processo
 import com.example.advogo.models.ProcessoHistorico
 import com.example.advogo.repositories.IProcessoHistoricoRepository
 import com.example.advogo.utils.Constants
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.FieldValue
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -45,9 +52,9 @@ class ProcessoHistoricoFragment : BaseFragment() {
             processoHistoricoDialog(null)
         }
 
-        if(processoDetalhes.historico?.isNotEmpty() == true) {
+        //if(processoDetalhes.historicoLista?.isNotEmpty() == true) {
             setProcessoHistoricoToUI(processoDetalhes.historicoLista as ArrayList<ProcessoHistorico>)
-        }
+        //}
 
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -106,10 +113,15 @@ class ProcessoHistoricoFragment : BaseFragment() {
     }
 
     private fun processoHistoricoDialog(historico: ProcessoHistorico? = null) {
+        bindingDialog = DialogProcessoHistoricoBinding.inflate(layoutInflater)
+
         val dialog = object : ProcessoHistoricoDialog(
             requireContext(),
-            historico ?: ProcessoHistorico()
+            historico ?: ProcessoHistorico(),
+            bindingDialog,
+            historico != null
         ) {
+            @RequiresApi(Build.VERSION_CODES.O)
             override fun onSubmit(historico: ProcessoHistorico) {
                 if(historico.id.isBlank()) {
                     adicionarHistorico(historico)
@@ -121,9 +133,10 @@ class ProcessoHistoricoFragment : BaseFragment() {
 
         dialog.show()
 
-        bindingDialog = DialogProcessoHistoricoBinding.inflate(dialog.layoutInflater)
+        //bindingDialog = DialogProcessoHistoricoBinding.inflate(dialog.layoutInflater)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun atualizarHistorico(historico: ProcessoHistorico) {
         if(!validarFormulario()) {
             return
@@ -137,7 +150,9 @@ class ProcessoHistoricoFragment : BaseFragment() {
             advogado = processoDetalhes.advogado,
             status = processoDetalhes.status,
             tipo = processoDetalhes.tipo,
-            data = null
+            data = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+            dataTimestamp = Timestamp.now(),
+            processo = processoDetalhes.numero
         )
 
         processoHistoricoRepository.atualizarProcessoHistorico(
@@ -147,6 +162,7 @@ class ProcessoHistoricoFragment : BaseFragment() {
         )
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun adicionarHistorico(historico: ProcessoHistorico) {
         if(!validarFormulario()) {
             return
@@ -160,7 +176,9 @@ class ProcessoHistoricoFragment : BaseFragment() {
             advogado = processoDetalhes.advogado,
             status = processoDetalhes.status,
             tipo = processoDetalhes.tipo,
-            data = null
+            data = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+            dataTimestamp = Timestamp.now(),
+            processo = processoDetalhes.numero
         )
 
         processoHistoricoRepository.adicionarProcessoHistorico(
@@ -171,7 +189,8 @@ class ProcessoHistoricoFragment : BaseFragment() {
     }
 
     private fun saveHistoricoSuccess() {
-        processoHistoricoRepository.obterProcessosHistoricos(
+        processoHistoricoRepository.obterProcessosHistoricosPorProcesso(
+            processoDetalhes.numero!!,
             {
                 setProcessoHistoricoToUI(it as ArrayList<ProcessoHistorico>)
                 hideProgressDialog()

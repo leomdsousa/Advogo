@@ -1,6 +1,8 @@
 package com.example.advogo.utils
 
 object Constants {
+
+
     const val ADVOGADOS_TABLE = "advogados"
     const val ADVOGADOS_ID = "_id"
     const val ADVOGADOS_NOME = "nome"
@@ -22,6 +24,7 @@ object Constants {
     const val PROCESSOS_ID = "_id"
     const val PROCESSOS_TITULO = "titulo"
     const val PROCESSOS_NUMERO = "numero"
+    const val PROCESSOS_DATA_TIMESTAMP = "dataTimestamp"
 
     const val PROCESSOS_TIPOS_TABLE = "processosTipos"
     const val PROCESSOS_TIPOS_ID = "_id"
@@ -32,12 +35,18 @@ object Constants {
     const val PROCESSOS_STATUS_STATUS = "status"
 
     const val PROCESSOS_ANDAMENTOS_TABLE = "processosAndamentos"
+    const val PROCESSOS_ANDAMENTOS_PROCESSO = "processo"
+    const val PROCESSOS_ANDAMENTOS_DATA = "data"
+    const val PROCESSOS_ANDAMENTOS_DATA_TIMESTAMP = "dataTimestamp"
 
     const val PROCESSOS_STATUS_ANDAMENTOS_TABLE = "processosStatusAndamentos"
 
     const val PROCESSOS_TIPOS_ANDAMENTOS_TABLE = "processosTiposAndamentos"
 
     const val PROCESSOS_HISTORICOS_TABLE = "processosHistoricos"
+    const val PROCESSOS_HISTORICOS_PROCESSO = "processo"
+    const val PROCESSOS_HISTORICOS_DATA = "data"
+    const val PROCESSOS_HISTORICOS_DATA_TIMESTAMP = "dataTimestamp"
 
     const val DILIGENCIAS_TABLE = "diligencias"
     const val DILIGENCIAS_ID = "_id"
@@ -45,6 +54,7 @@ object Constants {
     const val DILIGENCIAS_PROCESSO = "processo"
     const val DILIGENCIAS_ADVOGADO = "advogado"
     const val DILIGENCIAS_DATA = "data"
+    const val DILIGENCIAS_DATA_TIMESTAMP = "dataTimestamp"
 
     const val DILIGENCIAS_STATUS_TABLE = "diligenciasStatus"
     const val DILIGENCIAS_STATUS_ID = "_id"
@@ -55,6 +65,9 @@ object Constants {
     const val DILIGENCIAS_TIPOS_TIPO = "tipo"
 
     const val DILIGENCIAS_HISTORICOS_TABLE = "diligenciasHistoricos"
+    const val DILIGENCIAS_HISTORICOS_DILIGENCIA = "diligencia"
+    const val DILIGENCIAS_HISTORICOS_DATA = "data"
+    const val DILIGENCIAS_HISTORICOS_DATA_TIMESTAMP = "dataTimestamp"
 
     const val TELEFONES_TABLE = "telefones"
     const val TELEFONES_ID = "_id"
@@ -71,6 +84,9 @@ object Constants {
     const val ANEXOS_ID = "_id"
     const val ANEXOS_NOME = "nome"
     const val ANEXOS_URI = "uri"
+    const val ANEXOS_PROCESSO = "processo"
+    const val ANEXOS_DATA = "data"
+    const val ANEXOS_DATA_TIMESTAMP = "dataTimestamp"
 
     //Shared
     const val SELECIONAR = "SELECIONAR"

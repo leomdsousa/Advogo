@@ -22,6 +22,7 @@ import com.example.advogo.repositories.IProcessoStatusAndamentoRepository
 import com.example.advogo.repositories.IProcessoTipoAndamentoRepository
 import com.example.advogo.utils.Constants
 import com.example.advogo.dialogs.ProcessoAndamentoDialog
+import com.google.firebase.Timestamp
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -135,7 +136,8 @@ class ProcessoAndamentoFragment : BaseFragment() {
             andamento ?: ProcessoAndamento(),
             bindingDialog,
             tiposAndamentos,
-            statusAndamentos
+            statusAndamentos,
+            andamento != null
         ) {
             override fun onSubmit(andamento: ProcessoAndamento) {
                 if(andamento.id.isBlank()) {
@@ -171,7 +173,8 @@ class ProcessoAndamentoFragment : BaseFragment() {
             processo = processoDetalhes.numero,
             tipo = (bindingDialog.spinnerTipoAndamentoProcesso.selectedItem as ProcessoTipoAndamento)?.id,
             status = (bindingDialog.spinnerStatusProcessoAndamento .selectedItem as ProcessoStatusAndamento)?.id,
-            data = dataSelecionada
+            data = dataSelecionada,
+            dataTimestamp = Timestamp.now()
         )
 
 //        if(bindingDialog.etDataAndamento.text.toString().isNotEmpty()) {
@@ -203,7 +206,8 @@ class ProcessoAndamentoFragment : BaseFragment() {
             processo = processoDetalhes.numero,
             tipo = (bindingDialog.spinnerTipoAndamentoProcesso.selectedItem as ProcessoTipoAndamento)?.id,
             status = (bindingDialog.spinnerStatusProcessoAndamento .selectedItem as ProcessoStatusAndamento)?.id,
-            data = dataSelecionada
+            data = dataSelecionada,
+            dataTimestamp = Timestamp.now()
         )
 
 //        if(bindingDialog.etDataAndamento.text.toString().isNotEmpty()) {
@@ -222,7 +226,8 @@ class ProcessoAndamentoFragment : BaseFragment() {
     }
 
     private fun saveAndamentoSuccess() {
-        processoAndamentoRepository.obterProcessosAndamentos(
+        processoAndamentoRepository.obterProcessosAndamentosPorProcesso(
+            processoDetalhes.numero!!,
             {
                 setProcessoAndamentosToUI(it as ArrayList<ProcessoAndamento>)
                 hideProgressDialog()
