@@ -119,7 +119,7 @@ class AdvogadoRepository @Inject constructor(
     override fun atualizarAdvogado(model: Advogado, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.ADVOGADOS_TABLE)
-            .document(getCurrentUserId())
+            .document(model.id)
             .set(model, SetOptions.merge())
             .addOnSuccessListener {
                 onSuccessListener()

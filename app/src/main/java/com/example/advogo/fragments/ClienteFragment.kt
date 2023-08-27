@@ -210,10 +210,10 @@ class ClienteFragment : BaseFragment() {
             }
             "Limpar" -> {
                 //showProgressDialog("Aguarde por favor")
-                listaOrdenada = ArrayList(clientesLista.sortedByDescending { it.dataTimestamp })
+                listaOrdenada = ArrayList(clientesLista.sortedByDescending { it.dataCriacaoTimestamp })
             } else -> {
             //Validar o que implementar
-        }
+            }
         }
 
         (binding.rvClientsList.adapter as ClientesAdapter).updateList(listaOrdenada)

@@ -23,6 +23,8 @@ import com.example.advogo.utils.Constants
 import com.example.advogo.utils.SendNotificationToUserAsyncTask
 import com.example.advogo.dialogs.AdvogadosDialog
 import com.example.advogo.dialogs.ProcessosDialog
+import com.example.advogo.utils.extensions.ConverterUtils.fromUSADateStringToDate
+import com.example.advogo.utils.extensions.DataUtils
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.libraries.places.api.Places
@@ -38,6 +40,7 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
@@ -94,6 +97,10 @@ class DiligenciaCadastroActivity : BaseActivity() {
         binding.etDiligenciaData.setOnClickListener {
             showDataPicker() { ano, mes, dia ->
                 onDatePickerResult(ano, mes, dia)
+
+                showTimePicker { hour, minute ->
+                    onTimePickerResult(hour, minute)
+                }
             }
         }
 
@@ -272,7 +279,11 @@ class DiligenciaCadastroActivity : BaseActivity() {
             id = "",
             descricao = binding.etDiligenciaDescricao.text.toString(),
             data = dataSelecionada,
-            dataTimestamp = Timestamp.now(),
+            dataTimestamp = Timestamp(dataSelecionada!!.fromUSADateStringToDate()),
+            dataCriacao = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+            dataCriacaoTimestamp = Timestamp.now(),
+            dataAlteracao = null,
+            dataAlteracaoTimestamp = null,
             tipo = tipoDiligenciaSelecionada,
             status = statusDiligenciaSelecionada,
             endereco = binding.etDiligenciaEndereco.text.toString(),
@@ -290,7 +301,7 @@ class DiligenciaCadastroActivity : BaseActivity() {
                     advogado = advogadoSelecionado,
                     status = statusDiligenciaSelecionada,
                     tipo = tipoDiligenciaSelecionada,
-                    data = SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(LocalDateTime.now()),
+                    data = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
                     dataTimestamp = Timestamp.now()
                 )
 
@@ -381,12 +392,21 @@ class DiligenciaCadastroActivity : BaseActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun onDatePickerResult(ano: Int, mes: Int, dia: Int) {
-        val sDayOfMonth = if (dia < 10) "0$dia" else "$dia"
-        val sMonthOfYear = if ((mes + 1) < 10) "0${mes + 1}" else "${mes + 1}"
+        val retorno = DataUtils.onDatePickerResult(ano, mes, dia)
 
-        dataSelecionada = "$ano-$sMonthOfYear-$sDayOfMonth"
-        binding.etDiligenciaData.setText("$sDayOfMonth/$sMonthOfYear/$ano")
+        dataSelecionada = retorno.dataUSA
+        binding.etDiligenciaData.setText(retorno.dataBR)
+    }
+
+    private fun onTimePickerResult(hora: Int, minuto: Int) {
+        val horaAux = if (hora < 10) "0$hora" else "$hora"
+        val minutoAux = if (minuto < 10) "0$minuto" else "$minuto"
+
+        dataSelecionada = "$dataSelecionada $horaAux:$minutoAux:00"
+        val atualValorDiligenciaData = binding.etDiligenciaData.text.toString()
+        binding.etDiligenciaData.setText("$atualValorDiligenciaData $horaAux:$minutoAux")
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

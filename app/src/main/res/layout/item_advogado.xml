@@ -46,7 +46,7 @@
                 android:id="@+id/tv_adv_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/secondaryTextColor"
+                android:textColor="@color/black"
                 android:textSize="@dimen/itemAdvEmailTextSize"
                 app:fontFamily="@font/lato"
                 tools:text="Email" />
@@ -55,7 +55,7 @@
                 android:id="@+id/tv_telefone_adv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/secondaryTextColor"
+                android:textColor="@color/black"
                 android:textSize="@dimen/itemAdvEmailTextSize"
                 app:fontFamily="@font/lato"
                 tools:text="(11) 98701-5859" />

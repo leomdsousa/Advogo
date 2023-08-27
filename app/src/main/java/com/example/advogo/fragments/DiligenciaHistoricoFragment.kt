@@ -23,14 +23,18 @@ import com.example.advogo.models.Diligencia
 import com.example.advogo.models.DiligenciaHistorico
 import com.example.advogo.repositories.IDiligenciaHistoricoRepository
 import com.example.advogo.utils.Constants
+import com.example.advogo.utils.extensions.ConverterUtils.fromUSADateStringToDate
 import com.google.firebase.Timestamp
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 class DiligenciaHistoricoFragment : BaseFragment() {
@@ -58,9 +62,7 @@ class DiligenciaHistoricoFragment : BaseFragment() {
             diligenciaHistoricoDialog(null)
         }
 
-        //if(diligenciaDetalhes.historicoLista?.isNotEmpty() == true) {
-            setDiligenciaHistoricoToUI(diligenciaDetalhes.historicoLista)
-        //}
+        setDiligenciaHistoricoToUI(diligenciaDetalhes.historicoLista)
 
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -148,8 +150,8 @@ class DiligenciaHistoricoFragment : BaseFragment() {
             advogado = diligenciaDetalhes.advogado,
             status = diligenciaDetalhes.status,
             tipo = diligenciaDetalhes.tipo,
-            data = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
-            dataTimestamp = Timestamp.now(),
+            data = historico.data,
+            dataTimestamp = Timestamp(historico.data!!.fromUSADateStringToDate()),
             diligencia = diligenciaDetalhes.id
         )
 

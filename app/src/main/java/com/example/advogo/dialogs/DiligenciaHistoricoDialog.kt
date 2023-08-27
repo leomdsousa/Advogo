@@ -4,26 +4,10 @@ import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.view.View
-import android.widget.AdapterView
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.view.get
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.advogo.adapters.ProcessosAdapter
-import com.example.advogo.adapters.ProcessosStatusAndamentosAdapter
-import com.example.advogo.adapters.ProcessosTiposAndamentosAdapter
+import com.example.advogo.R
 import com.example.advogo.databinding.DialogDiligenciaHistoricoBinding
-import com.example.advogo.databinding.DialogListBinding
-import com.example.advogo.databinding.DialogProcessoAndamentoBinding
-import com.example.advogo.databinding.DialogProcessoAnexoBinding
 import com.example.advogo.models.*
-import com.example.advogo.repositories.IProcessoStatusAndamentoRepository
-import com.example.advogo.repositories.IProcessoTipoAndamentoRepository
-import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
-import javax.inject.Inject
+import com.example.advogo.utils.extensions.DialogUtils
 
 abstract class DiligenciaHistoricoDialog(
     context: Context,
@@ -41,6 +25,7 @@ abstract class DiligenciaHistoricoDialog(
 
         if(readOnly) {
             binding.btnSubmitDiligenciaHistorico.visibility = View.GONE
+            DialogUtils.makeEditTextsReadOnly(this, R.layout.dialog_diligencia_historico)
         }
 
         binding.btnSubmitDiligenciaHistorico.setOnClickListener {

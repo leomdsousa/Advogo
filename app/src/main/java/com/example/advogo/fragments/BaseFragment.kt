@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.ProgressDialog
+import android.app.TimePickerDialog
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
@@ -96,6 +97,23 @@ open class BaseFragment : Fragment() {
             day
         )
         dpd.show()
+    }
+
+    fun showTimePicker(onSuccess: (hour: Int, minute: Int) -> Unit) {
+        val c = Calendar.getInstance()
+        val hour = c.get(Calendar.HOUR_OF_DAY)
+        val minute = c.get(Calendar.MINUTE)
+
+        val timePickerDialog = TimePickerDialog(
+            requireContext(),
+            { _, hourOfDay, minute ->
+                onSuccess(hourOfDay, minute)
+            },
+            hour,
+            minute,
+            true
+        )
+        timePickerDialog.show()
     }
 
     fun chooseImage(fragment: Fragment, result: ActivityResultLauncher<Intent>) {

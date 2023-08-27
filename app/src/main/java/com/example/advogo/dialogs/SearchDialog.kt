@@ -3,9 +3,7 @@ package com.example.advogo.dialogs
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import com.example.advogo.adapters.AdvogadosAdapter
 import com.example.advogo.databinding.DialogSearchBinding
-import com.example.advogo.models.Advogado
 
 abstract class SearchDialog(
     context: Context,

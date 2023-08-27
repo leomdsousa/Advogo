@@ -25,7 +25,7 @@
                 android:id="@+id/tv_data_diligencia_hist"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/secondaryTextColor"
+                android:textColor="@color/black"
                 android:textSize="@dimen/itemProcessoNumeroTextSize"
                 app:fontFamily="@font/lato"
                 tools:text="Data: 12/12/2023" />
@@ -34,7 +34,7 @@
                 android:id="@+id/tv_adv_diligencia_hist"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/secondaryTextColor"
+                android:textColor="@color/black"
                 android:textSize="@dimen/itemProcessoNumeroTextSize"
                 app:fontFamily="@font/lato"
                 tools:text="Advogado: Leonardo Monteiro de Sousa (Nº OAB)" />
@@ -43,7 +43,7 @@
                 android:id="@+id/tv_obs_diligencia_hist"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/secondaryTextColor"
+                android:textColor="@color/black"
                 android:textSize="@dimen/itemProcessoNumeroTextSize"
                 app:fontFamily="@font/lato"
                 android:layout_marginTop="8dp"

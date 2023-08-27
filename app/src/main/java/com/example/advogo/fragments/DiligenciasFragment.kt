@@ -2,16 +2,12 @@ package com.example.advogo.fragments
 
 import android.app.Activity
 import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.ArrayAdapter
-import android.widget.ListView
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
@@ -21,19 +17,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.advogo.R
 import com.example.advogo.activities.DiligenciaCadastroActivity
 import com.example.advogo.activities.DiligenciaDetalheActivity
-import com.example.advogo.adapters.ClientesAdapter
 import com.example.advogo.adapters.DiligenciasAdapter
 import com.example.advogo.adapters.OptionsAdapter
 import com.example.advogo.databinding.DialogSearchBinding
 import com.example.advogo.databinding.FragmentDiligenciasBinding
-import com.example.advogo.dialogs.ProcessosDialog
 import com.example.advogo.dialogs.SearchDialog
-import com.example.advogo.models.Cliente
 import com.example.advogo.models.Diligencia
-import com.example.advogo.models.Processo
 import com.example.advogo.repositories.IDiligenciaRepository
 import com.example.advogo.utils.Constants
-import com.example.advogo.utils.DataSelecionadaDecorator
+import com.example.advogo.utils.extensions.ConverterUtils.fromCalendarDayToDateString
+import com.example.advogo.utils.extensions.ConverterUtils.fromLocalDateToDateString
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
@@ -81,6 +74,7 @@ class DiligenciasFragment : BaseFragment() {
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -90,8 +84,8 @@ class DiligenciasFragment : BaseFragment() {
             resultLauncher.launch(intent)
         }
 
-        binding.calendarView.setOnDateChangedListener { widget, date, selected ->
-            val data = "${date.year}-${date.month.toString().padStart(2, '0')}-${date.day.toString().padStart(2, '0')}"
+        binding.calendarView.setOnDateChangedListener { _, date, _ ->
+            val data = date.fromCalendarDayToDateString()
 
             CoroutineScope(Dispatchers.Main).launch {
                 val diligencias = obterDiligenciasPorData(data)
@@ -378,8 +372,8 @@ class DiligenciasFragment : BaseFragment() {
                 val dataInicial = LocalDate.now()
                 val dataFinal = obterProximosDiasUteis(dataInicial, 30).last()
 
-                val dataInicialStr = "${dataInicial.year}-${dataInicial.monthValue.toString().padStart(2,'0')}-${dataInicial.dayOfMonth.toString().padStart(2,'0')}"
-                val dataFinalStr = "${dataFinal.year}-${dataFinal.monthValue.toString().padStart(2,'0')}-${dataFinal.dayOfMonth.toString().padStart(2,'0')}"
+                val dataInicialStr = dataInicial.fromLocalDateToDateString()
+                val dataFinalStr = dataFinal.fromLocalDateToDateString()
 
                 CoroutineScope(Dispatchers.Main).launch {
                     val diligencias = obterDiligenciasPorData(dataInicialStr, dataFinalStr)
@@ -396,8 +390,8 @@ class DiligenciasFragment : BaseFragment() {
                 val dataInicial = LocalDate.now()
                 val dataFinal = obterProximosDiasUteis(dataInicial, 15).last()
 
-                val dataInicialStr = "${dataInicial.year}-${dataInicial.monthValue.toString().padStart(2,'0')}-${dataInicial.dayOfMonth.toString().padStart(2,'0')}"
-                val dataFinalStr = "${dataFinal.year}-${dataFinal.monthValue.toString().padStart(2,'0')}-${dataFinal.dayOfMonth.toString().padStart(2,'0')}"
+                val dataInicialStr = dataInicial.fromLocalDateToDateString()
+                val dataFinalStr = dataFinal.fromLocalDateToDateString()
 
                 CoroutineScope(Dispatchers.Main).launch {
                     val diligencias = obterDiligenciasPorData(dataInicialStr, dataFinalStr)
@@ -414,8 +408,8 @@ class DiligenciasFragment : BaseFragment() {
                 val dataInicial = LocalDate.now()
                 val dataFinal = obterProximosDiasUteis(dataInicial, 7).last()
 
-                val dataInicialStr = "${dataInicial.year}-${dataInicial.monthValue.toString().padStart(2,'0')}-${dataInicial.dayOfMonth.toString().padStart(2,'0')}"
-                val dataFinalStr = "${dataFinal.year}-${dataFinal.monthValue.toString().padStart(2,'0')}-${dataFinal.dayOfMonth.toString().padStart(2,'0')}"
+                val dataInicialStr = dataInicial.fromLocalDateToDateString()
+                val dataFinalStr = dataFinal.fromLocalDateToDateString()
 
                 CoroutineScope(Dispatchers.Main).launch {
                     val diligencias = obterDiligenciasPorData(dataInicialStr, dataFinalStr)
@@ -426,7 +420,7 @@ class DiligenciasFragment : BaseFragment() {
                     hideProgressDialog()
                 }
             } else -> {
-            //Validar o que implementar
+                //Validar o que implementar
             }
         }
     }
@@ -459,20 +453,3 @@ class DiligenciasFragment : BaseFragment() {
         (binding.rvDiligenciasList.adapter as DiligenciasAdapter).updateList(listaOrdenada)
     }
 }
-
-//        var listaOrdenada: ArrayList<Diligencia>
-//        if(!isListaOrdenadaAsc && !isListaOrdenadaDesc) {
-//            listaOrdenada = ArrayList(diligencias.sortedBy { it.descricao })
-//            isListaOrdenadaAsc = true
-//            isListaOrdenadaDesc = false
-//        } else if(!isListaOrdenadaDesc) {
-//            listaOrdenada = ArrayList(diligencias.sortedByDescending { it.descricao })
-//            isListaOrdenadaAsc = false
-//            isListaOrdenadaDesc = true
-//        } else {
-//            listaOrdenada = ArrayList(diligencias.sortedByDescending { it.descricao })
-//            isListaOrdenadaAsc = false
-//            isListaOrdenadaDesc = false
-//        }
-//
-//        (binding.rvDiligenciasList.adapter as DiligenciasAdapter).updateList(listaOrdenada)

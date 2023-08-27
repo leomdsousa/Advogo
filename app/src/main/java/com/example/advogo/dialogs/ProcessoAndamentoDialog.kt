@@ -5,26 +5,14 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.view.get
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.advogo.adapters.ProcessosAdapter
+import com.example.advogo.R
 import com.example.advogo.adapters.ProcessosStatusAndamentosAdapter
 import com.example.advogo.adapters.ProcessosTiposAndamentosAdapter
-import com.example.advogo.databinding.DialogListBinding
 import com.example.advogo.databinding.DialogProcessoAndamentoBinding
 import com.example.advogo.models.*
-import com.example.advogo.repositories.IProcessoStatusAndamentoRepository
-import com.example.advogo.repositories.IProcessoTipoAndamentoRepository
-import com.google.firebase.auth.FirebaseAuth
-import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import com.example.advogo.utils.extensions.DialogUtils
 import java.text.SimpleDateFormat
 import java.util.*
-import javax.inject.Inject
 
 abstract class ProcessoAndamentoDialog(
     context: Context,
@@ -48,6 +36,7 @@ abstract class ProcessoAndamentoDialog(
 
         if(readOnly) {
             binding.btnSubmitProcessoAndamento.visibility = View.GONE
+            DialogUtils.makeEditTextsReadOnly(this, R.layout.dialog_processo_andamento)
         }
 
         binding.etDataAndamento.setOnClickListener {

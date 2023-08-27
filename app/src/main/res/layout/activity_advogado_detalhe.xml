@@ -66,7 +66,12 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/name"
-                            android:inputType="text"
+                            android:inputType="none"
+                            android:background="@drawable/til_background"
+                            android:clickable="false"
+                            android:cursorVisible="false"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
                             android:maxLength="25"
                             android:textSize="@dimen/etTextSize" />
 
@@ -83,7 +88,12 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/sobrenome"
-                            android:inputType="text"
+                            android:inputType="none"
+                            android:background="@drawable/til_background"
+                            android:clickable="false"
+                            android:cursorVisible="false"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
                             android:maxLength="50"
                             android:textSize="@dimen/etTextSize" />
 
@@ -137,7 +147,12 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/oab"
-                            android:inputType="number"
+                            android:inputType="none"
+                            android:background="@drawable/til_background"
+                            android:clickable="false"
+                            android:cursorVisible="false"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
                             android:maxLength="6"
                             android:textSize="@dimen/etTextSize" />
 

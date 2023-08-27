@@ -14,10 +14,14 @@ import com.example.advogo.models.externals.CorreioResponse
 import com.example.advogo.repositories.ClienteRepository
 import com.example.advogo.services.CorreioApiService
 import com.example.advogo.utils.Constants
+import com.google.firebase.Timestamp
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 import javax.inject.Inject
@@ -84,6 +88,7 @@ class ClienteCadastroActivity : BaseActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun saveCliente() {
         if(!validarFormulario()) {
             return
@@ -101,6 +106,10 @@ class ClienteCadastroActivity : BaseActivity() {
             enderecoCidade = binding.etEnderecoCidade.text.toString(),
             enderecoBairro = binding.etBairro.text.toString(),
             telefone = binding.etTelefone.text.toString(),
+            dataCriacao = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+            dataCriacaoTimestamp = Timestamp.now(),
+            dataAlteracao = null,
+            dataAlteracaoTimestamp = null
         )
 
         clienteRepository.adicionarCliente(

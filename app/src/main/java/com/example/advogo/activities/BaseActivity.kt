@@ -3,10 +3,7 @@ package com.example.advogo.activities
 import android.Manifest
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.app.AlertDialog
-import android.app.DatePickerDialog
-import android.app.ProgressDialog
+import android.app.*
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -171,6 +168,23 @@ open class BaseActivity : AppCompatActivity() {
         dpd.show()
     }
 
+    fun showTimePicker(onSuccess: (hour: Int, minute: Int) -> Unit) {
+        val c = Calendar.getInstance()
+        val hour = c.get(Calendar.HOUR_OF_DAY)
+        val minute = c.get(Calendar.MINUTE)
+
+        val timePickerDialog = TimePickerDialog(
+            this,
+            { _, hourOfDay, minute ->
+                onSuccess(hourOfDay, minute)
+            },
+            hour,
+            minute,
+            true
+        )
+        timePickerDialog.show()
+    }
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -286,7 +300,7 @@ open class BaseActivity : AppCompatActivity() {
         }
     }
 
-    private fun obterLocalizacaoComLatLong(
+    fun obterLocalizacaoComLatLong(
         context: Context,
         lat: Double,
         lng: Double,

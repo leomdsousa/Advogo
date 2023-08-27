@@ -20,6 +20,8 @@ import com.example.advogo.models.Advogado
 import com.example.advogo.repositories.AdvogadoRepository
 import com.example.advogo.services.CorreioApiService
 import com.example.advogo.utils.Constants
+import com.example.advogo.utils.extensions.ConverterUtils.fromUSADateStringToDate
+import com.google.firebase.Timestamp
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,6 +30,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import java.io.IOException
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -123,6 +127,7 @@ class AdvogadoDetalheActivity : BaseActivity() {
         binding.etTelefone.setText(advogadoDetalhes.telefone)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun saveAdvogado() {
         if (!validarFormulario()) {
             return
@@ -145,14 +150,19 @@ class AdvogadoDetalheActivity : BaseActivity() {
                 endereco = (if (binding.etEndereco.text.toString() != advogadoDetalhes.endereco) binding.etEndereco.text.toString() else advogadoDetalhes.endereco),
                 enderecoLat = advogadoDetalhes.enderecoLat,
                 enderecoLong = advogadoDetalhes.enderecoLong,
-                imagem = imageUrl,
                 oab = (if (binding.etOab.text.toString() != advogadoDetalhes.oab!!.toString()) binding.etOab.text.toString().toLong() else advogadoDetalhes.oab!!.toLong()),
                 telefone = (if (binding.etTelefone.text.toString() != advogadoDetalhes.telefone) binding.etTelefone.text.toString() else advogadoDetalhes.telefone),
-                fcmToken = advogadoDetalhes.fcmToken
+                dataCriacao = advogadoDetalhes.dataCriacao,
+                dataCriacaoTimestamp = advogadoDetalhes.dataCriacaoTimestamp,
+                dataAlteracao = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+                dataAlteracaoTimestamp = Timestamp(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).fromUSADateStringToDate()),
+                imagem = imageUrl,
+                fcmToken = advogadoDetalhes.fcmToken,
             )
 
             try {
-                advogadoRepository.atualizarAdvogado(advogado,
+                advogadoRepository.atualizarAdvogado(
+                    advogado,
                     {
                         setAdvogadoToUI(advogado)
                         advogadoEdicaoSuccess()

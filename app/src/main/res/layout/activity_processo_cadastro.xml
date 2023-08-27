@@ -83,10 +83,10 @@
                             android:id="@+id/etNumeroProcesso"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="text"
+                            android:inputType="number"
                             android:hint="@string/hintNumeroProcessoDescription"
                             android:textSize="@dimen/etTextSize"
-                            android:digits="abcdefghijklmnopqrstuvwxyz1234567890"
+                            android:digits="1234567890"
                             app:mask="_______-__.____._.__.____"
                             app:maskCharacter="_"
                             app:maskStyle="normal" />
@@ -121,7 +121,7 @@
                         android:layout_marginTop="@dimen/processoCadastroTilMarginTop"
                         android:gravity="start"
                         android:text="@string/hintTipoDescription"
-                        android:textColor="@color/primaryTextColor"
+                        android:textColor="@color/black"
                         android:textSize="@dimen/etTextSize"
                         android:textStyle="bold" />
 
@@ -141,7 +141,7 @@
                         android:layout_marginTop="@dimen/processoCadastroTilMarginTop"
                         android:gravity="start"
                         android:text="@string/hintStatusDescription"
-                        android:textColor="@color/primaryTextColor"
+                        android:textColor="@color/black"
                         android:textSize="@dimen/etTextSize"
                         android:textStyle="bold" />
 

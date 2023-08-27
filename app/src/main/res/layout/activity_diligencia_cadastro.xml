@@ -67,7 +67,7 @@
                         android:layout_marginTop="@dimen/processoCadastroTilMarginTop"
                         android:gravity="start"
                         android:text="@string/hintTipoDiligenciaDescription"
-                        android:textColor="@color/primaryTextColor"
+                        android:textColor="@color/black"
                         android:textSize="@dimen/etTextSize"
                         android:textStyle="bold" />
 
@@ -87,7 +87,7 @@
                         android:layout_marginTop="@dimen/processoCadastroTilMarginTop"
                         android:gravity="start"
                         android:text="@string/hintStatusDiligenciaDescription"
-                        android:textColor="@color/primaryTextColor"
+                        android:textColor="@color/black"
                         android:textSize="@dimen/etTextSize"
                         android:textStyle="bold" />
 

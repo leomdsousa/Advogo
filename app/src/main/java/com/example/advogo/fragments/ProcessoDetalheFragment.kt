@@ -26,6 +26,8 @@ import com.example.advogo.utils.ProcessMaskTextWatcher
 import com.example.advogo.utils.SendNotificationToUserAsyncTask
 import com.example.advogo.dialogs.AdvogadosDialog
 import com.example.advogo.dialogs.ClientesDialog
+import com.example.advogo.utils.extensions.ConverterUtils.fromUSADateStringToDate
+import com.example.advogo.utils.extensions.DataUtils
 import com.google.firebase.Timestamp
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -35,6 +37,7 @@ import okhttp3.internal.format
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 import javax.inject.Inject
 
@@ -83,13 +86,13 @@ class ProcessoDetalheFragment : BaseFragment() {
         setupSpinners()
         setProcessoToUI(processoDetalhes)
 
-        binding.etNumeroProcesso.addTextChangedListener(ProcessMaskTextWatcher(binding.etNumeroProcesso))
+        //binding.etNumeroProcesso.addTextChangedListener(ProcessMaskTextWatcher(binding.etNumeroProcesso))
 
-        binding.etData.setOnClickListener {
-            showDataPicker(requireContext()) { ano, mes, dia ->
-                onDatePickerResult(ano, mes, dia)
-            }
-        }
+//        binding.etData.setOnClickListener {
+//            showDataPicker(requireContext()) { ano, mes, dia ->
+//                onDatePickerResult(ano, mes, dia)
+//            }
+//        }
 
         binding.btnProcessoCadastro.setOnClickListener {
             saveProcesso()
@@ -103,9 +106,9 @@ class ProcessoDetalheFragment : BaseFragment() {
             advogadosDialog()
         }
 
-        binding.etCliente.setOnClickListener {
-            clientesDialog()
-        }
+//        binding.etCliente.setOnClickListener {
+//            clientesDialog()
+//        }
 
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -177,7 +180,10 @@ class ProcessoDetalheFragment : BaseFragment() {
                 tipo = (if (tipoProcessoSelecionado != processoDetalhes.tipo) tipoProcessoSelecionado else processoDetalhes.tipo),
                 status = (if (statusProcessoSelecionado != processoDetalhes.status) statusProcessoSelecionado else processoDetalhes.status),
                 data = processoDetalhes.data,
-                dataTimestamp = Timestamp.now(),
+                dataCriacao = processoDetalhes.dataCriacao,
+                dataCriacaoTimestamp = processoDetalhes.dataCriacaoTimestamp,
+                dataAlteracao = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+                dataAlteracaoTimestamp = Timestamp.now(),
                 imagem = imageUrl,
                 cliente = (if (clienteSelecionado != processoDetalhes.cliente.toString()) clienteSelecionado else processoDetalhes.cliente.toString()),
                 advogado = (if (advSelecionado != processoDetalhes.advogado) advSelecionado else processoDetalhes.advogado),
@@ -187,6 +193,8 @@ class ProcessoDetalheFragment : BaseFragment() {
                 historico = processoDetalhes.historico
             )
 
+            processo.dataTimestamp = Timestamp(processo.data!!.fromUSADateStringToDate())
+
             processoRepository.atualizarProcesso(
                 processo,
                 {
@@ -195,7 +203,7 @@ class ProcessoDetalheFragment : BaseFragment() {
                         advogado = advSelecionado,
                         status = statusProcessoSelecionado,
                         tipo = tipoProcessoSelecionado,
-                        data = SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(LocalDateTime.now()),
+                        data = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
                         dataTimestamp = Timestamp.now()
                     )
 
@@ -453,12 +461,12 @@ class ProcessoDetalheFragment : BaseFragment() {
         }
     }
 
-    private fun onDatePickerResult(year: Int, month: Int, day: Int) {
-        val sDayOfMonth = if (day < 10) "0$day" else "$day"
-        val sMonthOfYear = if ((month + 1) < 10) "0${month + 1}" else "${month + 1}"
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun onDatePickerResult(ano: Int, mes: Int, dia: Int) {
+        val retorno = DataUtils.onDatePickerResult(ano, mes, dia)
 
-        dataSelecionada = "$year-$sMonthOfYear-$sDayOfMonth"
-        binding.etData.setText("$sDayOfMonth/$sMonthOfYear/$year")
+        dataSelecionada = retorno.dataUSA
+        binding.etData.setText(retorno.dataBR)
     }
 
     private fun atualizarProcessoSuccess() {

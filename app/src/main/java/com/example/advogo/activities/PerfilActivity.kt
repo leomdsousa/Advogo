@@ -3,22 +3,27 @@ package com.example.advogo.activities
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import com.bumptech.glide.Glide
 import com.example.advogo.R
 import com.example.advogo.databinding.ActivityPerfilBinding
 import com.example.advogo.models.Advogado
 import com.example.advogo.repositories.IAdvogadoRepository
 import com.example.advogo.utils.Constants
+import com.google.firebase.Timestamp
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.IOException
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -35,6 +40,7 @@ class PerfilActivity : BaseActivity() {
 
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPerfilBinding.inflate(layoutInflater)
@@ -58,8 +64,30 @@ class PerfilActivity : BaseActivity() {
                 { lat, long ->
                     latitude = lat
                     longitude = long
+
+                    obterLocalizacaoComLatLong(
+                        this,
+                        latitude!!,
+                        longitude!!,
+                        {   endereco ->
+                            binding.etEndereco.setText(endereco)
+                        },
+                        {
+                            Toast.makeText(
+                                this@PerfilActivity,
+                                "Erro ao buscar endereço atual",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    )
                 },
-                { null }
+                {
+                    Toast.makeText(
+                        this@PerfilActivity,
+                        "Erro ao buscar endereço atual",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
             )
         }
 
@@ -98,6 +126,7 @@ class PerfilActivity : BaseActivity() {
         binding.toolbarProfileActivity.setNavigationOnClickListener { onBackPressed() }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun atualizarAdvogado() {
         if(!validarFormulario()) {
             return
@@ -114,7 +143,11 @@ class PerfilActivity : BaseActivity() {
             imagem = (if (imagemPerfilURL.isNotEmpty() && imagemPerfilURL != advogadoDetalhes.imagem) imagemPerfilURL else advogadoDetalhes.imagem),
             oab = (if (binding.etOab.text.toString() != advogadoDetalhes.oab!!.toString()) binding.etOab.text.toString().toLong() else advogadoDetalhes.oab!!.toLong()),
             telefone = (if (binding.etTelefone.text.toString() != advogadoDetalhes.telefone) binding.etTelefone.text.toString() else advogadoDetalhes.telefone),
-            fcmToken = advogadoDetalhes.fcmToken
+            fcmToken = advogadoDetalhes.fcmToken,
+            dataCriacao = advogadoDetalhes.dataCriacao,
+            dataCriacaoTimestamp = advogadoDetalhes.dataCriacaoTimestamp,
+            dataAlteracao = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+            dataAlteracaoTimestamp = Timestamp.now()
         )
 
         advRepository.atualizarAdvogado(

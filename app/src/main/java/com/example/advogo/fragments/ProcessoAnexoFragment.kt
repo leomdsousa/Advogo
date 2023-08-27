@@ -24,6 +24,7 @@ import com.example.advogo.models.Processo
 import com.example.advogo.repositories.IAnexoRepository
 import com.example.advogo.utils.Constants
 import com.example.advogo.dialogs.ProcessoAnexoDialog
+import com.example.advogo.utils.extensions.ConverterUtils.fromUSADateStringToDate
 import com.google.firebase.Timestamp
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -32,10 +33,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
-import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
@@ -64,7 +63,7 @@ class ProcessoAnexoFragment : BaseFragment() {
 
         obterIntentDados()
 
-        setAnexosToUI(processoDetalhes.anexosLista as ArrayList<Anexo>?)
+        setAnexosToUI(processoDetalhes.anexosLista)
 
         binding.fabAddAnexo.setOnClickListener {
             anexoProcessoDialog(null)
@@ -98,46 +97,44 @@ class ProcessoAnexoFragment : BaseFragment() {
         }
     }
 
-    private fun setAnexosToUI(lista: ArrayList<Anexo>?) {
-        if (lista != null) {
-            if(lista.size > 0) {
-                binding.rvAnexosLista.visibility = View.VISIBLE
-                binding.tvNenhumAnexoDisponivel.visibility = View.GONE
+    private fun setAnexosToUI(lista: List<Anexo>?) {
+        if(lista != null && lista.isNotEmpty()) {
+            binding.rvAnexosLista.visibility = View.VISIBLE
+            binding.tvNenhumAnexoDisponivel.visibility = View.GONE
 
-                binding.rvAnexosLista.layoutManager = LinearLayoutManager(binding.root.context)
-                binding.rvAnexosLista.setHasFixedSize(true)
+            binding.rvAnexosLista.layoutManager = LinearLayoutManager(binding.root.context)
+            binding.rvAnexosLista.setHasFixedSize(true)
 
-                val adapter = AnexosAdapter(binding.root.context, lista)
-                binding.rvAnexosLista.adapter = adapter
+            val adapter = AnexosAdapter(binding.root.context, lista)
+            binding.rvAnexosLista.adapter = adapter
 
-                adapter.setOnItemClickListener(object :
-                    AnexosAdapter.OnItemClickListener {
-                    override fun onClick(anexo: Anexo) {
-                        anexoProcessoDialog(anexo)
+            adapter.setOnItemClickListener(object :
+                AnexosAdapter.OnItemClickListener {
+                override fun onClick(anexo: Anexo) {
+                    anexoProcessoDialog(anexo)
+                }
+                override fun onView(anexo: Anexo, position: Int) {
+                    if(!TextUtils.isEmpty(anexo.uri)) {
+                        abrirArquivo(anexo.uri!!)
                     }
-                    override fun onView(anexo: Anexo, position: Int) {
-                        if(!TextUtils.isEmpty(anexo.uri)) {
-                            abrirArquivo(anexo.uri!!)
+                }
+                override fun onDelete(anexo: Anexo, position: Int) {
+                    if(!TextUtils.isEmpty(anexo.uri)) {
+                        showProgressDialog(getString(R.string.aguardePorfavor))
+
+                        deletarArquivo(
+                            anexo.uri!!
+                        ) {
+                            deleteAnexoSuccess()
+                            hideProgressDialog()
                         }
                     }
-                    override fun onDelete(anexo: Anexo, position: Int) {
-                        if(!TextUtils.isEmpty(anexo.uri)) {
-                            showProgressDialog(getString(R.string.aguardePorfavor))
-                            
-                            deletarArquivo(
-                                anexo.uri!!
-                            ) {
-                                deleteAnexoSuccess()
-                                hideProgressDialog()
-                            }
-                        }
-                    }
-                })
+                }
+            })
 
-            } else {
-                binding.rvAnexosLista.visibility = View.GONE
-                binding.tvNenhumAnexoDisponivel.visibility = View.VISIBLE
-            }
+        } else {
+            binding.rvAnexosLista.visibility = View.GONE
+            binding.tvNenhumAnexoDisponivel.visibility = View.VISIBLE
         }
     }
 
@@ -188,10 +185,11 @@ class ProcessoAnexoFragment : BaseFragment() {
                 nome = selectedFile?.let { getFileNameFromUri(it) },
                 uri = uri,
                 advogado = getCurrentUserID(),
-                data = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
-                dataTimestamp = Timestamp.now(),
+                data = anexo.data,
                 processo = processoDetalhes.numero!!
             )
+
+            anexo.dataTimestamp = Timestamp(anexo.data!!.fromUSADateStringToDate())
 
             anexoRepository.atualizarAnexo(
                 anexo,

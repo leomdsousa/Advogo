@@ -34,7 +34,7 @@
                 android:id="@+id/tv_processo_diligencia"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/secondaryTextColor"
+                android:textColor="@color/black"
                 android:textSize="@dimen/itemDiligenciaProcessoTextSize"
                 app:fontFamily="@font/lato"
                 tools:text="Nº Processo: 123456456789" />
@@ -43,7 +43,7 @@
                 android:id="@+id/tv_tipo_diligencia"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/secondaryTextColor"
+                android:textColor="@color/black"
                 android:textSize="@dimen/itemDiligenciaTipoTextSize"
                 app:fontFamily="@font/lato"
                 tools:text="Tipo: Audiência" />
@@ -52,7 +52,7 @@
                 android:id="@+id/tv_adv_diligencia"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/secondaryTextColor"
+                android:textColor="@color/black"
                 android:textSize="@dimen/itemDiligenciaAdvTextSize"
                 app:fontFamily="@font/lato"
                 tools:text="Advogado: Leonardo Monteiro de Sousa (Nº OAB)" />
@@ -61,7 +61,7 @@
                 android:id="@+id/tv_data_diligencia"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/secondaryTextColor"
+                android:textColor="@color/black"
                 android:textSize="@dimen/itemDiligenciaDataTextSize"
                 app:fontFamily="@font/lato"
                 tools:text="Data: 12/12/2023" />
@@ -70,7 +70,7 @@
                 android:id="@+id/tv_status_diligencia"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/secondaryTextColor"
+                android:textColor="@color/black"
                 android:textSize="@dimen/itemDiligenciaStatusTextSize"
                 app:fontFamily="@font/lato"
                 tools:text="Status: Em Andamento" />

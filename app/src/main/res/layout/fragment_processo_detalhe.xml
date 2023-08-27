@@ -61,10 +61,15 @@
                         android:id="@+id/etNumeroProcesso"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="text"
+                        android:inputType="none"
+                        android:background="@drawable/til_background"
+                        android:clickable="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:cursorVisible="false"
                         android:hint="@string/hintNumeroProcessoDescription"
                         android:textSize="@dimen/etTextSize"
-                        android:digits="abcdefghijklmnopqrstuvwxyz1234567890"
+                        android:digits="1234567890"
                         app:mask="_______-__.____._.__.____"
                         app:maskCharacter="_"
                         app:maskStyle="normal" />
@@ -111,15 +116,6 @@
                     android:background="@drawable/spinner_background"
                     android:spinnerMode="dropdown" />
 
-<!--                <Spinner-->
-<!--                    android:id="@+id/spinnerTipoProcesso"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginTop="3dp"-->
-<!--                    android:background="@drawable/spinner_background"-->
-<!--                    android:popupBackground="@color/spinnerBackground"-->
-<!--                    android:spinnerMode="dropdown" />-->
-
                 <TextView
                     android:id="@+id/labelStatusProcesso"
                     android:layout_width="match_parent"
@@ -151,10 +147,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/hintDataDescription"
-                        android:inputType="text"
-                        android:cursorVisible="false"
+                        android:inputType="none"
+                        android:background="@drawable/til_background"
+                        android:clickable="false"
                         android:focusable="false"
                         android:focusableInTouchMode="false"
+                        android:cursorVisible="false"
                         android:textSize="@dimen/etTextSize" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -170,7 +168,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/hintClienteDescription"
-                        android:inputType="text"
+                        android:inputType="none"
+                        android:background="@drawable/til_background"
                         android:clickable="false"
                         android:cursorVisible="false"
                         android:focusable="false"
@@ -216,117 +215,5 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
     </ScrollView>
-
-<!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:orientation="vertical"-->
-<!--        android:padding="@dimen/processoDetalheContentPadding">-->
-
-<!--        <androidx.cardview.widget.CardView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:layout_marginBottom="@dimen/processoDetalheCvCardNameMarginBottom"-->
-<!--            android:elevation="@dimen/cardViewElevation"-->
-<!--            app:cardCornerRadius="@dimen/cardViewCornerRadius">-->
-
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:gravity="center_horizontal"-->
-<!--                android:orientation="vertical"-->
-<!--                android:padding="@dimen/processoDetalheCvContentPadding">-->
-
-<!--                <com.google.android.material.textfield.TextInputLayout-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content">-->
-
-<!--                    <androidx.appcompat.widget.AppCompatEditText-->
-<!--                        android:id="@+id/et_name_processo_detalhe"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:hint="@string/hintProcessoNome"-->
-<!--                        android:inputType="text"-->
-<!--                        android:textSize="@dimen/etTextSize"-->
-<!--                        tools:text="Test" />-->
-<!--                </com.google.android.material.textfield.TextInputLayout>-->
-
-<!--            </LinearLayout>-->
-<!--        </androidx.cardview.widget.CardView>-->
-
-<!--        <androidx.cardview.widget.CardView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:elevation="@dimen/cardViewElevation"-->
-<!--            app:cardCornerRadius="@dimen/cardViewCornerRadius">-->
-
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:gravity="center_horizontal"-->
-<!--                android:orientation="vertical"-->
-<!--                android:padding="@dimen/processoDetalheCvContentPadding">-->
-
-<!--                <TextView-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="@string/labelColor"-->
-<!--                    android:textColor="@color/secondaryTextColor"-->
-<!--                    android:textSize="@dimen/processoDetalheLabelTextSize" />-->
-
-<!--                <TextView-->
-<!--                    android:id="@+id/tv_select_adv"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginTop="@dimen/processoDetalheValueMarginTop"-->
-<!--                    android:padding="@dimen/processoDetalheValuePadding"-->
-<!--                    android:text="@string/selectAdv"-->
-<!--                    android:textColor="@color/primaryTextColor"-->
-<!--                    android:visibility="visible"-->
-<!--                    tools:visibility="visible" />-->
-
-<!--                <androidx.recyclerview.widget.RecyclerView-->
-<!--                    android:id="@+id/rv_selected_adv"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginTop="@dimen/processoDetalheValueMarginTop"-->
-<!--                    android:visibility="gone"-->
-<!--                    tools:visibility="visible" />-->
-
-<!--                <TextView-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginTop="@dimen/processoDetalheLabelMarginTop"-->
-<!--                    android:text="@string/data"-->
-<!--                    android:textColor="@color/secondaryTextColor"-->
-<!--                    android:textSize="@dimen/processoDetalheLabelTextSize" />-->
-
-<!--                <TextView-->
-<!--                    android:id="@+id/tv_select_data"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginTop="@dimen/processoDetalheValueMarginTop"-->
-<!--                    android:padding="@dimen/processoDetalheValuePadding"-->
-<!--                    android:text="@string/selectData"-->
-<!--                    android:textColor="@color/primaryTextColor" />-->
-
-<!--                <Button-->
-<!--                    android:id="@+id/btn_update_processo_detalhe"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_gravity="center"-->
-<!--                    android:layout_marginTop="@dimen/processoDetalheUpdateBtnMarginTop"-->
-<!--                    android:background="@drawable/shape_button_rounded"-->
-<!--                    android:foreground="?attr/selectableItemBackground"-->
-<!--                    android:gravity="center"-->
-<!--                    android:paddingTop="@dimen/btnPaddingTopBottom"-->
-<!--                    android:paddingBottom="@dimen/btnPaddingTopBottom"-->
-<!--                    android:text="@string/update"-->
-<!--                    android:textColor="@android:color/white"-->
-<!--                    android:textSize="@dimen/btnTextSize" />-->
-<!--            </LinearLayout>-->
-<!--        </androidx.cardview.widget.CardView>-->
-<!--    </LinearLayout>-->
-
 
 </LinearLayout>

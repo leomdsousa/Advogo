@@ -2,6 +2,7 @@ package com.example.advogo.fragments
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -11,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.advogo.R
 import com.example.advogo.adapters.*
@@ -22,13 +24,13 @@ import com.example.advogo.repositories.IProcessoStatusAndamentoRepository
 import com.example.advogo.repositories.IProcessoTipoAndamentoRepository
 import com.example.advogo.utils.Constants
 import com.example.advogo.dialogs.ProcessoAndamentoDialog
+import com.example.advogo.utils.extensions.ConverterUtils.fromUSADateStringToDate
+import com.example.advogo.utils.extensions.DataUtils
 import com.google.firebase.Timestamp
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
@@ -69,7 +71,7 @@ class ProcessoAndamentoFragment : BaseFragment() {
 
         obterIntentDados()
 
-        setProcessoAndamentosToUI(processoDetalhes.andamentosLista as ArrayList<ProcessoAndamento>?)
+        setProcessoAndamentosToUI(processoDetalhes.andamentosLista)
 
 //        bindingDialog.etDataAndamento.setOnClickListener {
 //            showDataPicker() { ano, mes, dia ->
@@ -101,8 +103,8 @@ class ProcessoAndamentoFragment : BaseFragment() {
         }
     }
 
-    private fun setProcessoAndamentosToUI(lista: ArrayList<ProcessoAndamento>?) {
-        if (lista != null) {
+    private fun setProcessoAndamentosToUI(lista: List<ProcessoAndamento>?) {
+        if (lista != null && lista.isNotEmpty()) {
             CoroutineScope(Dispatchers.Main).launch {
                 if(lista.size > 0) {
                     binding.rvAndamentosLista.visibility = View.VISIBLE
@@ -139,6 +141,7 @@ class ProcessoAndamentoFragment : BaseFragment() {
             statusAndamentos,
             andamento != null
         ) {
+            @RequiresApi(Build.VERSION_CODES.O)
             override fun onSubmit(andamento: ProcessoAndamento) {
                 if(andamento.id.isBlank()) {
                     adicionarAndamento(andamento)
@@ -146,6 +149,7 @@ class ProcessoAndamentoFragment : BaseFragment() {
                     atualizarAndamento(andamento)
                 }
             }
+            @RequiresApi(Build.VERSION_CODES.O)
             override fun onChooseDate() {
                 showDataPicker(requireContext()) { ano, mes, dia ->
                     onDatePickerResult(ano, mes, dia)
@@ -159,6 +163,7 @@ class ProcessoAndamentoFragment : BaseFragment() {
         //bindingDialog = DialogProcessoAndamentoBinding.inflate(inflater)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun atualizarAndamento(andamento: ProcessoAndamento) {
         if(!validarFormulario()) {
             return
@@ -174,8 +179,9 @@ class ProcessoAndamentoFragment : BaseFragment() {
             tipo = (bindingDialog.spinnerTipoAndamentoProcesso.selectedItem as ProcessoTipoAndamento)?.id,
             status = (bindingDialog.spinnerStatusProcessoAndamento .selectedItem as ProcessoStatusAndamento)?.id,
             data = dataSelecionada,
-            dataTimestamp = Timestamp.now()
         )
+
+        input.dataTimestamp = Timestamp(input.data!!.fromUSADateStringToDate())
 
 //        if(bindingDialog.etDataAndamento.text.toString().isNotEmpty()) {
 //            val fromFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
@@ -272,11 +278,11 @@ class ProcessoAndamentoFragment : BaseFragment() {
         return validado
     }
 
-    private fun onDatePickerResult(year: Int, month: Int, day: Int) {
-        val sDayOfMonth = if (day < 10) "0$day" else "$day"
-        val sMonthOfYear = if ((month + 1) < 10) "0${month + 1}" else "${month + 1}"
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun onDatePickerResult(ano: Int, mes: Int, dia: Int) {
+        val retorno = DataUtils.onDatePickerResult(ano, mes, dia)
 
-        dataSelecionada = "$year-$sMonthOfYear-$sDayOfMonth"
-        bindingDialog.etDataAndamento.setText("$sDayOfMonth/$sMonthOfYear/$year")
+        dataSelecionada = retorno.dataUSA
+        bindingDialog.etDataAndamento.setText(retorno.dataBR)
     }
 }

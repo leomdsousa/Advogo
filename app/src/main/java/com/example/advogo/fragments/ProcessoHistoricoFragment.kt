@@ -6,7 +6,6 @@ import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,16 +23,16 @@ import com.example.advogo.models.Processo
 import com.example.advogo.models.ProcessoHistorico
 import com.example.advogo.repositories.IProcessoHistoricoRepository
 import com.example.advogo.utils.Constants
+import com.example.advogo.utils.extensions.ConverterUtils.fromUSADateStringToDate
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.FieldValue
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 class ProcessoHistoricoFragment : BaseFragment() {
@@ -52,9 +51,7 @@ class ProcessoHistoricoFragment : BaseFragment() {
             processoHistoricoDialog(null)
         }
 
-        //if(processoDetalhes.historicoLista?.isNotEmpty() == true) {
-            setProcessoHistoricoToUI(processoDetalhes.historicoLista as ArrayList<ProcessoHistorico>)
-        //}
+        setProcessoHistoricoToUI(processoDetalhes.historicoLista)
 
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -78,9 +75,9 @@ class ProcessoHistoricoFragment : BaseFragment() {
         return binding.root
     }
 
-    private fun setProcessoHistoricoToUI(lista: ArrayList<ProcessoHistorico>) {
+    private fun setProcessoHistoricoToUI(lista: List<ProcessoHistorico>?) {
         CoroutineScope(Dispatchers.Main).launch {
-            if(lista.size > 0) {
+            if(lista != null && lista.isNotEmpty()) {
                 binding.rvProcessoHistoricoLista.visibility = View.VISIBLE
                 binding.tvNenhumProcessoHistoricDisponivel.visibility = View.GONE
 
@@ -150,10 +147,11 @@ class ProcessoHistoricoFragment : BaseFragment() {
             advogado = processoDetalhes.advogado,
             status = processoDetalhes.status,
             tipo = processoDetalhes.tipo,
-            data = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
-            dataTimestamp = Timestamp.now(),
+            data = historico.data,
             processo = processoDetalhes.numero
         )
+
+        input.dataTimestamp = Timestamp(input.data!!.fromUSADateStringToDate())
 
         processoHistoricoRepository.atualizarProcessoHistorico(
             input,

@@ -14,7 +14,7 @@ import kotlin.collections.ArrayList
 
 open class AnexosAdapter(
     private val context: Context,
-    private var list: ArrayList<Anexo>,
+    private var list: List<Anexo>?,
 ): RecyclerView.Adapter<AnexosAdapter.MyViewHolder>() {
     private var onItemClickListener: OnItemClickListener? = null
 
@@ -64,11 +64,14 @@ open class AnexosAdapter(
     }
 
     override fun onBindViewHolder(holder: AnexosAdapter.MyViewHolder, position: Int) {
-        val item = list[position]
-        holder.bind(item, position)
+        val item = list?.get(position)
+
+        if(item != null) {
+            holder.bind(item, position)
+        }
     }
 
-    override fun getItemCount(): Int = list.size
+    override fun getItemCount(): Int = list?.size ?: 0
 
     interface OnItemClickListener {
         fun onClick(Anexo: Anexo)

@@ -16,10 +16,15 @@ import com.example.advogo.models.externals.CorreioResponse
 import com.example.advogo.repositories.ClienteRepository
 import com.example.advogo.services.CorreioApiService
 import com.example.advogo.utils.Constants
+import com.example.advogo.utils.extensions.ConverterUtils.fromUSADateStringToDate
+import com.google.firebase.Timestamp
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 import javax.inject.Inject
@@ -127,6 +132,7 @@ class ClienteDetalheActivity : BaseActivity() {
         binding.etTelefone.setText(cliente.telefone)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun saveCliente() {
         if(!validarFormulario()) {
             return
@@ -144,6 +150,10 @@ class ClienteDetalheActivity : BaseActivity() {
             enderecoBairro = (if (binding.etBairro.text.toString() != clienteDetalhes.enderecoBairro.toString()) binding.etBairro.text.toString() else clienteDetalhes.enderecoBairro.toString()),
             enderecoCidade = (if (binding.etEnderecoCidade.text.toString() != clienteDetalhes.enderecoCidade.toString()) binding.etEnderecoCidade.text.toString() else clienteDetalhes.enderecoCidade.toString()),
             telefone = (if (binding.etTelefone.text.toString() != clienteDetalhes.telefone) binding.etTelefone.text.toString() else clienteDetalhes.telefone),
+            dataCriacao = clienteDetalhes.dataCriacao,
+            dataCriacaoTimestamp = clienteDetalhes.dataCriacaoTimestamp,
+            dataAlteracao = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+            dataAlteracaoTimestamp = Timestamp(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).fromUSADateStringToDate()),
         )
 
         clienteRepository.atualizarCliente(

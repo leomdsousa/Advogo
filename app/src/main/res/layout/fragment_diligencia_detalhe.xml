@@ -51,7 +51,7 @@
                         android:layout_marginTop="@dimen/processoCadastroTilMarginTop"
                         android:gravity="start"
                         android:text="@string/hintTipoDiligenciaDescription"
-                        android:textColor="@color/primaryTextColor"
+                        android:textColor="@color/black"
                         android:textSize="@dimen/etTextSize"
                         android:textStyle="bold" />
 
@@ -71,7 +71,7 @@
                         android:layout_marginTop="@dimen/processoCadastroTilMarginTop"
                         android:gravity="start"
                         android:text="@string/hintStatusDiligenciaDescription"
-                        android:textColor="@color/primaryTextColor"
+                        android:textColor="@color/black"
                         android:textSize="@dimen/etTextSize"
                         android:textStyle="bold" />
 
@@ -113,11 +113,13 @@
                             android:id="@+id/etDiligenciaProcesso"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:inputType="none"
+                            android:background="@drawable/til_background"
+                            android:clickable="false"
                             android:cursorVisible="false"
                             android:focusable="false"
                             android:focusableInTouchMode="false"
                             android:hint="@string/selecionarProcesso"
-                            android:inputType="text"
                             android:textSize="@dimen/etTextSize" />
                     </com.google.android.material.textfield.TextInputLayout>
 

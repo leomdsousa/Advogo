@@ -17,9 +17,12 @@ import com.example.advogo.repositories.IAdvogadoRepository
 import com.example.advogo.services.CorreioApiService
 import com.example.advogo.utils.Constants
 import com.example.advogo.utils.extensions.showPasswordVisibilityOnTouch
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 import javax.inject.Inject
@@ -128,6 +131,7 @@ class CadastroActivity : BaseActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun registrar() {
         val nome = binding.etNome.text.toString().trim()
         val sobrenome = binding.etSobrenome.text.toString().trim()
@@ -171,7 +175,11 @@ class CadastroActivity : BaseActivity() {
                             imagem = null,
                             oab = oab.toLong(),
                             telefone = telefone,
-                            fcmToken = null
+                            fcmToken = null,
+                            dataCriacao = SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(LocalDateTime.now()),
+                            dataCriacaoTimestamp = Timestamp.now(),
+                            dataAlteracao = null,
+                            dataAlteracaoTimestamp = null
                         )
 
                         advRepository.adicionarAdvogado(

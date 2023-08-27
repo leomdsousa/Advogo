@@ -67,7 +67,7 @@
                 android:layout_marginTop="@dimen/processoCadastroTilMarginTop"
                 android:gravity="start"
                 android:text="@string/hintTipoAndamentoDescription"
-                android:textColor="@color/primaryTextColor"
+                android:textColor="@color/black"
                 android:textSize="@dimen/etTextSize"
                 android:textStyle="bold" />
 
@@ -87,7 +87,7 @@
                 android:layout_marginTop="@dimen/processoCadastroTilMarginTop"
                 android:gravity="start"
                 android:text="@string/hintStatusAndamentoDescription"
-                android:textColor="@color/primaryTextColor"
+                android:textColor="@color/black"
                 android:textSize="@dimen/etTextSize"
                 android:textStyle="bold" />
 

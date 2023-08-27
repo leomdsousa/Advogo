@@ -34,7 +34,7 @@
                 android:id="@+id/tv_telefone_cliente"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/secondaryTextColor"
+                android:textColor="@color/black"
                 android:textSize="@dimen/itemClienteTextSize"
                 app:fontFamily="@font/lato"
                 tools:text="(11) 98701-5859" />
@@ -43,7 +43,7 @@
                 android:id="@+id/tv_email_cliente"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/secondaryTextColor"
+                android:textColor="@color/black"
                 android:textSize="@dimen/itemClienteTextSize"
                 app:fontFamily="@font/lato"
                 tools:text="jucimar123@gmail.com" />
@@ -52,7 +52,7 @@
                 android:id="@+id/tv_endereco_cliente"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/secondaryTextColor"
+                android:textColor="@color/black"
                 android:textSize="@dimen/itemClienteTextSize"
                 app:fontFamily="@font/lato"
                 tools:text="Rua 1, Nº 123, Vila Brasil, SP" />

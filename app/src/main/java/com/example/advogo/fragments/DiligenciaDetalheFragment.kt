@@ -27,6 +27,9 @@ import com.example.advogo.utils.Constants
 import com.example.advogo.utils.SendNotificationToUserAsyncTask
 import com.example.advogo.dialogs.AdvogadosDialog
 import com.example.advogo.dialogs.ProcessosDialog
+import com.example.advogo.utils.extensions.ConverterUtils.fromUSADateStringToDate
+import com.example.advogo.utils.extensions.ConverterUtils.fromUSADateTimeStringToTimestamp
+import com.example.advogo.utils.extensions.DataUtils
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.libraries.places.api.Places
@@ -42,6 +45,7 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
@@ -106,12 +110,16 @@ class DiligenciaDetalheFragment : BaseFragment() {
         binding.etDiligenciaData.setOnClickListener {
             showDataPicker(requireContext()) { ano, mes, dia ->
                 onDatePickerResult(ano, mes, dia)
+
+                showTimePicker { hour, minute ->
+                    onTimePickerResult(hour, minute)
+                }
             }
         }
 
-        binding.etDiligenciaProcesso.setOnClickListener {
-            processosDialog()
-        }
+//        binding.etDiligenciaProcesso.setOnClickListener {
+//            processosDialog()
+//        }
 
         binding.etDiligenciaAdvogado.setOnClickListener {
             advogadosDialog()
@@ -249,7 +257,10 @@ class DiligenciaDetalheFragment : BaseFragment() {
                 id = diligenciaDetalhes.id,
                 descricao = if (binding.etDiligenciaDescricao.text.toString() != diligenciaDetalhes.descricao) binding.etDiligenciaDescricao.text.toString() else diligenciaDetalhes.descricao,
                 data = if (dataSelecionada != diligenciaDetalhes.data) dataSelecionada else diligenciaDetalhes.data,
-                dataTimestamp = Timestamp.now(),
+                dataCriacao = diligenciaDetalhes.dataCriacao,
+                dataCriacaoTimestamp = diligenciaDetalhes.dataCriacaoTimestamp,
+                dataAlteracao = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+                dataAlteracaoTimestamp = Timestamp.now(),
                 status = if (statusDiligenciaSelecionada != diligenciaDetalhes.status) statusDiligenciaSelecionada else diligenciaDetalhes.status,
                 tipo = if (tipoDiligenciaSelecionada != diligenciaDetalhes.tipo) tipoDiligenciaSelecionada else diligenciaDetalhes.tipo,
                 endereco = if (binding.etDiligenciaEndereco.text.toString() != diligenciaDetalhes.endereco) binding.etDiligenciaEndereco.text.toString() else diligenciaDetalhes.endereco,
@@ -260,6 +271,8 @@ class DiligenciaDetalheFragment : BaseFragment() {
                 historico = diligenciaDetalhes.historico
             )
 
+            diligencia.dataTimestamp = Timestamp(diligencia.data!!.fromUSADateStringToDate())
+
             diligenciaRepository.atualizarDiligencia(
                 diligencia,
                 {
@@ -268,8 +281,7 @@ class DiligenciaDetalheFragment : BaseFragment() {
                         advogado = advSelecionado,
                         status = statusDiligenciaSelecionada,
                         tipo = tipoDiligenciaSelecionada,
-                        data = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date.from(LocalDateTime.now().atZone(
-                            ZoneId.systemDefault()).toInstant())),
+                        data = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
                         dataTimestamp = Timestamp.now()
                     )
 
@@ -457,12 +469,21 @@ class DiligenciaDetalheFragment : BaseFragment() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun onDatePickerResult(ano: Int, mes: Int, dia: Int) {
-        val sDayOfMonth = if (dia < 10) "0$dia" else "$dia"
-        val sMonthOfYear = if ((mes + 1) < 10) "0${mes + 1}" else "${mes + 1}"
+        val retorno = DataUtils.onDatePickerResult(ano, mes, dia)
 
-        dataSelecionada = "$ano-$sMonthOfYear-$sDayOfMonth"
-        binding.etDiligenciaData.setText("$sDayOfMonth/$sMonthOfYear/$ano")
+        dataSelecionada = retorno.dataUSA
+        binding.etDiligenciaData.setText(retorno.dataBR)
+    }
+
+    private fun onTimePickerResult(hora: Int, minuto: Int) {
+        val horaAux = if (hora < 10) "0$hora" else "$hora"
+        val minutoAux = if (minuto < 10) "0$minuto" else "$minuto"
+
+        dataSelecionada = "$dataSelecionada $horaAux:$minutoAux:00"
+        val atualValorDiligenciaData = binding.etDiligenciaData.text.toString()
+        binding.etDiligenciaData.setText("$atualValorDiligenciaData $horaAux:$minutoAux")
     }
 
     private fun formatarAlteracoes(diligencia: Diligencia): String {
