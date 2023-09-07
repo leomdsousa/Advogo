@@ -203,6 +203,7 @@ class ProcessoDetalheFragment : BaseFragment() {
                         advogado = advSelecionado,
                         status = statusProcessoSelecionado,
                         tipo = tipoProcessoSelecionado,
+                        processo = processoDetalhes.numero,
                         data = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
                         dataTimestamp = Timestamp.now()
                     )

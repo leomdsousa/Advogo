@@ -1,34 +1,27 @@
 package com.example.advogo.fragments
 
 import android.Manifest
-import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.ProgressDialog
 import android.app.TimePickerDialog
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.OpenableColumns
-import android.util.Log
-import android.view.View
-import android.view.ViewGroup
 import android.webkit.MimeTypeMap
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.example.advogo.activities.BaseActivity
 import com.example.advogo.utils.Constants
-import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
@@ -44,10 +37,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 open class BaseFragment : Fragment() {
-    private lateinit var _sharedPreferences: SharedPreferences
     private lateinit var _result: ActivityResultLauncher<Intent>
-    private var _doubleBackToExitPressureOnce = false
-    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     @Inject lateinit var progressDialog: ProgressDialog
     @Inject lateinit var progressBar: ProgressBar
@@ -68,17 +58,6 @@ open class BaseFragment : Fragment() {
         if(progressDialog.isShowing) {
             progressDialog.dismiss()
         }
-    }
-
-    private fun showProgressBar() {
-        //progressBar.visibility = View.VISIBLE
-        val progressBar = ProgressBar(requireContext())
-        (view as? ViewGroup)?.addView(progressBar)
-    }
-
-    private fun hideProgressBar() {
-        //progressBar.visibility = View.GONE
-        (view as? ViewGroup)?.removeView(progressBar)
     }
 
     fun showDataPicker(context: Context, onSuccess: (year: Int, monthOfYear: Int, dayOfMonth: Int) -> Unit) {
@@ -150,20 +129,15 @@ open class BaseFragment : Fragment() {
         return MimeTypeMap.getSingleton().getExtensionFromMimeType(requireContext().contentResolver.getType(uri!!))
     }
 
-    fun abrirArquivo(url: String) {
-//        val intent = Intent(Intent.ACTION_VIEW)
-//        intent.setDataAndType(Uri.parse(url), "application/pdf")
-//        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-//
-//        if(consegueAbrirArquivo(intent)) {
-//            startActivity(intent)
-//        } else {
-//            Toast.makeText(requireContext(), "Nenhum aplicativo encontrado para visualizar o PDF.", Toast.LENGTH_SHORT).show()
-//        }
+    private fun getFileMimeType(uri: Uri): String? {
+        val extensao = MimeTypeMap.getSingleton().getExtensionFromMimeType(requireContext().contentResolver.getType(uri!!))
+        return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extensao)
+    }
 
+    fun abrirArquivo(url: String) {
         val storageReference = Firebase.storage.getReferenceFromUrl(url)
 
-        val localFile = File.createTempFile("temp", "pdf")
+        val localFile = File.createTempFile("temp", ".${storageReference.name.split(".")[1]}")
 
         storageReference.getFile(localFile)
             .addOnSuccessListener {
@@ -174,19 +148,10 @@ open class BaseFragment : Fragment() {
                 )
 
                 val intent = Intent(Intent.ACTION_VIEW)
-                intent.setDataAndType(fileUri, "application/pdf")
+                intent.setDataAndType(fileUri, getFileMimeType(fileUri))
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
                 startActivity(intent)
-//                if (consegueAbrirArquivo(intent)) {
-//                    startActivity(intent)
-//                } else {
-//                    Toast.makeText(
-//                        requireContext(),
-//                        "Nenhum aplicativo encontrado para visualizar o PDF.",
-//                        Toast.LENGTH_SHORT
-//                    ).show()
-//                }
             }
             .addOnFailureListener {
                 Toast.makeText(requireContext(), "Erro ao baixar o arquivo.", Toast.LENGTH_SHORT).show()

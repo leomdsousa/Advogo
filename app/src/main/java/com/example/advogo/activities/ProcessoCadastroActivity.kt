@@ -338,6 +338,7 @@ class ProcessoCadastroActivity : BaseActivity() {
                         advogado = advSelecionado,
                         status = statusProcessoSelecionado,
                         tipo = tipoProcessoSelecionado,
+                        processo = processo.numero,
                         data = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
                         dataTimestamp = Timestamp.now()
                     )

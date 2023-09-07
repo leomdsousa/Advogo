@@ -40,13 +40,13 @@ class PerfilActivity : BaseActivity() {
 
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
-    @RequiresApi(Build.VERSION_CODES.O)
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPerfilBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setupActionBar()
+        setupActionBar("Perfil", binding.toolbarProfileActivity)
 
         advRepository.obterAdvogado(
             getCurrentUserID(),
@@ -111,19 +111,6 @@ class PerfilActivity : BaseActivity() {
                 }
             }
         }
-    }
-
-    private fun setupActionBar() {
-        setSupportActionBar(binding.toolbarProfileActivity)
-
-        val actionBar = supportActionBar
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true)
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_white_color_back_24dp)
-            actionBar.title = resources.getString(R.string.profile)
-        }
-
-        binding.toolbarProfileActivity.setNavigationOnClickListener { onBackPressed() }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

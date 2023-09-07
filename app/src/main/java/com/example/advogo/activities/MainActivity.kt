@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.TypefaceSpan
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
@@ -67,14 +68,14 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         setupActionBar()
         setupTabsLayout()
 
+        sharedPreferences =
+            this.getSharedPreferences(Constants.ADVOGO_PREFERENCES, Context.MODE_PRIVATE)
+
         advRepository.obterAdvogado(
             getCurrentUserID(),
             { adv ->
                 this@MainActivity.adv = adv
                 setNavigationAdvDetalhes(adv)
-
-                sharedPreferences =
-                    this.getSharedPreferences(Constants.ADVOGO_PREFERENCES, Context.MODE_PRIVATE)
 
                 val tokenUpdated = sharedPreferences.getBoolean(Constants.FCM_TOKEN_UPDATED, false)
 
@@ -92,6 +93,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                         .token
                         .addOnSuccessListener(this@MainActivity) { instanceIdResult ->
                             updateFCMToken(adv, instanceIdResult)
+                        }.addOnFailureListener {
+                            Log.e("TOKEN", "Erro ao gerar novo token para o usuário")
                         }
                 }
             },

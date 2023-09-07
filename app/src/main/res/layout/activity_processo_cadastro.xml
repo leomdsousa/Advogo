@@ -223,7 +223,7 @@
                         android:gravity="center"
                         android:paddingTop="@dimen/btnPaddingTopBottom"
                         android:paddingBottom="@dimen/btnPaddingTopBottom"
-                        android:text="@string/create"
+                        android:text="@string/cadastrar"
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/btnTextSize" />
                 </LinearLayout>

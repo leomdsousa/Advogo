@@ -211,12 +211,12 @@ class DiligenciaRepository @Inject constructor(
                 onFailureListener(exception)
             }
     }
-    override fun adicionarDiligencia(model: Diligencia, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+    override fun adicionarDiligencia(model: Diligencia, onSuccessListener: (id: String) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.DILIGENCIAS_TABLE)
             .add(model)
             .addOnSuccessListener {
-                onSuccessListener()
+                onSuccessListener(it.id)
             }
             .addOnFailureListener {
                 onFailureListener(it)
@@ -364,7 +364,7 @@ interface IDiligenciaRepository {
     fun obterDiligenciasByDescricaoContains(text: String, onSuccessListener: (lista: List<Diligencia>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
     fun obterDiligenciasPorProcesso(numeroProcesso: String, onSuccessListener: (lista: List<Diligencia>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
     fun obterDiligenciasPorAdvogado(emailAdvogado: String, onSuccessListener: (lista: List<Diligencia>) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
-    fun adicionarDiligencia(model: Diligencia, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun adicionarDiligencia(model: Diligencia, onSuccessListener: (id: String) -> Unit, onFailureListener: (ex: Exception?) -> Unit)
     fun atualizarDiligencia(model: Diligencia, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
     fun deletarDiligencia(id: String, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
 

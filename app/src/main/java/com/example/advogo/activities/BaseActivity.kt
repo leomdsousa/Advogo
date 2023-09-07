@@ -11,7 +11,6 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
-import android.location.LocationRequest
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -158,7 +157,7 @@ open class BaseActivity : AppCompatActivity() {
 
         val dpd = DatePickerDialog(
             this,
-            DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
+            { _, year, monthOfYear, dayOfMonth ->
                 onSuccess(year, monthOfYear, dayOfMonth)
             },
             year,
@@ -208,15 +207,21 @@ open class BaseActivity : AppCompatActivity() {
         return MimeTypeMap.getSingleton().getExtensionFromMimeType(contentResolver.getType(uri!!))
     }
 
+    private fun getFileMimeType(uri: Uri): String? {
+        val extensao = MimeTypeMap.getSingleton().getExtensionFromMimeType(contentResolver.getType(uri!!))
+        return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extensao)
+    }
+
     fun abrirArquivo(url: String) {
         val intent = Intent(Intent.ACTION_VIEW)
-        intent.setDataAndType(Uri.parse(url), "application/pdf")
+        val uri = Uri.parse(url)
+        intent.setDataAndType(uri, getFileMimeType(uri))
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
 
         if(consegueAbrirArquivo(intent)) {
             startActivity(intent)
         } else {
-            Toast.makeText(this, "Nenhum aplicativo encontrado para visualizar o PDF.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Nenhum aplicativo encontrado para visualizar o arquivo.", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -226,8 +231,6 @@ open class BaseActivity : AppCompatActivity() {
     }
 
     fun showGoogleMapPlaces(context: Context, result: ActivityResultLauncher<Intent>) {
-        //_result = result
-
         try {
             val fields = listOf(
                 Place.Field.ID,
@@ -363,19 +366,6 @@ open class BaseActivity : AppCompatActivity() {
             }
             .show()
     }
-
-//    @SuppressLint("MissingPermission")
-//    private fun requestNewLocationData(){
-//        var mLocationRequest = LocationRequest.create().apply {
-//            interval = 5000
-//            fastestInterval = 1000
-//            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-//        }
-//
-//        fusedLocationProviderClient.requestLocationUpdates(mLocationRequest, locationCallback,
-//            Looper.myLooper()!!
-//        )
-//    }
 
     private fun isLocationEnabled(): Boolean {
         val locationManager: LocationManager =

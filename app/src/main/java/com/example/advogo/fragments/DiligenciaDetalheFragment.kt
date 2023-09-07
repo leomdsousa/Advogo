@@ -281,6 +281,7 @@ class DiligenciaDetalheFragment : BaseFragment() {
                         advogado = advSelecionado,
                         status = statusDiligenciaSelecionada,
                         tipo = tipoDiligenciaSelecionada,
+                        diligencia = diligenciaDetalhes.id,
                         data = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
                         dataTimestamp = Timestamp.now()
                     )

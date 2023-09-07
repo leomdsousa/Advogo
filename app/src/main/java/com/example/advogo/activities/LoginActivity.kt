@@ -60,7 +60,7 @@ class LoginActivity : BaseActivity() {
                     if(task.isSuccessful) {
                         advRepository.obterAdvogado(
                             getCurrentUserID(),
-                            { advogado -> loginSuccess() },
+                            { loginSuccess() },
                             { loginFailure() }
                         )
                     } else {
@@ -72,6 +72,12 @@ class LoginActivity : BaseActivity() {
                             Toast.LENGTH_SHORT
                         ).show()
                     }
+                }.addOnFailureListener { ex ->
+                    Toast.makeText(
+                        this@LoginActivity,
+                        ex.message,
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
         }
     }
