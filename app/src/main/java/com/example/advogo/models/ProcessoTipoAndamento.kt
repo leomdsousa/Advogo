@@ -8,6 +8,7 @@ import kotlinx.parcelize.Parcelize
 data class ProcessoTipoAndamento(
     @DocumentId
     var id: String = "",
-    var tipo: String? = null
+    var tipo: String? = null,
+    @Transient var selecionado: Boolean = false
 ): Parcelable {
 }

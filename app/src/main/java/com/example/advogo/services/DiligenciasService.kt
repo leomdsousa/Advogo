@@ -37,11 +37,15 @@ class DiligenciasService : Service() {
             validado = false
         }
 
-        if (!binding.spinnerTipoDiligencia.isSelected) {
+        if (TextUtils.isEmpty(binding.etTipoDiligencia.text.toString())) {
+            binding.etTipoDiligencia.error = "Obrigatório"
+            binding.etTipoDiligencia.requestFocus()
             validado = false
         }
 
-        if (!binding.spinnerStatusDiligencia.isSelected) {
+        if (TextUtils.isEmpty(binding.etStatusDiligencia.text.toString())) {
+            binding.etStatusDiligencia.error = "Obrigatório"
+            binding.etStatusDiligencia.requestFocus()
             validado = false
         }
 

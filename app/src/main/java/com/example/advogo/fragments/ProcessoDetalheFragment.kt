@@ -16,16 +16,16 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import com.bumptech.glide.Glide
 import com.example.advogo.R
-import com.example.advogo.adapters.ProcessosStatusAdapter
-import com.example.advogo.adapters.ProcessosTiposAdapter
+import com.example.advogo.adapters.spinner.ProcessosStatusAdapter
 import com.example.advogo.databinding.FragmentProcessoDetalheBinding
 import com.example.advogo.models.*
 import com.example.advogo.repositories.*
 import com.example.advogo.utils.Constants
-import com.example.advogo.utils.ProcessMaskTextWatcher
 import com.example.advogo.utils.SendNotificationToUserAsyncTask
 import com.example.advogo.dialogs.AdvogadosDialog
 import com.example.advogo.dialogs.ClientesDialog
+import com.example.advogo.dialogs.ProcessoStatusDialog
+import com.example.advogo.dialogs.ProcessoTiposDialog
 import com.example.advogo.utils.extensions.ConverterUtils.fromUSADateStringToDate
 import com.example.advogo.utils.extensions.DataUtils
 import com.google.firebase.Timestamp
@@ -33,7 +33,6 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
-import okhttp3.internal.format
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
@@ -54,7 +53,6 @@ class ProcessoDetalheFragment : BaseFragment() {
     @Inject lateinit var processoStatusRepository: IProcessoStatusRepository
 
     private var advogados: List<Advogado> = ArrayList()
-    private var clientes: List<Cliente> = ArrayList()
     private var processosTipos: List<ProcessoTipo> = ArrayList()
     private var processosStatus: List<ProcessoStatus> = ArrayList()
 
@@ -83,16 +81,7 @@ class ProcessoDetalheFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         obterIntentDados()
-        setupSpinners()
         setProcessoToUI(processoDetalhes)
-
-        //binding.etNumeroProcesso.addTextChangedListener(ProcessMaskTextWatcher(binding.etNumeroProcesso))
-
-//        binding.etData.setOnClickListener {
-//            showDataPicker(requireContext()) { ano, mes, dia ->
-//                onDatePickerResult(ano, mes, dia)
-//            }
-//        }
 
         binding.btnProcessoCadastro.setOnClickListener {
             saveProcesso()
@@ -106,9 +95,13 @@ class ProcessoDetalheFragment : BaseFragment() {
             advogadosDialog()
         }
 
-//        binding.etCliente.setOnClickListener {
-//            clientesDialog()
-//        }
+        binding.etTipoProcesso.setOnClickListener {
+            tiposProcessoDialog()
+        }
+
+        binding.etStatusProcesso.setOnClickListener {
+            statusProcessoDialog()
+        }
 
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -221,71 +214,6 @@ class ProcessoDetalheFragment : BaseFragment() {
         }
     }
 
-    private fun setupSpinners() {
-        setupSpinnerTiposProcesso()
-        setupSpinnerStatusProcesso()
-    }
-
-    private fun setupSpinnerStatusProcesso() {
-        val spinnerStatus = binding.spinnerStatusProcesso
-
-        CoroutineScope(Dispatchers.Main).launch {
-            val processosStatusDeferred = async { processoStatusRepository.obterProcessoStatus() }
-            processosStatus = processosStatusDeferred.await()!!
-            (processosStatus as MutableList<ProcessoStatus>).add(0, ProcessoStatus(status = "Selecione"))
-
-            val adapter = ProcessosStatusAdapter(requireContext(), processosStatus)
-            spinnerStatus.adapter = adapter
-
-            if(processoDetalhes.statusObj != null)
-                binding.spinnerStatusProcesso.setSelection(processosStatus.indexOf(processoDetalhes.statusObj))
-
-            spinnerStatus.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                    val selectedItem = spinnerStatus.selectedItem as? ProcessoStatus
-                    selectedItem?.let {
-                        statusProcessoSelecionado = selectedItem.id
-                        spinnerStatus.setSelection(id.toInt())
-                    }
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                    // Nada selecionado
-                }
-            }
-        }
-    }
-
-    private fun setupSpinnerTiposProcesso() {
-        val spinnerTipos = binding.spinnerTipoProcesso
-
-        CoroutineScope(Dispatchers.Main).launch {
-            val processosTiposDeferred = async { processoTipoRepository.obterProcessosTipos() }
-            processosTipos = processosTiposDeferred.await()!!
-            (processosTipos as MutableList<ProcessoTipo>).add(0, ProcessoTipo(tipo = "Selecione"))
-
-            val adapter = ProcessosTiposAdapter(requireContext(), processosTipos)
-            spinnerTipos.adapter = adapter
-
-            if(processoDetalhes.tipoObj != null)
-                binding.spinnerTipoProcesso.setSelection(processosTipos.indexOf(processoDetalhes.tipoObj))
-
-            spinnerTipos.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                    val selectedItem = spinnerTipos.selectedItem as? ProcessoTipo
-                    selectedItem?.let {
-                        tipoProcessoSelecionado = selectedItem.id
-                        spinnerTipos.setSelection(id.toInt())
-                    }
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                    // Nada selecionado
-                }
-            }
-        }
-    }
-
     private fun advogadosDialog() {
         CoroutineScope(Dispatchers.Main).launch {
             if(advogados.isEmpty()) {
@@ -330,41 +258,78 @@ class ProcessoDetalheFragment : BaseFragment() {
         }
     }
 
-    private fun clientesDialog() {
+    private fun tiposProcessoDialog() {
         CoroutineScope(Dispatchers.Main).launch {
-            if(clientes.isEmpty()) {
-                val clientesDeferred = async { clienteRepository.obterClientes()!! }
-                clientes = clientesDeferred.await()
+            if(processosTipos.isEmpty()) {
+                val tiposProcessoDeferred = async { processoTipoRepository.obterProcessosTipos ()!! }
+                processosTipos = tiposProcessoDeferred.await()
             }
 
-            clientes.find { it.id == clienteSelecionado }?.selecionado = true
-
-            val listDialog = object : ClientesDialog(
+            val listDialog = object : ProcessoTiposDialog(
                 requireContext(),
-                clientes as ArrayList<Cliente>,
-                resources.getString(R.string.selecionarCliente)
+                processosTipos,
             ) {
-                override fun onItemSelected(cliente: Cliente, action: String) {
+                override fun onItemSelected(tipoProcesso: ProcessoTipo, action: String) {
                     if (action == Constants.SELECIONAR) {
-                        clientes.forEach {
+                        processosTipos.forEach {
                             it.selecionado = false
                         }
 
-                        if (binding.etCliente.text.toString() != cliente.id) {
-                            binding.etCliente.setText("${cliente.nome} (${cliente.cpf})")
-                            clienteSelecionado = cliente.id
-                            clientes[clientes.indexOf(cliente)].selecionado = true
+                        if (binding.etTipoProcesso.text.toString() != tipoProcesso.id) {
+                            binding.etTipoProcesso.setText(tipoProcesso.tipo)
+                            tipoProcessoSelecionado = tipoProcesso.id
+                            processosTipos[processosTipos.indexOf(tipoProcesso)].selecionado = true
                         } else {
                             Toast.makeText(
                                 requireContext(),
-                                "Cliente já selecionado! Favor escolher outro.",
+                                "Tipo já selecionado! Favor escolher outro.",
                                 Toast.LENGTH_LONG
                             ).show()
                         }
                     } else {
-                        binding.etCliente.text = null
-                        clienteSelecionado = null
-                        clientes[clientes.indexOf(cliente)].selecionado = false
+                        binding.etTipoProcesso.text = null
+                        tipoProcessoSelecionado = null
+                        processosTipos[processosTipos.indexOf(tipoProcesso)].selecionado = false
+                    }
+                }
+            }
+
+            listDialog.show()
+        }
+    }
+
+    private fun statusProcessoDialog() {
+        CoroutineScope(Dispatchers.Main).launch {
+            if(processosStatus.isEmpty()) {
+                val statusProcessoDeferred = async { processoStatusRepository.obterProcessoStatus() }
+                processosStatus = statusProcessoDeferred.await()!!
+            }
+
+            val listDialog = object : ProcessoStatusDialog(
+                requireContext(),
+                processosStatus,
+            ) {
+                override fun onItemSelected(item: ProcessoStatus, action: String) {
+                    if (action == Constants.SELECIONAR) {
+                        processosStatus.forEach {
+                            it.selecionado = false
+                        }
+
+                        if (binding.etStatusProcesso.text.toString() != item.id) {
+                            binding.etStatusProcesso.setText(item.status)
+                            statusProcessoSelecionado = item.id
+                            processosStatus[processosStatus.indexOf(item)].selecionado = true
+                        } else {
+                            Toast.makeText(
+                                requireContext(),
+                                "Status já selecionado! Favor escolher outro.",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    } else {
+                        binding.etStatusProcesso.text = null
+                        statusProcessoSelecionado = null
+                        processosStatus[processosStatus.indexOf(item)].selecionado = false
                     }
                 }
             }
@@ -376,8 +341,8 @@ class ProcessoDetalheFragment : BaseFragment() {
     private fun setProcessoToUI(processo: Processo) {
         binding.etProcessoName.setText(processo.titulo)
         binding.etDescricao.setText(processo.descricao)
-        binding.spinnerTipoProcesso.setSelection(processosTipos.indexOf(processo.tipoObj))
-        binding.spinnerStatusProcesso.setSelection(processosStatus.indexOf(processo.statusObj))
+        binding.etTipoProcesso.setText(processo.tipoObj?.tipo)
+        binding.etStatusProcesso.setText(processo.statusObj?.status)
         binding.etNumeroProcesso.setText(processo.numero)
         binding.etAdv.setText("${processo.advogadoObj?.nome} (${processo.advogadoObj?.oab})")
         binding.etCliente.setText("${processo.clienteObj?.nome} (${processo.clienteObj?.cpf})")
@@ -462,14 +427,6 @@ class ProcessoDetalheFragment : BaseFragment() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun onDatePickerResult(ano: Int, mes: Int, dia: Int) {
-        val retorno = DataUtils.onDatePickerResult(ano, mes, dia)
-
-        dataSelecionada = retorno.dataUSA
-        binding.etData.setText(retorno.dataBR)
-    }
-
     private fun atualizarProcessoSuccess() {
         hideProgressDialog()
 
@@ -498,10 +455,10 @@ class ProcessoDetalheFragment : BaseFragment() {
         var retorno = "PROCESSO ATUALIZADO"
 
         if(processo.status != statusProcessoSelecionado)
-            retorno += "\nStatus: DE ${processo.statusObj!!.status} para ${(binding.spinnerStatusProcesso.selectedItem as ProcessoStatus).status}"
+            retorno += "\nStatus: DE ${processo.statusObj!!.status} para ${binding.etStatusProcesso.text.toString()}"
 
         if(processo.tipo != tipoProcessoSelecionado)
-            retorno += "\nTipo: DE ${processo.tipoObj!!.tipo} para ${(binding.spinnerTipoProcesso.selectedItem as ProcessoTipo).tipo}"
+            retorno += "\nTipo: DE ${processo.tipoObj!!.tipo} para ${binding.etTipoProcesso.text.toString()}"
 
         if(processo.advogado != advSelecionado)
             retorno += "\nAdvogado: para ${binding.etAdv.text.toString()}"

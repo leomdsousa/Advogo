@@ -1,35 +1,59 @@
 package com.example.advogo.adapters
 
 import android.content.Context
-import android.view.View
+import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.TextView
-import com.example.advogo.R
+import androidx.recyclerview.widget.RecyclerView
+import com.example.advogo.databinding.ItemDiligenciaTipoBinding
 import com.example.advogo.models.DiligenciaTipo
+import com.example.advogo.utils.Constants
 
 open class DiligenciasTiposAdapter(
-    context: Context,
-    private val lista: List<DiligenciaTipo>
-) : ArrayAdapter<DiligenciaTipo>(context, R.layout.spinner_item_layout, lista) {
+    private val context: Context,
+    private val list: List<DiligenciaTipo>
+) : RecyclerView.Adapter<DiligenciasTiposAdapter.MyViewHolder>() {
+    private var onItemClickListener: OnItemClickListener? = null
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val view = super.getView(position, convertView, parent)
-        val diligenciaTipo = getItem(position)
-        diligenciaTipo?.let {
-            val descricaoTextView = view.findViewById<TextView>(R.id.text1)
-            descricaoTextView.text = it.tipo
+    inner class MyViewHolder(private val binding: ItemDiligenciaTipoBinding)
+        : RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: DiligenciaTipo, position: Int) {
+            binding.apply {
+                binding.tvTipoDiligencia.text = item.tipo ?: "Sem Título"
+
+                binding.root.setOnClickListener {
+                    if(item.selecionado) {
+                        onItemClickListener!!.onClick(item, position, Constants.DESELECIONAR)
+                    } else {
+                        onItemClickListener!!.onClick(item, position, Constants.SELECIONAR)
+                    }
+                }
+            }
+
         }
-        return view
     }
 
-    override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val view = super.getDropDownView(position, convertView, parent)
-        val diligenciaTipo = getItem(position)
-        diligenciaTipo?.let {
-            val descricaoTextView = view.findViewById<TextView>(R.id.text1)
-            descricaoTextView.text = it.tipo
-        }
-        return view
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DiligenciasTiposAdapter.MyViewHolder {
+        return MyViewHolder(
+            ItemDiligenciaTipoBinding.inflate(
+                LayoutInflater.from(context),
+                parent,
+                false
+            )
+        )
+    }
+
+    override fun onBindViewHolder(holder: DiligenciasTiposAdapter.MyViewHolder, position: Int) {
+        val item = list[position]
+        holder.bind(item, position)
+    }
+
+    override fun getItemCount(): Int = list.size
+
+    interface OnItemClickListener {
+        fun onClick(processo: DiligenciaTipo, position: Int, action: String)
+    }
+
+    fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
+        this.onItemClickListener = onItemClickListener
     }
 }

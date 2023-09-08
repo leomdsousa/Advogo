@@ -16,30 +16,27 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import com.bumptech.glide.Glide
 import com.example.advogo.R
-import com.example.advogo.adapters.ProcessosStatusAdapter
-import com.example.advogo.adapters.ProcessosTiposAdapter
+import com.example.advogo.adapters.spinner.ProcessosStatusAdapter
 import com.example.advogo.databinding.ActivityProcessoCadastroBinding
 import com.example.advogo.dialogs.AdvogadosDialog
 import com.example.advogo.dialogs.ClientesDialog
+import com.example.advogo.dialogs.ProcessoStatusDialog
+import com.example.advogo.dialogs.ProcessoTiposDialog
 import com.example.advogo.models.*
 import com.example.advogo.repositories.*
 import com.example.advogo.utils.Constants
 import com.example.advogo.utils.SendNotificationToUserAsyncTask
 import com.example.advogo.utils.extensions.ConverterUtils.fromUSADateStringToDate
-import com.example.advogo.utils.extensions.ConverterUtils.fromUSADateStringToLocalDate
 import com.example.advogo.utils.extensions.DataUtils
 import com.example.advogo.utils.extensions.StringUtils.removeSpecialCharacters
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import java.io.IOException
-import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
@@ -79,13 +76,10 @@ class ProcessoCadastroActivity : BaseActivity() {
         setContentView(binding.root)
 
         setupActionBar("Cadastro Processo", binding.toolbarProcessoCadastroActivity)
-        setupSpinners()
 
         if (intent.hasExtra(Constants.ADV_NOME_PARAM)) {
             userName = intent.getStringExtra(Constants.ADV_NOME_PARAM)!!
         }
-
-        //binding.etNumeroProcesso.addTextChangedListener(ProcessMaskTextWatcher(binding.etNumeroProcesso))
 
         binding.ivProcessoImage.setOnClickListener {
             chooseImage(this@ProcessoCadastroActivity, resultLauncher)
@@ -103,6 +97,14 @@ class ProcessoCadastroActivity : BaseActivity() {
 
         binding.etCliente.setOnClickListener {
             clientesDialog()
+        }
+
+        binding.etTipoProcesso.setOnClickListener {
+            tiposProcessoDialog()
+        }
+
+        binding.etStatusProcesso.setOnClickListener {
+            statusProcessoDialog()
         }
 
         binding.btnProcessoCadastro.setOnClickListener {
@@ -124,6 +126,86 @@ class ProcessoCadastroActivity : BaseActivity() {
                     e.printStackTrace()
                 }
             }
+        }
+    }
+
+    private fun tiposProcessoDialog() {
+        CoroutineScope(Dispatchers.Main).launch {
+            if(processosTipos.isEmpty()) {
+                val tiposProcessoDeferred = async { processoTipoRepository.obterProcessosTipos()!! }
+                processosTipos = tiposProcessoDeferred.await()
+            }
+
+            val listDialog = object : ProcessoTiposDialog(
+                this@ProcessoCadastroActivity,
+                processosTipos,
+            ) {
+                override fun onItemSelected(item: ProcessoTipo, action: String) {
+                    if (action == Constants.SELECIONAR) {
+                        processosTipos.forEach {
+                            it.selecionado = false
+                        }
+
+                        if (binding.etTipoProcesso.text.toString() != item.id) {
+                            binding.etTipoProcesso.setText(item.tipo)
+                            tipoProcessoSelecionado = item.id
+                            processosTipos[processosTipos.indexOf(item)].selecionado = true
+                        } else {
+                            Toast.makeText(
+                                this@ProcessoCadastroActivity,
+                                "Tipo já selecionado! Favor escolher outro.",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    } else {
+                        binding.etTipoProcesso.text = null
+                        tipoProcessoSelecionado = null
+                        processosTipos[processosTipos.indexOf(item)].selecionado = false
+                    }
+                }
+            }
+
+            listDialog.show()
+        }
+    }
+
+    private fun statusProcessoDialog() {
+        CoroutineScope(Dispatchers.Main).launch {
+            if(processosStatus.isEmpty()) {
+                val statusProcessoDeferred = async { processoStatusRepository.obterProcessoStatus() }
+                processosStatus = statusProcessoDeferred.await()!!
+            }
+
+            val listDialog = object : ProcessoStatusDialog(
+                this@ProcessoCadastroActivity,
+                processosStatus,
+            ) {
+                override fun onItemSelected(item: ProcessoStatus, action: String) {
+                    if (action == Constants.SELECIONAR) {
+                        processosStatus.forEach {
+                            it.selecionado = false
+                        }
+
+                        if (binding.etStatusProcesso.text.toString() != item.id) {
+                            binding.etStatusProcesso.setText(item.status)
+                            statusProcessoSelecionado = item.id
+                            processosStatus[processosStatus.indexOf(item)].selecionado = true
+                        } else {
+                            Toast.makeText(
+                                this@ProcessoCadastroActivity,
+                                "Status já selecionado! Favor escolher outro.",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    } else {
+                        binding.etStatusProcesso.text = null
+                        statusProcessoSelecionado = null
+                        processosStatus[processosStatus.indexOf(item)].selecionado = false
+                    }
+                }
+            }
+
+            listDialog.show()
         }
     }
 
@@ -207,66 +289,6 @@ class ProcessoCadastroActivity : BaseActivity() {
             }
 
             listDialog.show()
-        }
-    }
-
-    private fun setupSpinners() {
-        setupSpinnerTiposProcesso()
-        setupSpinnerStatusProcesso()
-
-    }
-
-    private fun setupSpinnerStatusProcesso() {
-        val spinnerStatus = findViewById<Spinner>(R.id.spinnerStatusProcesso)
-
-        CoroutineScope(Dispatchers.Main).launch {
-            val processosStatusDeferred = async { processoStatusRepository.obterProcessoStatus() }
-            processosStatus = processosStatusDeferred.await()!!
-            (processosStatus as MutableList<ProcessoStatus>).add(0, ProcessoStatus(status = "Selecione"))
-
-            val adapter = ProcessosStatusAdapter(this@ProcessoCadastroActivity, processosStatus)
-            spinnerStatus.adapter = adapter
-
-            spinnerStatus.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                    val selectedItem = spinnerStatus.selectedItem as? ProcessoStatus
-                    selectedItem?.let {
-                        statusProcessoSelecionado = selectedItem.id
-                        spinnerStatus.setSelection(id.toInt())
-                    }
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                    // Nada selecionado
-                }
-            }
-        }
-    }
-
-    private fun setupSpinnerTiposProcesso() {
-        val spinnerTipos = findViewById<Spinner>(R.id.spinnerTipoProcesso)
-
-        CoroutineScope(Dispatchers.Main).launch {
-            val processosTiposDeferred = async { processoTipoRepository.obterProcessosTipos() }
-            processosTipos = processosTiposDeferred.await()!!
-            (processosTipos as MutableList<ProcessoTipo>).add(0, ProcessoTipo(tipo = "Selecione"))
-
-            val adapter = ProcessosTiposAdapter(this@ProcessoCadastroActivity, processosTipos)
-            spinnerTipos.adapter = adapter
-
-            spinnerTipos.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                    val selectedItem = spinnerTipos.selectedItem as? ProcessoTipo
-                    selectedItem?.let {
-                        tipoProcessoSelecionado = selectedItem.id
-                        spinnerTipos.setSelection(id.toInt())
-                    }
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                    // Nada selecionado
-                }
-            }
         }
     }
 
@@ -449,3 +471,30 @@ class ProcessoCadastroActivity : BaseActivity() {
         }
     }
 }
+
+//    private fun setupSpinnerStatusProcesso() {
+//        val spinnerStatus = findViewById<Spinner>(R.id.spinnerStatusProcesso)
+//
+//        CoroutineScope(Dispatchers.Main).launch {
+//            val processosStatusDeferred = async { processoStatusRepository.obterProcessoStatus() }
+//            processosStatus = processosStatusDeferred.await()!!
+//            (processosStatus as MutableList<ProcessoStatus>).add(0, ProcessoStatus(status = "Selecione"))
+//
+//            val adapter = ProcessosStatusAdapter(this@ProcessoCadastroActivity, processosStatus)
+//            spinnerStatus.adapter = adapter
+//
+//            spinnerStatus.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+//                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+//                    val selectedItem = spinnerStatus.selectedItem as? ProcessoStatus
+//                    selectedItem?.let {
+//                        statusProcessoSelecionado = selectedItem.id
+//                        spinnerStatus.setSelection(id.toInt())
+//                    }
+//                }
+//
+//                override fun onNothingSelected(parent: AdapterView<*>?) {
+//                    // Nada selecionado
+//                }
+//            }
+//        }
+//    }

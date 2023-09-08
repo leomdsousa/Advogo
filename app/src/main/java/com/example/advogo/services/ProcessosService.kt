@@ -36,11 +36,15 @@ class ProcessosService : Service() {
             validado = false
         }
 
-        if (!binding.spinnerTipoProcesso.isSelected) {
+        if (TextUtils.isEmpty(binding.etTipoProcesso.text.toString())) {
+            binding.etTipoProcesso.error = "Obrigatório"
+            binding.etTipoProcesso.requestFocus()
             validado = false
         }
 
-        if (!binding.spinnerStatusProcesso.isSelected) {
+        if (TextUtils.isEmpty(binding.etStatusProcesso.text.toString())) {
+            binding.etStatusProcesso.error = "Obrigatório"
+            binding.etStatusProcesso.requestFocus()
             validado = false
         }
 

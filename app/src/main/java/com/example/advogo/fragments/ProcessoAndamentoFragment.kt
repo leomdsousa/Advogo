@@ -49,8 +49,6 @@ class ProcessoAndamentoFragment : BaseFragment() {
     private var statusAndamentos: List<ProcessoStatusAndamento> = emptyList()
 
     private var dataSelecionada: String? = null
-    private var tipoAndamentoSelecionado: String? = null
-    private var statusAndamentoSelecionado: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -72,12 +70,6 @@ class ProcessoAndamentoFragment : BaseFragment() {
         obterIntentDados()
 
         setProcessoAndamentosToUI(processoDetalhes.andamentosLista)
-
-//        bindingDialog.etDataAndamento.setOnClickListener {
-//            showDataPicker() { ano, mes, dia ->
-//                onDatePickerResult(ano, mes, dia)
-//            }
-//        }
 
         binding.fabAddAndamento.setOnClickListener {
             andamentoProcessoDialog(null)
@@ -106,7 +98,7 @@ class ProcessoAndamentoFragment : BaseFragment() {
     private fun setProcessoAndamentosToUI(lista: List<ProcessoAndamento>?) {
         if (lista != null && lista.isNotEmpty()) {
             CoroutineScope(Dispatchers.Main).launch {
-                if(lista.size > 0) {
+                if(lista.isNotEmpty()) {
                     binding.rvAndamentosLista.visibility = View.VISIBLE
                     binding.tvNenhumAndamentoDisponivel.visibility = View.GONE
 
@@ -158,9 +150,6 @@ class ProcessoAndamentoFragment : BaseFragment() {
         }
 
         dialog.show()
-
-        //val inflater = LayoutInflater.from(requireContext())
-        //bindingDialog = DialogProcessoAndamentoBinding.inflate(inflater)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -176,8 +165,10 @@ class ProcessoAndamentoFragment : BaseFragment() {
             descricao = bindingDialog.etDescricaoAndamento.text.toString(),
             advogado = getCurrentUserID(),
             processo = processoDetalhes.numero,
-            tipo = (bindingDialog.spinnerTipoAndamentoProcesso.selectedItem as ProcessoTipoAndamento)?.id,
-            status = (bindingDialog.spinnerStatusProcessoAndamento .selectedItem as ProcessoStatusAndamento)?.id,
+            tipo = bindingDialog.etTipoAndamentoProcesso.text.toString(),
+            status = bindingDialog.etStatusAndamentoProcesso.text.toString(),
+//            tipo = (bindingDialog.spinnerTipoAndamentoProcesso.selectedItem as ProcessoTipoAndamento)?.id,
+//            status = (bindingDialog.spinnerStatusProcessoAndamento .selectedItem as ProcessoStatusAndamento)?.id,
             data = dataSelecionada,
         )
 
@@ -210,8 +201,10 @@ class ProcessoAndamentoFragment : BaseFragment() {
             descricao = bindingDialog.etDescricaoAndamento.text.toString(),
             advogado = getCurrentUserID(),
             processo = processoDetalhes.numero,
-            tipo = (bindingDialog.spinnerTipoAndamentoProcesso.selectedItem as ProcessoTipoAndamento)?.id,
-            status = (bindingDialog.spinnerStatusProcessoAndamento .selectedItem as ProcessoStatusAndamento)?.id,
+            tipo = bindingDialog.etTipoAndamentoProcesso.text.toString(),
+            status = bindingDialog.etStatusAndamentoProcesso.text.toString(),
+//            tipo = (bindingDialog.spinnerTipoAndamentoProcesso.selectedItem as ProcessoTipoAndamento)?.id,
+//            status = (bindingDialog.spinnerStatusProcessoAndamento .selectedItem as ProcessoStatusAndamento)?.id,
             data = dataSelecionada,
             dataTimestamp = Timestamp.now()
         )
@@ -267,13 +260,25 @@ class ProcessoAndamentoFragment : BaseFragment() {
             validado = false
         }
 
-        if (bindingDialog.spinnerTipoAndamentoProcesso.selectedItem == null) {
+        if (TextUtils.isEmpty(bindingDialog.etTipoAndamentoProcesso.text.toString())) {
+            bindingDialog.etTipoAndamentoProcesso.error = "Obrigatório"
+            bindingDialog.etTipoAndamentoProcesso.requestFocus()
             validado = false
         }
 
-        if (bindingDialog.spinnerStatusProcessoAndamento.selectedItem == null) {
+        if (TextUtils.isEmpty(bindingDialog.etStatusAndamentoProcesso.text.toString())) {
+            bindingDialog.etStatusAndamentoProcesso.error = "Obrigatório"
+            bindingDialog.etStatusAndamentoProcesso.requestFocus()
             validado = false
         }
+
+//        if (bindingDialog.spinnerTipoAndamentoProcesso.selectedItem == null) {
+//            validado = false
+//        }
+//
+//        if (bindingDialog.spinnerStatusProcessoAndamento.selectedItem == null) {
+//            validado = false
+//        }
 
         return validado
     }

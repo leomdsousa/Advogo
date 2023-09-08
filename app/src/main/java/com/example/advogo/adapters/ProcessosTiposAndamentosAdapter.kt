@@ -1,35 +1,59 @@
 package com.example.advogo.adapters
 
 import android.content.Context
-import android.view.View
+import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.TextView
-import com.example.advogo.R
+import androidx.recyclerview.widget.RecyclerView
+import com.example.advogo.databinding.ItemProcessoAndamentoTipoBinding
 import com.example.advogo.models.ProcessoTipoAndamento
+import com.example.advogo.utils.Constants
 
 open class ProcessosTiposAndamentosAdapter(
-    context: Context,
-    private val lista: List<ProcessoTipoAndamento>
-) : ArrayAdapter<ProcessoTipoAndamento>(context, R.layout.spinner_item_layout, lista) {
+    private val context: Context,
+    private val list: List<ProcessoTipoAndamento>
+) : RecyclerView.Adapter<ProcessosTiposAndamentosAdapter.MyViewHolder>() {
+    private var onItemClickListener: OnItemClickListener? = null
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val view = super.getView(position, convertView, parent)
-        val telefoneTipo = getItem(position)
-        telefoneTipo?.let {
-            val descricaoTextView = view.findViewById<TextView>(R.id.text1)
-            descricaoTextView.text = it.tipo
+    inner class MyViewHolder(private val binding: ItemProcessoAndamentoTipoBinding)
+        : RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: ProcessoTipoAndamento, position: Int) {
+            binding.apply {
+                binding.tvDescricaoTipoProcesso.text = item.tipo ?: "Sem Título"
+
+                binding.root.setOnClickListener {
+                    if(item.selecionado) {
+                        onItemClickListener!!.onClick(item, position, Constants.DESELECIONAR)
+                    } else {
+                        onItemClickListener!!.onClick(item, position, Constants.SELECIONAR)
+                    }
+                }
+            }
+
         }
-        return view
     }
 
-    override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val view = super.getDropDownView(position, convertView, parent)
-        val telefoneTipo = getItem(position)
-        telefoneTipo?.let {
-            val descricaoTextView = view.findViewById<TextView>(R.id.text1)
-            descricaoTextView.text = it.tipo
-        }
-        return view
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProcessosTiposAndamentosAdapter.MyViewHolder {
+        return MyViewHolder(
+            ItemProcessoAndamentoTipoBinding.inflate(
+                LayoutInflater.from(context),
+                parent,
+                false
+            )
+        )
+    }
+
+    override fun onBindViewHolder(holder: ProcessosTiposAndamentosAdapter.MyViewHolder, position: Int) {
+        val item = list[position]
+        holder.bind(item, position)
+    }
+
+    override fun getItemCount(): Int = list.size
+
+    interface OnItemClickListener {
+        fun onClick(processo: ProcessoTipoAndamento, position: Int, action: String)
+    }
+
+    fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
+        this.onItemClickListener = onItemClickListener
     }
 }

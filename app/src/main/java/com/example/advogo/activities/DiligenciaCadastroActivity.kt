@@ -14,15 +14,14 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import com.example.advogo.R
-import com.example.advogo.adapters.DiligenciasStatusAdapter
-import com.example.advogo.adapters.DiligenciasTiposAdapter
+import com.example.advogo.adapters.spinner.DiligenciasStatusAdapter
+import com.example.advogo.adapters.spinner.DiligenciasTiposAdapter
 import com.example.advogo.databinding.ActivityDiligenciaCadastroBinding
+import com.example.advogo.dialogs.*
 import com.example.advogo.models.*
 import com.example.advogo.repositories.*
 import com.example.advogo.utils.Constants
 import com.example.advogo.utils.SendNotificationToUserAsyncTask
-import com.example.advogo.dialogs.AdvogadosDialog
-import com.example.advogo.dialogs.ProcessosDialog
 import com.example.advogo.utils.extensions.ConverterUtils.fromUSADateStringToDate
 import com.example.advogo.utils.extensions.DataUtils
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -37,11 +36,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.io.IOException
-import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
@@ -68,8 +64,8 @@ class DiligenciaCadastroActivity : BaseActivity() {
     private var advogadoSelecionado: String? = null
     private var advogadoSelecionadoToken: String? = null
 
-    private var diligenciaStatus: List<DiligenciaStatus>? = ArrayList()
-    private var diligenciaTipos: List<DiligenciaTipo>? = ArrayList()
+    private var diligenciaStatus: List<DiligenciaStatus> = ArrayList()
+    private var diligenciaTipos: List<DiligenciaTipo> = ArrayList()
     private var processos: List<Processo> = ArrayList()
 
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
@@ -84,7 +80,6 @@ class DiligenciaCadastroActivity : BaseActivity() {
 
         setupActionBar("Cadastro Diligência", binding.toolbarDiligenciaCadastro)
         configurarGoogleMapPlaces()
-        setupSpinners()
 
         binding.btnCadastrarDiligencia.setOnClickListener {
             saveDiligencia()
@@ -112,6 +107,14 @@ class DiligenciaCadastroActivity : BaseActivity() {
             advogadosDialog()
         }
 
+        binding.etTipoDiligencia.setOnClickListener {
+            tiposDiligenciaDialog()
+        }
+
+        binding.etStatusDiligencia.setOnClickListener {
+            statusDiligenciaDialog()
+        }
+
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 try {
@@ -126,6 +129,86 @@ class DiligenciaCadastroActivity : BaseActivity() {
                     e.printStackTrace()
                 }
             }
+        }
+    }
+
+    private fun tiposDiligenciaDialog() {
+        CoroutineScope(Dispatchers.Main).launch {
+            if(diligenciaTipos.isEmpty()) {
+                val tiposDiligenciaDeferred = async { diligenciaTipoRepository.obterDiligenciasTipos()!! }
+                diligenciaTipos = tiposDiligenciaDeferred.await()
+            }
+
+            val listDialog = object : DiligenciaTiposDialog(
+                this@DiligenciaCadastroActivity,
+                diligenciaTipos,
+            ) {
+                override fun onItemSelected(item: DiligenciaTipo, action: String) {
+                    if (action == Constants.SELECIONAR) {
+                        diligenciaTipos.forEach {
+                            it.selecionado = false
+                        }
+
+                        if (binding.etTipoDiligencia.text.toString() != item.id) {
+                            binding.etTipoDiligencia.setText(item.tipo)
+                            tipoDiligenciaSelecionada = item.id
+                            diligenciaTipos[diligenciaTipos.indexOf(item)].selecionado = true
+                        } else {
+                            Toast.makeText(
+                                this@DiligenciaCadastroActivity,
+                                "Tipo já selecionado! Favor escolher outro.",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    } else {
+                        binding.etTipoDiligencia.text = null
+                        tipoDiligenciaSelecionada = null
+                        diligenciaTipos[diligenciaTipos.indexOf(item)].selecionado = false
+                    }
+                }
+            }
+
+            listDialog.show()
+        }
+    }
+
+    private fun statusDiligenciaDialog() {
+        CoroutineScope(Dispatchers.Main).launch {
+            if(diligenciaStatus.isEmpty()) {
+                val statusProcessoDeferred = async { diligenciaStatusRepository.obterDiligenciasStatus() }
+                diligenciaStatus = statusProcessoDeferred.await()!!
+            }
+
+            val listDialog = object : DiligenciaStatusDialog(
+                this@DiligenciaCadastroActivity,
+                diligenciaStatus,
+            ) {
+                override fun onItemSelected(item: DiligenciaStatus, action: String) {
+                    if (action == Constants.SELECIONAR) {
+                        diligenciaStatus.forEach {
+                            it.selecionado = false
+                        }
+
+                        if (binding.etStatusDiligencia.text.toString() != item.id) {
+                            binding.etStatusDiligencia.setText(item.status)
+                            statusDiligenciaSelecionada = item.id
+                            diligenciaStatus[diligenciaStatus.indexOf(item)].selecionado = true
+                        } else {
+                            Toast.makeText(
+                                this@DiligenciaCadastroActivity,
+                                "Status já selecionado! Favor escolher outro.",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    } else {
+                        binding.etStatusDiligencia.text = null
+                        statusDiligenciaSelecionada = null
+                        diligenciaStatus[diligenciaStatus.indexOf(item)].selecionado = false
+                    }
+                }
+            }
+
+            listDialog.show()
         }
     }
 
@@ -205,65 +288,6 @@ class DiligenciaCadastroActivity : BaseActivity() {
             }
 
             listDialog.show()
-        }
-    }
-
-    private fun setupSpinners() {
-        setupSpinnerTipoDiligencia()
-        setupSpinnerStatusDiligencia()
-    }
-
-    private fun setupSpinnerStatusDiligencia() {
-        val spinnerStatus = findViewById<Spinner>(R.id.spinnerStatusDiligencia)
-
-        CoroutineScope(Dispatchers.Main).launch {
-            val diligenciaStatusDeferred = async { diligenciaStatusRepository.obterDiligenciasStatus() }
-            diligenciaStatus = diligenciaStatusDeferred.await()!!
-            (diligenciaStatus as MutableList<DiligenciaStatus>).add(0, DiligenciaStatus(status = "Selecione"))
-
-            val adapter = DiligenciasStatusAdapter(this@DiligenciaCadastroActivity, diligenciaStatus!!)
-            spinnerStatus.adapter = adapter
-
-            spinnerStatus.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                    val selectedItem = spinnerStatus.selectedItem as? DiligenciaStatus
-                    selectedItem?.let {
-                        statusDiligenciaSelecionada = selectedItem.id
-                        spinnerStatus.setSelection(id.toInt())
-                    }
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                    // Nada selecionado
-                }
-            }
-        }
-    }
-
-    private fun setupSpinnerTipoDiligencia() {
-        val spinnerTipos = findViewById<Spinner>(R.id.spinnerTipoDiligencia)
-
-        CoroutineScope(Dispatchers.Main).launch {
-            val diligenciaTiposDeferred = async { diligenciaTipoRepository.obterDiligenciasTipos() }
-            diligenciaTipos = diligenciaTiposDeferred.await()!!
-            (diligenciaTipos as MutableList<DiligenciaTipo>).add(0, DiligenciaTipo(tipo = "Selecione"))
-
-            val adapter = DiligenciasTiposAdapter(this@DiligenciaCadastroActivity, diligenciaTipos!!)
-            spinnerTipos.adapter = adapter
-
-            spinnerTipos.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                    val selectedItem = spinnerTipos.selectedItem as? DiligenciaTipo
-                    selectedItem?.let {
-                        tipoDiligenciaSelecionada = selectedItem.id
-                        spinnerTipos.setSelection(id.toInt())
-                    }
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                    // Nada selecionado
-                }
-            }
         }
     }
 

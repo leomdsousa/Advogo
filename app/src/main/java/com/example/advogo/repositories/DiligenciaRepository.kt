@@ -253,7 +253,7 @@ class DiligenciaRepository @Inject constructor(
             .document(id)
             .get()
             .addOnSuccessListener { document ->
-                if (!document.exists()) {
+                if (document.exists()) {
                     coroutineScope.launch {
                         val resultado = document.toObject(Diligencia::class.java)!!
 

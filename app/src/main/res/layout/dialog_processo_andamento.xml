@@ -60,45 +60,85 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <TextView
-                android:id="@+id/labelTipoProcesso"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/processoCadastroTilMarginTop"
-                android:gravity="start"
-                android:text="@string/hintTipoAndamentoDescription"
-                android:textColor="@color/black"
-                android:textSize="@dimen/etTextSize"
-                android:textStyle="bold" />
+                style="@style/MyTextInputLayoutStyle"
+                android:layout_marginTop="@dimen/processoCadastroTilMarginTop">
 
-            <Spinner
-                android:id="@+id/spinnerTipoAndamentoProcesso"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:background="@drawable/spinner_background"
-                android:popupBackground="@color/spinnerBackground"
-                android:spinnerMode="dropdown" />
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etTipoAndamentoProcesso"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hintTipoAndamentoDescription"
+                    android:inputType="text"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:textSize="@dimen/etTextSize" />
 
-            <TextView
-                android:id="@+id/labelStatusProcesso"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/processoCadastroTilMarginTop"
-                android:gravity="start"
-                android:text="@string/hintStatusAndamentoDescription"
-                android:textColor="@color/black"
-                android:textSize="@dimen/etTextSize"
-                android:textStyle="bold" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <Spinner
-                android:id="@+id/spinnerStatusProcessoAndamento"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:background="@drawable/spinner_background"
-                android:popupBackground="@color/spinnerBackground"
-                android:spinnerMode="dropdown" />
+                style="@style/MyTextInputLayoutStyle"
+                android:layout_marginTop="@dimen/processoCadastroTilMarginTop">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etStatusAndamentoProcesso"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hintStatusAndamentoDescription"
+                    android:inputType="text"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:textSize="@dimen/etTextSize" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+<!--            <TextView-->
+<!--                android:id="@+id/labelTipoProcesso"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="@dimen/processoCadastroTilMarginTop"-->
+<!--                android:gravity="start"-->
+<!--                android:text="@string/hintTipoAndamentoDescription"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textSize="@dimen/etTextSize"-->
+<!--                android:textStyle="bold" />-->
+
+<!--            <Spinner-->
+<!--                android:id="@+id/spinnerTipoAndamentoProcesso"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="3dp"-->
+<!--                android:background="@drawable/spinner_background"-->
+<!--                android:popupBackground="@color/spinnerBackground"-->
+<!--                android:spinnerMode="dropdown" />-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/labelStatusProcesso"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="@dimen/processoCadastroTilMarginTop"-->
+<!--                android:gravity="start"-->
+<!--                android:text="@string/hintStatusAndamentoDescription"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textSize="@dimen/etTextSize"-->
+<!--                android:textStyle="bold" />-->
+
+<!--            <Spinner-->
+<!--                android:id="@+id/spinnerStatusProcessoAndamento"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="3dp"-->
+<!--                android:background="@drawable/spinner_background"-->
+<!--                android:popupBackground="@color/spinnerBackground"-->
+<!--                android:spinnerMode="dropdown" />-->
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"

@@ -2,48 +2,25 @@ package com.example.advogo.activities
 
 import TabsAdapter
 import android.app.Activity
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.*
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.viewpager2.widget.ViewPager2
 import com.example.advogo.R
-import com.example.advogo.adapters.DiligenciasStatusAdapter
-import com.example.advogo.adapters.DiligenciasTiposAdapter
 import com.example.advogo.databinding.ActivityDiligenciaDetalheBinding
 import com.example.advogo.fragments.*
 import com.example.advogo.models.*
 import com.example.advogo.repositories.*
 import com.example.advogo.utils.Constants
-import com.example.advogo.utils.SendNotificationToUserAsyncTask
-import com.example.advogo.dialogs.AdvogadosDialog
-import com.example.advogo.dialogs.ProcessosDialog
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
-import com.google.android.libraries.places.api.Places
-import com.google.android.libraries.places.api.model.Place
-import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
-import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.*
 import javax.inject.Inject
-import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 class DiligenciaDetalheActivity : BaseActivity() {

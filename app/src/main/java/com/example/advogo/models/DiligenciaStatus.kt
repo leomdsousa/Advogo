@@ -8,6 +8,7 @@ import kotlinx.parcelize.Parcelize
 data class DiligenciaStatus(
     @DocumentId
     var id: String = "",
-    var status: String? = null
+    var status: String? = null,
+    @Transient var selecionado: Boolean = false
 ): Parcelable {
 }

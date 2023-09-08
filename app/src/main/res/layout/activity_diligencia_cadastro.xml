@@ -60,45 +60,41 @@
                             android:textSize="@dimen/etTextSize" />
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <TextView
-                        android:id="@+id/labelTipoDiligencia"
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/processoCadastroTilMarginTop"
-                        android:gravity="start"
-                        android:text="@string/hintTipoDiligenciaDescription"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/etTextSize"
-                        android:textStyle="bold" />
+                        style="@style/MyTextInputLayoutStyle"
+                        android:layout_marginTop="@dimen/processoCadastroTilMarginTop">
 
-                    <Spinner
-                        android:id="@+id/spinnerTipoDiligencia"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="3dp"
-                        android:background="@drawable/spinner_background"
-                        android:popupBackground="@color/spinnerBackground"
-                        android:spinnerMode="dropdown"/>
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/etTipoDiligencia"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/hintTipoDiligenciaDescription"
+                            android:inputType="text"
+                            android:cursorVisible="false"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:textSize="@dimen/etTextSize" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <TextView
-                        android:id="@+id/labelStatusDiligencia"
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/processoCadastroTilMarginTop"
-                        android:gravity="start"
-                        android:text="@string/hintStatusDiligenciaDescription"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/etTextSize"
-                        android:textStyle="bold" />
+                        style="@style/MyTextInputLayoutStyle"
+                        android:layout_marginTop="@dimen/processoCadastroTilMarginTop">
 
-                    <Spinner
-                        android:id="@+id/spinnerStatusDiligencia"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="3dp"
-                        android:background="@drawable/spinner_background"
-                        android:popupBackground="@color/spinnerBackground"
-                        android:spinnerMode="dropdown"/>
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/etStatusDiligencia"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/hintStatusDiligenciaDescription"
+                            android:inputType="text"
+                            android:cursorVisible="false"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:textSize="@dimen/etTextSize" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"

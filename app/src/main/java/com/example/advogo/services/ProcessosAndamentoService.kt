@@ -32,13 +32,25 @@ class ProcessosAndamentoService : Service() {
             validado = false
         }
 
-        if (bindingDialog.spinnerTipoAndamentoProcesso.selectedItem == null) {
+        if (TextUtils.isEmpty(bindingDialog.etTipoAndamentoProcesso.text.toString())) {
+            bindingDialog.etTipoAndamentoProcesso.error = "Obrigatório"
+            bindingDialog.etTipoAndamentoProcesso.requestFocus()
             validado = false
         }
 
-        if (bindingDialog.spinnerStatusProcessoAndamento.selectedItem == null) {
+        if (TextUtils.isEmpty(bindingDialog.etStatusAndamentoProcesso.text.toString())) {
+            bindingDialog.etStatusAndamentoProcesso.error = "Obrigatório"
+            bindingDialog.etStatusAndamentoProcesso.requestFocus()
             validado = false
         }
+
+//        if (bindingDialog.spinnerTipoAndamentoProcesso.selectedItem == null) {
+//            validado = false
+//        }
+//
+//        if (bindingDialog.spinnerStatusProcessoAndamento.selectedItem == null) {
+//            validado = false
+//        }
 
         return validado
     }

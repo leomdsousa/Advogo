@@ -5,30 +5,27 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import com.example.advogo.R
-import com.example.advogo.adapters.DiligenciasStatusAdapter
-import com.example.advogo.adapters.DiligenciasTiposAdapter
-import com.example.advogo.databinding.ActivityProcessoDetalheBinding
+import com.example.advogo.adapters.spinner.DiligenciasStatusAdapter
+import com.example.advogo.adapters.spinner.DiligenciasTiposAdapter
 import com.example.advogo.databinding.FragmentDiligenciaDetalheBinding
-import com.example.advogo.databinding.FragmentProcessoDetalheBinding
 import com.example.advogo.models.*
 import com.example.advogo.repositories.*
 import com.example.advogo.utils.Constants
 import com.example.advogo.utils.SendNotificationToUserAsyncTask
 import com.example.advogo.dialogs.AdvogadosDialog
+import com.example.advogo.dialogs.DiligenciaStatusDialog
+import com.example.advogo.dialogs.DiligenciaTiposDialog
 import com.example.advogo.dialogs.ProcessosDialog
 import com.example.advogo.utils.extensions.ConverterUtils.fromUSADateStringToDate
-import com.example.advogo.utils.extensions.ConverterUtils.fromUSADateTimeStringToTimestamp
 import com.example.advogo.utils.extensions.DataUtils
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -44,7 +41,6 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
-import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
 import javax.inject.Inject
@@ -66,8 +62,8 @@ class DiligenciaDetalheFragment : BaseFragment() {
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private var advogados: List<Advogado> = ArrayList()
     private var processos: List<Processo> = ArrayList()
-    private var diligenciaStatus: List<DiligenciaStatus>? = ArrayList()
-    private var diligenciaTipos: List<DiligenciaTipo>? = ArrayList()
+    private var diligenciaStatus: List<DiligenciaStatus> = ArrayList()
+    private var diligenciaTipos: List<DiligenciaTipo> = ArrayList()
 
     private var savedLatitude: Double = 0.0
     private var savedLongitude: Double = 0.0
@@ -95,7 +91,6 @@ class DiligenciaDetalheFragment : BaseFragment() {
 
         obterIntentDados()
         configurarGoogleMapPlaces()
-        setupSpinners()
 
         setDiligenciaToUI(diligenciaDetalhes)
 
@@ -117,12 +112,16 @@ class DiligenciaDetalheFragment : BaseFragment() {
             }
         }
 
-//        binding.etDiligenciaProcesso.setOnClickListener {
-//            processosDialog()
-//        }
-
         binding.etDiligenciaAdvogado.setOnClickListener {
             advogadosDialog()
+        }
+
+        binding.etTipoDiligencia.setOnClickListener {
+            tiposDiligenciaDialog()
+        }
+
+        binding.etStatusDiligencia.setOnClickListener {
+            statusDiligenciaDialog()
         }
 
         binding.btnGoogleMaps.setOnClickListener {
@@ -152,73 +151,10 @@ class DiligenciaDetalheFragment : BaseFragment() {
         }
     }
 
-    private fun setupSpinners() {
-        setupSpinnerTipoDiligencia()
-        setupSpinnerStatusDiligencia()
-    }
-
-    private fun setupSpinnerStatusDiligencia() {
-        CoroutineScope(Dispatchers.Main).launch {
-            val diligenciaStatusDeferred = async { diligenciaStatusRepository.obterDiligenciasStatus() }
-            diligenciaStatus = diligenciaStatusDeferred.await()!!
-            (diligenciaStatus as MutableList<DiligenciaStatus>).add(0, DiligenciaStatus(status = "Selecione"))
-
-            val adapter = DiligenciasStatusAdapter(requireContext(), diligenciaStatus!!)
-            binding.spinnerStatusDiligencia.adapter = adapter
-
-            if(diligenciaDetalhes.statusObj != null) {
-                binding.spinnerStatusDiligencia.setSelection((diligenciaStatus as MutableList<DiligenciaStatus>).indexOf(diligenciaDetalhes.statusObj))
-            }
-
-            binding.spinnerStatusDiligencia.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                    val selectedItem = binding.spinnerStatusDiligencia.selectedItem as? DiligenciaStatus
-                    selectedItem?.let {
-                        statusDiligenciaSelecionada = selectedItem.id
-                        binding.spinnerStatusDiligencia.setSelection(id.toInt())
-                    }
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                    // Nada selecionado
-                }
-            }
-        }
-    }
-
-    private fun setupSpinnerTipoDiligencia() {
-        CoroutineScope(Dispatchers.Main).launch {
-            val diligenciaTiposDeferred = async { diligenciaTipoRepository.obterDiligenciasTipos() }
-            diligenciaTipos = diligenciaTiposDeferred.await()!!
-            (diligenciaTipos as MutableList<DiligenciaTipo>).add(0, DiligenciaTipo(tipo = "Selecione"))
-
-            val adapter = DiligenciasTiposAdapter(requireContext(), diligenciaTipos!!)
-            binding.spinnerTipoDiligencia.adapter = adapter
-
-            if(diligenciaDetalhes.tipoObj != null) {
-                binding.spinnerTipoDiligencia.setSelection((diligenciaTipos as MutableList<DiligenciaTipo>).indexOf(diligenciaDetalhes.tipoObj))
-            }
-
-            binding.spinnerTipoDiligencia.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                    val selectedItem = binding.spinnerTipoDiligencia.selectedItem as? DiligenciaTipo
-                    selectedItem?.let {
-                        tipoDiligenciaSelecionada = selectedItem.id
-                        binding.spinnerTipoDiligencia.setSelection(id.toInt())
-                    }
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                    // Nada selecionado
-                }
-            }
-        }
-    }
-
     private fun setDiligenciaToUI(diligencia: Diligencia) {
         binding.etDiligenciaDescricao.setText(diligencia.descricao)
-        binding.spinnerTipoDiligencia.setSelection(diligenciaTipos!!.indexOf(diligencia.tipoObj!!))
-        binding.spinnerStatusDiligencia.setSelection(diligenciaStatus!!.indexOf(diligencia.statusObj!!))
+        binding.etTipoDiligencia.setText(diligencia.tipoObj?.tipo)
+        binding.etStatusDiligencia.setText(diligencia.statusObj?.status)
         binding.etDiligenciaProcesso.setText(diligencia.processoObj?.numero)
         binding.etDiligenciaAdvogado.setText("${diligencia.advogadoObj?.nome} (${diligencia.advogadoObj?.oab})")
         binding.etDiligenciaEndereco.setText(diligencia.endereco)
@@ -248,7 +184,7 @@ class DiligenciaDetalheFragment : BaseFragment() {
         CoroutineScope(Dispatchers.Main).launch {
             showProgressDialog(getString(R.string.aguardePorfavor))
 
-            val diligenciaDetalhesDeferred = async { diligenciaRepository.obterDiligencia(diligenciaDetalhes.id!!) }
+            val diligenciaDetalhesDeferred = async { diligenciaRepository.obterDiligencia(diligenciaDetalhes.id) }
             diligenciaDetalhes = diligenciaDetalhesDeferred.await()!!
 
             val alteracoes = formatarAlteracoes(diligenciaDetalhes)
@@ -299,41 +235,78 @@ class DiligenciaDetalheFragment : BaseFragment() {
         }
     }
 
-    private fun processosDialog() {
+    private fun tiposDiligenciaDialog() {
         CoroutineScope(Dispatchers.Main).launch {
-            if(processos.isEmpty()) {
-                val processosDeferred = async { processoRepository.obterProcessos()!! }
-                processos = processosDeferred.await()
+            if(diligenciaTipos.isEmpty()) {
+                val tiposDiligenciaDeferred = async { diligenciaTipoRepository.obterDiligenciasTipos()!! }
+                diligenciaTipos = tiposDiligenciaDeferred.await()
             }
 
-            processos.find { it.id == processoSelecionado }?.selecionado = true
-
-            val listDialog = object : ProcessosDialog(
+            val listDialog = object : DiligenciaTiposDialog(
                 requireContext(),
-                processos as ArrayList<Processo>,
-                resources.getString(R.string.selecionarProcesso)
+                diligenciaTipos,
             ) {
-                override fun onItemSelected(processo: Processo, action: String) {
+                override fun onItemSelected(item: DiligenciaTipo, action: String) {
                     if (action == Constants.SELECIONAR) {
-                        processos.forEach {
+                        diligenciaTipos.forEach {
                             it.selecionado = false
                         }
 
-                        if (binding.etDiligenciaProcesso.text.toString() != processo.id) {
-                            binding.etDiligenciaProcesso.setText("${processo.numero}")
-                            processoSelecionado = processo.id
-                            processos!![processos!!.indexOf(processo)].selecionado = true
+                        if (binding.etTipoDiligencia.text.toString() != item.id) {
+                            binding.etTipoDiligencia.setText(item.tipo)
+                            tipoDiligenciaSelecionada = item.id
+                            diligenciaTipos[diligenciaTipos.indexOf(item)].selecionado = true
                         } else {
                             Toast.makeText(
                                 requireContext(),
-                                "Processo já selecionado! Favor escolher outro.",
+                                "Tipo já selecionado! Favor escolher outro.",
                                 Toast.LENGTH_LONG
                             ).show()
                         }
                     } else {
-                        binding.etDiligenciaProcesso.text = null
-                        processoSelecionado = null
-                        processos!![processos!!.indexOf(processo)].selecionado = false
+                        binding.etTipoDiligencia.text = null
+                        tipoDiligenciaSelecionada = null
+                        diligenciaTipos[diligenciaTipos.indexOf(item)].selecionado = false
+                    }
+                }
+            }
+
+            listDialog.show()
+        }
+    }
+
+    private fun statusDiligenciaDialog() {
+        CoroutineScope(Dispatchers.Main).launch {
+            if(diligenciaStatus.isEmpty()) {
+                val statusProcessoDeferred = async { diligenciaStatusRepository.obterDiligenciasStatus() }
+                diligenciaStatus = statusProcessoDeferred.await()!!
+            }
+
+            val listDialog = object : DiligenciaStatusDialog(
+                requireContext(),
+                diligenciaStatus,
+            ) {
+                override fun onItemSelected(item: DiligenciaStatus, action: String) {
+                    if (action == Constants.SELECIONAR) {
+                        diligenciaStatus.forEach {
+                            it.selecionado = false
+                        }
+
+                        if (binding.etStatusDiligencia.text.toString() != item.id) {
+                            binding.etStatusDiligencia.setText(item.status)
+                            statusDiligenciaSelecionada = item.id
+                            diligenciaStatus[diligenciaStatus.indexOf(item)].selecionado = true
+                        } else {
+                            Toast.makeText(
+                                requireContext(),
+                                "Status já selecionado! Favor escolher outro.",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    } else {
+                        binding.etStatusDiligencia.text = null
+                        statusDiligenciaSelecionada = null
+                        diligenciaStatus[diligenciaStatus.indexOf(item)].selecionado = false
                     }
                 }
             }
@@ -491,10 +464,10 @@ class DiligenciaDetalheFragment : BaseFragment() {
         var retorno = "DILIGÊNCIA ATUALIZADA"
 
         if(diligencia.status != statusDiligenciaSelecionada)
-            retorno += "\nStatus: DE ${diligencia.statusObj!!.status} para ${(binding.spinnerStatusDiligencia.selectedItem as DiligenciaStatus).status}"
+            retorno += "\nStatus: DE ${diligencia.statusObj!!.status} para ${binding.etStatusDiligencia.text.toString()}"
 
         if(diligencia.tipo != tipoDiligenciaSelecionada)
-            retorno += "\nTipo: DE ${diligencia.tipoObj!!.tipo} para ${(binding.spinnerTipoDiligencia.selectedItem as DiligenciaTipo).tipo}"
+            retorno += "\nTipo: DE ${diligencia.tipoObj!!.tipo} para ${binding.etTipoDiligencia.text.toString()}"
 
         if(diligencia.processo != processoSelecionado)
             retorno += "\n Processo: para ${binding.etDiligenciaProcesso.text.toString()}"
