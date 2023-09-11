@@ -1,66 +1,193 @@
 package com.example.advogo.services
 
-import android.app.Service
-import android.content.Context
-import android.content.Intent
-import android.os.IBinder
-import android.text.TextUtils
-import com.example.advogo.activities.AdvogadoDetalheActivity
-import com.example.advogo.activities.ClienteCadastroActivity
-import com.example.advogo.databinding.ActivityAdvogadoBinding
-import com.example.advogo.databinding.ActivityAdvogadoDetalheBinding
-import com.example.advogo.databinding.ActivityProcessoCadastroBinding
+import android.annotation.SuppressLint
+import android.net.Uri
+import android.os.Build
+import androidx.annotation.RequiresApi
+import com.example.advogo.models.Advogado
 import com.example.advogo.repositories.IAdvogadoRepository
-import dagger.hilt.android.AndroidEntryPoint
+import com.example.advogo.utils.extensions.StringExtensions.fromUSADateStringToDate
+import com.google.common.base.Strings
+import com.google.common.io.Files.getFileExtension
+import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
-@AndroidEntryPoint
-class AdvogadosService : Service() {
+class AdvogadosService {
     @Inject lateinit var repository: IAdvogadoRepository
 
-    override fun onBind(p0: Intent?): IBinder? {
-        return null
+    @SuppressLint("SimpleDateFormat")
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun cadastrar(
+        advogado: Advogado,
+        onSuccess: () -> Unit,
+        onFailure: (List<String>) -> Unit
+    ) {
+        val erros = validar(advogado)
+
+        if (erros.isNotEmpty()) {
+            onFailure(erros)
+            return
+        }
+
+        FirebaseAuth.getInstance()
+            .createUserWithEmailAndPassword(advogado.email!!, advogado.password!!)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val firebaseUser = task.result!!.user
+                    advogado.id = firebaseUser!!.uid
+                    advogado.dataCriacao = SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(LocalDateTime.now())
+                    advogado.dataCriacaoTimestamp = Timestamp.now()
+                    advogado.dataAlteracao = null
+                    advogado.dataAlteracaoTimestamp = null
+
+                    repository.adicionarAdvogado(
+                        advogado,
+                        { onSuccess() },
+                        { onFailure(listOf("Erro ao cadastrar Advogado")) }
+                    )
+                } else {
+                    onFailure(listOf("Erro ao cadastrar Advogado"))
+                }
+            }
     }
 
-    fun validarAdvogadoSubmit(binding: ActivityAdvogadoDetalheBinding): Boolean {
-        var validado = true
+    @RequiresApi(Build.VERSION_CODES.O)
+    suspend fun atualizar(
+        advogado: Advogado,
+        onSuccess: () -> Unit,
+        onFailure: (List<String>) -> Unit
+    ) {
+        val erros = validar(advogado)
 
-        if (TextUtils.isEmpty(binding.etName.text.toString())) {
-            binding.etName.error = "Obrigatório"
-            binding.etName.requestFocus()
-            validado = false
+        if (erros.isNotEmpty()) {
+            onFailure(erros)
+            return
         }
 
-        if (TextUtils.isEmpty(binding.etSobrenome.text.toString())) {
-            binding.etSobrenome.error = "Obrigatório"
-            binding.etSobrenome.requestFocus()
-            validado = false
+        CoroutineScope(Dispatchers.Main).launch {
+            val imageUrl = if (advogado.imagemSelecionadaURI != null) {
+                salvarImagem(advogado.oab!!.toString(), advogado.imagemSelecionadaURI!!)
+            } else {
+                advogado.imagem
+            }
+
+            advogado.dataAlteracao = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+            advogado.dataAlteracaoTimestamp = Timestamp(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).fromUSADateStringToDate())
+            advogado.imagem = imageUrl
+
+            try {
+                repository.atualizarAdvogado(
+                    advogado,
+                    { onSuccess() },
+                    { onFailure(listOf("Erro ao atualizar Advogado")) }
+                )
+            } catch (e: Exception) {
+                onFailure(listOf("Erro ao atualizar Advogado"))
+            }
+        }
+    }
+
+    private suspend fun salvarImagem(oab: String, imagemSelecionadaUri: Uri): String {
+        return suspendCancellableCoroutine { continuation ->
+            val sRef: StorageReference = FirebaseStorage.getInstance().reference.child(
+                "ADVOGADO_${oab}_IMAGEM" + System.currentTimeMillis() + "." + getFileExtension(
+                    imagemSelecionadaUri.lastPathSegment!!
+                )
+            )
+
+            sRef.putFile(imagemSelecionadaUri!!)
+                .addOnSuccessListener { taskSnapshot ->
+                    taskSnapshot.metadata!!.reference!!.downloadUrl
+                        .addOnSuccessListener { uri ->
+                            val imageUrl = uri.toString()
+                            continuation.resume(imageUrl, null)
+                        }
+                        .addOnFailureListener { exception ->
+                            continuation.cancel(exception)
+                        }
+                }
+                .addOnFailureListener { exception ->
+                    continuation.cancel(exception)
+                }
+        }
+    }
+
+    fun deletar(advogadoId: String, onSuccess: () -> Unit, onFailure: () -> Unit) {
+        repository.deletarAdvogado(
+            advogadoId,
+            { onSuccess() },
+            { onFailure() }
+        )
+    }
+
+    private fun validar(advogado: Advogado): List<String> {
+        val erros = mutableListOf<String>()
+
+        if (Strings.isNullOrEmpty(advogado.nome)) {
+            erros.add("O nome é obrigatório")
         }
 
-        if (TextUtils.isEmpty(binding.etEmail.text.toString())) {
-            binding.etEmail.error = "Obrigatório"
-            binding.etEmail.requestFocus()
-            validado = false
+        if (Strings.isNullOrEmpty(advogado.sobrenome)) {
+            erros.add("O sobrenome é obrigatório")
         }
 
-        if (TextUtils.isEmpty(binding.etTelefone.text.toString())) {
-            binding.etTelefone.error = "Obrigatório"
-            binding.etTelefone.requestFocus()
-            validado = false
+        if (Strings.isNullOrEmpty(advogado.email)) {
+            erros.add("O email é obrigatório")
         }
 
-        if (TextUtils.isEmpty(binding.etOab.text.toString())) {
-            binding.etOab.error = "Obrigatório"
-            binding.etOab.requestFocus()
-            validado = false
+        if (Strings.isNullOrEmpty(advogado.telefone)) {
+            erros.add("O telefone é obrigatório")
         }
 
-        if (TextUtils.isEmpty(binding.etEndereco.text.toString())) {
-            binding.etEndereco.error = "Obrigatório"
-            binding.etEndereco.requestFocus()
-            validado = false
+        if (advogado.oab == null) {
+            erros.add("O número da OAB é obrigatório")
         }
 
-        return validado
+        if (Strings.isNullOrEmpty(advogado.endereco)) {
+            erros.add("O endereço é obrigatório")
+        }
+
+        return erros
+    }
+
+    fun obterAdvogados(
+        onSuccessListener: (lista: List<Advogado>) -> Unit,
+        onFailureListener: (exception: Exception?) -> Unit
+    ) {
+        repository.obterAdvogados(onSuccessListener, onFailureListener)
+    }
+
+    fun obterAdvogado(
+        id: String,
+        onSuccessListener: (advogado: Advogado) -> Unit,
+        onFailureListener: (exception: Exception?) -> Unit
+    ) {
+        repository.obterAdvogado(id, onSuccessListener, onFailureListener)
+    }
+
+    fun obterAdvogadoPorEmail(
+        email: String,
+        onSuccessListener: (advogado: Advogado) -> Unit,
+        onFailureListener: (exception: Exception?) -> Unit
+    ) {
+        repository.obterAdvogadoPorEmail(email, onSuccessListener, onFailureListener)
+    }
+
+    suspend fun obterAdvogados(): List<Advogado>? {
+        return repository.obterAdvogados()
+    }
+
+    suspend fun obterAdvogado(id: String): Advogado? {
+        return repository.obterAdvogado(id)
     }
 }

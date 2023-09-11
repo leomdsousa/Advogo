@@ -141,9 +141,9 @@
     <dimen name="itemProcessoImageCircularBorderWidth">0.5dp</dimen>
     <dimen name="itemProcessoDescricaoLayoutMarginStart">10dp</dimen>
     <dimen name="itemProcessoDescricaoTextSize">18sp</dimen>
-    <dimen name="itemProcessoNumeroTextSize">14sp</dimen>
-    <dimen name="itemProcessoTipoTextSize">14sp</dimen>
-    <dimen name="itemProcessoStatusTextSize">14sp</dimen>
+    <dimen name="itemProcessoNumeroTextSize">12sp</dimen>
+    <dimen name="itemProcessoTipoTextSize">12sp</dimen>
+    <dimen name="itemProcessoStatusTextSize">12sp</dimen>
     <dimen name="itemProcessoDividerMarginTop">5dp</dimen>
     <dimen name="itemProcessoDividerHeight">0.3dp</dimen>
 
@@ -195,7 +195,6 @@
     <dimen name="advDialogActionButtonTextSize">16sp</dimen>
 
     <dimen name="itemSelectedAdvImageSize">45dp</dimen>
-
     <dimen name="itemProcessoAndamentoTextSize">16sp</dimen>
 
     <!--DIALOG LIST-->

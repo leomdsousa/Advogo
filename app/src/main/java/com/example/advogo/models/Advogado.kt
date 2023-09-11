@@ -1,5 +1,6 @@
 package com.example.advogo.models
 
+import android.net.Uri
 import android.os.Parcelable
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
@@ -26,6 +27,9 @@ data class Advogado(
     var fcmToken: String? = null,
     var whatsapp: Boolean? = null,
     @Transient var telefoneObj: Telefone? = null,
-    @Transient var selecionado: Boolean = false
+    @Transient var selecionado: Boolean = false,
+    @Transient var imagemSelecionadaURI: Uri? = null,
+    @Transient var username: String? = null,
+    @Transient var password: String? = null,
 ): Parcelable { }
 

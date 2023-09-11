@@ -9,25 +9,22 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import com.bumptech.glide.Glide
 import com.example.advogo.R
-import com.example.advogo.adapters.spinner.ProcessosStatusAdapter
 import com.example.advogo.databinding.FragmentProcessoDetalheBinding
 import com.example.advogo.models.*
 import com.example.advogo.repositories.*
-import com.example.advogo.utils.Constants
-import com.example.advogo.utils.SendNotificationToUserAsyncTask
+import com.example.advogo.utils.constants.Constants
+import com.example.advogo.utils.notification.SendNotificationToUserAsyncTask
 import com.example.advogo.dialogs.AdvogadosDialog
-import com.example.advogo.dialogs.ClientesDialog
 import com.example.advogo.dialogs.ProcessoStatusDialog
 import com.example.advogo.dialogs.ProcessoTiposDialog
-import com.example.advogo.utils.extensions.ConverterUtils.fromUSADateStringToDate
-import com.example.advogo.utils.extensions.DataUtils
+import com.example.advogo.utils.UserUtils.getCurrentUserID
+import com.example.advogo.utils.extensions.StringExtensions.fromUSADateStringToDate
 import com.google.firebase.Timestamp
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -172,7 +169,7 @@ class ProcessoDetalheFragment : BaseFragment() {
                 numero = (if (binding.etNumeroProcesso.text.toString() != processoDetalhes.numero) binding.etNumeroProcesso.text.toString() else processoDetalhes.numero),
                 tipo = (if (tipoProcessoSelecionado != processoDetalhes.tipo) tipoProcessoSelecionado else processoDetalhes.tipo),
                 status = (if (statusProcessoSelecionado != processoDetalhes.status) statusProcessoSelecionado else processoDetalhes.status),
-                data = processoDetalhes.data,
+                dataInicio = processoDetalhes.dataInicio,
                 dataCriacao = processoDetalhes.dataCriacao,
                 dataCriacaoTimestamp = processoDetalhes.dataCriacaoTimestamp,
                 dataAlteracao = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
@@ -186,7 +183,7 @@ class ProcessoDetalheFragment : BaseFragment() {
                 historico = processoDetalhes.historico
             )
 
-            processo.dataTimestamp = Timestamp(processo.data!!.fromUSADateStringToDate())
+            processo.dataInicioTimestamp = Timestamp(processo.dataInicio!!.fromUSADateStringToDate())
 
             processoRepository.atualizarProcesso(
                 processo,
@@ -352,7 +349,7 @@ class ProcessoDetalheFragment : BaseFragment() {
         clienteSelecionado = processoDetalhes.cliente
         tipoProcessoSelecionado = processoDetalhes.tipo
         statusProcessoSelecionado = processoDetalhes.status
-        dataSelecionada = processoDetalhes.data
+        dataSelecionada = processoDetalhes.dataInicio
 
 
         if(!dataSelecionada.isNullOrEmpty()) {

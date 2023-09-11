@@ -1,13 +1,8 @@
 package com.example.advogo.repositories
 
-import com.example.advogo.models.Advogado
-import com.example.advogo.models.Telefone
 import com.example.advogo.models.TelefoneTipo
-import com.example.advogo.utils.Constants
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
+import com.example.advogo.utils.constants.Constants
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.SetOptions
 import javax.inject.Inject
 
 class TelefoneTipoRepository @Inject constructor(

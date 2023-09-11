@@ -17,6 +17,7 @@
     <string name="selectAdv">Selecionar advogado</string>
     <string name="selectData">Selecionar data</string>
     <string name="labelColor">Cor</string>
+    <string name="hintTipo">Tipo</string>
 
     <string name="confirmacaoDeletarProcesso">Deseja deletar o processo \'%1$s\'?</string>
     <string name="confirmacaoDeletarCliente">Deseja deletar o cliente \'%1$s\'?</string>
@@ -77,6 +78,8 @@
     <string name="nenhumAndamentoEncontrado">Nenhum andamento encontrado!</string>
     <string name="nenhumaDiligenciaHistoricoEncontrado">Nenhum histórico encontrado!</string>
     <string name="nenhumProcessoHistoricoEncontrado">Nenhum histórico encontrado!</string>
+    <string name="nenhumStatusEncontrado">Nenhum status encontrado!</string>
+    <string name="nenhumTipoEncontrado">Nenhum tipo encontrado!</string>
 
     <!--INTRO-->
     <string name="imageContentDescription">Imagem</string>
@@ -133,6 +136,14 @@
     <string name="buscarClientes">Buscar Clientes</string>
 
     <string name="defaultNotificationChannelId">advogo_notification_channel_id</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="gerenciar">Gerenciar</string>
+    <string name="processo_tipos">Processo Tipos</string>
+    <string name="processo_status">Processo Status</string>
+    <string name="diligencia_tipos">Diligência Tipos</string>
+    <string name="diligencia_status">Diligência Status</string>
+    <string name="andamento_tipos">Andamento Tipos</string>
+    <string name="andamento_status">Andamento Status</string>
+    <string name="anexo_tipos">Anexo Tipos</string>
 </resources>

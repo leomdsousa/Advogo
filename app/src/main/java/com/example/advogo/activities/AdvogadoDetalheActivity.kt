@@ -19,8 +19,8 @@ import com.example.advogo.databinding.ActivityAdvogadoDetalheBinding
 import com.example.advogo.models.Advogado
 import com.example.advogo.repositories.AdvogadoRepository
 import com.example.advogo.services.CorreioApiService
-import com.example.advogo.utils.Constants
-import com.example.advogo.utils.extensions.ConverterUtils.fromUSADateStringToDate
+import com.example.advogo.utils.constants.Constants
+import com.example.advogo.utils.extensions.StringExtensions.fromUSADateStringToDate
 import com.google.firebase.Timestamp
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference

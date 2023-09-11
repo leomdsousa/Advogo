@@ -6,6 +6,7 @@ import android.os.Handler
 import android.os.Looper
 import android.view.WindowManager
 import com.example.advogo.R
+import com.example.advogo.utils.UserUtils.isUserLoggedIn
 
 class SplashScreenActivity : BaseActivity() {
     private val _splashTimeOut:Long = 3000

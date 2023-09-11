@@ -5,10 +5,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.advogo.databinding.ItemDiligenciaStatusBinding
-import com.example.advogo.databinding.ItemProcessoStatusBinding
 import com.example.advogo.models.DiligenciaStatus
-import com.example.advogo.models.ProcessoStatus
-import com.example.advogo.utils.Constants
+import com.example.advogo.utils.constants.Constants
 
 open class DiligenciasStatusAdapter(
     private val context: Context,
@@ -52,7 +50,7 @@ open class DiligenciasStatusAdapter(
     override fun getItemCount(): Int = list.size
 
     interface OnItemClickListener {
-        fun onClick(processo: DiligenciaStatus, position: Int, action: String)
+        fun onClick(item: DiligenciaStatus, position: Int, action: String)
     }
 
     fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {

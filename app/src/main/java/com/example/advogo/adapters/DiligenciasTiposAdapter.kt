@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.advogo.databinding.ItemDiligenciaTipoBinding
 import com.example.advogo.models.DiligenciaTipo
-import com.example.advogo.utils.Constants
+import com.example.advogo.utils.constants.Constants
 
 open class DiligenciasTiposAdapter(
     private val context: Context,
@@ -50,7 +50,7 @@ open class DiligenciasTiposAdapter(
     override fun getItemCount(): Int = list.size
 
     interface OnItemClickListener {
-        fun onClick(processo: DiligenciaTipo, position: Int, action: String)
+        fun onClick(item: DiligenciaTipo, position: Int, action: String)
     }
 
     fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {

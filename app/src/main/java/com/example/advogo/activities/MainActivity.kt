@@ -12,7 +12,6 @@ import android.text.SpannableString
 import android.text.style.TypefaceSpan
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
@@ -32,14 +31,14 @@ import com.example.advogo.models.Advogado
 import com.example.advogo.repositories.IAdvogadoRepository
 import com.example.advogo.repositories.IDiligenciaRepository
 import com.example.advogo.repositories.IProcessoRepository
-import com.example.advogo.utils.Constants
+import com.example.advogo.utils.UserUtils.getCurrentUserID
+import com.example.advogo.utils.constants.Constants
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
-import io.grpc.InternalChannelz.id
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -116,16 +115,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         }
     }
 
-//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-//        val currentFragment = getCurrentFragment()
-//        return currentFragment?.onCreateOptionsMenu(menu, menuInflater) ?: false
-//    }
-//
-//    private fun getCurrentFragment(): Fragment? {
-//        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
-//        return navHostFragment?.childFragmentManager?.fragments?.get(0)
-//    }
-
     private fun setupTabsLayout() {
         viewPager = findViewById(R.id.viewPager)
         tabLayout = findViewById(R.id.tabLayout)
@@ -165,6 +154,34 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 val intent = Intent(this@MainActivity, AdvogadoActivity::class.java)
                 startActivity(intent)
             }
+            R.id.navProcessoStatus -> {
+                val intent = Intent(this@MainActivity, ProcessoStatusActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.navProcessoTipos -> {
+                val intent = Intent(this@MainActivity, ProcessoTiposActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.navDiligenciaStatus -> {
+                val intent = Intent(this@MainActivity, DiligenciaStatusActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.navDiligenciaTipos -> {
+                val intent = Intent(this@MainActivity, DiligenciaTiposActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.navAndamentoStatus -> {
+                val intent = Intent(this@MainActivity, ProcessoAndamentoStatusActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.navAndamentoTipos -> {
+                val intent = Intent(this@MainActivity, ProcessoAndamentoTiposActivity::class.java)
+                startActivity(intent)
+            }
+//            R.id.navAnexoTipos -> {
+//                val intent = Intent(this@MainActivity, AnexoTiposActivity::class.java)
+//                startActivity(intent)
+//            }
             R.id.navDeslogar -> {
                 FirebaseAuth.getInstance().signOut()
                 sharedPreferences.edit().clear().apply()

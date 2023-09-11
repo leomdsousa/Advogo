@@ -3,18 +3,15 @@ package com.example.advogo.adapters
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.advogo.databinding.ItemClienteBinding
 import com.example.advogo.models.Cliente
-import com.example.advogo.models.Processo
-import com.example.advogo.utils.Constants
+import com.example.advogo.utils.constants.Constants
 
 
 open class ClientesAdapter(

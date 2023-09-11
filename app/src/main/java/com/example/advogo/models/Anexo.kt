@@ -17,6 +17,7 @@ data class Anexo(
     var dataTimestamp: Timestamp? = null,
     var advogado: String? = null,
     var processo: String? = null,
-    @Transient var advogadoObj: Advogado? = null
+    @Transient var advogadoObj: Advogado? = null,
+    @Transient var imagemSelecionadaURI: Uri? = null,
 ): Parcelable {
 }

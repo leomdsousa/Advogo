@@ -33,7 +33,6 @@ abstract class AdvogadosDialog(
         binding.tvTitle.text = titulo
 
         if (list.size > 0) {
-
             binding.rvList.layoutManager = LinearLayoutManager(context)
             adapter = AdvogadosAdapter(
                 context,

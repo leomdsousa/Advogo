@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.advogo.databinding.ItemProcessoTipoBinding
 import com.example.advogo.models.ProcessoTipo
-import com.example.advogo.utils.Constants
+import com.example.advogo.utils.constants.Constants
 
 open class ProcessosTiposAdapter(
     private val context: Context,

@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.advogo.databinding.ItemProcessoAndamentoStatusBinding
 import com.example.advogo.models.ProcessoStatusAndamento
-import com.example.advogo.utils.Constants
+import com.example.advogo.utils.constants.Constants
 
 open class ProcessosStatusAndamentosAdapter(
     private val context: Context,
@@ -50,7 +50,7 @@ open class ProcessosStatusAndamentosAdapter(
     override fun getItemCount(): Int = list.size
 
     interface OnItemClickListener {
-        fun onClick(processo: ProcessoStatusAndamento, position: Int, action: String)
+        fun onClick(item: ProcessoStatusAndamento, position: Int, action: String)
     }
 
     fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {

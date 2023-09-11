@@ -46,6 +46,31 @@
             android:value="@string/defaultNotificationChannelId" />
 
         <activity
+            android:name=".activities.DiligenciaTiposActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Advogo.NoActionBar" />
+        <activity
+            android:name=".activities.ProcessoTiposActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Advogo.NoActionBar" />
+        <activity
+            android:name=".activities.ProcessoAndamentoStatusActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Advogo.NoActionBar" />
+        <activity
+            android:name=".activities.DiligenciaStatusActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Advogo.NoActionBar" />
+        <activity
+            android:name=".activities.ProcessoStatusActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Advogo.NoActionBar" />
+        <activity
             android:name=".activities.AdvogadoActivity"
             android:exported="false"
             android:screenOrientation="portrait"
@@ -132,7 +157,7 @@
             android:theme="@style/Theme.Advogo.NoActionBar" />
 
         <service
-            android:name=".services.utils.MyFirebaseMessagingService"
+            android:name=".utils.notification.MyFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

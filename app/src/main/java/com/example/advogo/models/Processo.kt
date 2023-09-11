@@ -1,5 +1,6 @@
 package com.example.advogo.models
 
+import android.net.Uri
 import android.os.Parcelable
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
@@ -16,8 +17,10 @@ data class Processo(
     var tipo: String? = null,
     var status: String? = null,
     var imagem: String? = null,
-    var data: String? = null,
-    var dataTimestamp: Timestamp? = null,
+    var dataInicio: String? = null,
+    var dataInicioTimestamp: Timestamp? = null,
+    var dataTermino: String? = null,
+    var dataTerminoTimestamp: Timestamp? = null,
     var dataCriacao: String? = null,
     var dataCriacaoTimestamp: Timestamp? = null,
     var dataAlteracao: String? = null,
@@ -28,6 +31,7 @@ data class Processo(
     var anexos: List<String>? = null,
     var andamentos: List<String>? = null,
     var historico: List<String>? = null,
+    var partes: List<ProcessoParte> = listOf(),
     @Transient var tipoObj: ProcessoTipo? = null,
     @Transient var statusObj: ProcessoStatus? = null,
     @Transient var clienteObj: Cliente? = null,
@@ -37,5 +41,6 @@ data class Processo(
     @Transient var andamentosLista: List<ProcessoAndamento>? = null,
     @Transient var historicoLista: List<ProcessoHistorico>? = null,
     @Transient var selecionado: Boolean = false,
+    @Transient var imagemSelecionadaURI: Uri? = null,
 ): Parcelable {
 }

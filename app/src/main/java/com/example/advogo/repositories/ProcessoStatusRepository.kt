@@ -1,8 +1,9 @@
 package com.example.advogo.repositories
 
 import com.example.advogo.models.ProcessoStatus
-import com.example.advogo.utils.Constants
+import com.example.advogo.utils.constants.Constants
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -80,6 +81,42 @@ class ProcessoStatusRepository @Inject constructor(
                 continuation.resumeWithException(exception)
             }
     }
+
+    override fun adicionarProcessoStatus(model: ProcessoStatus, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+        firebaseStore
+            .collection(Constants.PROCESSOS_STATUS_TABLE)
+            .add(model)
+            .addOnSuccessListener {
+                onSuccessListener()
+            }
+            .addOnFailureListener {
+                onFailureListener(it)
+            }
+    }
+    override fun atualizarProcessoStatus(model: ProcessoStatus, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+        firebaseStore
+            .collection(Constants.PROCESSOS_STATUS_TABLE)
+            .document(model.id)
+            .set(model, SetOptions.merge())
+            .addOnSuccessListener {
+                onSuccessListener()
+            }
+            .addOnFailureListener {
+                onFailureListener(it)
+            }
+    }
+    override fun deletarProcessoStatus(id: String, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+        firebaseStore
+            .collection(Constants.PROCESSOS_STATUS_TABLE)
+            .document(id)
+            .delete()
+            .addOnSuccessListener {
+                onSuccessListener()
+            }
+            .addOnFailureListener {
+                onFailureListener(it)
+            }
+    }
 }
 
 interface IProcessoStatusRepository {
@@ -88,4 +125,8 @@ interface IProcessoStatusRepository {
 
     suspend fun obterProcessoStatus(): List<ProcessoStatus>?
     suspend fun obterProcessoStatus(id: String): ProcessoStatus?
+
+    fun adicionarProcessoStatus(model: ProcessoStatus, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun atualizarProcessoStatus(model: ProcessoStatus, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun deletarProcessoStatus(id: String, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
 }

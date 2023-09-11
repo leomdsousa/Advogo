@@ -12,6 +12,41 @@
             android:title="@string/navAdvogados" />
 
         <item
+            android:id="@+id/navOpcoesGerenciar"
+            android:icon="@drawable/ic_baseline_expand_more_24"
+            android:title="@string/gerenciar">
+            <menu>
+                <item
+                    android:id="@+id/navProcessoTipos"
+                    android:title="@string/processo_tipos" />
+
+                <item
+                    android:id="@+id/navProcessoStatus"
+                    android:title="@string/processo_status" />
+
+                <item
+                    android:id="@+id/navDiligenciaTipos"
+                    android:title="@string/diligencia_tipos" />
+
+                <item
+                    android:id="@+id/navDiligenciaStatus"
+                    android:title="@string/diligencia_status" />
+
+                <item
+                    android:id="@+id/navAndamentoTipos"
+                    android:title="@string/andamento_tipos" />
+
+                <item
+                    android:id="@+id/navAndamentoStatus"
+                    android:title="@string/andamento_status" />
+
+<!--                <item-->
+<!--                    android:id="@+id/navAnexoTipos"-->
+<!--                    android:title="@string/anexo_tipos" />-->
+            </menu>
+        </item>
+
+        <item
             android:id="@+id/navDeslogar"
             android:icon="@drawable/ic_baseline_logout_24"
             android:title="@string/navDeslogar" />

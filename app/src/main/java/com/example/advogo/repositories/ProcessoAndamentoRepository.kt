@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.example.advogo.models.ProcessoAndamento
-import com.example.advogo.utils.Constants
+import com.example.advogo.utils.constants.Constants
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query

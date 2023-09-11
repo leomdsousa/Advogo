@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide
 import com.example.advogo.R
 import com.example.advogo.databinding.ItemProcessoBinding
 import com.example.advogo.models.Processo
-import com.example.advogo.utils.Constants
+import com.example.advogo.utils.constants.Constants
 
 open class ProcessosAdapter(
     private val context: Context,

@@ -1,8 +1,9 @@
 package com.example.advogo.repositories
 
 import com.example.advogo.models.DiligenciaTipo
-import com.example.advogo.utils.Constants
+import com.example.advogo.utils.constants.Constants
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -80,6 +81,42 @@ class DiligenciaTipoRepository @Inject constructor(
                 continuation.resumeWithException(exception)
             }
     }
+
+    override fun adicionarDiligenciaTipo(model: DiligenciaTipo, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+        firebaseStore
+            .collection(Constants.DILIGENCIAS_TIPOS_TABLE)
+            .add(model)
+            .addOnSuccessListener {
+                onSuccessListener()
+            }
+            .addOnFailureListener {
+                onFailureListener(it)
+            }
+    }
+    override fun atualizarDiligenciaTipo(model: DiligenciaTipo, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+        firebaseStore
+            .collection(Constants.DILIGENCIAS_TIPOS_TABLE)
+            .document(model.id)
+            .set(model, SetOptions.merge())
+            .addOnSuccessListener {
+                onSuccessListener()
+            }
+            .addOnFailureListener {
+                onFailureListener(it)
+            }
+    }
+    override fun deletarDiligenciaTipo(id: String, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+        firebaseStore
+            .collection(Constants.DILIGENCIAS_TIPOS_TABLE)
+            .document(id)
+            .delete()
+            .addOnSuccessListener {
+                onSuccessListener()
+            }
+            .addOnFailureListener {
+                onFailureListener(it)
+            }
+    }
 }
 
 interface IDiligenciaTipoRepository {
@@ -88,4 +125,7 @@ interface IDiligenciaTipoRepository {
 
     suspend fun obterDiligenciasTipos(): List<DiligenciaTipo>?
     suspend fun obterDiligenciaTipo(id: String): DiligenciaTipo?
+    fun adicionarDiligenciaTipo(model: DiligenciaTipo, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun atualizarDiligenciaTipo(model: DiligenciaTipo, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun deletarDiligenciaTipo(id: String, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
 }

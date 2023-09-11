@@ -35,8 +35,8 @@ import androidx.lifecycle.lifecycleScope
 import com.example.advogo.R
 import com.example.advogo.models.Advogado
 import com.example.advogo.repositories.AdvogadoRepository
-import com.example.advogo.utils.Constants
-import com.example.advogo.utils.ObterEnderecoFromLatLng
+import com.example.advogo.utils.constants.Constants
+import com.example.advogo.utils.handlers.ObterEnderecoFromLatLng
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
@@ -84,24 +84,6 @@ open class BaseActivity : AppCompatActivity() {
     fun hideProgressDialog() {
         if(progressDialog.isShowing) {
             progressDialog.dismiss()
-        }
-    }
-
-    fun isUserLoggedIn(): Boolean {
-        return getCurrentUserID().isNotEmpty()
-    }
-
-    fun getCurrentUser(): FirebaseUser {
-        return FirebaseAuth.getInstance().currentUser!!
-    }
-
-    fun getCurrentUserID(): String {
-        val user = FirebaseAuth.getInstance().currentUser
-
-        return if(user != null) {
-            FirebaseAuth.getInstance().currentUser!!.uid
-        } else {
-            ""
         }
     }
 

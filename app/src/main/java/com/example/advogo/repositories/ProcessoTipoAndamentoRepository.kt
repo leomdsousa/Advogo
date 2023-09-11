@@ -1,8 +1,9 @@
 package com.example.advogo.repositories
 
 import com.example.advogo.models.ProcessoTipoAndamento
-import com.example.advogo.utils.Constants
+import com.example.advogo.utils.constants.Constants
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -80,6 +81,42 @@ class ProcessoTipoAndamentoRepository @Inject constructor(
                 continuation.resumeWithException(exception)
             }
     }
+
+    override fun adicionarProcessoTipoAndamento(model: ProcessoTipoAndamento, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+        firebaseStore
+            .collection(Constants.PROCESSOS_TIPOS_ANDAMENTOS_TABLE)
+            .add(model)
+            .addOnSuccessListener {
+                onSuccessListener()
+            }
+            .addOnFailureListener {
+                onFailureListener(it)
+            }
+    }
+    override fun atualizarProcessoTipoAndamento(model: ProcessoTipoAndamento, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+        firebaseStore
+            .collection(Constants.PROCESSOS_TIPOS_ANDAMENTOS_TABLE)
+            .document(model.id)
+            .set(model, SetOptions.merge())
+            .addOnSuccessListener {
+                onSuccessListener()
+            }
+            .addOnFailureListener {
+                onFailureListener(it)
+            }
+    }
+    override fun deletarProcessoTipoAndamento(id: String, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+        firebaseStore
+            .collection(Constants.PROCESSOS_TIPOS_ANDAMENTOS_TABLE)
+            .document(id)
+            .delete()
+            .addOnSuccessListener {
+                onSuccessListener()
+            }
+            .addOnFailureListener {
+                onFailureListener(it)
+            }
+    }
 }
 
 interface IProcessoTipoAndamentoRepository {
@@ -88,4 +125,8 @@ interface IProcessoTipoAndamentoRepository {
 
     suspend fun obterProcessoTipoAndamentos(): List<ProcessoTipoAndamento>?
     suspend fun obterProcessoTipoAndamento(id: String): ProcessoTipoAndamento?
+
+    fun adicionarProcessoTipoAndamento(model: ProcessoTipoAndamento, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun atualizarProcessoTipoAndamento(model: ProcessoTipoAndamento, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun deletarProcessoTipoAndamento(id: String, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
 }

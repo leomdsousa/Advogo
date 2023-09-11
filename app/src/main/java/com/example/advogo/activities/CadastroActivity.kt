@@ -15,7 +15,7 @@ import com.example.advogo.models.Advogado
 import com.example.advogo.models.externals.CorreioResponse
 import com.example.advogo.repositories.IAdvogadoRepository
 import com.example.advogo.services.CorreioApiService
-import com.example.advogo.utils.Constants
+import com.example.advogo.utils.constants.Constants
 import com.example.advogo.utils.extensions.showPasswordVisibilityOnTouch
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth

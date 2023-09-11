@@ -16,7 +16,8 @@ import com.example.advogo.R
 import com.example.advogo.databinding.ActivityPerfilBinding
 import com.example.advogo.models.Advogado
 import com.example.advogo.repositories.IAdvogadoRepository
-import com.example.advogo.utils.Constants
+import com.example.advogo.utils.UserUtils.getCurrentUserID
+import com.example.advogo.utils.constants.Constants
 import com.google.firebase.Timestamp
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference

@@ -22,9 +22,10 @@ import com.example.advogo.databinding.FragmentProcessoAnexoBinding
 import com.example.advogo.models.Anexo
 import com.example.advogo.models.Processo
 import com.example.advogo.repositories.IAnexoRepository
-import com.example.advogo.utils.Constants
-import com.example.advogo.dialogs.ProcessoAnexoDialog
-import com.example.advogo.utils.extensions.ConverterUtils.fromUSADateStringToDate
+import com.example.advogo.utils.constants.Constants
+import com.example.advogo.dialogs.form.ProcessoAnexoDialog
+import com.example.advogo.utils.UserUtils.getCurrentUserID
+import com.example.advogo.utils.extensions.StringExtensions.fromUSADateStringToDate
 import com.google.firebase.Timestamp
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference

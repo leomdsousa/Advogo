@@ -16,7 +16,7 @@ import com.example.advogo.databinding.ActivityDiligenciaDetalheBinding
 import com.example.advogo.fragments.*
 import com.example.advogo.models.*
 import com.example.advogo.repositories.*
-import com.example.advogo.utils.Constants
+import com.example.advogo.utils.constants.Constants
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint

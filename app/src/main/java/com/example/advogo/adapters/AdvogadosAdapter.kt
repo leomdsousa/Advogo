@@ -11,10 +11,7 @@ import com.bumptech.glide.Glide
 import com.example.advogo.R
 import com.example.advogo.databinding.ItemAdvogadoBinding
 import com.example.advogo.models.Advogado
-import com.example.advogo.utils.Constants
-import com.example.advogo.dialogs.AdvogadosDialog
-import com.example.advogo.models.Cliente
-import dagger.hilt.android.AndroidEntryPoint
+import com.example.advogo.utils.constants.Constants
 
 open class AdvogadosAdapter(
     private val context: Context,

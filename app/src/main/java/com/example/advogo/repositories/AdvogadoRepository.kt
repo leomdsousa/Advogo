@@ -1,17 +1,11 @@
 package com.example.advogo.repositories
 
 import com.example.advogo.models.Advogado
-import com.example.advogo.models.Cliente
-import com.example.advogo.utils.Constants
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
-import com.google.android.gms.tasks.Task
+import com.example.advogo.utils.constants.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
-import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-import javax.inject.Provider
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -139,16 +133,6 @@ class AdvogadoRepository @Inject constructor(
             .addOnFailureListener {
                 onFailureListener(it)
             }
-    }
-
-    private fun getCurrentUserId(): String {
-        val user = FirebaseAuth.getInstance().currentUser
-
-        return if(user != null) {
-            FirebaseAuth.getInstance().currentUser!!.uid
-        } else {
-            ""
-        }
     }
 }
 

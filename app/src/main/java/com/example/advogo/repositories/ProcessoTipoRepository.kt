@@ -1,8 +1,9 @@
 package com.example.advogo.repositories
 
 import com.example.advogo.models.ProcessoTipo
-import com.example.advogo.utils.Constants
+import com.example.advogo.utils.constants.Constants
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -80,6 +81,42 @@ class ProcessoTipoRepository @Inject constructor(
                 continuation.resumeWithException(exception)
             }
     }
+
+    override fun adicionarProcessoTipo(model: ProcessoTipo, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+        firebaseStore
+            .collection(Constants.PROCESSOS_TIPOS_TABLE)
+            .add(model)
+            .addOnSuccessListener {
+                onSuccessListener()
+            }
+            .addOnFailureListener {
+                onFailureListener(it)
+            }
+    }
+    override fun atualizarProcessoTipo(model: ProcessoTipo, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+        firebaseStore
+            .collection(Constants.PROCESSOS_TIPOS_TABLE)
+            .document(model.id)
+            .set(model, SetOptions.merge())
+            .addOnSuccessListener {
+                onSuccessListener()
+            }
+            .addOnFailureListener {
+                onFailureListener(it)
+            }
+    }
+    override fun deletarProcessoTipo(id: String, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
+        firebaseStore
+            .collection(Constants.PROCESSOS_TIPOS_TABLE)
+            .document(id)
+            .delete()
+            .addOnSuccessListener {
+                onSuccessListener()
+            }
+            .addOnFailureListener {
+                onFailureListener(it)
+            }
+    }
 }
 
 interface IProcessoTipoRepository {
@@ -88,4 +125,8 @@ interface IProcessoTipoRepository {
 
     suspend fun obterProcessosTipos(): List<ProcessoTipo>?
     suspend fun obterProcessoTipo(id: String): ProcessoTipo?
+
+    fun adicionarProcessoTipo(model: ProcessoTipo, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun atualizarProcessoTipo(model: ProcessoTipo, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
+    fun deletarProcessoTipo(id: String, onSuccessListener: () -> Unit, onFailureListener: (ex: Exception?) -> Unit)
 }

@@ -7,16 +7,12 @@ import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.MenuItem
-import android.view.View
-import android.widget.AdapterView
-import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import com.bumptech.glide.Glide
 import com.example.advogo.R
-import com.example.advogo.adapters.spinner.ProcessosStatusAdapter
 import com.example.advogo.databinding.ActivityProcessoCadastroBinding
 import com.example.advogo.dialogs.AdvogadosDialog
 import com.example.advogo.dialogs.ClientesDialog
@@ -24,11 +20,12 @@ import com.example.advogo.dialogs.ProcessoStatusDialog
 import com.example.advogo.dialogs.ProcessoTiposDialog
 import com.example.advogo.models.*
 import com.example.advogo.repositories.*
-import com.example.advogo.utils.Constants
-import com.example.advogo.utils.SendNotificationToUserAsyncTask
-import com.example.advogo.utils.extensions.ConverterUtils.fromUSADateStringToDate
+import com.example.advogo.utils.UserUtils.getCurrentUserID
+import com.example.advogo.utils.constants.Constants
+import com.example.advogo.utils.notification.SendNotificationToUserAsyncTask
 import com.example.advogo.utils.extensions.DataUtils
-import com.example.advogo.utils.extensions.StringUtils.removeSpecialCharacters
+import com.example.advogo.utils.extensions.StringExtensions.fromUSADateStringToDate
+import com.example.advogo.utils.extensions.StringExtensions.removeSpecialCharacters
 import com.google.firebase.Timestamp
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -341,8 +338,8 @@ class ProcessoCadastroActivity : BaseActivity() {
                 numero = binding.etNumeroProcesso.text.toString(),
                 tipo = tipoProcessoSelecionado,
                 status = statusProcessoSelecionado,
-                data = dataSelecionada,
-                dataTimestamp = Timestamp(dataSelecionada!!.fromUSADateStringToDate()),
+                dataInicio = dataSelecionada,
+                dataInicioTimestamp = Timestamp(dataSelecionada!!.fromUSADateStringToDate()),
                 dataCriacao = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
                 dataCriacaoTimestamp = Timestamp.now(),
                 dataAlteracao = null,

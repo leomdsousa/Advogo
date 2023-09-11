@@ -9,6 +9,7 @@ data class ProcessoStatusAndamento(
     @DocumentId
     var id: String = "",
     var status: String? = null,
+    var ativo: Boolean? = true,
     @Transient var selecionado: Boolean = false
 ): Parcelable {
 }

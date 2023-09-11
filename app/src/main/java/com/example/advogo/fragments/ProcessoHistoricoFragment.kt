@@ -18,12 +18,12 @@ import com.example.advogo.R
 import com.example.advogo.adapters.ProcessosHistoricosAdapter
 import com.example.advogo.databinding.DialogProcessoHistoricoBinding
 import com.example.advogo.databinding.FragmentProcessoHistoricoBinding
-import com.example.advogo.dialogs.ProcessoHistoricoDialog
+import com.example.advogo.dialogs.form.ProcessoHistoricoDialog
 import com.example.advogo.models.Processo
 import com.example.advogo.models.ProcessoHistorico
 import com.example.advogo.repositories.IProcessoHistoricoRepository
-import com.example.advogo.utils.Constants
-import com.example.advogo.utils.extensions.ConverterUtils.fromUSADateStringToDate
+import com.example.advogo.utils.constants.Constants
+import com.example.advogo.utils.extensions.StringExtensions.fromUSADateStringToDate
 import com.google.firebase.Timestamp
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope

@@ -13,16 +13,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.advogo.R
 import com.example.advogo.activities.ProcessoCadastroActivity
 import com.example.advogo.activities.ProcessoDetalheActivity
-import com.example.advogo.adapters.ClientesAdapter
 import com.example.advogo.adapters.OptionsAdapter
 import com.example.advogo.adapters.ProcessosAdapter
 import com.example.advogo.databinding.DialogSearchBinding
 import com.example.advogo.databinding.FragmentProcessosBinding
 import com.example.advogo.dialogs.SearchDialog
-import com.example.advogo.models.Cliente
 import com.example.advogo.models.Processo
 import com.example.advogo.repositories.IProcessoRepository
-import com.example.advogo.utils.Constants
+import com.example.advogo.utils.constants.Constants
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -213,7 +211,7 @@ class ProcessosFragment : BaseFragment() {
             }
             "Limpar" -> {
                 //showProgressDialog("Aguarde por favor")
-                listaOrdenada = ArrayList(processosLista.sortedByDescending { it.dataTimestamp })
+                listaOrdenada = ArrayList(processosLista.sortedByDescending { it.dataCriacaoTimestamp })
             } else -> {
             //Validar o que implementar
         }

@@ -7,7 +7,7 @@ import com.example.advogo.databinding.ActivityMapBinding
 import com.example.advogo.models.Advogado
 import com.example.advogo.models.Diligencia
 import com.example.advogo.models.Processo
-import com.example.advogo.utils.Constants
+import com.example.advogo.utils.constants.Constants
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback

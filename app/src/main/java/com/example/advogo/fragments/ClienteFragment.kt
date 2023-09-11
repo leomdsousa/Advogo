@@ -14,16 +14,13 @@ import com.example.advogo.R
 import com.example.advogo.activities.ClienteCadastroActivity
 import com.example.advogo.activities.ClienteDetalheActivity
 import com.example.advogo.adapters.ClientesAdapter
-import com.example.advogo.adapters.DiligenciasAdapter
 import com.example.advogo.adapters.OptionsAdapter
-import com.example.advogo.databinding.DialogProcessoAnexoBinding
 import com.example.advogo.databinding.DialogSearchBinding
 import com.example.advogo.databinding.FragmentClienteBinding
 import com.example.advogo.dialogs.SearchDialog
 import com.example.advogo.models.Cliente
-import com.example.advogo.models.Diligencia
 import com.example.advogo.repositories.IClienteRepository
-import com.example.advogo.utils.Constants
+import com.example.advogo.utils.constants.Constants
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

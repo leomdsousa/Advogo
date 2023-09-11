@@ -2,15 +2,12 @@ package com.example.advogo.activities
 
 import TabsAdapter
 import android.app.Activity
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.*
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.viewpager2.widget.ViewPager2
@@ -19,7 +16,7 @@ import com.example.advogo.databinding.ActivityProcessoDetalheBinding
 import com.example.advogo.fragments.*
 import com.example.advogo.models.*
 import com.example.advogo.repositories.*
-import com.example.advogo.utils.Constants
+import com.example.advogo.utils.constants.Constants
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint

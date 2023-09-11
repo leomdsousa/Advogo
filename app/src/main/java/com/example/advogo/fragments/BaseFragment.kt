@@ -21,7 +21,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.example.advogo.activities.BaseActivity
-import com.example.advogo.utils.Constants
+import com.example.advogo.utils.constants.Constants
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
@@ -192,16 +192,6 @@ open class BaseFragment : Fragment() {
     private fun consegueAbrirArquivo(intent: Intent): Boolean {
         val packageManager = requireContext().packageManager
         return intent.resolveActivity(packageManager) != null
-    }
-
-    fun getCurrentUserID(): String {
-        val user = FirebaseAuth.getInstance().currentUser
-
-        return if(user != null) {
-            FirebaseAuth.getInstance().currentUser!!.uid
-        } else {
-            ""
-        }
     }
 
     fun showGoogleMapPlaces(context: Context, result: ActivityResultLauncher<Intent>) {

@@ -18,21 +18,19 @@ import com.example.advogo.R
 import com.example.advogo.adapters.DiligenciasHistoricosAdapter
 import com.example.advogo.databinding.DialogDiligenciaHistoricoBinding
 import com.example.advogo.databinding.FragmentDiligenciaHistoricoBinding
-import com.example.advogo.dialogs.DiligenciaHistoricoDialog
+import com.example.advogo.dialogs.form.DiligenciaHistoricoDialog
 import com.example.advogo.models.Diligencia
 import com.example.advogo.models.DiligenciaHistorico
 import com.example.advogo.repositories.IDiligenciaHistoricoRepository
-import com.example.advogo.utils.Constants
-import com.example.advogo.utils.extensions.ConverterUtils.fromUSADateStringToDate
+import com.example.advogo.utils.constants.Constants
+import com.example.advogo.utils.extensions.StringExtensions.fromUSADateStringToDate
 import com.google.firebase.Timestamp
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 

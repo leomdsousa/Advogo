@@ -24,9 +24,9 @@ import com.example.advogo.databinding.FragmentDiligenciasBinding
 import com.example.advogo.dialogs.SearchDialog
 import com.example.advogo.models.Diligencia
 import com.example.advogo.repositories.IDiligenciaRepository
-import com.example.advogo.utils.Constants
-import com.example.advogo.utils.extensions.ConverterUtils.fromCalendarDayToDateString
-import com.example.advogo.utils.extensions.ConverterUtils.fromLocalDateToDateString
+import com.example.advogo.utils.constants.Constants
+import com.example.advogo.utils.extensions.DateExtensions.fromCalendarDayToDateString
+import com.example.advogo.utils.extensions.DateExtensions.fromLocalDateToDateString
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*

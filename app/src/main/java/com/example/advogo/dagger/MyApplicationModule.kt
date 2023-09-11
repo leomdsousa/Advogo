@@ -1,7 +1,11 @@
 package com.example.advogo.dagger
 
+import android.app.Application
+import android.app.ProgressDialog
 import android.content.Context
+import android.widget.ProgressBar
 import com.example.advogo.repositories.*
+import com.example.advogo.utils.handlers.CalendarHandler
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
@@ -15,6 +19,30 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object MyApplicationModule {
+    @Provides
+    @Singleton
+    fun provideApplicationContext(application: Application): Context {
+        return application
+    }
+
+    @Provides
+    @Singleton
+    fun provideProgressDialog(application: Application): ProgressDialog {
+        return ProgressDialog(application)
+    }
+
+    @Provides
+    @Singleton
+    fun provideProgressBar(context: Context): ProgressBar {
+        return ProgressBar(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCalendarService(): CalendarHandler {
+        return CalendarHandler()
+    }
+
     @Provides
     @Singleton
     fun provideFirestore(): FirebaseFirestore {

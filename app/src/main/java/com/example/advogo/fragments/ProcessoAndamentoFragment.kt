@@ -22,10 +22,11 @@ import com.example.advogo.models.*
 import com.example.advogo.repositories.IProcessoAndamentoRepository
 import com.example.advogo.repositories.IProcessoStatusAndamentoRepository
 import com.example.advogo.repositories.IProcessoTipoAndamentoRepository
-import com.example.advogo.utils.Constants
-import com.example.advogo.dialogs.ProcessoAndamentoDialog
-import com.example.advogo.utils.extensions.ConverterUtils.fromUSADateStringToDate
+import com.example.advogo.utils.constants.Constants
+import com.example.advogo.dialogs.form.ProcessoAndamentoDialog
+import com.example.advogo.utils.UserUtils.getCurrentUserID
 import com.example.advogo.utils.extensions.DataUtils
+import com.example.advogo.utils.extensions.StringExtensions.fromUSADateStringToDate
 import com.google.firebase.Timestamp
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
