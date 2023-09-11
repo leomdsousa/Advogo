@@ -5,7 +5,7 @@ import com.google.firebase.firestore.DocumentId
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class TipoParte(
+data class TiposPartes(
     @DocumentId
     var id: String = "",
     var tipo: String? = null,

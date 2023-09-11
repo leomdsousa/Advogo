@@ -1,8 +1,6 @@
 package com.example.advogo.utils.constants
 
 object Constants {
-
-
     const val ADVOGADOS_TABLE = "advogados"
     const val ADVOGADOS_ID = "_id"
     const val ADVOGADOS_NOME = "nome"
@@ -87,6 +85,10 @@ object Constants {
     const val ANEXOS_PROCESSO = "processo"
     const val ANEXOS_DATA = "data"
     const val ANEXOS_DATA_TIMESTAMP = "dataTimestamp"
+
+    const val TIPOS_PARTES_TABLE = "tiposPartes"
+
+    const val TIPOS_HONORARIOS_TABLE = "tiposHonorarios"
 
     //Shared
     const val SELECIONAR = "SELECIONAR"

@@ -9,5 +9,5 @@ data class ProcessoParte(
     var documento: String? = null,
     var contato: String? = null,
     var tipo: String? = null,
-    @Transient var tipoObj: TipoParte? = null,
+    @Transient var tipoObj: TiposPartes? = null,
 ): Parcelable
