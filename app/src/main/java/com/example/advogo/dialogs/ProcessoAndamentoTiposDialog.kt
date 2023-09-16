@@ -42,6 +42,12 @@ abstract class ProcessoAndamentoTiposDialog(
                     dismiss()
                     onItemSelected(item, action)
                 }
+                override fun onEdit(item: ProcessoTipoAndamento, position: Int) {
+                    return
+                }
+                override fun onDelete(item: ProcessoTipoAndamento, position: Int) {
+                    return
+                }
             })
         }
     }

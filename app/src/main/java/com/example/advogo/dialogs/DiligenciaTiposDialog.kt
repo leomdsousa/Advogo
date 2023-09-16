@@ -42,6 +42,12 @@ abstract class DiligenciaTiposDialog(
                     dismiss()
                     onItemSelected(item, action)
                 }
+                override fun onEdit(item: DiligenciaTipo, position: Int) {
+                    return
+                }
+                override fun onDelete(item: DiligenciaTipo, position: Int) {
+                    return
+                }
             })
         }
     }

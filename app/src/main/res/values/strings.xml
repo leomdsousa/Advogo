@@ -23,6 +23,8 @@
     <string name="confirmacaoDeletarCliente">Deseja deletar o cliente \'%1$s\'?</string>
     <string name="confirmacaoDeletarDiligencia">Deseja deletar a diligência \'%1$s\'?</string>
     <string name="confirmacaoDeletarAdvogado">Deseja deletar o advogado \'%1$s\'?</string>
+    <string name="confirmacaoDeletarTipo">Deseja deletar o tipo \'%1$s\'?</string>
+    <string name="confirmacaoDeletarStatus">Deseja deletar o status \'%1$s\'?</string>
 
     <!--HINT-->
     <string name="hintProcessoName">Nome</string>

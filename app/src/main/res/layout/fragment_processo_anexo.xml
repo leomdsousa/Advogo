@@ -1,74 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--<FrameLayout-->
-<!--    xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--    xmlns:tools="http://schemas.android.com/tools"-->
-<!--    android:layout_width="match_parent"-->
-<!--    android:layout_height="match_parent"-->
-<!--    tools:context=".fragments.ProcessoAnexoFragment">-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="@dimen/mainScreenContentPadding"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".fragments.ProcessoAnexoFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:elevation="@dimen/cardViewElevation"
+        app:cardCornerRadius="@dimen/cardViewCornerRadius">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvAnexosLista"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/tvNenhumAnexoDisponivel"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:orientation="vertical"
-            android:padding="@dimen/mainScreenContentPadding"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            tools:context=".fragments.ProcessoAnexoFragment">
+            android:text="@string/nenhumAnexoEncontrado"
+            android:textColor="@color/secondaryTextColor"
+            app:fontFamily="@font/montserrat_medium"
+            android:textSize="@dimen/noProcessAvailableTextSize" />
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@android:color/white"
-                android:elevation="@dimen/cardViewElevation"
-                app:cardCornerRadius="@dimen/cardViewCornerRadius">
+    </androidx.cardview.widget.CardView>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvAnexosLista"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:visibility="gone"
-                    tools:visibility="visible" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add_anexo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fabMargin"
+        android:layout_gravity="end|bottom"
+        app:tint="@android:color/white"
+        android:backgroundTint="@color/colorPrimary"
+        app:srcCompat="@drawable/ic_vector_add_24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="@dimen/fabMargin"
+        android:layout_marginEnd="@dimen/fabMargin" />
 
-                <TextView
-                    android:id="@+id/tvNenhumAnexoDisponivel"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="@string/nenhumAnexoEncontrado"
-                    android:textColor="@color/secondaryTextColor"
-                    app:fontFamily="@font/montserrat_medium"
-                    android:textSize="@dimen/noProcessAvailableTextSize" />
-
-<!--                <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-<!--                    android:id="@+id/fab_add_anexo"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_gravity="bottom|end"-->
-<!--                    android:layout_margin="@dimen/fabMargin"-->
-<!--                    app:tint="@android:color/white"-->
-<!--                    android:backgroundTint="@color/colorPrimary"-->
-<!--                    app:srcCompat="@drawable/ic_vector_add_24dp" />-->
-
-            </androidx.cardview.widget.CardView>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_add_anexo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/fabMargin"
-            android:layout_gravity="end|bottom"
-            app:tint="@android:color/white"
-            android:backgroundTint="@color/colorPrimary"
-            app:srcCompat="@drawable/ic_vector_add_24dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginBottom="@dimen/fabMargin"
-            android:layout_marginEnd="@dimen/fabMargin" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <!--</FrameLayout>-->
+    </androidx.constraintlayout.widget.ConstraintLayout>

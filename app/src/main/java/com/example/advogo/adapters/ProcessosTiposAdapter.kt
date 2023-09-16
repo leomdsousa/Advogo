@@ -2,6 +2,7 @@ package com.example.advogo.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.advogo.databinding.ItemProcessoTipoBinding
@@ -10,7 +11,8 @@ import com.example.advogo.utils.constants.Constants
 
 open class ProcessosTiposAdapter(
     private val context: Context,
-    private val list: List<ProcessoTipo>
+    private val list: List<ProcessoTipo>,
+    private val readOnly: Boolean = true
 ) : RecyclerView.Adapter<ProcessosTiposAdapter.MyViewHolder>() {
     private var onItemClickListener: OnItemClickListener? = null
 
@@ -27,8 +29,23 @@ open class ProcessosTiposAdapter(
                         onItemClickListener!!.onClick(item, position, Constants.SELECIONAR)
                     }
                 }
-            }
 
+                if(!readOnly) {
+                    binding.btnEdit.visibility = View.VISIBLE
+                    binding.btnDelete.visibility = View.VISIBLE
+
+                    binding.btnEdit.setOnClickListener {
+                        onItemClickListener!!.onEdit(item, position)
+                    }
+
+                    binding.btnDelete.setOnClickListener {
+                        onItemClickListener!!.onDelete(item, position)
+                    }
+                } else {
+                    binding.btnEdit.visibility = View.GONE
+                    binding.btnDelete.visibility = View.GONE
+                }
+            }
         }
     }
 
@@ -50,7 +67,9 @@ open class ProcessosTiposAdapter(
     override fun getItemCount(): Int = list.size
 
     interface OnItemClickListener {
-        fun onClick(processo: ProcessoTipo, position: Int, action: String)
+        fun onClick(item: ProcessoTipo, position: Int, action: String)
+        fun onEdit(item: ProcessoTipo, position: Int)
+        fun onDelete(item: ProcessoTipo, position: Int)
     }
 
     fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {

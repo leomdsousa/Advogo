@@ -40,6 +40,12 @@ abstract class DiligenciaStatusDialog(
                     dismiss()
                     onItemSelected(item, action)
                 }
+                override fun onEdit(item: DiligenciaStatus, position: Int) {
+                    return
+                }
+                override fun onDelete(item: DiligenciaStatus, position: Int) {
+                    return
+                }
             })
         }
     }

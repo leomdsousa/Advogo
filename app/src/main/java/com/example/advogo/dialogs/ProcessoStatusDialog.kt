@@ -42,6 +42,13 @@ abstract class ProcessoStatusDialog(
                     dismiss()
                     onItemSelected(item, action)
                 }
+                override fun onEdit(item: ProcessoStatus, position: Int) {
+                    return;
+                }
+
+                override fun onDelete(item: ProcessoStatus, position: Int) {
+                    return;
+                }
             })
         }
     }

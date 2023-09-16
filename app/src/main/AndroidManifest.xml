@@ -61,6 +61,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Advogo.NoActionBar" />
         <activity
+            android:name=".activities.ProcessoAndamentoTiposActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Advogo.NoActionBar" />
+        <activity
             android:name=".activities.DiligenciaStatusActivity"
             android:exported="false"
             android:screenOrientation="portrait"
