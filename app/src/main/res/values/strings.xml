@@ -43,6 +43,8 @@
     <string name="hintDiligenciasDescription">Diligências</string>
     <string name="hintCpf">CPF</string>
     <string name="hintCep">Digite o CEP</string>
+    <string name="hintDocumento">Documento</string>
+    <string name="hintContato">Contato</string>
 
     <string name="hintEndereco">Endereço</string>
     <string name="hintEnderecoOuCep">Rua ou CEP</string>
@@ -82,6 +84,7 @@
     <string name="nenhumProcessoHistoricoEncontrado">Nenhum histórico encontrado!</string>
     <string name="nenhumStatusEncontrado">Nenhum status encontrado!</string>
     <string name="nenhumTipoEncontrado">Nenhum tipo encontrado!</string>
+    <string name="nenhumProcessoParteEncontrado">Nenhuma parte cadastrada!</string>
 
     <!--INTRO-->
     <string name="imageContentDescription">Imagem</string>

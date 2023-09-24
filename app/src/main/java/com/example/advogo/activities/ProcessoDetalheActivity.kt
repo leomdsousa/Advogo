@@ -18,6 +18,8 @@ import com.example.advogo.models.*
 import com.example.advogo.repositories.*
 import com.example.advogo.utils.constants.Constants
 import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayout.GRAVITY_FILL
+import com.google.android.material.tabs.TabLayout.MODE_SCROLLABLE
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -52,9 +54,11 @@ class ProcessoDetalheActivity : BaseActivity() {
     private fun setupTabsLayout() {
         viewPager = findViewById(R.id.viewPager)
         tabLayout = findViewById(R.id.tabLayout)
+        tabLayout.tabMode = MODE_SCROLLABLE
 
         val adapter = TabsAdapter(this)
         adapter.addFragment(ProcessoDetalheFragment(), "Dados")
+        adapter.addFragment(ProcessoParteFragment(), "Partes")
         adapter.addFragment(ProcessoAndamentoFragment(), "Andamentos")
         adapter.addFragment(ProcessoAnexoFragment(), "Anexos")
         adapter.addFragment(ProcessoHistoricoFragment(), "Histórico")
@@ -142,9 +146,10 @@ class ProcessoDetalheActivity : BaseActivity() {
     private fun getTabIcon(position: Int): Int {
         return when (position) {
             0 -> R.drawable.ic_baseline_app_registration_24
-            1 -> R.drawable.ic_baseline_timeline_24
-            2 -> R.drawable.ic_baseline_attachment_24
-            3 -> R.drawable.ic_baseline_history_24
+            1 -> R.drawable.ic_baseline_groups_24
+            2 -> R.drawable.ic_baseline_timeline_24
+            3 -> R.drawable.ic_baseline_attachment_24
+            4 -> R.drawable.ic_baseline_history_24
             else -> 0
         }
     }

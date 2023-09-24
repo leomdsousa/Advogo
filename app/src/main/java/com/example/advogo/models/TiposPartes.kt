@@ -10,4 +10,5 @@ data class TiposPartes(
     var id: String = "",
     var tipo: String? = null,
     var ativo: Boolean? = true,
+    @Transient var selecionado: Boolean = false
 ): Parcelable

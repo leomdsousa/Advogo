@@ -6,19 +6,16 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.advogo.adapters.ProcessosStatusAndamentosAdapter
-import com.example.advogo.adapters.ProcessosTiposAndamentosAdapter
+import com.example.advogo.adapters.TiposPartesAdapter
 import com.example.advogo.databinding.DialogListBinding
-import com.example.advogo.models.ProcessoStatusAndamento
-import com.example.advogo.models.ProcessoTipoAndamento
-import com.example.advogo.utils.enums.UseAdapterBindingFor
+import com.example.advogo.models.TiposPartes
 
-abstract class ProcessoAndamentoTiposDialog(
+abstract class TiposPartesDialog(
     context: Context,
-    private val list: List<ProcessoTipoAndamento>
+    private val list: List<TiposPartes>
 ): Dialog(context) {
     private lateinit var binding: DialogListBinding
-    private var adapter: ProcessosTiposAndamentosAdapter? = null
+    private var adapter: TiposPartesAdapter? = null
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,24 +33,18 @@ abstract class ProcessoAndamentoTiposDialog(
     private fun setupRecyclerView(view: View) {
         if (list.isNotEmpty()) {
             binding.rvList.layoutManager = LinearLayoutManager(context)
-            adapter = ProcessosTiposAndamentosAdapter(context, list, UseAdapterBindingFor.DIALOG)
+            adapter = TiposPartesAdapter(context, list)
             binding.rvList.adapter = adapter
 
             adapter!!.setOnItemClickListener(object :
-                ProcessosTiposAndamentosAdapter.OnItemClickListener {
-                override fun onClick(item: ProcessoTipoAndamento, position: Int, action: String) {
+                TiposPartesAdapter.OnItemClickListener {
+                override fun onClick(tipoParte: TiposPartes, position: Int, action:String) {
                     dismiss()
-                    onItemSelected(item, action)
-                }
-                override fun onEdit(item: ProcessoTipoAndamento, position: Int) {
-                    return
-                }
-                override fun onDelete(item: ProcessoTipoAndamento, position: Int) {
-                    return
+                    onItemSelected(tipoParte, position, action)
                 }
             })
         }
     }
 
-    protected abstract fun onItemSelected(item: ProcessoTipoAndamento, action:String)
+    protected abstract fun onItemSelected(tiposParte: TiposPartes, position: Int, action:String)
 }

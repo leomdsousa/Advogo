@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/itemDiligenciaContentMarginBottom"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/itemDiligenciaContentPadding">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/itemDiligenciaDescricaoLayoutMarginStart"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_nome_parte"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="@dimen/itemDiligenciaDescricaoTextSize"
+                app:fontFamily="@font/montserrat_medium"
+                tools:text="Jucimar" />
+
+            <TextView
+                android:id="@+id/tv_documento_cliente"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="@dimen/itemClienteTextSize"
+                app:fontFamily="@font/lato"
+                tools:text="Documento da Parte" />
+
+            <TextView
+                android:id="@+id/tv_contato_parte"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="@dimen/itemClienteTextSize"
+                app:fontFamily="@font/lato"
+                tools:text="Contato da Parte" />
+
+            <TextView
+                android:id="@+id/tv_tipo_parte"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="@dimen/itemClienteTextSize"
+                app:fontFamily="@font/lato"
+                tools:text="Tipo da Parte" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/itemClienteDividerHeight"
+        android:layout_marginTop="@dimen/itemClienteDividerMarginTop"
+        android:background="@color/dividerColor" />
+</LinearLayout>
