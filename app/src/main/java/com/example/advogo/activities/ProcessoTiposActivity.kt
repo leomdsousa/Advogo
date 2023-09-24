@@ -14,6 +14,7 @@ import com.example.advogo.databinding.DialogListFormBinding
 import com.example.advogo.dialogs.form.ProcessoTipoDialog
 import com.example.advogo.models.ProcessoTipo
 import com.example.advogo.repositories.IProcessoTipoRepository
+import com.example.advogo.utils.enums.UseAdapterBindingFor
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -63,7 +64,7 @@ class ProcessoTiposActivity : BaseActivity() {
             val adapter = ProcessosTiposAdapter(
                 this,
                 lista,
-                false
+                UseAdapterBindingFor.ACTIVITY_OR_FRAGMENT
             )
             binding.rvTiposList.adapter = adapter
 

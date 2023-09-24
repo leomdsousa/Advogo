@@ -14,6 +14,7 @@ import com.example.advogo.databinding.DialogListFormBinding
 import com.example.advogo.dialogs.form.DiligenciaStatusDialog
 import com.example.advogo.models.DiligenciaStatus
 import com.example.advogo.repositories.IDiligenciaStatusRepository
+import com.example.advogo.utils.enums.UseAdapterBindingFor
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -53,7 +54,7 @@ class DiligenciaStatusActivity : BaseActivity() {
             val adapter = DiligenciasStatusAdapter(
                 this,
                 lista,
-                false
+                UseAdapterBindingFor.ACTIVITY_OR_FRAGMENT
             )
             binding.rvStatusList.adapter = adapter
 

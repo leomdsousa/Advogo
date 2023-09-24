@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.advogo.adapters.DiligenciasStatusAdapter
 import com.example.advogo.databinding.DialogListBinding
 import com.example.advogo.models.DiligenciaStatus
+import com.example.advogo.utils.enums.UseAdapterBindingFor
 
 abstract class DiligenciaStatusDialog(
     context: Context,
@@ -31,7 +32,7 @@ abstract class DiligenciaStatusDialog(
     private fun setupRecyclerView(view: View) {
         if (list.isNotEmpty()) {
             binding.rvList.layoutManager = LinearLayoutManager(context)
-            adapter = DiligenciasStatusAdapter(context, list)
+            adapter = DiligenciasStatusAdapter(context, list, UseAdapterBindingFor.DIALOG)
             binding.rvList.adapter = adapter
 
             adapter!!.setOnItemClickListener(object :

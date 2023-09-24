@@ -65,6 +65,7 @@
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/dialog_processo_andamento.xml" value="0.22" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/dialog_processo_anexo.xml" value="0.25" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/dialog_processo_historico.xml" value="0.10729166666666666" />
+        <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/dialog_processo_tipo_form.xml" value="0.33" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/dialog_progress.xml" value="0.1" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/dialog_search.xml" value="0.22" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/fragment_cliente.xml" value="0.33" />
@@ -82,6 +83,12 @@
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/item_andamento.xml" value="0.22321428571428573" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/item_anexo.xml" value="0.4968553459119497" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/item_cliente.xml" value="0.33" />
+        <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/item_dialog_diligencia_status.xml" value="0.33" />
+        <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/item_dialog_diligencia_tipo.xml" value="0.13229166666666667" />
+        <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/item_dialog_processo_andamento_status.xml" value="0.13229166666666667" />
+        <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/item_dialog_processo_andamento_tipo.xml" value="0.4789762340036563" />
+        <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/item_dialog_processo_status.xml" value="0.13229166666666667" />
+        <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/item_dialog_processo_tipo.xml" value="0.1" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/item_diligencia.xml" value="0.25" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/item_diligencia_historico.xml" value="0.350597609561753" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/item_diligencia_status.xml" value="0.12291666666666666" />
@@ -89,13 +96,14 @@
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/item_option.xml" value="0.10885416666666667" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/item_processo.xml" value="0.33" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/item_processo_andamento_status.xml" value="0.12291666666666666" />
-        <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/item_processo_andamento_tipo.xml" value="0.12291666666666666" />
+        <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/item_processo_andamento_tipo.xml" value="0.33" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/item_processo_historico.xml" value="0.33" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/item_processo_status.xml" value="0.33" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/item_processo_tipo.xml" value="0.3388888888888889" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/item_tab_layout.xml" value="0.33" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/nav_header_main.xml" value="0.25" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layout/spinner_item_layout.xml" value="0.67" />
+        <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/layouts/activity/layout/teste.xml" value="0.18802083333333333" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/menu/activity_main_drawer.xml" value="0.16" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/menu/menu_advogados.xml" value="0.13854166666666667" />
         <entry key="..\:/Users/leona/StudioProjects/Advogo/app/src/main/res/menu/menu_advogados_add.xml" value="0.13854166666666667" />

@@ -9,6 +9,8 @@ data class ProcessoTipoAndamento(
     @DocumentId
     var id: String = "",
     var tipo: String? = null,
+    var prazo: Int? = null,
+    var somenteDiaUtil: Boolean? = false,
     var ativo: Boolean? = true,
     @Transient var selecionado: Boolean = false
 ): Parcelable {

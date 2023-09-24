@@ -11,9 +11,11 @@ import com.example.advogo.R
 import com.example.advogo.adapters.ProcessosTiposAndamentosAdapter
 import com.example.advogo.databinding.ActivityProcessoAndamentoTiposBinding
 import com.example.advogo.databinding.DialogListFormBinding
+import com.example.advogo.databinding.DialogProcessoTipoAndamentoFormBinding
 import com.example.advogo.dialogs.form.ProcessoTipoAndamentoDialog
 import com.example.advogo.models.ProcessoTipoAndamento
 import com.example.advogo.repositories.IProcessoTipoAndamentoRepository
+import com.example.advogo.utils.enums.UseAdapterBindingFor
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -23,7 +25,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class ProcessoAndamentoTiposActivity : BaseActivity() {
     private lateinit var binding: ActivityProcessoAndamentoTiposBinding
-    private lateinit var bindingDialog: DialogListFormBinding
+    private lateinit var bindingDialog: DialogProcessoTipoAndamentoFormBinding
     @Inject lateinit var repository: IProcessoTipoAndamentoRepository
 
     @RequiresApi(Build.VERSION_CODES.P)
@@ -53,7 +55,7 @@ class ProcessoAndamentoTiposActivity : BaseActivity() {
             val adapter = ProcessosTiposAndamentosAdapter(
                 this,
                 lista,
-                false
+                UseAdapterBindingFor.ACTIVITY_OR_FRAGMENT
             )
             binding.rvTiposList.adapter = adapter
 
@@ -99,7 +101,7 @@ class ProcessoAndamentoTiposActivity : BaseActivity() {
     }
 
     private fun openDialog(status: ProcessoTipoAndamento? = null) {
-        bindingDialog = DialogListFormBinding.inflate(layoutInflater)
+        bindingDialog = DialogProcessoTipoAndamentoFormBinding.inflate(layoutInflater)
 
         val dialog = object : ProcessoTipoAndamentoDialog(
             this,
@@ -129,6 +131,8 @@ class ProcessoAndamentoTiposActivity : BaseActivity() {
             val input = ProcessoTipoAndamento(
                 id = "",
                 tipo = bindingDialog.etDescription.text.toString(),
+                prazo = bindingDialog.etPrazo.text.toString().toInt(),
+                somenteDiaUtil = bindingDialog.chkSomenteDiasUteis.isChecked,
                 ativo = true
             )
 
@@ -155,6 +159,8 @@ class ProcessoAndamentoTiposActivity : BaseActivity() {
             val input = ProcessoTipoAndamento(
                 id = status.id,
                 tipo = bindingDialog.etDescription.text.toString(),
+                prazo = bindingDialog.etPrazo.text.toString().toInt(),
+                somenteDiaUtil = bindingDialog.chkSomenteDiasUteis.isChecked,
                 ativo = true
             )
 

@@ -148,4 +148,7 @@
     <string name="andamento_tipos">Andamento Tipos</string>
     <string name="andamento_status">Andamento Status</string>
     <string name="anexo_tipos">Anexo Tipos</string>
+
+    <string name="hintPrazo">Prazo</string>
+    <string name="hintSomenteDiasUteis">Somente dias úteis?</string>
 </resources>

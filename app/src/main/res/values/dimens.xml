@@ -196,6 +196,12 @@
 
     <dimen name="itemSelectedAdvImageSize">45dp</dimen>
     <dimen name="itemProcessoAndamentoTextSize">16sp</dimen>
+    <dimen name="itemTipoProcessoTextSize">16sp</dimen>
+    <dimen name="itemStatusProcessoTextSize">16sp</dimen>
+    <dimen name="itemTipoDiligenciaTextSize">16sp</dimen>
+    <dimen name="itemStatusDiligenciaTextSize">16sp</dimen>
+    <dimen name="itemProcessoTipoAndamentoTextSize">9sp</dimen>
+
 
     <!--DIALOG LIST-->
     <dimen name="dialogListCvElevationAndCornerRadius">3dp</dimen>

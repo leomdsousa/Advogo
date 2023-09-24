@@ -14,6 +14,7 @@ import com.example.advogo.databinding.DialogListFormBinding
 import com.example.advogo.dialogs.form.ProcessoStatusDialog
 import com.example.advogo.models.ProcessoStatus
 import com.example.advogo.repositories.IProcessoStatusRepository
+import com.example.advogo.utils.enums.UseAdapterBindingFor
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -53,7 +54,7 @@ class ProcessoStatusActivity : BaseActivity() {
             val adapter = ProcessosStatusAdapter(
                 this,
                 lista,
-                false
+                UseAdapterBindingFor.ACTIVITY_OR_FRAGMENT
             )
             binding.rvStatusList.adapter = adapter
 

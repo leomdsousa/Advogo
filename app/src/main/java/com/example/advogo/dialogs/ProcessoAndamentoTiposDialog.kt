@@ -10,6 +10,7 @@ import com.example.advogo.adapters.ProcessosTiposAndamentosAdapter
 import com.example.advogo.databinding.DialogListBinding
 import com.example.advogo.models.ProcessoStatusAndamento
 import com.example.advogo.models.ProcessoTipoAndamento
+import com.example.advogo.utils.enums.UseAdapterBindingFor
 
 abstract class ProcessoAndamentoTiposDialog(
     context: Context,
@@ -33,7 +34,7 @@ abstract class ProcessoAndamentoTiposDialog(
     private fun setupRecyclerView(view: View) {
         if (list.isNotEmpty()) {
             binding.rvList.layoutManager = LinearLayoutManager(context)
-            adapter = ProcessosTiposAndamentosAdapter(context, list)
+            adapter = ProcessosTiposAndamentosAdapter(context, list, UseAdapterBindingFor.DIALOG)
             binding.rvList.adapter = adapter
 
             adapter!!.setOnItemClickListener(object :

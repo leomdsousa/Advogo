@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.advogo.adapters.ProcessosStatusAndamentosAdapter
 import com.example.advogo.databinding.DialogListBinding
 import com.example.advogo.models.ProcessoStatusAndamento
+import com.example.advogo.utils.enums.UseAdapterBindingFor
 
 abstract class ProcessoAndamentoStatusDialog(
     context: Context,
@@ -31,7 +32,7 @@ abstract class ProcessoAndamentoStatusDialog(
     private fun setupRecyclerView(view: View) {
         if (list.isNotEmpty()) {
             binding.rvList.layoutManager = LinearLayoutManager(context)
-            adapter = ProcessosStatusAndamentosAdapter(context, list)
+            adapter = ProcessosStatusAndamentosAdapter(context, list, UseAdapterBindingFor.DIALOG)
             binding.rvList.adapter = adapter
 
             adapter!!.setOnItemClickListener(object :

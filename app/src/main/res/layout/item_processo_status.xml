@@ -26,21 +26,38 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/primaryTextColor"
-                android:textSize="@dimen/itemProcessoTipoTextSize"
+                android:textSize="@dimen/itemStatusProcessoTextSize"
                 app:fontFamily="@font/montserrat_medium"
                 tools:text="Status Processo Descrição" />
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/iv_selected"
+        <ImageButton
+            android:id="@+id/btn_edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|end"
-            android:layout_marginEnd="@dimen/itemSelectedMarginEnd"
-            android:contentDescription="@string/imageContentDescription"
-            android:src="@drawable/ic_vector_color_accent_done_24dp"
-            android:visibility="gone"
-            tools:visibility="visible" />
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/ic_baseline_edit_24"
+            app:tint="@color/white"
+            android:background="@color/colorAccent"
+            android:padding="2dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp" />
+
+        <ImageButton
+            android:id="@+id/btn_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@id/btn_edit"
+            android:src="@drawable/ic_vector_delete_24dp"
+            app:tint="@color/white"
+            android:background="@color/colorAccent"
+            android:padding="2dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"/>
 
     </LinearLayout>
 
@@ -48,33 +65,5 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/itemProcessoDividerHeight"
         android:background="@color/dividerColor" />
-
-    <ImageButton
-        android:id="@+id/btn_edit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:src="@drawable/ic_baseline_edit_24"
-        app:tint="@color/white"
-        android:background="@color/colorAccent"
-        android:padding="2dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="16dp" />
-
-    <ImageButton
-        android:id="@+id/btn_delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toStartOf="@id/btn_edit"
-        android:src="@drawable/ic_vector_delete_24dp"
-        app:tint="@color/white"
-        android:background="@color/colorAccent"
-        android:padding="2dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"/>
 
 </RelativeLayout>
