@@ -35,14 +35,14 @@ open class ProcessosAdapter(
                 binding.tvTipoProcesso.text = "Tipo: ${item.tipoObj?.tipo}"
                 binding.tvStatusProcesso.text = "Status: ${item.statusObj?.status}"
 
-                if (item.selecionado) {
+                if (item.selecionado == true) {
                     binding.ivSelected.visibility = View.VISIBLE
                 } else {
                     binding.ivSelected.visibility = View.GONE
                 }
 
                 binding.root.setOnClickListener {
-                    if(item.selecionado) {
+                    if(item.selecionado == true) {
                         onItemClickListener!!.onClick(item, position, Constants.DESELECIONAR)
                     } else {
                         onItemClickListener!!.onClick(item, position, Constants.SELECIONAR)

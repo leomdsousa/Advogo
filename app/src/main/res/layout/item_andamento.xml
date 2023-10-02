@@ -49,6 +49,17 @@
                 tools:text="Data: 12/12/2023" />
 
             <TextView
+                android:id="@+id/tv_data_prazo_andamento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="@dimen/itemProcessoAndamentoTextSize"
+                app:fontFamily="@font/lato"
+                android:visibility="gone"
+                tools:visibility="visible"
+                tools:text="Data Prazo: 31/12/2023" />
+
+            <TextView
                 android:id="@+id/tv_descricao_andamento"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -4,6 +4,7 @@ import android.net.Uri
 import android.os.Parcelable
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
+import com.google.firebase.firestore.Exclude
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -17,7 +18,7 @@ data class Anexo(
     var dataTimestamp: Timestamp? = null,
     var advogado: String? = null,
     var processo: String? = null,
-    @Transient var advogadoObj: Advogado? = null,
-    @Transient var imagemSelecionadaURI: Uri? = null,
+    @Exclude var advogadoObj: Advogado? = null,
+    @Exclude var imagemSelecionadaURI: Uri? = null,
 ): Parcelable {
 }

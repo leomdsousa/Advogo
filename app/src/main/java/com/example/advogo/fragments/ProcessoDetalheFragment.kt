@@ -180,7 +180,8 @@ class ProcessoDetalheFragment : BaseFragment() {
                 diligencias = processoDetalhes.diligencias,
                 anexos = processoDetalhes.anexos,
                 andamentos = processoDetalhes.andamentos,
-                historico = processoDetalhes.historico
+                historico = processoDetalhes.historico,
+                partes = processoDetalhes.partes
             )
 
             processo.dataInicioTimestamp = Timestamp(processo.dataInicio!!.fromUSADateStringToDate())

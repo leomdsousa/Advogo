@@ -25,7 +25,7 @@ open class DiligenciasStatusAdapter(
                 binding.tvStatusDiligencia.text = item.status ?: "Sem Título"
 
                 binding.root.setOnClickListener {
-                    if(item.selecionado) {
+                    if(item.selecionado == true) {
                         onItemClickListener!!.onClick(item, position, Constants.DESELECIONAR)
                     } else {
                         onItemClickListener!!.onClick(item, position, Constants.SELECIONAR)
@@ -53,7 +53,7 @@ open class DiligenciasStatusAdapter(
             binding.tvStatusDiligencia.text = item.status ?: "Sem Título"
 
             binding.root.setOnClickListener {
-                if(item.selecionado) {
+                if(item.selecionado == true) {
                     onItemClickListener!!.onClick(item, position, Constants.DESELECIONAR)
                 } else {
                     onItemClickListener!!.onClick(item, position, Constants.SELECIONAR)

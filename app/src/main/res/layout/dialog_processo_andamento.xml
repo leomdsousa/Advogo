@@ -100,46 +100,6 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-<!--            <TextView-->
-<!--                android:id="@+id/labelTipoProcesso"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="@dimen/processoCadastroTilMarginTop"-->
-<!--                android:gravity="start"-->
-<!--                android:text="@string/hintTipoAndamentoDescription"-->
-<!--                android:textColor="@color/black"-->
-<!--                android:textSize="@dimen/etTextSize"-->
-<!--                android:textStyle="bold" />-->
-
-<!--            <Spinner-->
-<!--                android:id="@+id/spinnerTipoAndamentoProcesso"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="3dp"-->
-<!--                android:background="@drawable/spinner_background"-->
-<!--                android:popupBackground="@color/spinnerBackground"-->
-<!--                android:spinnerMode="dropdown" />-->
-
-<!--            <TextView-->
-<!--                android:id="@+id/labelStatusProcesso"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="@dimen/processoCadastroTilMarginTop"-->
-<!--                android:gravity="start"-->
-<!--                android:text="@string/hintStatusAndamentoDescription"-->
-<!--                android:textColor="@color/black"-->
-<!--                android:textSize="@dimen/etTextSize"-->
-<!--                android:textStyle="bold" />-->
-
-<!--            <Spinner-->
-<!--                android:id="@+id/spinnerStatusProcessoAndamento"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="3dp"-->
-<!--                android:background="@drawable/spinner_background"-->
-<!--                android:popupBackground="@color/spinnerBackground"-->
-<!--                android:spinnerMode="dropdown" />-->
-
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -159,6 +119,29 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <TextView
+                android:id="@+id/tv_prazo_tipo_andamento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="@dimen/itemProcessoTipoTextSize"
+                app:fontFamily="@font/montserrat_medium"
+                android:visibility="gone"
+                tools:visibility="visible"
+                tools:text="Prazo: 15 dias" />
+
+            <TextView
+                android:id="@+id/tv_somente_dias_uteis_tipo_andamento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="@dimen/itemProcessoTipoTextSize"
+                app:fontFamily="@font/montserrat_medium"
+                android:visibility="gone"
+                tools:visibility="visible"
+                tools:text="Somente dias úteis: Sim" />
+
             <Button
                 android:id="@+id/btn_submit_processo_andamento"
                 android:layout_width="match_parent"
@@ -174,17 +157,29 @@
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/btnTextSize" />
 
-<!--            <TextView-->
-<!--                android:id="@+id/advHidden"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="0dp"-->
-<!--                android:visibility="invisible" />-->
+            <TextView
+                android:id="@+id/advHidden"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:visibility="gone" />
 
-<!--            <TextView-->
-<!--                android:id="@+id/processoHidden"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="0dp"-->
-<!--                android:visibility="invisible" />-->
+            <TextView
+                android:id="@+id/processoHidden"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tipoHidden"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/statusHidden"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:visibility="gone" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

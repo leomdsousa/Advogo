@@ -468,30 +468,3 @@ class ProcessoCadastroActivity : BaseActivity() {
         }
     }
 }
-
-//    private fun setupSpinnerStatusProcesso() {
-//        val spinnerStatus = findViewById<Spinner>(R.id.spinnerStatusProcesso)
-//
-//        CoroutineScope(Dispatchers.Main).launch {
-//            val processosStatusDeferred = async { processoStatusRepository.obterProcessoStatus() }
-//            processosStatus = processosStatusDeferred.await()!!
-//            (processosStatus as MutableList<ProcessoStatus>).add(0, ProcessoStatus(status = "Selecione"))
-//
-//            val adapter = ProcessosStatusAdapter(this@ProcessoCadastroActivity, processosStatus)
-//            spinnerStatus.adapter = adapter
-//
-//            spinnerStatus.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-//                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-//                    val selectedItem = spinnerStatus.selectedItem as? ProcessoStatus
-//                    selectedItem?.let {
-//                        statusProcessoSelecionado = selectedItem.id
-//                        spinnerStatus.setSelection(id.toInt())
-//                    }
-//                }
-//
-//                override fun onNothingSelected(parent: AdapterView<*>?) {
-//                    // Nada selecionado
-//                }
-//            }
-//        }
-//    }

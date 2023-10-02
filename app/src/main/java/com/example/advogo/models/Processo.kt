@@ -4,6 +4,7 @@ import android.net.Uri
 import android.os.Parcelable
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
+import com.google.firebase.firestore.Exclude
 import kotlinx.parcelize.Parcelize
 import java.util.*
 
@@ -32,15 +33,16 @@ data class Processo(
     var andamentos: List<String>? = null,
     var historico: List<String>? = null,
     var partes: List<ProcessoParte> = listOf(),
-    @Transient var tipoObj: ProcessoTipo? = null,
-    @Transient var statusObj: ProcessoStatus? = null,
-    @Transient var clienteObj: Cliente? = null,
-    @Transient var advogadoObj: Advogado? = null,
-    @Transient var diligenciasLista: List<Diligencia>? = null,
-    @Transient var anexosLista: List<Anexo>? = null,
-    @Transient var andamentosLista: List<ProcessoAndamento>? = null,
-    @Transient var historicoLista: List<ProcessoHistorico>? = null,
-    @Transient var selecionado: Boolean = false,
-    @Transient var imagemSelecionadaURI: Uri? = null,
+    @Exclude var tipoObj: ProcessoTipo? = null,
+    @Exclude var statusObj: ProcessoStatus? = null,
+    @Exclude var clienteObj: Cliente? = null,
+    @Exclude var advogadoObj: Advogado? = null,
+    @Exclude var diligenciasLista: List<Diligencia>? = null,
+    @Exclude var anexosLista: List<Anexo>? = null,
+    @Exclude var andamentosLista: List<ProcessoAndamento>? = null,
+    @Exclude var historicoLista: List<ProcessoHistorico>? = null,
+    @Exclude var selecionado: Boolean? = null,
+    @Exclude var imagemSelecionadaURI: Uri? = null,
 ): Parcelable {
+
 }

@@ -3,6 +3,7 @@ package com.example.advogo.models
 import android.os.Parcelable
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
+import com.google.firebase.firestore.Exclude
 import kotlinx.parcelize.Parcelize
 import java.util.*
 
@@ -25,10 +26,10 @@ data class Diligencia(
     var processo: String? = null,
     var advogado: String? = null,
     var historico: List<String>? = null,
-    @Transient var processoObj: Processo? = null,
-    @Transient var advogadoObj: Advogado? = null,
-    @Transient var tipoObj: DiligenciaTipo? = null,
-    @Transient var statusObj: DiligenciaStatus? = null,
-    @Transient var historicoLista: List<DiligenciaHistorico>? = arrayListOf()
+    @Exclude var processoObj: Processo? = null,
+    @Exclude var advogadoObj: Advogado? = null,
+    @Exclude var tipoObj: DiligenciaTipo? = null,
+    @Exclude var statusObj: DiligenciaStatus? = null,
+    @Exclude var historicoLista: List<DiligenciaHistorico>? = arrayListOf()
 ): Parcelable {
 }

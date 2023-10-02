@@ -3,6 +3,7 @@ package com.example.advogo.models
 import android.os.Parcelable
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
+import com.google.firebase.firestore.Exclude
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -24,7 +25,7 @@ data class Cliente(
     var enderecoBairro: String? = null,
     var telefone: String? = null,
     var whatsapp: Boolean? = false,
-    @Transient var telefoneObj: Telefone? = null,
-    @Transient var selecionado: Boolean = false
+    @Exclude var telefoneObj: Telefone? = null,
+    @Exclude var selecionado: Boolean? = null,
 ): Parcelable {
 }

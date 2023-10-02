@@ -23,7 +23,7 @@ open class TiposPartesAdapter(
                 binding.tvDescricaoTipoParte .text = item.tipo
 
                 binding.root.setOnClickListener {
-                    if(item.selecionado) {
+                    if(item.selecionado == true) {
                         onItemClickListener!!.onClick(item, position, Constants.DESELECIONAR)
                     } else {
                         onItemClickListener!!.onClick(item, position, Constants.SELECIONAR)

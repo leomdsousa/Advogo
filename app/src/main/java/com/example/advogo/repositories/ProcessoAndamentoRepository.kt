@@ -1,10 +1,16 @@
 package com.example.advogo.repositories
 
 import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.example.advogo.models.ProcessoAndamento
+import com.example.advogo.utils.DateUtils.calculateFinalDate
 import com.example.advogo.utils.constants.Constants
+import com.example.advogo.utils.extensions.DateExtensions.fromDateToBrDateString
+import com.example.advogo.utils.extensions.DateExtensions.fromDateToDateString
+import com.example.advogo.utils.extensions.StringExtensions.fromUSADateStringToDate
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -27,6 +33,7 @@ class ProcessoAndamentoRepository @Inject constructor(
 ): IProcessoAndamentoRepository {
     private val coroutineScope: CoroutineScope = (context as? LifecycleOwner)?.lifecycleScope ?: GlobalScope
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun obterProcessosAndamentos(onSuccessListener: (List<ProcessoAndamento>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.PROCESSOS_ANDAMENTOS_TABLE)
@@ -47,6 +54,12 @@ class ProcessoAndamentoRepository @Inject constructor(
                                 item.statusObj = statusDeferred.await()
                                 item.tipoObj = tipoDeferred.await()
 
+                                if(item.tipoObj != null) {
+                                    if(item.tipoObj!!.prazo != null) {
+                                        val finalDate = calculateFinalDate(item.data!!.fromUSADateStringToDate(), item.tipoObj!!.prazo!!, item.tipoObj!!.somenteDiaUtil!!)
+                                        item.dataPrazo = finalDate.fromDateToBrDateString()
+                                    }
+                                }
                             }
 
                             onSuccessListener(lista)
@@ -60,6 +73,7 @@ class ProcessoAndamentoRepository @Inject constructor(
                 onFailureListener(exception)
             }
     }
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun obterProcessosAndamentosPorProcesso(numeroProcesso: String, onSuccessListener: (List<ProcessoAndamento>) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.PROCESSOS_ANDAMENTOS_TABLE)
@@ -80,6 +94,13 @@ class ProcessoAndamentoRepository @Inject constructor(
                                 item.advogadoObj = advogadoDeferred.await()
                                 item.statusObj = statusDeferred.await()
                                 item.tipoObj = tipoDeferred.await()
+
+                                if(item.tipoObj != null) {
+                                    if(item.tipoObj!!.prazo != null) {
+                                        val finalDate = calculateFinalDate(item.data!!.fromUSADateStringToDate(), item.tipoObj!!.prazo!!, item.tipoObj!!.somenteDiaUtil!!)
+                                        item.dataPrazo = finalDate.fromDateToBrDateString()
+                                    }
+                                }
                             }
 
                             onSuccessListener(lista)
@@ -93,6 +114,7 @@ class ProcessoAndamentoRepository @Inject constructor(
                 onFailureListener(exception)
             }
     }
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun obterProcessoAndamento(id: String, onSuccessListener: (ProcessoAndamento: ProcessoAndamento) -> Unit, onFailureListener: (ex: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.PROCESSOS_ANDAMENTOS_TABLE)
@@ -113,6 +135,13 @@ class ProcessoAndamentoRepository @Inject constructor(
                             andamento.statusObj = statusDeferred.await()
                             andamento.tipoObj = tipoDeferred.await()
 
+                            if(andamento.tipoObj != null) {
+                                if(andamento.tipoObj!!.prazo != null) {
+                                    val finalDate = calculateFinalDate(andamento.data!!.fromUSADateStringToDate(), andamento.tipoObj!!.prazo!!, andamento.tipoObj!!.somenteDiaUtil!!)
+                                    andamento.dataPrazo = finalDate.fromDateToBrDateString()
+                                }
+                            }
+
                             onSuccessListener(andamento)
                         }
                     }
@@ -125,6 +154,7 @@ class ProcessoAndamentoRepository @Inject constructor(
             }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun obterProcessosAndamentos(): List<ProcessoAndamento>? = suspendCoroutine { continuation ->
         firebaseStore
             .collection(Constants.PROCESSOS_ANDAMENTOS_TABLE)
@@ -145,6 +175,12 @@ class ProcessoAndamentoRepository @Inject constructor(
                                 item.statusObj = statusDeferred.await()
                                 item.tipoObj = tipoDeferred.await()
 
+                                if(item.tipoObj != null) {
+                                    if(item.tipoObj!!.prazo != null) {
+                                        val finalDate = calculateFinalDate(item.data!!.fromUSADateStringToDate(), item.tipoObj!!.prazo!!, item.tipoObj!!.somenteDiaUtil!!)
+                                        item.dataPrazo = finalDate.fromDateToBrDateString()
+                                    }
+                                }
                             }
 
                             continuation.resume(resultado)
@@ -158,6 +194,7 @@ class ProcessoAndamentoRepository @Inject constructor(
                 continuation.resumeWithException(exception)
             }
     }
+    @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun obterProcessoAndamento(id: String): ProcessoAndamento? = suspendCoroutine { continuation ->
         firebaseStore
             .collection(Constants.PROCESSOS_ANDAMENTOS_TABLE)
@@ -176,6 +213,13 @@ class ProcessoAndamentoRepository @Inject constructor(
                         resultado.statusObj = statusDeferred.await()
                         resultado.tipoObj = tipoDeferred.await()
 
+                        if(resultado.tipoObj != null) {
+                            if(resultado.tipoObj!!.prazo != null) {
+                                val finalDate = calculateFinalDate(resultado.data!!.fromUSADateStringToDate(), resultado.tipoObj!!.prazo!!, resultado.tipoObj!!.somenteDiaUtil!!)
+                                resultado.dataPrazo = finalDate.fromDateToBrDateString()
+                            }
+                        }
+
                         continuation.resume(resultado)
                     }
                 } else {
@@ -187,6 +231,7 @@ class ProcessoAndamentoRepository @Inject constructor(
             }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun obterAndamentosPorLista(ids: List<String>): List<ProcessoAndamento>? = suspendCoroutine { continuation ->
         firebaseStore
             .collection(Constants.PROCESSOS_ANDAMENTOS_TABLE)
@@ -208,6 +253,12 @@ class ProcessoAndamentoRepository @Inject constructor(
                                 item.statusObj = statusDeferred.await()
                                 item.tipoObj = tipoDeferred.await()
 
+                                if(item.tipoObj != null) {
+                                    if(item.tipoObj!!.prazo != null) {
+                                        val finalDate = calculateFinalDate(item.data!!.fromUSADateStringToDate(), item.tipoObj!!.prazo!!, item.tipoObj!!.somenteDiaUtil!!)
+                                        item.dataPrazo = finalDate.fromDateToBrDateString()
+                                    }
+                                }
                             }
 
                             continuation.resume(resultado)
@@ -221,6 +272,7 @@ class ProcessoAndamentoRepository @Inject constructor(
                 continuation.resumeWithException(exception)
             }
     }
+    @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun obterAndamentosPorProcesso(numeroProcesso: String): List<ProcessoAndamento>? = suspendCoroutine { continuation ->
         firebaseStore
             .collection(Constants.PROCESSOS_ANDAMENTOS_TABLE)
@@ -242,6 +294,12 @@ class ProcessoAndamentoRepository @Inject constructor(
                                 item.statusObj = statusDeferred.await()
                                 item.tipoObj = tipoDeferred.await()
 
+                                if(item.tipoObj != null) {
+                                    if(item.tipoObj!!.prazo != null) {
+                                        val finalDate = calculateFinalDate(item.data!!.fromUSADateStringToDate(), item.tipoObj!!.prazo!!, item.tipoObj!!.somenteDiaUtil!!)
+                                        item.dataPrazo = finalDate.fromDateToBrDateString()
+                                    }
+                                }
                             }
 
                             continuation.resume(resultado)

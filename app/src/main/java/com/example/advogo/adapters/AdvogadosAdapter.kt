@@ -68,14 +68,14 @@ open class AdvogadosAdapter(
                         binding.imageEmail.visibility = View.GONE
                     }
 
-                    if (item.selecionado) {
+                    if (item.selecionado == true) {
                         binding.ivSelectedAdv.visibility = View.VISIBLE
                     } else {
                         binding.ivSelectedAdv.visibility = View.GONE
                     }
 
                     binding.root.setOnClickListener {
-                        if(item.selecionado) {
+                        if(item.selecionado == true) {
                             onItemClickListener!!.onClick(position, item, Constants.DESELECIONAR)
                         } else {
                             onItemClickListener!!.onClick(position, item, Constants.SELECIONAR)

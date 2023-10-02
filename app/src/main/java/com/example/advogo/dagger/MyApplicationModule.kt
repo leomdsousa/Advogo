@@ -123,7 +123,8 @@ object MyApplicationModule {
         statusProcessoRepository: ProcessoStatusRepository,
         anexoRepository: AnexoRepository,
         andamentoRepository: IProcessoAndamentoRepository,
-        historicoRepository: IProcessoHistoricoRepository
+        historicoRepository: IProcessoHistoricoRepository,
+        tiposPartesRepository: ITipoParteRepository
     ): IProcessoRepository {
         return ProcessoRepository(
             context,
@@ -135,7 +136,8 @@ object MyApplicationModule {
             statusProcessoRepository,
             anexoRepository,
             andamentoRepository,
-            historicoRepository
+            historicoRepository,
+            tiposPartesRepository
         )
     }
 
@@ -234,5 +236,13 @@ object MyApplicationModule {
         advogadoRepository: AdvogadoRepository
     ): IAnexoRepository {
         return AnexoRepository(context, firestore, advogadoRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideTiposPartesRepository(
+        firestore: FirebaseFirestore,
+    ): ITipoParteRepository {
+        return TipoParteRepository(firestore)
     }
 }

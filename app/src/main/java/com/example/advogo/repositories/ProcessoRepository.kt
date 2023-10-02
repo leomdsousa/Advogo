@@ -24,7 +24,8 @@ class ProcessoRepository @Inject constructor(
     private val statusProcessoRepository: ProcessoStatusRepository,
     private val anexoRepository: AnexoRepository,
     private val andamentoRepository: IProcessoAndamentoRepository,
-    private val historicoRepository: IProcessoHistoricoRepository
+    private val historicoRepository: IProcessoHistoricoRepository,
+    private val tipoParteRepository: ITipoParteRepository
 ): IProcessoRepository {
     private val coroutineScope: CoroutineScope = (context as? LifecycleOwner)?.lifecycleScope ?: GlobalScope
 
@@ -57,6 +58,13 @@ class ProcessoRepository @Inject constructor(
 
                                 val historicoDeferred = async { historicoRepository.obterProcessosHistoricosPorProcesso(item.numero!!) }
                                 item.historicoLista = historicoDeferred.await()
+
+                                if(item.partes.isNotEmpty()) {
+                                    for (parte in item.partes) {
+                                        val tipoParteDeferred = async { tipoParteRepository.obterTipoParte(parte.tipo!!) }
+                                        parte.tipoObj = tipoParteDeferred.await()
+                                    }
+                                }
                             }
 
                             onSuccessListener(processos)
@@ -99,6 +107,13 @@ class ProcessoRepository @Inject constructor(
                         val historicoDeferred = async { historicoRepository.obterProcessosHistoricosPorProcesso(processo.numero!!) }
                         processo.historicoLista = historicoDeferred.await()
 
+                        if(processo.partes.isNotEmpty()) {
+                            for (parte in processo.partes) {
+                                val tipoParteDeferred = async { tipoParteRepository.obterTipoParte(parte.tipo!!) }
+                                parte.tipoObj = tipoParteDeferred.await()
+                            }
+                        }
+
                         onSuccessListener(processo)
                     }
                 } else {
@@ -137,6 +152,13 @@ class ProcessoRepository @Inject constructor(
 
                         val historicoDeferred = async { historicoRepository.obterProcessosHistoricosPorProcesso(processo.numero!!) }
                         processo.historicoLista = historicoDeferred.await()
+
+                        if(processo.partes.isNotEmpty()) {
+                            for (parte in processo.partes) {
+                                val tipoParteDeferred = async { tipoParteRepository.obterTipoParte(parte.tipo!!) }
+                                parte.tipoObj = tipoParteDeferred.await()
+                            }
+                        }
 
                         onSuccessListener(processo)
                     }
@@ -180,6 +202,13 @@ class ProcessoRepository @Inject constructor(
 
                                 val historicoDeferred = async { historicoRepository.obterProcessosHistoricosPorProcesso(item.numero!!) }
                                 item.historicoLista = historicoDeferred.await()
+
+                                if(item.partes.isNotEmpty()) {
+                                    for (parte in item.partes) {
+                                        val tipoParteDeferred = async { tipoParteRepository.obterTipoParte(parte.tipo!!) }
+                                        parte.tipoObj = tipoParteDeferred.await()
+                                    }
+                                }
                             }
 
                             onSuccessListener(processos)
@@ -259,6 +288,13 @@ class ProcessoRepository @Inject constructor(
 
                                 val historicoDeferred = async { historicoRepository.obterProcessosHistoricosPorProcesso(item.numero!!) }
                                 item.historicoLista = historicoDeferred.await()
+
+                                if(item.partes.isNotEmpty()) {
+                                    for (parte in item.partes) {
+                                        val tipoParteDeferred = async { tipoParteRepository.obterTipoParte(parte.tipo!!) }
+                                        parte.tipoObj = tipoParteDeferred.await()
+                                    }
+                                }
                             }
 
                             continuation.resume(resultado)
@@ -300,6 +336,13 @@ class ProcessoRepository @Inject constructor(
 
                         val historicoDeferred = async { historicoRepository.obterProcessosHistoricosPorProcesso(resultado.numero!!) }
                         resultado.historicoLista = historicoDeferred.await()
+
+                        if(resultado.partes.isNotEmpty()) {
+                            for (parte in resultado.partes) {
+                                val tipoParteDeferred = async { tipoParteRepository.obterTipoParte(parte.tipo!!) }
+                                parte.tipoObj = tipoParteDeferred.await()
+                            }
+                        }
 
                         continuation.resume(resultado)
                     }

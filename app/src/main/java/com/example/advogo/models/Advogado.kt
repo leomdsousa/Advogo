@@ -4,6 +4,7 @@ import android.net.Uri
 import android.os.Parcelable
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
+import com.google.firebase.firestore.Exclude
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
@@ -26,10 +27,10 @@ data class Advogado(
     var telefone: String? = null,
     var fcmToken: String? = null,
     var whatsapp: Boolean? = null,
-    @Transient var telefoneObj: Telefone? = null,
-    @Transient var selecionado: Boolean = false,
-    @Transient var imagemSelecionadaURI: Uri? = null,
-    @Transient var username: String? = null,
-    @Transient var password: String? = null,
+    @Exclude var telefoneObj: Telefone? = null,
+    @Exclude var selecionado: Boolean? = null,
+    @Exclude var imagemSelecionadaURI: Uri? = null,
+    @Exclude var username: String? = null,
+    @Exclude var password: String? = null,
 ): Parcelable { }
 

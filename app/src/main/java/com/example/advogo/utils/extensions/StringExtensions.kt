@@ -39,7 +39,7 @@ object StringExtensions {
         val cal = Calendar.getInstance()
         cal.set(
             this.substring(0,4).padStart(4,'0').toInt(),
-            this.substring(6,7).padStart(2,'0').toInt()-1,
+            this.substring(5,7).padStart(2,'0').toInt()-1,
             this.substring(8,10).padStart(2,'0').toInt()
         )
         return cal.time

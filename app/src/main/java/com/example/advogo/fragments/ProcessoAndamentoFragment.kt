@@ -166,22 +166,12 @@ class ProcessoAndamentoFragment : BaseFragment() {
             descricao = bindingDialog.etDescricaoAndamento.text.toString(),
             advogado = getCurrentUserID(),
             processo = processoDetalhes.numero,
-            tipo = bindingDialog.etTipoAndamentoProcesso.text.toString(),
-            status = bindingDialog.etStatusAndamentoProcesso.text.toString(),
-//            tipo = (bindingDialog.spinnerTipoAndamentoProcesso.selectedItem as ProcessoTipoAndamento)?.id,
-//            status = (bindingDialog.spinnerStatusProcessoAndamento .selectedItem as ProcessoStatusAndamento)?.id,
+            tipo = bindingDialog.tipoHidden.text.toString(),
+            status = bindingDialog.statusHidden.text.toString(),
             data = dataSelecionada,
         )
 
         input.dataTimestamp = Timestamp(input.data!!.fromUSADateStringToDate())
-
-//        if(bindingDialog.etDataAndamento.text.toString().isNotEmpty()) {
-//            val fromFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
-//            val toFormat = SimpleDateFormat("dd/MM/yyyy", Locale("pt", "BR"))
-//            val fromDate = fromFormat.parse(bindingDialog.etDataAndamento.text.toString())
-//            val selectedDate = toFormat.format(fromDate)
-//            input.data = selectedDate
-//        }
 
         processoAndamentoRepository.atualizarProcessoAndamento(
             input,
@@ -202,21 +192,11 @@ class ProcessoAndamentoFragment : BaseFragment() {
             descricao = bindingDialog.etDescricaoAndamento.text.toString(),
             advogado = getCurrentUserID(),
             processo = processoDetalhes.numero,
-            tipo = bindingDialog.etTipoAndamentoProcesso.text.toString(),
-            status = bindingDialog.etStatusAndamentoProcesso.text.toString(),
-//            tipo = (bindingDialog.spinnerTipoAndamentoProcesso.selectedItem as ProcessoTipoAndamento)?.id,
-//            status = (bindingDialog.spinnerStatusProcessoAndamento .selectedItem as ProcessoStatusAndamento)?.id,
+            tipo = bindingDialog.tipoHidden.text.toString(),
+            status = bindingDialog.statusHidden.text.toString(),
             data = dataSelecionada,
             dataTimestamp = Timestamp.now()
         )
-
-//        if(bindingDialog.etDataAndamento.text.toString().isNotEmpty()) {
-//            val fromFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
-//            val toFormat = SimpleDateFormat("dd/MM/yyyy", Locale("pt", "BR"))
-//            val fromDate = fromFormat.parse(bindingDialog.etDataAndamento.text.toString())
-//            val selectedDate = toFormat.format(fromDate)
-//            input.data = selectedDate
-//        }
 
         processoAndamentoRepository.adicionarProcessoAndamento(
             input,
@@ -272,14 +252,6 @@ class ProcessoAndamentoFragment : BaseFragment() {
             bindingDialog.etStatusAndamentoProcesso.requestFocus()
             validado = false
         }
-
-//        if (bindingDialog.spinnerTipoAndamentoProcesso.selectedItem == null) {
-//            validado = false
-//        }
-//
-//        if (bindingDialog.spinnerStatusProcessoAndamento.selectedItem == null) {
-//            validado = false
-//        }
 
         return validado
     }

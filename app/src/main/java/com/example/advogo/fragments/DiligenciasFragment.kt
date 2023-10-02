@@ -207,10 +207,6 @@ class DiligenciasFragment : BaseFragment() {
 
                 dataSelecionadaMap[dataDiligencia] = Color.RED
             }
-
-            //val decorator = DataSelecionadaDecorator(dataSelecionadaMap)
-            //binding.calendarView.addDecorator(decorator)
-            //binding.calendarView.state().edit()
         }
     }
 

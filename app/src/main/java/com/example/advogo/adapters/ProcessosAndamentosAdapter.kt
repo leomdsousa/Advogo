@@ -3,6 +3,7 @@ package com.example.advogo.adapters
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -34,6 +35,11 @@ open class ProcessosAndamentosAdapter(
                     val fromDate = fromFormat.parse(item.data)
                     val data = toFormat.format(fromDate)
                     binding.tvDataAndamento.text = "Data: $data"
+                }
+
+                if(!item.dataPrazo.isNullOrEmpty()) {
+                    binding.tvDataPrazoAndamento.visibility = View.VISIBLE
+                    binding.tvDataPrazoAndamento.text = "Data Prazo: ${item.dataPrazo}"
                 }
 
                 binding.tvDescricaoAndamento.text = "Descrição: ${item.descricao}"

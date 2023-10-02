@@ -1,5 +1,6 @@
 package com.example.advogo.dialogs.form
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
@@ -35,7 +36,6 @@ abstract class ProcessoAndamentoDialog(
         setContentView(binding.root)
         setCanceledOnTouchOutside(true)
         setCancelable(true)
-        //setupSpinners()
         setDados(andamento)
 
         if(readOnly) {
@@ -68,16 +68,24 @@ abstract class ProcessoAndamentoDialog(
                 context,
                 tiposAndamentos,
             ) {
+                @SuppressLint("SetTextI18n")
                 override fun onItemSelected(item: ProcessoTipoAndamento, action: String) {
                     if (action == Constants.SELECIONAR) {
                         tiposAndamentos.forEach {
                             it.selecionado = false
                         }
 
-                        if (binding.etTipoAndamentoProcesso.text.toString() != item.id) {
+                        if (binding.tipoHidden.text.toString() != item.id) {
                             binding.etTipoAndamentoProcesso.setText(item.tipo)
+                            binding.tipoHidden.text = item.id
                             tipoAndamentoSelecionado = item.id
                             tiposAndamentos[tiposAndamentos.indexOf(item)].selecionado = true
+
+                            binding.tvPrazoTipoAndamento.visibility = View.VISIBLE
+                            binding.tvSomenteDiasUteisTipoAndamento.visibility = View.VISIBLE
+
+                            binding.tvPrazoTipoAndamento.text = "Prazo: ${item.prazo ?: "Não informado"}"
+                            binding.tvSomenteDiasUteisTipoAndamento.text = "Somente dias úteis: ${if (item.somenteDiaUtil == null) "Não informado" else if(item.somenteDiaUtil == true) "Sim" else "Não"}"
                         } else {
                             Toast.makeText(
                                 context,
@@ -87,8 +95,15 @@ abstract class ProcessoAndamentoDialog(
                         }
                     } else {
                         binding.etTipoAndamentoProcesso.text = null
+                        binding.tipoHidden.text = null
                         tipoAndamentoSelecionado = null
                         tiposAndamentos[tiposAndamentos.indexOf(item)].selecionado = false
+
+                        binding.tvPrazoTipoAndamento.visibility = View.GONE
+                        binding.tvSomenteDiasUteisTipoAndamento.visibility = View.GONE
+
+                        binding.tvPrazoTipoAndamento.text = null
+                        binding.tvSomenteDiasUteisTipoAndamento.text = null
                     }
                 }
             }
@@ -109,8 +124,9 @@ abstract class ProcessoAndamentoDialog(
                             it.selecionado = false
                         }
 
-                        if (binding.etStatusAndamentoProcesso.text.toString() != item.id) {
+                        if (binding.statusHidden.text.toString() != item.id) {
                             binding.etStatusAndamentoProcesso.setText(item.status)
+                            binding.statusHidden.text = item.id
                             statusAndamentoSelecionado = item.id
                             statusAndamentos[statusAndamentos.indexOf(item)].selecionado = true
                         } else {
@@ -122,6 +138,7 @@ abstract class ProcessoAndamentoDialog(
                         }
                     } else {
                         binding.etStatusAndamentoProcesso.text = null
+                        binding.statusHidden.text = null
                         statusAndamentoSelecionado = null
                         statusAndamentos[statusAndamentos.indexOf(item)].selecionado = false
                     }
@@ -132,63 +149,7 @@ abstract class ProcessoAndamentoDialog(
         }
     }
 
-//    private fun setupSpinners() {
-//        setupSpinnerStatusAndamento()
-//        setupSpinnerTiposAndamento()
-//    }
-
-//    private fun setupSpinnerTiposAndamento() {
-//        val spinnerTipos = binding.spinnerTipoAndamentoProcesso
-//
-//        (tiposAndamentos as MutableList<ProcessoTipoAndamento>).add(0, ProcessoTipoAndamento(tipo = "Selecione"))
-//
-//        val adapter = ProcessosTiposAndamentosAdapter(context, tiposAndamentos)
-//        spinnerTipos.adapter = adapter
-//
-//        if(andamento.tipoObj != null)
-//            binding.spinnerTipoAndamentoProcesso.setSelection(tiposAndamentos.indexOf(andamento.tipoObj))
-//
-//        spinnerTipos.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-//            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-//                val selectedItem = spinnerTipos.selectedItem as? ProcessoTipoAndamento
-//                selectedItem?.let {
-//                    tipoAndamentoSelecionado = selectedItem.id
-//                    spinnerTipos.setSelection(id.toInt())
-//                }
-//            }
-//
-//            override fun onNothingSelected(parent: AdapterView<*>?) {
-//                // Nada selecionado
-//            }
-//        }
-//    }
-//
-//    private fun setupSpinnerStatusAndamento() {
-//        val spinnerStatus = binding.spinnerStatusProcessoAndamento
-//
-//        (statusAndamentos as MutableList<ProcessoStatusAndamento>).add(0, ProcessoStatusAndamento(status = "Selecione"))
-//
-//        val adapter = ProcessosStatusAndamentosAdapter(context, statusAndamentos)
-//        spinnerStatus.adapter = adapter
-//
-//        if(andamento.statusObj != null)
-//            binding.spinnerStatusProcessoAndamento.setSelection(statusAndamentos.indexOf(andamento.statusObj))
-//
-//        spinnerStatus.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-//            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-//                val selectedItem = spinnerStatus.selectedItem as? ProcessoTipoAndamento
-//                selectedItem?.let {
-//                    statusAndamentoSelecionado = selectedItem.id
-//                    spinnerStatus.setSelection(id.toInt())
-//                }
-//            }
-//
-//            override fun onNothingSelected(parent: AdapterView<*>?) {
-//                // Nada selecionado
-//            }
-//        }
-//    }
-
+    @SuppressLint("SetTextI18n")
     private fun setDados(andamento: ProcessoAndamento) {
         if(andamento.id.isBlank()) {
             binding.tvTitle.text = "Cadastro Andamento"
@@ -198,10 +159,16 @@ abstract class ProcessoAndamentoDialog(
             binding.btnSubmitProcessoAndamento.text = "Atualizar"
 
             binding.etDescricaoAndamento.setText(andamento.descricao)
-            binding.etTipoAndamentoProcesso.setText(tiposAndamentos.indexOf(andamento.tipoObj))
-            binding.etStatusAndamentoProcesso.setText(statusAndamentos.indexOf(andamento.statusObj))
-//            binding.spinnerTipoAndamentoProcesso.setSelection(tiposAndamentos.indexOf(andamento.tipoObj))
-//            binding.spinnerStatusProcessoAndamento.setSelection(statusAndamentos.indexOf(andamento.statusObj))
+
+            binding.etTipoAndamentoProcesso.setText(andamento.tipoObj?.tipo)
+            tipoAndamentoSelecionado = andamento.tipoObj?.id
+            binding.tipoHidden.text = andamento.tipoObj?.id;
+
+            binding.etStatusAndamentoProcesso.setText(andamento.statusObj?.status)
+            statusAndamentoSelecionado = andamento.statusObj?.id
+            binding.statusHidden.text = andamento.statusObj?.id;
+
+            binding.advHidden.text = andamento.advogadoObj?.id;
 
             if(andamento.data?.isNotEmpty() == true) {
                 val fromFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
@@ -209,6 +176,14 @@ abstract class ProcessoAndamentoDialog(
                 val fromDate = fromFormat.parse(andamento.data)
                 val selectedDate = toFormat.format(fromDate)
                 binding.etDataAndamento.setText(selectedDate)
+            }
+
+            if(!andamento.tipo.isNullOrBlank() && andamento.tipoObj != null) {
+                binding.tvPrazoTipoAndamento.visibility = View.VISIBLE
+                binding.tvSomenteDiasUteisTipoAndamento.visibility = View.VISIBLE
+
+                binding.tvPrazoTipoAndamento.text = "Prazo: ${andamento.tipoObj?.prazo ?: "Não informado"}"
+                binding.tvSomenteDiasUteisTipoAndamento.text = "Somente dias úteis: ${if (andamento.tipoObj?.somenteDiaUtil == null) "Não informado" else if(andamento.tipoObj?.somenteDiaUtil == true) "Sim" else "Não"}"
             }
         }
     }

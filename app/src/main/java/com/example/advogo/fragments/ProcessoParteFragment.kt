@@ -2,6 +2,7 @@ package com.example.advogo.fragments
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
@@ -19,14 +20,18 @@ import com.example.advogo.adapters.ProcessosPartesAdapter
 import com.example.advogo.databinding.DialogProcessoParteBinding
 import com.example.advogo.databinding.FragmentProcessoParteBinding
 import com.example.advogo.dialogs.form.ProcessoParteDialog
-import com.example.advogo.models.Processo
-import com.example.advogo.models.ProcessoParte
+import com.example.advogo.models.*
 import com.example.advogo.repositories.IProcessoRepository
+import com.example.advogo.repositories.ITipoParteRepository
 import com.example.advogo.utils.constants.Constants
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.Exclude
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -34,8 +39,11 @@ class ProcessoParteFragment : BaseFragment() {
     private lateinit var binding: FragmentProcessoParteBinding
     private lateinit var bindingDialog: DialogProcessoParteBinding
     @Inject lateinit var processoRepository: IProcessoRepository
+    @Inject lateinit var tiposPartesRepository: ITipoParteRepository
     private lateinit var processoDetalhes: Processo
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
+
+    private var tiposPartes: List<TiposPartes> = emptyList()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -68,6 +76,11 @@ class ProcessoParteFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentProcessoParteBinding.inflate(inflater, container, false)
+
+        CoroutineScope(Dispatchers.Main).launch {
+            tiposPartes = tiposPartesRepository.obterProcessosTipos() ?: emptyList()
+        }
+
         return binding.root
     }
 
@@ -112,6 +125,7 @@ class ProcessoParteFragment : BaseFragment() {
             requireContext(),
             parte ?: ProcessoParte(),
             bindingDialog,
+            tiposPartes,
             parte != null
         ) {
             @RequiresApi(Build.VERSION_CODES.O)
@@ -131,17 +145,34 @@ class ProcessoParteFragment : BaseFragment() {
 
         showProgressDialog(getString(R.string.aguardePorfavor))
 
-        val input = ProcessoParte(
-//            id = historico.id,
-//            obs = bindingDialog.etDescricaoHistorico.text.toString(),
-//            advogado = processoDetalhes.advogado,
-//            status = processoDetalhes.status,
-//            tipo = processoDetalhes.tipo,
-//            data = historico.data,
-//            processo = processoDetalhes.numero
+        val inputParte = ProcessoParte(
+            nome = bindingDialog.etNomeParte.text.toString(),
+            documento = bindingDialog.etDocumentoParte.text.toString(),
+            contato = bindingDialog.etContatoParte.text.toString(),
+            tipo = bindingDialog.tipoHidden.text.toString(),
         )
 
-        //input.dataTimestamp = Timestamp(input.data!!.fromUSADateStringToDate())
+        if(processoDetalhes.partes.isEmpty()) {
+            processoDetalhes.partes = emptyList()
+            processoDetalhes.partes = processoDetalhes.partes.plus(inputParte)
+        } else {
+            processoDetalhes.partes = processoDetalhes.partes.plus(inputParte)
+        }
+
+        processoDetalhes.dataAlteracao = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+        processoDetalhes.dataAlteracaoTimestamp = Timestamp.now()
+
+        //TODO - Provisório até resolver a questão de fazer o Transient e/ou Exclude dessas propriedades funcionarem
+        processoDetalhes.tipoObj = null
+        processoDetalhes.statusObj = null
+        processoDetalhes.clienteObj = null
+        processoDetalhes.advogadoObj = null
+        processoDetalhes.diligenciasLista = null
+        processoDetalhes.anexosLista = null
+        processoDetalhes.andamentosLista = null
+        processoDetalhes.historicoLista = null
+        processoDetalhes.selecionado = null
+        processoDetalhes.imagemSelecionadaURI = null
 
         processoRepository.atualizarProcesso(
             processoDetalhes,
