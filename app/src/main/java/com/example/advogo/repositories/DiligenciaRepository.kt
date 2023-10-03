@@ -283,8 +283,8 @@ class DiligenciaRepository @Inject constructor(
     override suspend fun obterDiligenciasPorData(data: String): List<Diligencia>? = suspendCoroutine { continuation ->
         firebaseStore
             .collection(Constants.DILIGENCIAS_TABLE)
-            .whereGreaterThanOrEqualTo(Constants.DILIGENCIAS_DATA, data)
-            .whereLessThanOrEqualTo(Constants.DILIGENCIAS_DATA, data)
+            .whereGreaterThanOrEqualTo(Constants.DILIGENCIAS_DATA, "$data 00:00:00")
+            .whereLessThanOrEqualTo(Constants.DILIGENCIAS_DATA, "$data 23:59:59")
             .get()
             .addOnSuccessListener { document ->
                 if (!document.isEmpty) {
@@ -321,8 +321,8 @@ class DiligenciaRepository @Inject constructor(
     override suspend fun obterDiligenciasPorData(dataInicio: String, dataFinal: String): List<Diligencia>? = suspendCoroutine { continuation ->
         firebaseStore
             .collection(Constants.DILIGENCIAS_TABLE)
-            .whereGreaterThanOrEqualTo(Constants.DILIGENCIAS_DATA, dataInicio)
-            .whereLessThanOrEqualTo(Constants.DILIGENCIAS_DATA, dataFinal)
+            .whereGreaterThanOrEqualTo(Constants.DILIGENCIAS_DATA, "$dataInicio 00:00:00")
+            .whereLessThanOrEqualTo(Constants.DILIGENCIAS_DATA, "$dataFinal 23:59:59")
             .get()
             .addOnSuccessListener { document ->
                 if (!document.isEmpty) {

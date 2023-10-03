@@ -446,6 +446,6 @@ class DiligenciasFragment : BaseFragment() {
             }
         }
 
-        (binding.rvDiligenciasList.adapter as DiligenciasAdapter).updateList(listaOrdenada)
+         (binding.rvDiligenciasList.adapter as DiligenciasAdapter).updateList(listaOrdenada)
     }
 }
