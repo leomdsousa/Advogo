@@ -3,10 +3,14 @@ package com.example.advogo.activities
 import android.app.Activity
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
 import android.text.TextUtils
+import android.text.TextWatcher
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.widget.addTextChangedListener
 import com.example.advogo.R
 import com.example.advogo.databinding.ActivityClienteCadastroBinding
 import com.example.advogo.models.Cliente
@@ -42,6 +46,25 @@ class ClienteCadastroActivity : BaseActivity() {
         binding.btnCadastroCliente.setOnClickListener {
             saveCliente()
         }
+
+        binding.etTelefone.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val value = s.toString()
+
+                if(value.isNotEmpty()) {
+                    binding.tilChkWhatsapp.visibility = View.VISIBLE
+                } else {
+                    binding.tilChkWhatsapp.visibility = View.GONE
+                    binding.chkWhatsapp.isChecked = false
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+            }
+        })
 
         binding.btnCep.setOnClickListener {
             binding.etEnderecoRua.isEnabled = false
@@ -108,7 +131,8 @@ class ClienteCadastroActivity : BaseActivity() {
             dataCriacao = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
             dataCriacaoTimestamp = Timestamp.now(),
             dataAlteracao = null,
-            dataAlteracaoTimestamp = null
+            dataAlteracaoTimestamp = null,
+            whatsapp = binding.chkWhatsapp.isChecked
         )
 
         clienteRepository.adicionarCliente(

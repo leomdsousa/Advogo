@@ -122,6 +122,23 @@
                             app:maskStyle="normal" />
                     </com.google.android.material.textfield.TextInputLayout>
 
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilChkWhatsapp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/MyTextInputLayoutStyle"
+                        android:layout_marginTop="@dimen/cadastroClienteChkMarginTop"
+                        android:visibility="gone"
+                        tools:visibility="visible">
+
+                        <CheckBox
+                            android:id="@+id/chkWhatsapp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/hintWhatsapp"/>
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

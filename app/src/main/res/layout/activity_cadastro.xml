@@ -105,6 +105,43 @@
                         android:layout_marginTop="@dimen/authenticationScreenTilMarginTop"
                         android:layout_marginEnd="@dimen/authenticationScreenTilMarginStartEnd">
 
+                        <com.santalu.maskara.widget.MaskEditText
+                            android:id="@+id/etTelefone"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="number"
+                            android:hint="@string/telefone"
+                            android:textSize="@dimen/etTextSize"
+                            app:mask="+55 (__) _____-____"
+                            app:maskCharacter="_"
+                            app:maskStyle="normal" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilChkWhatsapp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/MyTextInputLayoutStyle"
+                        android:layout_marginTop="@dimen/cadastroClienteChkMarginTop"
+                        android:visibility="gone"
+                        tools:visibility="visible">
+
+                        <CheckBox
+                            android:id="@+id/chkWhatsapp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/hintWhatsapp"/>
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/MyTextInputLayoutStyle"
+                        android:layout_marginStart="@dimen/authenticationScreenTilMarginStartEnd"
+                        android:layout_marginTop="@dimen/authenticationScreenTilMarginTop"
+                        android:layout_marginEnd="@dimen/authenticationScreenTilMarginStartEnd">
+
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etOab"
                             android:layout_width="match_parent"
@@ -218,26 +255,6 @@
                             android:maxLength="50"
                             android:textSize="@dimen/etTextSize"
                             android:enabled="false" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        style="@style/MyTextInputLayoutStyle"
-                        android:layout_marginStart="@dimen/authenticationScreenTilMarginStartEnd"
-                        android:layout_marginTop="@dimen/authenticationScreenTilMarginTop"
-                        android:layout_marginEnd="@dimen/authenticationScreenTilMarginStartEnd">
-
-                        <com.santalu.maskara.widget.MaskEditText
-                            android:id="@+id/etTelefone"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="number"
-                            android:hint="@string/telefone"
-                            android:textSize="@dimen/etTextSize"
-                            app:mask="+55 (__) _____-____"
-                            app:maskCharacter="_"
-                            app:maskStyle="normal" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout

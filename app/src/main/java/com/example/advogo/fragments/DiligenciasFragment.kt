@@ -60,17 +60,17 @@ class DiligenciasFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+
+        obterDiligencias()
+        onCreateCarregouLista = true
+
+        binding = FragmentDiligenciasBinding.inflate(layoutInflater)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentDiligenciasBinding.inflate(layoutInflater, container, false)
-
-        obterDiligencias()
-        onCreateCarregouLista = true
-
         return binding.root
     }
 

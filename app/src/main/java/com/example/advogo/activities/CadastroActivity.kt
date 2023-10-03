@@ -1,12 +1,16 @@
 package com.example.advogo.activities
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
 import android.text.TextUtils
+import android.text.TextWatcher
 import android.view.MenuItem
 import android.view.MotionEvent
+import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.example.advogo.R
@@ -23,6 +27,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 import javax.inject.Inject
@@ -41,6 +46,25 @@ class CadastroActivity : BaseActivity() {
         setContentView(binding.root)
 
         setupActionBar("Registre-se", binding.toolbarSignUp)
+
+        binding.etTelefone.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val value = s.toString()
+
+                if(value.isNotEmpty()) {
+                    binding.tilChkWhatsapp.visibility = View.VISIBLE
+                } else {
+                    binding.tilChkWhatsapp.visibility = View.GONE
+                    binding.chkWhatsapp.isChecked = false
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+            }
+        })
 
         binding.btnSignUp.setOnClickListener { registrar() }
 
@@ -99,28 +123,6 @@ class CadastroActivity : BaseActivity() {
         return correioService.obterEndereco(cep)
     }
 
-//    @RequiresApi(Build.VERSION_CODES.P)
-//    private fun setupActionBar() {
-//        setSupportActionBar(binding.toolbarSignUp)
-//        val actionBar = supportActionBar
-//
-//        if(actionBar != null) {
-//            actionBar.setDisplayHomeAsUpEnabled(true)
-//            actionBar.setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back_ios_24)
-//
-//            val spannableTitle = SpannableString("Registrar-se")
-//
-//            spannableTitle.setSpan(
-//                TypefaceSpan(ResourcesCompat.getFont(this, R.font.montserrat_medium)!!),
-//                0,
-//                title.length,
-//                Spannable.SPAN_INCLUSIVE_INCLUSIVE
-//            )
-//
-//            actionBar.title = spannableTitle
-//        }
-//    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
@@ -143,6 +145,7 @@ class CadastroActivity : BaseActivity() {
         val enderecoCidade = binding.etEnderecoCidade.text.toString()
         val oab = binding.etOab.text.toString().trim()
         val telefone = binding.etTelefone.text.toString().trim()
+        val whatsapp = binding.chkWhatsapp.isChecked
 
         if(validarFormulario(
                 nome,
@@ -176,10 +179,11 @@ class CadastroActivity : BaseActivity() {
                             oab = oab.toLong(),
                             telefone = telefone,
                             fcmToken = null,
-                            dataCriacao = SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(LocalDateTime.now()),
+                            dataCriacao = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
                             dataCriacaoTimestamp = Timestamp.now(),
                             dataAlteracao = null,
-                            dataAlteracaoTimestamp = null
+                            dataAlteracaoTimestamp = null,
+                            whatsapp = whatsapp
                         )
 
                         advRepository.adicionarAdvogado(
@@ -269,14 +273,6 @@ class CadastroActivity : BaseActivity() {
 
     private fun registrarSuccess() {
         hideProgressDialog()
-
-//        Toast.makeText(
-//            this@CadastroActivity,
-//            "Usuário registrado com sucesso!",
-//            Toast.LENGTH_LONG
-//        ).show()
-
-        //FirebaseAuth.getInstance().signOut()
 
         var intent = Intent(this@CadastroActivity, MainActivity::class.java)
         intent.putExtra(Constants.FROM_REGISTRAR_ACTIVITY, Constants.FROM_REGISTRAR_ACTIVITY)

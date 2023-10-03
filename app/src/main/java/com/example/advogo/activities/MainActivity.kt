@@ -104,7 +104,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                if (result.data!!.hasExtra(Constants.FROM_PERFIL_ACTIVITY)) {
+                if (result.data!!.hasExtra(Constants.FROM_PERFIL_ACTIVITY)
+                    || result.data!!.hasExtra(Constants.FROM_REGISTRAR_ACTIVITY)
+                ) {
                     advRepository.obterAdvogado(
                         getCurrentUserID(),
                         { adv -> setNavigationAdvDetalhes(adv) },
@@ -178,10 +180,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 val intent = Intent(this@MainActivity, ProcessoAndamentoTiposActivity::class.java)
                 startActivity(intent)
             }
-//            R.id.navAnexoTipos -> {
-//                val intent = Intent(this@MainActivity, AnexoTiposActivity::class.java)
-//                startActivity(intent)
-//            }
             R.id.navDeslogar -> {
                 FirebaseAuth.getInstance().signOut()
                 sharedPreferences.edit().clear().apply()

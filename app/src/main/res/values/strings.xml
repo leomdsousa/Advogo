@@ -45,6 +45,7 @@
     <string name="hintCep">Digite o CEP</string>
     <string name="hintDocumento">Documento</string>
     <string name="hintContato">Contato</string>
+    <string name="hintWhatsapp">Whatsapp</string>
 
     <string name="hintEndereco">Endereço</string>
     <string name="hintEnderecoOuCep">Rua ou CEP</string>

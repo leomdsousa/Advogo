@@ -10,7 +10,6 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Advogado(
-    @DocumentId
     var id: String = "",
     var nome: String? = null,
     var sobrenome: String? = null,

@@ -32,11 +32,11 @@ class AdvogadoRepository @Inject constructor(
     override fun obterAdvogado(id: String, onSuccessListener: (advogado: Advogado) -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.ADVOGADOS_TABLE)
-            .document(id)
+            .whereEqualTo(Constants.ADVOGADOS_ID, id)
             .get()
             .addOnSuccessListener { document ->
-                if (document.exists()) {
-                    val advogado = document.toObject(Advogado::class.java)!!
+                if (!document.isEmpty) {
+                    val advogado = document.first().toObject(Advogado::class.java)!!
                     onSuccessListener(advogado)
                 } else {
                     onFailureListener(null)
@@ -66,11 +66,11 @@ class AdvogadoRepository @Inject constructor(
     override suspend fun obterAdvogado(id: String): Advogado? = suspendCoroutine { continuation ->
         firebaseStore
             .collection(Constants.ADVOGADOS_TABLE)
-            .document(id)
+            .whereEqualTo(Constants.ADVOGADOS_ID, id)
             .get()
             .addOnSuccessListener { document ->
-                if (document.exists()) {
-                    val cliente = document.toObject(Advogado::class.java)!!
+                if (!document.isEmpty) {
+                    val cliente = document.first().toObject(Advogado::class.java)!!
                     continuation.resume(cliente)
                 } else {
                     continuation.resume(null)
@@ -113,25 +113,48 @@ class AdvogadoRepository @Inject constructor(
     override fun atualizarAdvogado(model: Advogado, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.ADVOGADOS_TABLE)
-            .document(model.id)
-            .set(model, SetOptions.merge())
-            .addOnSuccessListener {
-                onSuccessListener()
+            .whereEqualTo(Constants.ADVOGADOS_ID, model.id)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                if (!querySnapshot.isEmpty) {
+                    val document = querySnapshot.documents[0]
+                    document.reference.set(model, SetOptions.merge())
+                        .addOnSuccessListener {
+                            onSuccessListener()
+                        }
+                        .addOnFailureListener {
+                            onFailureListener(it)
+                        }
+                } else {
+                    onFailureListener(Exception("Documento não encontrado com o ID: ${model.id}"))
+                }
             }
-            .addOnFailureListener {
-                onFailureListener(it)
+            .addOnFailureListener { exception ->
+                onFailureListener(exception)
             }
     }
+
     override fun deletarAdvogado(id: String, onSuccessListener: () -> Unit, onFailureListener: (exception: Exception?) -> Unit) {
         firebaseStore
             .collection(Constants.ADVOGADOS_TABLE)
-            .document(id)
-            .delete()
-            .addOnSuccessListener {
-                onSuccessListener()
+            .whereEqualTo(Constants.ADVOGADOS_ID, id)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                if (!querySnapshot.isEmpty) {
+                    val document = querySnapshot.documents.first()
+                    document.reference.delete()
+                        .addOnSuccessListener {
+                            onSuccessListener()
+                        }
+                        .addOnFailureListener {
+                            onFailureListener(it)
+                        }
+                } else {
+                    onFailureListener(Exception("Documento não encontrado com o ID: $id"))
+                }
             }
-            .addOnFailureListener {
-                onFailureListener(it)
+            .addOnFailureListener { exception ->
+                onFailureListener(exception)
             }
     }
 }

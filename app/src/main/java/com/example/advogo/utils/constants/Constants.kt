@@ -2,7 +2,7 @@ package com.example.advogo.utils.constants
 
 object Constants {
     const val ADVOGADOS_TABLE = "advogados"
-    const val ADVOGADOS_ID = "_id"
+    const val ADVOGADOS_ID = "id"
     const val ADVOGADOS_NOME = "nome"
     const val ADVOGADOS_SOBRENOME = "sobrenome"
     const val ADVOGADOS_EMAIL = "email"

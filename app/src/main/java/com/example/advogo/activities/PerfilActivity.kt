@@ -18,10 +18,15 @@ import com.example.advogo.models.Advogado
 import com.example.advogo.repositories.IAdvogadoRepository
 import com.example.advogo.utils.UserUtils.getCurrentUserID
 import com.example.advogo.utils.constants.Constants
+import com.example.advogo.utils.extensions.StringExtensions.removeSpecialCharacters
 import com.google.firebase.Timestamp
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import java.io.IOException
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -120,60 +125,74 @@ class PerfilActivity : BaseActivity() {
             return
         }
 
-        val advogado = Advogado(
-            id = getCurrentUserID(),
-            nome = (if (binding.etName.text.toString() != advogadoDetalhes.nome) binding.etName.text.toString() else advogadoDetalhes.nome),
-            sobrenome = (if (binding.etSobrenome.text.toString() != advogadoDetalhes.sobrenome) binding.etSobrenome.text.toString() else advogadoDetalhes.sobrenome),
-            email = (if (binding.etEmail.text.toString() != advogadoDetalhes.email) binding.etEmail.text.toString() else advogadoDetalhes.email),
-            endereco = (if (binding.etEndereco.text.toString() != advogadoDetalhes.endereco) binding.etEndereco.text.toString() else advogadoDetalhes.endereco),
-            enderecoLat = latitude,
-            enderecoLong = latitude,
-            imagem = (if (imagemPerfilURL.isNotEmpty() && imagemPerfilURL != advogadoDetalhes.imagem) imagemPerfilURL else advogadoDetalhes.imagem),
-            oab = (if (binding.etOab.text.toString() != advogadoDetalhes.oab!!.toString()) binding.etOab.text.toString().toLong() else advogadoDetalhes.oab!!.toLong()),
-            telefone = (if (binding.etTelefone.text.toString() != advogadoDetalhes.telefone) binding.etTelefone.text.toString() else advogadoDetalhes.telefone),
-            fcmToken = advogadoDetalhes.fcmToken,
-            dataCriacao = advogadoDetalhes.dataCriacao,
-            dataCriacaoTimestamp = advogadoDetalhes.dataCriacaoTimestamp,
-            dataAlteracao = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
-            dataAlteracaoTimestamp = Timestamp.now()
-        )
+        CoroutineScope(Dispatchers.Main).launch {
+            val imageUrl = if (imagemSelecionadaURI != null) {
+                atualizarAdvogadoImagem()
+            } else {
+                advogadoDetalhes.imagem
+            }
 
-        advRepository.atualizarAdvogado(
-            advogado,
-            {
-                if(imagemSelecionadaURI != null) {
-                    atualizarAdvogadoImagem()
-                }
+            val advogado = Advogado(
+                id = getCurrentUserID(),
+                nome = (if (binding.etName.text.toString() != advogadoDetalhes.nome) binding.etName.text.toString() else advogadoDetalhes.nome),
+                sobrenome = (if (binding.etSobrenome.text.toString() != advogadoDetalhes.sobrenome) binding.etSobrenome.text.toString() else advogadoDetalhes.sobrenome),
+                email = (if (binding.etEmail.text.toString() != advogadoDetalhes.email) binding.etEmail.text.toString() else advogadoDetalhes.email),
+                endereco = (if (binding.etEndereco.text.toString() != advogadoDetalhes.endereco) binding.etEndereco.text.toString() else advogadoDetalhes.endereco),
+                enderecoLat = latitude,
+                enderecoLong = latitude,
+                imagem = imageUrl,
+                oab = (if (binding.etOab.text.toString() != advogadoDetalhes.oab!!.toString()) binding.etOab.text.toString().toLong() else advogadoDetalhes.oab!!.toLong()),
+                telefone = (if (binding.etTelefone.text.toString() != advogadoDetalhes.telefone) binding.etTelefone.text.toString() else advogadoDetalhes.telefone),
+                fcmToken = advogadoDetalhes.fcmToken,
+                dataCriacao = advogadoDetalhes.dataCriacao,
+                dataCriacaoTimestamp = advogadoDetalhes.dataCriacaoTimestamp,
+                dataAlteracao = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+                dataAlteracaoTimestamp = Timestamp.now()
+            )
 
-                setDadosPerfil(advogado)
-                atualizarPerfilSuccess()
-            },
-            { atualizarPerfilFailure() }
-        )
+            advRepository.atualizarAdvogado(
+                advogado,
+                {
+                    setDadosPerfil(advogado)
+                    atualizarPerfilSuccess()
+                },
+                { atualizarPerfilFailure() }
+            )
+        }
+
+
     }
 
-    private fun atualizarAdvogadoImagem() {
-        val sRef: StorageReference = FirebaseStorage.getInstance().reference.child(
-            "ADVOGADO_${advogadoDetalhes.oab}_IMAGEM" + System.currentTimeMillis() + "." + getFileExtension(
-                imagemSelecionadaURI!!
+    private suspend fun atualizarAdvogadoImagem(): String {
+        return suspendCancellableCoroutine { continuation ->
+            val sRef: StorageReference = FirebaseStorage.getInstance().reference.child(
+                "ADVOGADO_${advogadoDetalhes.oab}_IMAGEM" + System.currentTimeMillis() + "." + getFileExtension(
+                    imagemSelecionadaURI!!
+                )
             )
-        )
 
-        sRef.putFile(imagemSelecionadaURI!!)
-            .addOnSuccessListener { taskSnapshot ->
-                taskSnapshot.metadata!!.reference!!.downloadUrl
-                    .addOnSuccessListener { uri ->
-                        imagemPerfilURL = uri.toString()
-                        advogadoDetalhes.imagem = imagemPerfilURL
-                    }
-            }
-            .addOnFailureListener { exception ->
-                Toast.makeText(
-                    this@PerfilActivity,
-                    "Erro au atualizar imagem",
-                    Toast.LENGTH_LONG
-                ).show()
-            }
+            sRef.putFile(imagemSelecionadaURI!!)
+                .addOnSuccessListener { taskSnapshot ->
+                    taskSnapshot.metadata!!.reference!!.downloadUrl
+                        .addOnSuccessListener { uri ->
+                            val imageUrl = uri.toString()
+                            imagemPerfilURL = uri.toString()
+                            continuation.resume(imageUrl, null)
+                        }
+                        .addOnFailureListener { exception ->
+                            continuation.cancel(exception)
+                        }
+                }
+                .addOnFailureListener { exception ->
+                    Toast.makeText(
+                        this@PerfilActivity,
+                        "Erro au atualizar imagem",
+                        Toast.LENGTH_LONG
+                    ).show()
+
+                    continuation.cancel(exception)
+                }
+        }
     }
 
     private fun setDadosPerfil(advogado: Advogado) {

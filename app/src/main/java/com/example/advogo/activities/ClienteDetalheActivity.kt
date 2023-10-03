@@ -3,9 +3,12 @@ package com.example.advogo.activities
 import android.app.Activity
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
 import android.text.TextUtils
+import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
@@ -49,6 +52,25 @@ class ClienteDetalheActivity : BaseActivity() {
         binding.btnAtualizarCliente.setOnClickListener {
             saveCliente()
         }
+
+        binding.etTelefone.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val value = s.toString()
+
+                if(value.isNotEmpty()) {
+                    binding.tilChkWhatsapp.visibility = View.VISIBLE
+                } else {
+                    binding.tilChkWhatsapp.visibility = View.GONE
+                    binding.chkWhatsapp.isChecked = false
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+            }
+        })
 
         binding.btnCep.setOnClickListener {
             binding.etEndereco.isEnabled = false
@@ -129,6 +151,11 @@ class ClienteDetalheActivity : BaseActivity() {
         binding.etEnderecoCidade.setText(cliente.enderecoCidade)
         binding.etBairro.setText(cliente.enderecoBairro)
         binding.etTelefone.setText(cliente.telefone)
+
+        if(!cliente.telefone.isNullOrEmpty()) {
+            binding.tilChkWhatsapp.visibility = View.VISIBLE
+            binding.chkWhatsapp.isChecked = cliente.whatsapp ?: false
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -153,6 +180,7 @@ class ClienteDetalheActivity : BaseActivity() {
             dataCriacaoTimestamp = clienteDetalhes.dataCriacaoTimestamp,
             dataAlteracao = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
             dataAlteracaoTimestamp = Timestamp(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).fromUSADateStringToDate()),
+            whatsapp = binding.chkWhatsapp.isChecked
         )
 
         clienteRepository.atualizarCliente(

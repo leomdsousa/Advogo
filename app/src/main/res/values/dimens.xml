@@ -76,6 +76,7 @@
     <dimen name="cadastroClienteScreenTilMarginStartEnd">16dp</dimen>
     <dimen name="cadastroClienteScreenTilMarginTop">20dp</dimen>
     <dimen name="cadastroClienteScreenMarginTop">60dp</dimen>
+    <dimen name="cadastroClienteChkMarginTop">10dp</dimen>
 
     <!--DETALHE CLIENTE-->
     <dimen name="detalheClienteScreenBtnMarginTop">30dp</dimen>
